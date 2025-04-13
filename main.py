@@ -68,7 +68,7 @@ def combine_rss_files():
     rss = Element("rss", version="2.0")
     channel = SubElement(rss, "channel")
     SubElement(channel, "title").text = "Hacker Newsのコメント要約"
-    SubElement(channel, "link").text = "https://your-github-pages-url"
+    SubElement(channel, "link").text = "https://github.com/kj-9/hacker-news-ja-summary-rss"
     SubElement(channel, "description").text = "Hacker Newsのコメント要約"
 
     # load all json files in out directory
