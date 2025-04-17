@@ -9,6 +9,7 @@ from xml.etree.ElementTree import Element, SubElement, ElementTree
 from urllib.parse import urlparse, parse_qs
 from pydantic import BaseModel
 from markdown import markdown
+import time
 
 # Configure logging
 logging.basicConfig(
@@ -106,12 +107,23 @@ if __name__ == "__main__":
     links = fetch_top_links(args.limit)
     # Generate summaries for each link
     for link in links:
-        link.generate_summary()
-
-        # write as json file
-        json_file = Path(f"out/{link.comments_id}.json")
-        with json_file.open("w") as f:
-            f.write(link.model_dump_json(indent=2))
+        retries = 2
+        while retries >= 0:
+            try:
+                link.generate_summary()
+                # write as json file
+                json_file = Path(f"out/{link.comments_id}.json")
+                with json_file.open("w") as f:
+                    f.write(link.model_dump_json(indent=2))
+                break
+            except Exception as e:
+                logging.error(f"Error generating summary for link {link.comments_id}: {e}")
+                retries -= 1
+                if retries >= 0:
+                    logging.info("Waiting before retrying...")
+                    time.sleep(15)
+                else:
+                    logging.warning(f"Skipping link {link.comments_id} after multiple retries.")
 
     combine_rss_files()
     logging.info("Script completed successfully.")
