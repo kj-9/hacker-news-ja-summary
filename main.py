@@ -64,7 +64,7 @@ def fetch_top_links(limit):
 
 
 # Function to combine daily RSS files into a master RSS file
-def combine_rss_files():
+def summaries_to_rss():
     # Create the root RSS structure
     rss = Element("rss", version="2.0")
     channel = SubElement(rss, "channel")
@@ -125,6 +125,6 @@ if __name__ == "__main__":
                 else:
                     logging.warning(f"Skipping link {link.comments_id} after multiple retries.")
 
-    combine_rss_files()
+    summaries_to_rss()
     logging.info("Script completed successfully.")
 
