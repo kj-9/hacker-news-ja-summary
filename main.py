@@ -113,9 +113,6 @@ if __name__ == "__main__":
         with json_file.open("w") as f:
             f.write(link.model_dump_json(indent=2))
 
-    #generate_rss(links_with_summaries)
-    #combine_rss_files()
+    combine_rss_files()
     logging.info("Script completed successfully.")
 
-    links_with_summaries = [link for link in links if link.comments_summary]
-    combine_rss_files()
