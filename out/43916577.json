@@ -1,0 +1,8 @@
+{
+  "comments_id": "43916577",
+  "rank": 2,
+  "title": "Waiting for Postgres 18: Accelerating Disk Reads with Asynchronous I/O",
+  "link": "https://pganalyze.com/blog/postgres-18-async-io",
+  "created_date": "2025-05-07T20:13:29.205305",
+  "comments_summary": "Postgresの新しい非同期I/O機能に関するHacker Newsのコメントの要約：\n\n## LinuxとWindowsの非同期I/O\n\nWindowsはIOCPに加えてIORingの実装も持っているという指摘がある。PostgresはWindows NT 3.1から非同期I/Oをサポートしているが、APIはまだPostgresでサポートされていない。io_uringはLinuxでのみ利用可能だが、Windowsでも利用できるようになった。Linuxでは、preadv2(..., RWF_NOWAIT)を使用して、ページキャッシュからオプティミスティックな非ブロック読み取りを実行できる。\n\n## クラウドストレージのパフォーマンスとコスト\n\nAWSなどのクラウドストレージのパフォーマンスは期待ほどではなく、制約が多いという不満の声がある。クラウドでは、ネットワーク、IOPS、CPUなど、あらゆるものが制限されている。AWSのインスタンスストアは最大330万IOPSを提供できるが、インスタンスが停止または再起動されるとデータが消去されるという問題がある。\n\n## その他の最適化とツール\n\nPostgresのパフォーマンスを最適化するために、PGTuneを使用したワークロード固有の設定、PgHeroでのリアルタイムパフォーマンス監視、pgcronによる自動VACUUM ANALYZE操作などの方法が挙げられている。ZSTD圧縮バックアップ用のカスタムCLIユーティリティも紹介されている。\n\n## Postgresと他のデータベース\n\nPostgresは、InnoDBのようなクラスタ化インデックスアプローチではなく、ヒープファイルを使用している。InnoDBはプライマリキー順でのデータアクセスや範囲スキャンに優れているが、Postgresは頻繁な非キーカラムの更新や多様なアクセスパターンに適している。\n\n## io_uringのセキュリティ\n\nio_uringにはセキュリティ上の懸念がいくつかあるが、大部分は修正されている。ただし、一部のLinux管理者やディストリビューションでは、デフォルトでio_uringが無効になっている場合がある。\n\n## まとめ\n\nPostgresの新しい非同期I/O機能は、パフォーマンス向上に大きく貢献する可能性があるが、クラウド環境でのストレージ性能の制約や、io_uringのセキュリティ上の懸念など、考慮すべき点も多い。また、Postgresのパフォーマンスを最適化するためには、適切な設定やツール、バックアップ戦略が不可欠である。"
+}
