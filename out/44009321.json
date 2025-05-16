@@ -1,0 +1,8 @@
+{
+  "comments_id": "44009321",
+  "rank": 8,
+  "title": "Show HN: KVSplit – Run 2-3× longer contexts on Apple Silicon",
+  "link": "https://github.com/dipampaul17/KVSplit",
+  "created_date": "2025-05-16T20:13:03.052881",
+  "comments_summary": "LLM推論において、KVキャッシュのキーと値は量子化感度が大きく異なるという発見。\\n\n\n\\n\n## 量子化感度の違い\\n\n\nキーは品質を維持するためにより高い精度を必要とし、値はより低い精度でも許容される。K8V4（8ビットキー、4ビット値）では、59%のメモリ削減で0.86%のperplexity損失に抑えられたが、K4V8（4ビットキー、8ビット値）では、同じメモリ削減でもperplexity損失が6.06%に増加した。\\n\n\n\\n\n## 実装\\n\n\nllama.cppに--kvq-keyと--kvq-valフラグを追加し、既存の量子化ロジックをKとVテンソルに個別に適用した。Metalを使用して高速化し、M4 MacBook ProでTinyLlamaを使用して8Kコンテキストウィンドウでベンチマークを実施。\\n\n\n\\n\n## 潜在的な影響\\n\n\nこの最適化により、同じMac上で2〜3倍長いコンテキストでLLMを実行できるようになる。メモリ使用量はシーケンス長に比例するため、コンテキストが長くなるにつれて節約効果が大きくなる。\\n\n\n\\n\n## まとめ\\n\n\ndipampaul17は、LLMのKVキャッシュにおいてキーと値の量子化感度が異なることを利用して、llama.cppを最適化し、メモリ使用量を削減しつつperplexity損失を最小限に抑えることに成功しました。この最適化は、特にApple Siliconデバイスにおいて、より長いコンテキストでのLLMの実行を可能にする可能性があります。\\n"
+}
