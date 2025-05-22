@@ -1,0 +1,8 @@
+{
+  "comments_id": "44064875",
+  "rank": 6,
+  "title": "Loading Pydantic models from JSON without running out of memory",
+  "link": "https://pythonspeed.com/articles/pydantic-json-memory/",
+  "created_date": "2025-05-22T20:13:23.097544",
+  "comments_summary": "この記事は、PythonにおけるJSON処理のパフォーマンスとメモリ効率に関する議論です。\n\n## JSON処理ライブラリの比較\n\n`ijson`と`json.load(f)`、`ujson`の比較について要望があり、PyCon 2025での発表スライドが共有されました。`ijson`に関する以前の記事も参考として挙げられています。`msgspec`は、デフォルトでメモリ効率が良いと評価されています。\n\n## dataclassesのslotsについて\n\n`slots=True`を常に設定することのデメリットが議論されました。`slots=True`を設定すると、元のdataclass定義にない属性を後から追加できなくなる点が指摘されています。また、`vars()`のようなイントロスペクションが機能しなくなる場合があるものの、`dataclasses.asdict`を使用する場合は問題が少ないとされています。\n\n## 複雑なモデルのロードに関する問題\n\n複雑なモデルのロード時に、深い部分が辞書として残ってしまう問題が提起されました。この問題に対する解決策として、Discriminated Unionsの使用が提案されています。Pydanticが部分的にしか検証しないという挙動は通常ありえないため、具体的なコード例の共有が求められています。また、データ構造の複雑さ自体を見直すことも検討されています。\n\n## Pydanticの代替としてのmsgspec\n\nPydanticの代わりに`msgspec`を使用することが提案されました。`msgspec`はメモリ効率が良く、高速であると評価されています。Pydanticの利点としては、validation hooksを利用して特定のフィールドのシリアライズ/デシリアライズをカスタマイズできる点が挙げられています。Pydanticは速度面では劣るものの、多くの機能を提供しています。\n\n## まとめ\n\nPythonでJSONを扱う際のライブラリ選択や、dataclassesのslots、複雑なモデルのロードに関する問題点と解決策が議論されました。`ijson`、`ujson`、`msgspec`といった代替ライブラリが提案され、それぞれのメリット・デメリットが比較検討されています。"
+}
