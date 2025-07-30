@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #ff6600;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+            margin: 10px 0 0 0;
+        }
+        .rss-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .rss-link:hover {
+            background: #e55a00;
+        }
+        .articles {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .date-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .date-header {
+            color: #ff6600;
+            font-size: 1.5em;
+            margin: 0 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ff6600;
+        }
+        .articles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .article-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #ff6600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .article-title {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #000;
+            line-height: 1.4;
+        }
+        .article-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .article-title a:hover {
+            color: #ff6600;
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .article-content {
+            flex: 1;
+        }
+        .article-rank {
+            flex-shrink: 0;
+            margin-right: 10px;
+            align-self: flex-start;
+            margin-top: 2px;
+        }
+        .date-navigation {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-btn {
+            background: #ff6600;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.2s;
+            min-width: 40px;
+        }
+        .nav-btn:hover {
+            background: #e55a00;
+        }
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .date-picker-container {
+            position: relative;
+        }
+        .current-date {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ff6600;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .current-date:hover {
+            background: #f8f8f8;
+        }
+        .date-selector {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .date-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .date-option:hover {
+            background: #f8f8f8;
+        }
+        .date-option:last-child {
+            border-bottom: none;
+        }
+        .article-summary {
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        .rank-badge {
+            background: #ff6600;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            color: #666;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Hacker News 日本語要約</h1>
+        <p>Hacker Newsの記事コメントを日本語で要約しています</p>
+        <a href="rss.xml" class="rss-link">RSS フィードを購読</a>
+    </div>
+    
+    <div class="date-navigation">
+        <button class="nav-btn" id="prevBtn" onclick="navigateDate(-1)">←</button>
+        <div class="date-picker-container">
+            <div class="current-date" id="currentDate" onclick="toggleDatePicker()">2025年07月30日</div>
+            <div class="date-selector" id="datePicker"></div>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="navigateDate(1)">→</button>
+    </div>
+    
+    <div class="articles" id="articlesContainer"></div>
+    
+    <script>
+        const articlesData = ${articles_data};
+        const sortedDates = ${sorted_dates};
+        let currentDateIndex = 0;
+        let datePickerVisible = false;
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function showDate(dateKey) {
+            const container = document.getElementById('articlesContainer');
+            const data = articlesData[dateKey];
+            
+            if (!data) {
+                container.innerHTML = '<div class="loading">データが見つかりません</div>';
+                return;
+            }
+            
+            let html = 
+                '<div class="date-section">' +
+                    '<div class="articles-list">';
+            
+            data.articles.forEach(article => {
+                html += 
+                    '<div class="article-card">' +
+                        '<div class="article-rank">' +
+                            '<span class="rank-badge">#' + article.rank + '</span>' +
+                        '</div>' +
+                        '<div class="article-content">' +
+                            '<h3 class="article-title">' +
+                                '<a href="pages/' + article.id + '.html">' + escapeHtml(article.title) + '</a>' +
+                            '</h3>' +
+                            '<div class="article-summary">' + escapeHtml(article.preview) + '</div>' +
+                        '</div>' +
+                    '</div>';
+            });
+            
+            html += 
+                    '</div>' +
+                '</div>';
+            
+            container.innerHTML = html;
+            
+            // Update current date display
+            document.getElementById('currentDate').textContent = data.formatted_date;
+            
+            // Update navigation buttons
+            currentDateIndex = sortedDates.indexOf(dateKey);
+            document.getElementById('prevBtn').disabled = currentDateIndex === 0;
+            document.getElementById('nextBtn').disabled = currentDateIndex === sortedDates.length - 1;
+        }
+        
+        function navigateDate(direction) {
+            const newIndex = currentDateIndex + direction;
+            if (newIndex >= 0 && newIndex < sortedDates.length) {
+                showDate(sortedDates[newIndex]);
+            }
+        }
+        
+        function toggleDatePicker() {
+            const picker = document.getElementById('datePicker');
+            datePickerVisible = !datePickerVisible;
+            
+            if (datePickerVisible) {
+                picker.style.display = 'block';
+            } else {
+                picker.style.display = 'none';
+            }
+        }
+        
+        function selectDate(dateKey) {
+            showDate(dateKey);
+            toggleDatePicker();
+        }
+        
+        function initializePage() {
+            const pickerContainer = document.getElementById('datePicker');
+            
+            // Populate date picker with options
+            sortedDates.forEach(dateKey => {
+                const data = articlesData[dateKey];
+                const option = document.createElement('div');
+                option.className = 'date-option';
+                option.textContent = data.formatted_date;
+                option.onclick = () => selectDate(dateKey);
+                pickerContainer.appendChild(option);
+            });
+            
+            // Show latest date by default
+            if (sortedDates.length > 0) {
+                showDate(sortedDates[0]);
+            }
+            
+            // Close picker when clicking outside
+            document.addEventListener('click', (e) => {
+                const pickerContainer = document.querySelector('.date-picker-container');
+                if (!pickerContainer.contains(e.target) && datePickerVisible) {
+                    toggleDatePicker();
+                }
+            });
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+    
+    <div class="footer">
+        <p>
+            更新頻度: 毎日 | 
+            <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a> | 
+            <a href="rss.xml">RSS</a>
+        </p>
+        <p>記事の要約は AI によって生成されており、内容の正確性は保証されません。</p>
+    </div>
+</body>
+</html>
