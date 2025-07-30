@@ -183,7 +183,12 @@ def summaries_to_rss():
             item = SubElement(channel, "item")
             SubElement(item, "title").text = link.title
             SubElement(item, "link").text = link.link
-            SubElement(item, "description").text = markdown(link.comments_summary)
+            
+            # Add page link to description
+            page_link = f"https://kj-9.github.io/hacker-news-ja-summary-rss/pages/{link.comments_id}.html"
+            description_with_link = f"<p><a href=\"{page_link}\">日本語要約ページを読む</a></p>\n\n{markdown(link.comments_summary)}"
+            SubElement(item, "description").text = description_with_link
+            
             SubElement(item, "pubDate").text = link.created_date.strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
