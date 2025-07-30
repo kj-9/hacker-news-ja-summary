@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How a 20 year old bug in GTA San Andreas surfaced in Windows 11 24H2 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How a 20 year old bug in GTA San Andreas surfaced in Windows 11 24H2</h1>
+        <div class="meta">
+            投稿日: 2025年04月23日 | ランク: 2
+        </div>
+        <a href="https://cookieplmonster.github.io/2025/04/23/gta-san-andreas-win11-24h2-bug/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>GTA San AndreasのバグがWindows 11で再浮上した件についての議論の要約：</p>
+<h2>バグの概要</h2>
+<p>GTA San Andreasに存在する、特定の車両（Skimmer）のwheel scaleが未初期化メモリから読み込まれるバグが、Windows 11 24H2で顕在化した。
+これは、Windowsの内部関数LeaveCriticalSectionのスタック使用量の変更により、未初期化メモリが上書きされるようになったためである。</p>
+<h2>バグの原因と対策</h2>
+<ul>
+<li><strong>未初期化変数の使用:</strong> C/C++における未初期化変数の使用は未定義動作であり、予測不能な結果を引き起こす可能性がある。</li>
+<li><strong>コンパイラの警告:</strong> この種のバグは、コンパイラの警告を無視せずに確認することで早期に発見できる可能性がある。</li>
+<li><strong>Sanitizerの利用:</strong> AddressSanitizerなどのツールを使用することで、実行時に未定義動作を検出できる。</li>
+<li><strong>防御的プログラミング:</strong> 変数の初期化、エラーチェック、想定外の状況への対応など、防御的なコーディングを心がけることが重要である。</li>
+<li><strong>関数型プログラミング:</strong> 関数型プログラミングの考え方を取り入れることで、変数のミューテーションによる問題を回避できる。</li>
+<li><strong>テスト:</strong> ユニットテストを実装することで、vehicleファイルをロードおよびインスタンス化し、同様の問題を検出できる。</li>
+</ul>
+<h2>過去のゲーム開発と現代の開発</h2>
+<ul>
+<li><strong>ツールの進化:</strong> 2000年代初頭には、現在ほど高度なデバッグツールや解析ツールが存在しなかった。</li>
+<li><strong>開発環境の違い:</strong> 当時の開発環境や「メタ」は現代とは異なり、インターネットを通じた情報共有も限られていた。</li>
+<li><strong>成功の定義:</strong> 完璧さよりも、動作し、成功することが重視される傾向があった。</li>
+</ul>
+<h2>その他の意見</h2>
+<ul>
+<li><strong>Raymond Chen氏:</strong> この種の技術的な深掘りはRaymond Chen氏が得意とするものであり、非常に高く評価される。</li>
+<li><strong>互換性維持の重要性:</strong> OSの内部実装の変更が、アプリケーションの互換性に影響を与える可能性がある。</li>
+<li><strong>批判:</strong> 問題のコードを書いたプログラマーを批判すべきではないという意見もあった。</li>
+</ul>
+<h2>まとめ</h2>
+<p>GTA San Andreasのバグは、未初期化変数の使用という古典的な問題が、OSの変更によって顕在化した事例である。
+この問題は、適切なツールや開発手法を用いることで回避可能であり、現代の開発者にとって教訓となる。
+また、過去の開発環境や文化を考慮することも重要である。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

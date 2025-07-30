@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lsr: ls with io_uring - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">lsr: ls with io_uring</h1>
+        <div class="meta">
+            投稿日: 2025年07月18日 | ランク: 4
+        </div>
+        <a href="https://rockorager.dev/log/lsr-ls-but-with-io-uring/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、<code>ls</code>コマンドをio_uringを使って高速化する試みである<code>lsr</code>について解説しています。</p>
+<h2>io_uring とは</h2>
+<p>io_uringは、Linuxカーネルの非同期I/Oインターフェースであり、システムコールのオーバーヘッドを削減し、I/O処理を高速化することができます。</p>
+<h2>なぜ <code>lsr</code> を作ったのか</h2>
+<ul>
+<li><code>lsr</code>は、<code>ls</code>コマンドを高速化するために、io_uringを利用してZig言語で実装されました。</li>
+<li><code>ls</code>コマンドを直接変更するのではなく、新しいコマンド<code>lsr</code>を作成したのは、既存の<code>ls</code>がC言語で書かれており、作者がZigで書きたいと考えたためです。</li>
+<li>また、GNUプロジェクトへの貢献には著作権譲渡が必要となる場合があり、それを避けるためでもあります。</li>
+</ul>
+<h2>io_uringの採用に関する議論</h2>
+<ul>
+<li>io_uringは比較的新しい技術であり、セキュリティ上の懸念も指摘されています。</li>
+<li>また、従来の同期的なシステムコールをio_uringで置き換えるには、アーキテクチャの変更が必要となり、既存のツールとの互換性を維持するのが難しい場合があります。</li>
+<li>セキュリティの問題として、io_uringがカーネルメモリへの直接アクセスを許可することが挙げられています。</li>
+<li>Googleなどの組織では、セキュリティ上の理由からio_uringをブロックしている場合があります。</li>
+</ul>
+<h2><code>lsr</code> の性能</h2>
+<ul>
+<li><code>lsr</code>は、従来の<code>ls</code>コマンドと比較して、システムコールの回数を大幅に削減し、実行速度を向上させています。</li>
+<li>ただし、その速度向上の効果は、ディレクトリ内のファイル数やファイルシステムのタイプによって異なります。</li>
+<li>ローカライズ機能の欠如が、GNU lsと比較して高速である要因の一つです。</li>
+</ul>
+<h2>まとめ</h2>
+<p><code>lsr</code>は、io_uringを活用して<code>ls</code>コマンドを高速化する実験的なプロジェクトです。io_uringは、システムコールのオーバーヘッドを削減し、I/O処理を高速化する可能性を秘めていますが、セキュリティ上の懸念や既存のツールとの互換性の問題など、解決すべき課題も存在します。<code>lsr</code>の登場は、今後のシステムユーティリティの進化に一石を投じるものとなるかもしれません。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

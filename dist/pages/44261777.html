@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequent reauth doesn&#x27;t make you more secure - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Frequent reauth doesn&#x27;t make you more secure</h1>
+        <div class="meta">
+            投稿日: 2025年06月12日 | ランク: 1
+        </div>
+        <a href="https://tailscale.com/blog/frequent-reath-security" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、認証における再認証の頻度について議論しています。</p>
+<h2>実装と保守の容易さ</h2>
+<ul>
+<li>セッションクッキーは実装と保守が容易であるため、デフォルトとして使用され続けるでしょう。</li>
+<li>Appleの開発者サービス（App Store Connectなど）はセッションクッキーを使用していますが、開発者にとって不満の原因となっています。</li>
+</ul>
+<h2>セッションクッキーとパーシステントクッキー</h2>
+<ul>
+<li>セッションクッキーはブラウザを閉じると自動的に削除される一時的なデータファイルであり、パーシステントクッキーはセッションを超えて情報を保存できます。</li>
+<li>多くのサイトは認証にパーシステントクッキーを使用しています。</li>
+<li>ブラウザの設定で終了時にクッキーをクリアすることで、マルウェアによるクッキーの盗難を防ぐことができます。</li>
+</ul>
+<h2>再認証の頻度とセキュリティ</h2>
+<ul>
+<li>頻繁な再認証は、セキュリティ体制を大幅に改善するわけではありません。</li>
+<li>認証システムは、有効期限またはユーザー/デバイスによってセッションを無効にする機能を持つべきです。</li>
+<li>セッションを無効にしてからアクセスがなくなるまでのレイテンシが、再認証の頻度よりも重要です。</li>
+<li>トークンの更新と認証/認可のタイムアウトを分離することが重要です。</li>
+<li>リフレッシュトークンを使用することで、ネットワークがダウンした場合でもローカルでの作業を妨げません。</li>
+</ul>
+<h2>ユーザーの利便性とセキュリティのバランス</h2>
+<ul>
+<li>頻繁な再認証は、ユーザーがパスワードを書き留めたり、セキュリティ対策を回避するハックを考え出す原因となります。</li>
+<li>企業によっては、ADFS + MFAを介してKeycloakにログインし、10〜15分のトークン有効期間を持つOIDCプロバイダーとしてKeycloakに依存することで、セキュリティと利便性のバランスを取っています。</li>
+<li>デバイス=同一人物という前提が99%の場合に正しいですが、状況によってはより保守的な仮定をする必要があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>再認証の頻度に関する議論は、セキュリティとユーザーエクスペリエンスのバランスを取る必要性を示しています。頻繁な再認証はセキュリティを向上させる可能性がありますが、ユーザーの利便性を損ない、セキュリティ対策を回避するハックを生み出す可能性があります。適切な認証システムは、セッションを無効にする機能を持ち、トークンの更新と認証/認可のタイムアウトを分離することで、セキュリティと利便性のバランスを取る必要があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

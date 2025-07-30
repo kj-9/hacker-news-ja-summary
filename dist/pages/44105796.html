@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGP handling bug causes widespread internet routing instability - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">BGP handling bug causes widespread internet routing instability</h1>
+        <div class="meta">
+            投稿日: 2025年05月27日 | ランク: 8
+        </div>
+        <a href="https://blog.benjojo.co.uk/post/bgp-attr-40-junos-arista-session-reset-incident" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>BGPの脆弱性に関するHacker Newsの議論の要約です。</p>
+<h2>BGPとインターネットルーティング</h2>
+<p>BGP（Border Gateway Protocol）は、異なるネットワーク間のルーティング情報を交換するためのプロトコルであり、インターネットの基盤となっています。BGPはTCP/IPと同様にインターネットに不可欠ですが、その複雑さから、問題が発生するまで学ぶ機会が少ないという意見があります。BGPを学ぶ方法としては、ローカルルーターのセットアップ、シミュレーターの使用、DN42への参加などが提案されています。</p>
+<h2>マルチキャスト</h2>
+<p>インターネット上でのマルチキャストの利用については意見が分かれています。技術的には可能ですが、ISPでの設定や利用頻度の低さから、実用的ではないという指摘があります。一方で、過去にはBBCなどがMBoneを利用してライブ放送を行っていた事例もあります。</p>
+<h2>エラー処理とPostelの法則</h2>
+<p>BGPメッセージのエラー処理に関する議論では、Postelの法則（受信には寛容に、送信には厳密に）が取り上げられました。しかし、この原則はプロトコルの硬直化やセキュリティ問題を引き起こす可能性があるという批判もあります。RFC 7606で推奨されている「treat-as-withdraw」（問題を通知として扱う）のアプローチが、より安全であると考えられています。</p>
+<h2>実装の誤り</h2>
+<p>AristaのBGP実装におけるエラー処理の誤り（RFC7606に準拠していない）が議論されています。エラーを含むメッセージを適切に処理せず、接続を遮断することが問題視されています。未知の属性を伝播させるBGPの設計が、新たな機能の迅速な展開を可能にする一方で、脆弱性の原因にもなり得ることが指摘されています。</p>
+<h2>まとめ</h2>
+<p>BGPはインターネットの重要な基盤ですが、その複雑さから学習が難しい側面があります。BGPのエラー処理に関する議論では、Postelの法則の限界や実装の重要性が浮き彫りになりました。BGPの脆弱性は今後も発見される可能性があり、継続的な対策が必要です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

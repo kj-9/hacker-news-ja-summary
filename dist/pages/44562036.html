@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedding user-defined indexes in Apache Parquet - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Embedding user-defined indexes in Apache Parquet</h1>
+        <div class="meta">
+            投稿日: 2025年07月14日 | ランク: 4
+        </div>
+        <a href="https://datafusion.apache.org/blog/2025/07/14/user-defined-parquet-indexes/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>[DataFusionにおけるParquetファイルへのカスタムメタデータの追加に関する議論]</p>
+<h2>Parquetの拡張性</h2>
+<ul>
+<li>Parquetファイル形式は古くなってきており、新しい種類のメタデータでParquetを拡張する標準化された方法がないという批判がある。</li>
+<li>DataFusionは、既存のリーダーとの下位互換性を損なわずにこれを行うための巧妙な方法を示した。</li>
+<li>DataFusionは、他のリーダーが無視するfooterとデータページの間​​に任意のデータを挿入する。</li>
+<li>DataFusionのようなクエリエンジンはそれを活用できる。</li>
+</ul>
+<h2>DataFusionの実装</h2>
+<ul>
+<li>DataFusionは、.parquetファイルに新しいインデックスを埋め込み、それを使用してクエリのパフォーマンスを向上させる。</li>
+<li>この特定のインスタンスでは、列のすべての異なる値を持つインデックスを追加する。</li>
+<li>次に、DataFusionクエリエンジンを拡張してそれを活用し、<code>WHERE nation = 'Singapore'</code>のようなクエリが、データページをスキャンせずにその値が.parquetファイルに存在するかどうかを判断できるようにする。</li>
+<li>データページのスキャンは、データセット全体のスキャンを回避するための最小-最大フィルターがあるため、すでに最適化されている。</li>
+</ul>
+<h2>標準化の可能性</h2>
+<ul>
+<li>この手法はDataFusionに固有のものではない。</li>
+<li>各エンジンは、インデックスを利用するためにそれらについて知る必要がある。</li>
+<li>parquet標準へのフォールバックは、データがすべて読み取り可能であることを意味する。</li>
+<li>DataFusionがこのメタデータの読み取り方法の仕様と、実装を検証するためのテストスイートを公開しているかどうかは不明。</li>
+</ul>
+<h2>Parquetファイル形式</h2>
+<ul>
+<li>Parquetファイルには、FileMetadata構造にkey_value_metadataというフィールドが含まれている。</li>
+<li>記事で説明されている手法は、このキーと値のペアを使用して、ファイルに埋め込まれた追加のメタデータ（この場合は個別のインデックス）へのポインタを格納していると思われる。</li>
+<li>各データページ間のParquetファイルに任意のバイナリデータを埋め込むことができる。</li>
+<li>すべてのParquetリーダーはfooterで指定されたデータページへの正確なオフセットに依存しているため、これは完全に有効である。</li>
+</ul>
+<h2>まとめ</h2>
+<p>DataFusionは、Parquetファイル形式の柔軟性を活用して、カスタムメタデータを追加し、クエリのパフォーマンスを向上させる方法を示した。この手法は他のエンジンでも使用できるが、メタデータの解釈方法を認識する必要がある。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

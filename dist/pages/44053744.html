@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM function calls don&#x27;t scale; code orchestration is simpler, more effective - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">LLM function calls don&#x27;t scale; code orchestration is simpler, more effective</h1>
+        <div class="meta">
+            投稿日: 2025年05月21日 | ランク: 8
+        </div>
+        <a href="https://jngiam.bearblog.dev/mcp-large-data/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>LLM（大規模言語モデル）がタスクを実行する際の課題と、その解決策についての議論</p>
+<h2>実行環境と状態管理</h2>
+<p>LLMの実行環境は通常ステートフルであり、Jupyterカーネルのようなものがユーザーセッションごとに必要となる。これは管理が難しく、コストもかかるため、ステートレスで永続的な実行環境が重要となる。イベントソーシングやDurable ExecutionといったアーキテクチャパターンがAIの実行において重要になるが、AIフレームワークでは一般的ではない。</p>
+<h2>エラー処理と継続実行</h2>
+<p>LLMが生成したコードの実行が途中で失敗した場合、エラー発生時の変数の状態から処理を再開できることが望ましい。LLMは正しく再開できるコードを生成できるが、それを可能にするランタイムの構築が難しい。APIをLLMに対して冪等にすることで、LLMがアクション全体をリプレイするか、失敗したステップだけをリプレイするかをバックエンドが気にしなくてもよくなる。</p>
+<h2>LLMと決定論的アプローチのハイブリッド</h2>
+<p>決定論的なアプローチを最大限に活用し、残りの複雑な部分をLLMで処理するハイブリッドな解決策が最適である。LLMを使用して決定論的なアプローチ（コード）を生成し、それがうまく機能すれば、将来のために保存して決定論的に使用する。また、決定論的な方法を使用して、LLMへの最適な入力を生成することもできる。</p>
+<h2>コンテキストメモリのインデックス化</h2>
+<p>モデルがspanをstart:endの範囲で参照できるようにすることで、明示的な引用の代わりに参照渡しで引数を渡せるようにする。これらのspanを抽出QAタスクの回答やコードブロックの引数として使用したり、ポインタからグラフを構築してグラフ計算を実行したりできる。</p>
+<h2>まとめ</h2>
+<p>LLMの利用における課題（コスト、速度、エラー処理）と、その解決策（ステートレス実行環境、冪等なAPI、決定論的アプローチとの組み合わせ、コンテキストメモリのインデックス化）について議論されている。LLMの能力を最大限に引き出しつつ、効率的かつ信頼性の高いシステムを構築するための様々なアプローチが提案されている。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

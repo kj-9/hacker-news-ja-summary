@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategies for Fast Lexers - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Strategies for Fast Lexers</h1>
+        <div class="meta">
+            投稿日: 2025年07月14日 | ランク: 5
+        </div>
+        <a href="https://xnacly.me/posts/2025/fast-lexer-strategies/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、高速な字句解析器を構築するための戦略に関するものです。この記事では、メモ化による高速化、ジャンプテーブル、C言語での実装、<code>FILE*</code>を操作する字句解析器、SIMD、その他の最適化手法など、さまざまな手法について説明しています。</p>
+<h2>ベンチマークとパフォーマンス</h2>
+<ul>
+<li>メモ化による高速化は驚くべきものでした。</li>
+<li>ハンドロールされたジャンプテーブルが大きな影響を与えていることを示すベンチマークはありますか？</li>
+<li>あるアーキテクチャとベンチマークでは、コンパイルされたgotoの方が高速でした。</li>
+<li>現代のコンパイラは、大きなswitch文にジャンプテーブルを使用しないのでしょうか？</li>
+<li>8 Mloc/sに達することができました。</li>
+</ul>
+<h2>言語と実装</h2>
+<ul>
+<li>これはC言語で書かれています。</li>
+<li>これのいくつかは他の言語に翻訳されます。</li>
+<li>Rust、Go、C、C++などでも、ジャンプテーブル、mmapping、遅延数値解析、アロケーションの最小化、文字列スライス、インターニング、インラインハッシュはすべて機能します。</li>
+<li>ClickHouse SQL Lexerを見てみることをお勧めします。</li>
+</ul>
+<h2>字句解析器の設計と最適化</h2>
+<ul>
+<li>字句解析器を文字列ビューではなく、<code>FILE*</code>で動作させるのが好きです。</li>
+<li>字句解析中の「意思決定」を最小限に抑えるようにしてください。</li>
+<li>gotoスレッドを検討したのは、キーワードの識別だけでした。</li>
+<li>キーワードの識別には、gotoスレッドを使用することを検討しました。</li>
+<li>完全に高性能な字句解析器は、できるだけ遠くまでジャンプする必要があります。</li>
+<li>バイト単位で操作するということは、パフォーマンスに厳しい制限があることを意味します。</li>
+<li>タギングマスクを使用して、さまざまなタイプのアトムを区別しました。</li>
+<li>分岐予測フレンドリーな設計を使用しました。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li>字句解析がコンパイラの主要なパフォーマンスのボトルネックであるというのは、素晴らしい問題です。</li>
+<li>字句解析はボトルネックになることはありますか？</li>
+<li>REPLの場合を除き、通常は「事前にファイル全体を読み込む」方が有利です。</li>
+<li>字句解析は、ほとんどの場合ボトルネックではありません。「読みやすい字句解析器の戦略」を見てみたいと思います。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この記事では、高速な字句解析器を構築するためのさまざまな戦略について説明しました。これらの戦略には、メモ化、ジャンプテーブル、SIMD、その他の最適化手法の使用が含まれます。この記事では、字句解析がコンパイラの主要なパフォーマンスのボトルネックであるかどうかについても議論し、字句解析はボトルネックになることはほとんどないという結論に達しました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

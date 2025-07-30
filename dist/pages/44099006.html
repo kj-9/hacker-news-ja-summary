@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News now runs on top of Common Lisp - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Hacker News now runs on top of Common Lisp</h1>
+        <div class="meta">
+            投稿日: 2025年05月26日 | ランク: 6
+        </div>
+        <a href="https://lisp-journey.gitlab.io/blog/hacker-news-now-runs-on-top-of-common-lisp/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、Hacker News (HN) が Common Lisp で Arc ランタイムを再実装したこと、およびそれに関連する議論についてまとめたものです。</p>
+<h2>ダークモードの要望</h2>
+<ul>
+<li>ユーザーは HN に公式のダークモードが実装されることを期待しています。</li>
+<li>Tampermonkey などのツールでユーザー自身がスタイルシートを適用する方法もありますが、サイトの変更に対応してメンテナンスするのは難しいという意見があります。</li>
+<li>ブラウザにダークモード機能が組み込まれることが理想的ですが、CSS のカスケードにより、ユーザーのスタイルシートがウェブサイトの機能を壊す可能性があるという懸念もあります。</li>
+<li>一部の RSS リーダーの埋め込みブラウザでは、クライアントサイドのパッチが機能しないため、サイト側の CSS が必要です。</li>
+</ul>
+<h2>Common Lisp とパフォーマンス</h2>
+<ul>
+<li>SBCL (Steel Bank Common Lisp) は非常に高速であり、Racket よりもパフォーマンスが高いという意見があります。</li>
+<li>HN はシングルコアで動作していましたが、Clarc によりマルチコアでの実行が容易になります。</li>
+<li>CPU が高速であるため、基本的な最適化を行うことで、少数の CPU コアで多数のユーザーに対応できます。</li>
+</ul>
+<h2>セキュリティとアンチアビューズ対策</h2>
+<ul>
+<li>HN のコードベースには、公開すると悪用される可能性のあるアンチアビューズ対策が含まれています。</li>
+<li>セキュリティの原則（ケルクホフスの原則）に反するという意見もありますが、コストを攻撃者と防御者の間で分散させることでセキュリティを強化できるという反論もあります。</li>
+<li>アンチアビューズ対策は、ネットワークセキュリティとは異なり、スパムアカウントの作成などを防ぐためのものです。</li>
+</ul>
+<h2>HN の設計思想</h2>
+<ul>
+<li>HN は「Worse is better」の原則の好例であり、必要最小限の機能に絞り、強力なモデレーションによって成り立っています。</li>
+<li>Slashdot のような豊富な機能は持っていませんが、そのシンプルさが HN の強みとなっています。</li>
+<li>HN は収益を上げる必要がないため、広告が控えめで、ユーザーエクスペリエンスを重視した設計になっています。</li>
+<li>過剰な技術に依存せず、人的な入力に依存している点が HN の特徴であり、成功の要因となっています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker News が Common Lisp で Arc ランタイムを再実装したことは、パフォーマンスの向上やマルチコア対応など、多くのメリットをもたらす可能性があります。また、ダークモードの実装やアンチアビューズ対策など、今後の HN の開発に関する議論も活発に行われています。HN の設計思想である「Worse is better」や、強力なモデレーションによって、シンプルながらも質の高いコミュニティが維持されていることが、HN の成功の要因であると考えられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

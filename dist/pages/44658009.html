@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font-size-adjust Is Useful - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Font-size-adjust Is Useful</h1>
+        <div class="meta">
+            投稿日: 2025年07月26日 | ランク: 7
+        </div>
+        <a href="https://matklad.github.io/2025/07/16/font-size-adjust.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、Webフォントの使用に関する議論と、FOUC（Flash of Unstyled Content）の問題を解決するための代替案、および<code>font-size-adjust</code>プロパティについて解説しています。</p>
+<h2>WebフォントとFOUCの問題</h2>
+<p>Webフォントを使用すると、ページが読み込まれる際にFOUCが発生し、ユーザーエクスペリエンスが低下する可能性があります。一部の開発者は、FOUCを避けるために、ページの最初のレンダリングをブロックすることを問題視しています。</p>
+<ul>
+<li><strong>FOUCを避けるためにページをブロックするべきではない:</strong> 遅い接続や高遅延の接続では、ユーザーが空白のページを見つめる時間が長くなるため。</li>
+<li><strong>FOUCは非常に気になる:</strong> テキストを読み始めた後にレイアウトがシフトすると、ユーザーは自分の場所を見失う可能性があるため。</li>
+<li><strong>必ずしもそうではない:</strong> ボタンやナビゲーション構造など、一時的に間違ったフォントで表示されても、ページの構成を把握できるという意見もある。</li>
+</ul>
+<h2>Webフォントの代替案</h2>
+<p>FOUCの問題を解決するために、いくつかの代替案が提案されています。</p>
+<ul>
+<li><strong>システムフォントの使用:</strong> OSに付属のフォントを使用することで、FOUCを回避できる。<code>font-family: system-ui;</code>を使用すると、OSのデフォルトのUIフォントを使用できる。</li>
+<li><strong>フォントのサブセット化:</strong> コンテンツで使用される文字のみを含むようにフォントをサブセット化することで、フォントファイルのサイズを削減できる。</li>
+<li><strong>ブラウザフォント:</strong> ブラウザにフォントを同梱することで、Webフォントをダウンロードする必要がなくなる。</li>
+<li><strong>Googleの推奨:</strong> Googleは、ページの読み込み速度を重視しており、カスタムフォントが読み込まれるまでシステムフォントでテキストを表示することを推奨している。</li>
+</ul>
+<h2>font-size-adjustプロパティ</h2>
+<p><code>font-size-adjust</code>プロパティは、フォントのx-heightを調整し、異なるフォント間でテキストのサイズをより一貫性のあるものにすることができます。</p>
+<ul>
+<li><strong>line-heightの調整:</strong> <code>font-size-adjust</code>は、行間（leading）を調整するのではなく、文字の高さ（x-heightやcap height）を調整する。</li>
+<li><strong>フォントの互換性:</strong> 異なるフォントを使用する場合でも、テキストのサイズが大きく変わらないようにするために使用できる。</li>
+<li><strong>将来の変更:</strong> 将来フォントを変更する場合でも、テキストのサイズが変わらないようにすることができる。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Webフォントの使用は、FOUCやパフォーマンスの問題を引き起こす可能性があります。システムフォントの使用やフォントのサブセット化などの代替案を検討することで、ユーザーエクスペリエンスを向上させることができます。また、<code>font-size-adjust</code>プロパティを使用すると、異なるフォント間でテキストのサイズをより一貫性のあるものにすることができます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

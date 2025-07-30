@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: KVSplit – Run 2-3× longer contexts on Apple Silicon - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: KVSplit – Run 2-3× longer contexts on Apple Silicon</h1>
+        <div class="meta">
+            投稿日: 2025年05月16日 | ランク: 8
+        </div>
+        <a href="https://github.com/dipampaul17/KVSplit" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>LLM推論において、KVキャッシュのキーと値は量子化感度が大きく異なるという発見。\n</p>
+<p>\n</p>
+<h2>量子化感度の違い\n</h2>
+<p>キーは品質を維持するためにより高い精度を必要とし、値はより低い精度でも許容される。K8V4（8ビットキー、4ビット値）では、59%のメモリ削減で0.86%のperplexity損失に抑えられたが、K4V8（4ビットキー、8ビット値）では、同じメモリ削減でもperplexity損失が6.06%に増加した。\n</p>
+<p>\n</p>
+<h2>実装\n</h2>
+<p>llama.cppに--kvq-keyと--kvq-valフラグを追加し、既存の量子化ロジックをKとVテンソルに個別に適用した。Metalを使用して高速化し、M4 MacBook ProでTinyLlamaを使用して8Kコンテキストウィンドウでベンチマークを実施。\n</p>
+<p>\n</p>
+<h2>潜在的な影響\n</h2>
+<p>この最適化により、同じMac上で2〜3倍長いコンテキストでLLMを実行できるようになる。メモリ使用量はシーケンス長に比例するため、コンテキストが長くなるにつれて節約効果が大きくなる。\n</p>
+<p>\n</p>
+<h2>まとめ\n</h2>
+<p>dipampaul17は、LLMのKVキャッシュにおいてキーと値の量子化感度が異なることを利用して、llama.cppを最適化し、メモリ使用量を削減しつつperplexity損失を最小限に抑えることに成功しました。この最適化は、特にApple Siliconデバイスにおいて、より長いコンテキストでのLLMの実行を可能にする可能性があります。\n</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

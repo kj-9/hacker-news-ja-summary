@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Buckaroo – Data table UI for Notebooks - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Buckaroo – Data table UI for Notebooks</h1>
+        <div class="meta">
+            投稿日: 2025年05月18日 | ランク: 8
+        </div>
+        <a href="https://github.com/paddymul/buckaroo" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <h2>Buckaroo: PandasとPolarsデータフレーム用のオープンソースのデータフレームビューア</h2>
+<p>Hacker Newsのスレッドでは、paddy_mがBuckarooという自身のオープンソースプロジェクトを紹介しました。Buckarooは、最新のテーブルに期待される基本的な機能（スクロール、検索、ソート）を備えたデータフレームビューアです。さらに、要約統計やヒストグラムも利用できます。Buckarooは、PandasとPolarsのデータフレームをサポートし、Jupyter、Marimo、VSCode、Google Colabのノートブックで動作します。</p>
+<h2>キーテーマ1: 機能と拡張性</h2>
+<ul>
+<li>Buckarooは、テーブルUIを構築するためのフレームワークとして設計されており、初期のデータ探索アプリケーションがその上に構築されています。</li>
+<li>コアテーブルの表示にはAG-Gridが使用されており、カスタマイズのためにJS関数を渡す必要がないように、宣言的なレイヤーでカスタマイズされています。</li>
+<li>Python側には、要約統計を追加するためのフレームワークがあります（依存関係のための小さなDAG付き）。</li>
+<li>一般的なコマンド（列の削除など）をポイント＆クリックで選択できるローコードUIもあります。このローコードUIは、同じタスクを実行するPython関数も生成します。これは、JSONフレーバーのLispを読み取る小さなLispインタープリターであるJLisp上に構築されています。</li>
+</ul>
+<h2>キーテーマ2: 自動クリーニング</h2>
+<ul>
+<li>自動クリーニングは、列を調べて、一般的なクリーニング操作をヒューリスティックに提案します。操作はローコードUIに追加され、そこで編集できます。複数のクリーニング戦略を適用して、最適なものを保持できます。UIなしで複数の戦略を使用する自動クリーニングは非常に不透明です。これは（LLMではなく）ヒューリスティックに実行されるため、高速でデータはローカルに保持されます。</li>
+</ul>
+<h2>キーテーマ3: 他のツールとの比較と改善点</h2>
+<ul>
+<li>ZeroCool2uは、VS CodeのData Wranglerが組織全体でデフォルトのソリューションであると述べています。彼は、ローコードソリューションがPandasではなくPolarsを記述することを希望しています。</li>
+<li>paddy_mは、BuckarooのローコードUIがPolarsで動作可能であるが、現在接続されているコマンドがないことを認め、それに取り組むことを約束しました。</li>
+<li>paddy_mは、Data Wranglerが素晴らしい仕事をしたことを認識していますが、クローズドソースであり、拡張不可能であると指摘しています。彼は、Data Wranglerのどのような機能が好きか、どのように異なればよいかを尋ねました。</li>
+</ul>
+<h2>キーテーマ4: Polarsのサポート</h2>
+<ul>
+<li>paddy_mは、ブラウザで試すことができるMarimo WASMの例を作成しました。</li>
+<li>彼は、Polarsの機能を更新する必要があり、最近Pandasに焦点を当てたローコードUIの大規模なリファクタリングを完了したばかりで、Polarsのためにそれをクリーンアップする時が来たと述べています。</li>
+<li>また、PolarsのPythonコード生成は、1つの大きな選択ブロックに対して、データフレームへの複数の再割り当てがあるため、非慣用的です。彼は、それを修正する方法についていくつかのアイデアを持っていますが、時間がかかるでしょう。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Buckarooは、PandasとPolarsのデータフレームを操作するための有望なオープンソースツールです。拡張性、自動クリーニング機能、ローコードUIを備えており、データサイエンティストやデータフレーム/ノートブックの他のユーザーからのフィードバックを積極的に求めています。Data Wranglerのような既存のツールと比較して、Buckarooはオープンソースであり、より拡張性が高いことを目指しています。特にPolarsのサポートに関しては、今後の改善に期待が持てます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

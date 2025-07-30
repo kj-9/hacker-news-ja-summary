@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust running on every GPU - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Rust running on every GPU</h1>
+        <div class="meta">
+            投稿日: 2025年07月26日 | ランク: 6
+        </div>
+        <a href="https://rust-gpu.github.io/blog/2025/07/25/rust-on-every-gpu/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドでは、RustでGPUコードを記述し、複数のバックエンドで実行できるようにする試みについて議論されています。</p>
+<h2>RustでGPUプログラミングを行うことの可能性\n</h2>
+<p>人々は、RustでGPUプログラミングを行うことの可能性に興奮しており、既存の<code>no_std</code> + <code>no_alloc</code>クレートを修正なしでGPUで実行できるという点に特に注目しています。これは、多くの興味深いアイデアを解き放つ可能性を秘めていると考えられています。\n</p>
+<ul>
+<li>開発者は単一の実装を記述し、それをあらゆる種類のハードウェア上で実行できるポータブルバイナリにすることが可能になります。</li>
+<li>GPUにデータを送受信するためにCudarcのような抽象化を使用し、通常のCUDAカーネルを記述できます。</li>
+<li>CUDAプログラマーの間でのRustポートの需要は低いかもしれませんが、Rustはシステムプログラミングをより多くの人々に広げました。GPUプログラミングについても同様のことが起こる可能性があります。</li>
+</ul>
+<h2>抽象化の課題とパフォーマンスへの影響\n</h2>
+<p>GPU APIに対する抽象化は、GPUの低レベルの詳細を活用することを目的とするユースケースでは、バグやパフォーマンスの低下につながる可能性があるため、信頼できないという意見があります。</p>
+<ul>
+<li>ハードウェアの違いを考慮し、ターゲットごとに異なる実装が必要になる可能性があります。</li>
+<li>パフォーマンスを重視する開発者は、結果の最適性に疑問を持つかもしれません。</li>
+<li>抽象化のレベルを選択することは、エンジニアリング能力とパフォーマンスニーズのトレードオフです。</li>
+</ul>
+<h2>ベンダーロックインと標準化の必要性\n</h2>
+<p>GPUソフトウェアのベンダーロックインされた悪夢を打破し、ハードウェアベンダー間の競争を促進する可能性を秘めているという意見があります。</p>
+<ul>
+<li>現在、すべてのベンダーがサポートするオープンスタンダードが切実に必要とされています。</li>
+<li>NvidiaがKhronosの会長を務めているという事実は、現在の状況について何かを示唆しています。</li>
+<li>CUDAがNvidiaにとって大きな堀になっているため、WebGPUだけではこの問題を解決できません。</li>
+</ul>
+<h2>Rust GPUエコシステム\n</h2>
+<p>Rust GPUエコシステムは急速に成長しており、さまざまなプロジェクトが存在します。</p>
+<ul>
+<li><code>rust-gpu</code>はSPIRVにコンパイルするだけであり、VulkanのIRです。</li>
+<li><code>wgpu-rs</code> WebGPU実装の取り組みに基づいて構築されています。</li>
+<li>複数のバックエンドを単一のバイナリにコンパイルし、実行時にプラットフォーム固有のコードパスを選択できます。</li>
+</ul>
+<h2>抽象化レイヤーの数\n</h2>
+<p>抽象化レイヤーの数が多いため、パフォーマンスへの影響やデバッグの難しさについて懸念があります。</p>
+<ul>
+<li>ドメイン固有のRustコード、バックエンドの抽象化、wgpuなどの抽象化、Vulkanなどの抽象化、ドライバーの抽象化、ハードウェアというように、多くのレイヤーが存在します。</li>
+<li>ただし、Rustの強みの1つは、多くのゼロコスト抽象化を提供することです。</li>
+<li>また、Rustのすべてのツール（<code>cargo</code>、<code>cargo test</code>、<code>cargo clippy</code>、<code>rust-analyzer</code>）をシェーダーの構築に使用できます。</li>
+</ul>
+<h2>まとめ\n</h2>
+<p>全体として、このスレッドは、RustでGPUプログラミングを行うことの可能性に対する興奮と、抽象化、パフォーマンス、ベンダーロックイン、標準化の必要性に関する懸念を浮き彫りにしています。Rust GPUエコシステムは急速に成長しており、GPUプログラミングの分野に大きな影響を与える可能性を秘めています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

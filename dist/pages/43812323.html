@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Geocoding Is Hard - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Reverse Geocoding Is Hard</h1>
+        <div class="meta">
+            投稿日: 2025年04月27日 | ランク: 5
+        </div>
+        <a href="https://shkspr.mobi/blog/2025/04/reverse-geocoding-is-hard/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、地理空間座標から地名や住所を特定する「リバースジオコーディング」の難しさについて論じています。</p>
+<h2>UXの課題</h2>
+<p>人々は、Twitchがクラウドソーシングで翻訳を解決したように、クラウドソーシングによる解決策を提供するフィードバックウィジェットのアイデアに言及しています。</p>
+<h2>距離の測定方法</h2>
+<p>直線距離ではなくナビゲーション距離を測定すると、「川」の問題を回避できます。ただし、ルーティングエンジンやデータセットによっては、徒歩では非常に近いポイントでも、既知のルートが運転ルートしかないという問題が発生する可能性があります。OSRMとArcgisはカナダの住所に使用されています。GoogleにはRoutes APIがあります。Graphopperも検討してください。</p>
+<h2>人間が理解しやすい指示</h2>
+<p>グリッドレイアウトの都市では、「クロフォードとショーの間にあるクイーンストリートの約半分」のように指示を出すことができますが、公園の真ん中にあるものへの指示をどのように出すのでしょうか。道順を尋ねられた場合、人々は道路名を知らないことが多いため、道路名を使用することはめったにありません。</p>
+<h2>Geonamesデータベース</h2>
+<p>Geonamesデータベースは、国、都市、主要なランドマークを包括的に網羅しています。ただし、変更や更新の速度が遅く、最新のレストランなどの情報はありません。</p>
+<h2>技術的な難しさ</h2>
+<p>リアルな地理空間座標から特徴空間へのマッピングは、技術的に非常に難しいです。これは、複雑な非線形性を持つ疎なデータモデルでの推論です。動的な関係を追加すると、さらに難しくなります。</p>
+<h2>既存のソリューション</h2>
+<p>Google Maps APIを使用して、住所をクエリし、候補となる住所をランク付けできます。Esriのソフトウェアは、投影エンジンとジオコーディングシステムにおいて優れています。</p>
+<h2>その他のアプローチ</h2>
+<p>OpenStreetMapの住所を短く分割し、最も近い一致を検索することができます。また、OpenStreetMapのデータをElasticsearchに格納し、地理空間クエリを使用することもできます。</p>
+<h2>GPS座標の変動</h2>
+<p>GPS座標は、大陸の移動により変化します。オーストラリアでは、大陸が北に移動しているため、すべての場所が1.8mシフトしました。</p>
+<h2>時間的要素の考慮</h2>
+<p>データベースのテーブルに「valid_from」と「valid_till」を追加することで、データの履歴を管理できます。SQL 2011では、時間的テーブルが定義されています。</p>
+<h2>完璧主義の問題</h2>
+<p>リバースジオコーディングは、完璧主義の問題である可能性があります。ほとんどの場所には明確で簡単な住所がありますが、それ以外の場合は、AIを使用して解決できます。</p>
+<h2>まとめ</h2>
+<p>この記事では、リバースジオコーディングのさまざまな側面について議論されています。課題、既存のソリューション、および将来のアプローチについて考察されています。特に、データの正確性、変動性、および時間的要素を考慮することが重要であることが強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

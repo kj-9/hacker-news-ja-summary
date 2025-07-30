@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Too Many Open Files - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Too Many Open Files</h1>
+        <div class="meta">
+            投稿日: 2025年06月06日 | ランク: 9
+        </div>
+        <a href="https://mattrighetti.com/2025/06/04/too-many-files-open" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、プロセスが開けるファイル記述子の数に上限を設けることの是非について議論しています。</p>
+<h2>ファイル記述子制限の必要性</h2>
+<p>一部の人は、ファイル記述子の数に上限を設けることは、リソースの枯渇やバグのあるプログラムによるシステムの不安定化を防ぐために必要であると主張しています。また、初期のUNIXシステムでは、ファイル記述子の動的な割り当てがサポートされていなかったため、固定サイズの配列を使用していたという歴史的な理由もあります。</p>
+<h2>ファイル記述子制限の不要性</h2>
+<p>他の人は、ファイル記述子の数に上限を設けることは、現代のシステムでは不要であると主張しています。ファイル記述子はカーネルリソースの名前であり、メモリ使用量に直接関係するものではありません。ファイル記述子の制限は、プログラムの設計を歪め、不必要な複雑さを生み出す可能性があります。ファイル記述子の代わりに、カーネルメモリの使用量を直接制御する方が良いでしょう。</p>
+<h2>実用上の問題</h2>
+<p>macOSではデフォルトのファイル記述子の制限が非常に低く、ClickHouseなどのアプリケーションに影響を与える可能性があります。また、VSCodeなどのIDEでは、デフォルトで高い制限が設定されているため、他のシェルで発生するバグが隠蔽されることがあります。ファイル記述子のリークが発生した場合、エラーが発生する可能性があります。</p>
+<h2>解決策</h2>
+<p>ファイル記述子の制限を増やすには、ulimitコマンドを使用したり、/etc/security/limits.confファイルを編集したりする方法があります。Goでは、osパッケージをインポートすると、起動時にファイル記述子のソフトリミットがハードリミットまで自動的に引き上げられます。</p>
+<h2>まとめ</h2>
+<p>ファイル記述子の制限は、歴史的な経緯やリソース管理の観点から設けられていますが、現代のシステムではその必要性について議論があります。制限を設けることでシステムの安定性を保つことができる一方、プログラムの設計を歪めたり、開発者の生産性を低下させたりする可能性もあります。状況に応じて適切な制限を設定し、必要に応じて引き上げることが重要です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

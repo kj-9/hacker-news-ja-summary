@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMD-friendly algorithms for substring searching (2018) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">SIMD-friendly algorithms for substring searching (2018)</h1>
+        <div class="meta">
+            投稿日: 2025年06月14日 | ランク: 9
+        </div>
+        <a href="http://0x80.pl/notesen/2016-11-28-simd-strfind.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、文字列検索におけるSIMD（Single Instruction, Multiple Data）アルゴリズムの利用について議論しています。</p>
+<h2>SIMD文字列検索の実装と最適化</h2>
+<ul>
+<li>複数の人がSIMDを使って文字列検索や分割のアルゴリズムを実装し、最適化を試みている。</li>
+<li>haystackの長さが既知の場合やneedleが大きい場合には、Quick Searchなどのアルゴリズムを組み合わせることで性能向上が見込める。</li>
+<li>muslのstrstrと比較して、SIMD最適化されたlibcではある程度の改善が見られる。</li>
+<li>文字列のサイズによって効率が変わるため、SIMDのセットアップコードが割に合うかどうかの閾値をハードウェアごとにベンチマークする必要がある。</li>
+</ul>
+<h2>実装上の注意点と課題</h2>
+<ul>
+<li>SIMDアルゴリズムの実装では、アライメントされていないデータの扱い、境界条件の処理、針が空の場合の整数オーバーフローなど、UB（未定義動作）を引き起こす可能性がある。</li>
+<li>特に境界条件の処理は煩雑になりがちで、SIMD文字列検索の実装をためらう要因となる。</li>
+<li>理想化されたアルゴリズムは、境界チェックが誤っている、haystackの長さが8の倍数であることを前提としているなど、実際の実装には注意が必要。</li>
+</ul>
+<h2>既存のライブラリとアルゴリズム</h2>
+<ul>
+<li>ripgrep（Rustの<code>regex</code>クレート経由）では、AVX2を使ったアプローチで文字列検索を高速化している。</li>
+<li><code>memchr</code>ライブラリでは、needleの頻度の低い2バイトを選択するヒューリスティックを用いており、Two-WayやGNU libcの<code>memmem</code>よりも高速。</li>
+<li>C#でもIndexOfにSIMDが実装されている。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この記事では、SIMDを使った文字列検索アルゴリズムの実装、最適化、および注意点について議論されました。実装者は、特定のユースケースに対してSIMDが本当に必要かどうかを慎重に検討し、既存のライブラリやアルゴリズムを参考にしながら、境界条件などの実装上の課題に注意する必要があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

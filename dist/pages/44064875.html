@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Pydantic models from JSON without running out of memory - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Loading Pydantic models from JSON without running out of memory</h1>
+        <div class="meta">
+            投稿日: 2025年05月22日 | ランク: 6
+        </div>
+        <a href="https://pythonspeed.com/articles/pydantic-json-memory/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、PythonにおけるJSON処理のパフォーマンスとメモリ効率に関する議論です。</p>
+<h2>JSON処理ライブラリの比較</h2>
+<p><code>ijson</code>と<code>json.load(f)</code>、<code>ujson</code>の比較について要望があり、PyCon 2025での発表スライドが共有されました。<code>ijson</code>に関する以前の記事も参考として挙げられています。<code>msgspec</code>は、デフォルトでメモリ効率が良いと評価されています。</p>
+<h2>dataclassesのslotsについて</h2>
+<p><code>slots=True</code>を常に設定することのデメリットが議論されました。<code>slots=True</code>を設定すると、元のdataclass定義にない属性を後から追加できなくなる点が指摘されています。また、<code>vars()</code>のようなイントロスペクションが機能しなくなる場合があるものの、<code>dataclasses.asdict</code>を使用する場合は問題が少ないとされています。</p>
+<h2>複雑なモデルのロードに関する問題</h2>
+<p>複雑なモデルのロード時に、深い部分が辞書として残ってしまう問題が提起されました。この問題に対する解決策として、Discriminated Unionsの使用が提案されています。Pydanticが部分的にしか検証しないという挙動は通常ありえないため、具体的なコード例の共有が求められています。また、データ構造の複雑さ自体を見直すことも検討されています。</p>
+<h2>Pydanticの代替としてのmsgspec</h2>
+<p>Pydanticの代わりに<code>msgspec</code>を使用することが提案されました。<code>msgspec</code>はメモリ効率が良く、高速であると評価されています。Pydanticの利点としては、validation hooksを利用して特定のフィールドのシリアライズ/デシリアライズをカスタマイズできる点が挙げられています。Pydanticは速度面では劣るものの、多くの機能を提供しています。</p>
+<h2>まとめ</h2>
+<p>PythonでJSONを扱う際のライブラリ選択や、dataclassesのslots、複雑なモデルのロードに関する問題点と解決策が議論されました。<code>ijson</code>、<code>ujson</code>、<code>msgspec</code>といった代替ライブラリが提案され、それぞれのメリット・デメリットが比較検討されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>

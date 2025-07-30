@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPU Deep Dive - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">TPU Deep Dive</h1>
+        <div class="meta">
+            投稿日: 2025年06月22日 | ランク: 6
+        </div>
+        <a href="https://henryhmko.github.io/posts/tpu/tpu.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、GoogleのTensor Processing Unit（TPU）に関する技術的な議論をまとめたものです。</p>
+<h2>キャッシュとメモリ管理</h2>
+<p>TPUにはMMU（Memory Management Unit）がないため、キャッシュのロードやストアは自動化されていません。TPUはプッシュ型アーキテクチャを採用しており、GPUの柔軟性はキャッシュではなくMMUによる自動フェッチに起因するという意見があります。</p>
+<h2>TPUに適したアルゴリズム</h2>
+<p>TPUは、大規模な密行列の積算に最適化されています。SVDや固有値分解も、最終的には行列積に帰着するため、TPUで効率的に処理できる可能性があります。Jaxの書籍は、TPUのハードウェア機能への計算のマッピングに関して役立つ情報源となります。</p>
+<h2>TPUの知識の習得方法</h2>
+<p>TPUに関する知識は、Googleが公開している論文や講演から得ることができます。また、JaxやXLAなどのオープンソースプロジェクトもTPUの動作に関する手がかりを提供します。Google Colabを通じてTPUに無料でアクセスする方法もあります。</p>
+<h2>LLMにおけるGPUとTPUの最適化と決定論</h2>
+<p>LLM（Large Language Models）は一般的に決定論的ですが、トークンサンプリングは通常、ある程度のランダム性を持っています。ただし、分散環境では浮動小数点数の誤差により、非決定論的な結果が生じる可能性があります。GPUとTPUでは、スケジューリングやメモリアクセスパターンが異なるため、パフォーマンスの決定論的保証が異なります。TPUはサイクルレベルでの決定論的保証を持つ可能性がありますが、GPUは持ちません。</p>
+<h2>TPUを販売しないGoogleの戦略</h2>
+<p>GoogleがTPUを販売しない理由として、販売とサポートに必要なインフラの構築コストや、競争力を維持するために技術を共有しないことが挙げられています。また、TPUの利用が特定のワークロードに限定されているため、広く販売しても需要が見込めない可能性があります。</p>
+<h2>TPUとFPGAの比較</h2>
+<p>FPGA（Field-Programmable Gate Array）は、TPUと比較して柔軟性がありますが、コストや電力効率の面で劣ります。FPGAは少量生産に適しており、特定の用途に特化したシステムを構築できます。一方、TPUは大量生産に適しており、特定のAIワークロードに最適化されています。</p>
+<h2>TPUの将来性</h2>
+<p>TPUはGoogleの内部需要を満たすために開発されており、クラウドサービスプロバイダー間の競争がないため、外部での普及が進まない可能性があります。ただし、TPUはGoogleの技術的な選択肢を制約する可能性があり、将来の機械学習プロジェクトに影響を与える可能性があります。</p>
+<h2>まとめ</h2>
+<p>この記事では、GoogleのTPUに関する様々な議論が交わされました。TPUのアーキテクチャ、適切なアルゴリズム、知識の習得方法、LLMにおける決定論、販売戦略、FPGAとの比較、そして将来性について議論されています。TPUは特定のワークロードに最適化されたハードウェアであり、GoogleのAI戦略において重要な役割を果たしていますが、外部での普及には課題が残ることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary-rss">GitHub</a></p>
+    </div>
+</body>
+</html>
