@@ -10,6 +10,8 @@ from urllib.parse import urlparse, parse_qs
 from pydantic import BaseModel
 from markdown import markdown
 import time
+import html
+from string import Template
 
 # Configure logging
 logging.basicConfig(
@@ -63,6 +65,106 @@ def fetch_top_links(limit):
     return links
 
 
+# Function to generate HTML pages and RSS
+def generate_html_pages():
+    """Generate individual article HTML pages and index page"""
+    # Load templates
+    templates_dir = Path("templates")
+    with (templates_dir / "article.html").open("r", encoding="utf-8") as f:
+        article_template = Template(f.read())
+    with (templates_dir / "index.html").open("r", encoding="utf-8") as f:
+        index_template = Template(f.read())
+    
+    # Ensure dist directory exists
+    dist_dir = Path("dist")
+    dist_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Load all articles from JSON files
+    out_dir = Path("out")
+    articles = []
+    json_files = sorted(out_dir.glob("*.json"), key=lambda x: x.name, reverse=True)
+    
+    for json_file in json_files:
+        with json_file.open("r", encoding="utf-8") as f:
+            link = HnLink.model_validate_json(f.read())
+            articles.append(link)
+            
+            # Generate individual article HTML
+            if link.comments_summary:
+                article_html = article_template.substitute(
+                    title=html.escape(link.title),
+                    date=link.created_date.strftime("%Y年%m月%d日"),
+                    rank=link.rank,
+                    link=html.escape(link.link),
+                    content=markdown(link.comments_summary)
+                )
+                
+                # Create pages directory if it doesn't exist
+                pages_dir = dist_dir / "pages"
+                pages_dir.mkdir(parents=True, exist_ok=True)
+                
+                article_file = pages_dir / f"{link.comments_id}.html"
+                with article_file.open("w", encoding="utf-8") as f:
+                    f.write(article_html)
+    
+    # Group articles by date and sort by rank within each day
+    from collections import defaultdict
+    import json
+    articles_by_date = defaultdict(list)
+    
+    for article in articles:  # Process all articles
+        if article.comments_summary:
+            date_key = article.created_date.strftime("%Y-%m-%d")
+            articles_by_date[date_key].append(article)
+    
+    # Sort articles within each date by rank (ascending)
+    for date_key in articles_by_date:
+        articles_by_date[date_key].sort(key=lambda x: x.rank)
+    
+    # Create JSON data for client-side pagination
+    articles_data = {}
+    sorted_dates = sorted(articles_by_date.keys(), reverse=True)  # Most recent dates first
+    
+    for date_key in sorted_dates:
+        date_articles = articles_by_date[date_key]
+        date_obj = datetime.strptime(date_key, "%Y-%m-%d")
+        formatted_date = date_obj.strftime("%Y年%m月%d日")
+        
+        # Create article data for this date
+        articles_json = []
+        for article in date_articles:
+            # Get first paragraph of summary for preview
+            summary_lines = article.comments_summary.split('\n')
+            preview = summary_lines[0] if summary_lines else ""
+            if len(preview) > 200:
+                preview = preview[:200] + "..."
+            
+            articles_json.append({
+                "id": article.comments_id,
+                "title": article.title,
+                "rank": article.rank,
+                "preview": preview,
+                "link": article.link
+            })
+        
+        articles_data[date_key] = {
+            "formatted_date": formatted_date,
+            "articles": articles_json
+        }
+    
+    # Generate index page with JavaScript pagination
+    index_html = index_template.substitute(
+        articles_data=json.dumps(articles_data, ensure_ascii=False),
+        sorted_dates=json.dumps(sorted_dates, ensure_ascii=False)
+    )
+    
+    index_file = dist_dir / "index.html"
+    with index_file.open("w", encoding="utf-8") as f:
+        f.write(index_html)
+    
+    logging.info(f"Generated {len(articles)} article pages and index page")
+
+
 # Function to combine daily RSS files into a master RSS file
 def summaries_to_rss():
     # Create the root RSS structure
@@ -74,7 +176,7 @@ def summaries_to_rss():
 
     # load all json files in out directory
     out_dir = Path("out")
-    json_files = out_dir.glob("*.json")
+    json_files = sorted(out_dir.glob("*.json"), key=lambda x: x.name, reverse=True)
     for json_file in json_files:
         with json_file.open("r") as f:
             link = HnLink.model_validate_json(f.read())
@@ -126,5 +228,6 @@ if __name__ == "__main__":
                     logging.warning(f"Skipping link {link.comments_id} after multiple retries.")
 
     summaries_to_rss()
+    generate_html_pages()
     logging.info("Script completed successfully.")
 
