@@ -1,5 +1,6 @@
 # hacker-news-ja-summary-rss
 
-Hacker Newsのコメントを日本語で要約し、RSSフィードとしてホストしています。
+Hacker Newsのコメントを日本語で要約しています。
 
-[Follow RSS Feed](https://kj-9.github.io/hacker-news-ja-summary-rss/rss.xml)
+- [Web Page](https://kj-9.github.io/hacker-news-ja-summary-rss)
+- [RSS Feed](https://kj-9.github.io/hacker-news-ja-summary-rss/rss.xml)
