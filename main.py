@@ -171,7 +171,7 @@ def summaries_to_rss():
     rss = Element("rss", version="2.0")
     channel = SubElement(rss, "channel")
     SubElement(channel, "title").text = "Hacker Newsのコメント要約"
-    SubElement(channel, "link").text = "https://github.com/kj-9/hacker-news-ja-summary-rss"
+    SubElement(channel, "link").text = "https://github.com/kj-9/hacker-news-ja-summary"
     SubElement(channel, "description").text = "Hacker Newsのコメント要約"
 
     # load all json files in out directory
@@ -185,7 +185,7 @@ def summaries_to_rss():
             SubElement(item, "link").text = link.link
             
             # Add page link to description
-            page_link = f"https://kj-9.github.io/hacker-news-ja-summary-rss/pages/{link.comments_id}.html"
+            page_link = f"https://kj-9.github.io/hacker-news-ja-summary/pages/{link.comments_id}.html"
             description_with_link = f"<p><a href=\"{page_link}\">日本語要約ページを読む</a></p>\n\n{markdown(link.comments_summary)}"
             SubElement(item, "description").text = description_with_link
             
