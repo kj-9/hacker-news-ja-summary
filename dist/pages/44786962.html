@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A deep dive into Rust and C memory interoperability - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A deep dive into Rust and C memory interoperability</h1>
+        <div class="meta">
+            投稿日: 2025年08月04日 | ランク: 6
+        </div>
+        <a href="https://notashes.me/blog/part-1-memory-management/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、CとRustのメモリ割り当ての相互運用に関する潜在的な問題点について解説しています。</p>
+<h2>インタビューの質問</h2>
+<p>読者は、Cの<code>malloc</code>で割り当てられたメモリをRustの<code>dealloc</code>で解放するとどうなるかという、記事の冒頭の質問について議論しています。一部の読者は、記事のフォーマットが読みにくいと感じており、AIによって生成されたテキストのように感じられると述べています。</p>
+<h2>CとRustの構造体へのアクセス</h2>
+<p>読者は、CとRustの両方から構造体にアクセスする方法について質問し、<code>#[repr(C)]</code>属性を使用して、Rustコンパイラに構造体をCコンパイラと同じレイアウトで配置させる方法について議論しています。また、<code>rust-bindgen</code>ツールを使用して、CヘッダーからRustの構造体を自動的に生成する方法についても議論しています。</p>
+<h2>アロケータの混合</h2>
+<p>読者は、Cで割り当てられたメモリをRustで解放することがなぜ問題なのか、また、その理由について議論しています。アロケータがランタイム間で同じように動作することを期待するのは非現実的であり、アロケータを混合すると、ヒープの破損や予期しないクラッシュにつながる可能性があることを指摘しています。ライブラリがCで記述されている場合、ライブラリがオブジェクト破棄のための関数をエクスポートすることが推奨されます。</p>
+<h2>Rustでのアロケータのサポート</h2>
+<p>読者は、Rustの標準ライブラリでアロケータをデータ構造に渡すことができるようになることについて議論しています。これにより、Postgresなどの独自のアロケータシステムを持つ環境でRustコードを統合することが容易になる可能性があります。</p>
+<h2>AIによるテキスト生成の疑惑</h2>
+<p>読者は、記事のテキストがAIによって生成された可能性があると疑っています。箇条書きリストの多用、特定フレーズの使用、全体的な構造などが、AI生成テキストの特徴であると指摘しています。著者はRedditでAIの使用を認めています。</p>
+<h2>まとめ</h2>
+<p>この記事は、CとRustのメモリ割り当ての相互運用に関する潜在的な問題点を解説し、特にアロケータの混合が危険であることを強調しています。記事のフォーマットや内容については賛否両論ありますが、CとRustの混在したコードベースで作業する開発者にとっては有益な情報源となる可能性があります。ただし、AIによって生成されたテキストが含まれている可能性があるため、内容の正確性については注意が必要です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
