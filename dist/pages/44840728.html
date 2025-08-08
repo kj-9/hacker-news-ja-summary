@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask HN: How can ChatGPT serve 700M users when I can&#x27;t run one GPT-4 locally? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ask HN: How can ChatGPT serve 700M users when I can&#x27;t run one GPT-4 locally?</h1>
+        <div class="meta">
+            投稿日: 2025年08月08日 | ランク: 6
+        </div>
+        <a href="https://news.ycombinator.com/item?id=44840728" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>大規模なLLM推論を可能にするエンジニアリングの工夫について議論しています。</p>
+<h2>スケールとリソース</h2>
+<ul>
+<li>OpenAIは、週に約7億人のユーザーをChatGPTで処理しており、大規模なGPUクラスタを所有しています。</li>
+<li>ハードウェア(GPU)にお金をかければ解決できるという意見もあります。</li>
+<li>大規模なGPUクラスタには、「莫大なVRAM」が搭載されています。オフロードなしで実際にモデルをロードできれば、ほとんどの場合、推論はそれほど計算コストがかかりません。</li>
+<li>OpenAIはMicrosoft Azureのクラウドインフラストラクチャでホストされており、Microsoftは49%を所有しています。</li>
+</ul>
+<h2>最適化と手法</h2>
+<ul>
+<li>モデルの最適化、シャーディング、カスタムハードウェア、巧妙なロードバランシング、プロンプトのキャッシング、RAG、CUDAの最適化、スロットリング、推論時の計算以外の他のアプローチを使用したオフロードなどが行われています。</li>
+<li>推論はバッチ処理できるため、複数のクエリを並列バッチでまとめて処理する方が、ユーザーごとにGPUを1つずつインタラクティブに割り当てるよりも効率的です。</li>
+<li>投機的デコーディングは、より小さいドラフトモデルを使用して、はるかに少ない計算量とメモリでトークンを生成します。次に、メインモデルは、生成したであろう確率に基づいてそれらのトークンを受け入れます。</li>
+<li>構造化された出力のための別のトリックは、「高速転送」です。JSONを生成するときに<code>{ "":</code>などで始める必要があることがわかっている場合、トークンをスキップできます。</li>
+<li>バッチ処理はレイテンシを増加させるため、トレードオフが生じます。MoEは均等に使用されないため、さらに複雑になります。</li>
+</ul>
+<h2>ハードウェア</h2>
+<ul>
+<li>GoogleはTPUを持っており、Nvidiaカードよりも効率的です。</li>
+<li>Positron.aiは、専用ハードウェアによるLLMワークロードのスケーリングへのアプローチについて議論しています。</li>
+<li>CerebrasとGroqは、すでに推論のスループットが非常に高くなっています。AppleがAppleシリコンAIサーバーを開発する場合も面白いかもしれません。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このディスカッションでは、大規模なLLM推論を可能にするさまざまな要因について議論しています。主な要因は、リソース（大規模なGPUクラスタ）と、モデルの最適化、シャーディング、カスタムハードウェアなどのエンジニアリング上の工夫です。投機的デコーディングやバッチ処理などの手法も、パフォーマンスを向上させるために使用されています。また、TPUやCerebrasなどの専用ハードウェアも、LLM推論の効率を高める上で重要な役割を果たしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
