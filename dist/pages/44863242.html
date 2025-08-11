@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenSSH Post-Quantum Cryptography - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">OpenSSH Post-Quantum Cryptography</h1>
+        <div class="meta">
+            投稿日: 2025年08月11日 | ランク: 6
+        </div>
+        <a href="https://www.openssh.com/pq.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのスレッドでは、OpenSSHへのポスト量子暗号（PQC）の採用と、既存の暗号アルゴリズムに対するその必要性と影響について議論されています。</p>
+<h2>PQC採用の必要性</h2>
+<p>多くの人が、量子コンピュータがまだ存在しないにもかかわらず、PQCを採用する必要性を強調しています。理由は、今日のトラフィックが「ストア・ナウ、デクリプト・レイター」攻撃のリスクにさらされているからです。PQCへの切り替えのコストは比較的低く、データ侵害の潜在的な結果に比べて、PQCは賢明な予防措置であると見なされています。</p>
+<h2>オーバーヘッドとパフォーマンスの影響</h2>
+<p>PQCアルゴリズムは、従来のアルゴリズムと比較して、キーサイズが大きく、ネットワークトラフィックとCPU時間にオーバーヘッドが生じるという懸念があります。ただし、これらのオーバーヘッドは主にキー交換に影響し、全体的なセッションパフォーマンスへの影響は最小限に抑えられます。また、ハイブリッドアプローチを使用すると、古典的なアルゴリズムが破られた場合でも、一定レベルのセキュリティが確保されます。</p>
+<h2>量子コンピュータの進捗状況</h2>
+<p>量子コンピューティングの進捗状況に関する意見は分かれています。一部の人は、スケーリングの問題は主にエンジニアリング上の課題であると主張していますが、他の人は、それが基礎となる物理学の問題であると信じています。量子コンピュータの開発のタイムラインに関する見積もりは大きく異なり、一部の人は5〜10年以内に実現すると予測していますが、他の人は20年以上かかると予測しています。</p>
+<h2>アルゴリズムの選択肢</h2>
+<p>OpenSSHで使用できる2つの主要なPQCハイブリッドアルゴリズムである、mlkem768x25519-sha256とsntrup761x25519-sha512について議論されています。mlkem768はパフォーマンスが向上し、キーサイズが小さいのに対し、SNTRUP761はセキュリティに関する仮定が強く、潜在的な暗号解読に対する回復力が高くなっています。業界はmlkemに標準化する傾向があります。</p>
+<h2>ハイブリッド方式</h2>
+<p>OpenSSHに実装されているすべてのPQCアルゴリズムはハイブリッドであり、PQCアルゴリズムと古典的なアルゴリズムを組み合わせたものです。これにより、PQCアルゴリズムが破られた場合でも、セキュリティが従来のアルゴリズムよりも悪化することはありません。ただし、ハイブリッドスキームは、実装バグやサイドチャネルに対する露出を増やす可能性もあります。</p>
+<h2>まとめ</h2>
+<p>全体として、スレッドは、特に長期間機密性を保つ必要のあるデータの場合、PQCを早期に採用することの重要性を強調しています。PQCアルゴリズムの実装にはパフォーマンスのオーバーヘッドがあるものの、リスクを軽減するのに効果的であると見なされています。議論では、適切なアルゴリズムの選択、ハイブリッド方式の利点と欠点、量子コンピューティングの最新の進捗状況についても取り上げられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
