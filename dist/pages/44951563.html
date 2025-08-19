@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Without the futex, it&#x27;s futile - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Without the futex, it&#x27;s futile</h1>
+        <div class="meta">
+            投稿日: 2025年08月19日 | ランク: 7
+        </div>
+        <a href="https://h4x0r.org/futex/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、現代の並行処理において重要な役割を果たす Futex（fast userspace mutex）について解説しています。The Art of Multiprocessor Programmingという書籍が、Futexについて十分にカバーしていない点を批判し、Futexの重要性と、現代のハードウェアにおける効率的なプリミティブの中核をなすことを強調しています。</p>
+<h2>Futexの仕組みと重要性</h2>
+<p>Futexは、ユーザー空間での高速なmutex処理を可能にする仕組みであり、競合が発生しない場合にはシステムコールを回避できます。
+Futexは、ロックと待機を分離し、カーネルはロックの状態に関与せず、待機キューの管理と競合状態の検出のみを行います。</p>
+<h2>Futexの進化と課題</h2>
+<p>Futexは、当初はシンプルなsyscallでしたが、条件変数や優先順位の継承などの機能が追加され、APIが複雑化しています。
+Linuxのfutex syscallは、多機能でありながら、価値の低い部分も含まれています。
+Windowsでは、Futexに類似したWaitOnAddressというAPIが導入されています。</p>
+<h2>Futexと他の同期プリミティブ</h2>
+<p>Benaphoreは、Futexが登場する前に存在した同期プリミティブですが、Futexほど汎用性が高くありません。
+WaitForMultipleObjectsは、複数のカーネルオブジェクトを待機するWindowsのAPIであり、LinuxではFutex2で同様の機能が実現されています。</p>
+<h2>まとめ</h2>
+<p>Futexは、現代の並行処理において重要な役割を果たすプリミティブであり、その仕組みを理解することは、効率的な並行処理プログラミングに不可欠です。Futexは、ユーザー空間での高速なmutex処理を可能にし、競合が発生しない場合にはシステムコールを回避できます。
+FutexのAPIは複雑化していますが、その概念は他のOSのプリミティブにも影響を与えており、並行処理の世界において重要な存在です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>

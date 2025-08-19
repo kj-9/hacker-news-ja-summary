@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How we exploited CodeRabbit: From simple PR to RCE and write access on 1M repos - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How we exploited CodeRabbit: From simple PR to RCE and write access on 1M repos</h1>
+        <div class="meta">
+            投稿日: 2025年08月19日 | ランク: 2
+        </div>
+        <a href="https://research.kudelskisecurity.com/2025/08/19/how-we-exploited-coderabbit-from-a-simple-pr-to-rce-and-write-access-on-1m-repositories/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>CodeRabbitの脆弱性とそれに対する対応についてのHacker Newsのコメントです。ある研究者がCodeRabbitのシステムに存在するリモートコード実行（RCE）の脆弱性を発見し、それを悪用してGitHubアプリの秘密鍵を取得できることを報告しました。</p>
+<h2>環境変数の管理とAPIキーの安全性</h2>
+<p>多くの人が、CodeRabbitがAPIキーを環境変数に保存していたことに対する懸念を表明しています。GitHub自身がドキュメントで環境変数でのキーの保存を推奨していないにも関わらずです。APIキーを環境変数に保存するのではなく、より安全な方法（HSMやキーVaultなど）を使用するべきだったという意見が出ています。</p>
+<h2>隔離メカニズムとサンドボックス化</h2>
+<p>CodeRabbitがRubocopを隔離メカニズム内で実行していなかったことが問題視されています。Dockerコンテナなどの隔離技術を使用していたにもかかわらず、一部のツールが適切にサンドボックス化されていなかったようです。脆弱性が悪用されたツールがサンドボックス化されていなかったのは、単なる偶然だったという指摘もあります。</p>
+<h2>GitHubアプリの権限とセキュリティ</h2>
+<p>CodeRabbitがGitHubリポジトリへの書き込みアクセス権を必要とすることに対する疑問も提起されています。テストの追加や修正の提案のために書き込みアクセスが必要であるものの、それがセキュリティリスクを高める可能性があるという懸念があります。リポジトリへの書き込み権限をより細かく制御できるような仕組みがGitHubに求められています。</p>
+<h2>脆弱性の報告と対応</h2>
+<p>CodeRabbitの担当者がコメントで、RCEの脆弱性は既に報告され修正済みであり、顧客データへの影響はなかったと述べています。また、現在ではすべての実行コードに対して広範なサンドボックス化を行っていると説明しています。しかし、修正前に秘密鍵が漏洩していなかったか、バックドアが仕掛けられていないかなど、CodeRabbitの説明に対する疑念も表明されています。</p>
+<h2>まとめ</h2>
+<p>CodeRabbitの脆弱性は、環境変数の不適切な管理、サンドボックス化の不備、GitHubアプリの過剰な権限など、複数のセキュリティ上の問題が組み合わさって発生しました。この問題を迅速に修正し、セキュリティ対策を強化したことは評価できますが、初期のセキュリティ設計の甘さや、脆弱性に関する情報公開の不足に対する批判も多く見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
