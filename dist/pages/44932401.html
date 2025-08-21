@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D4D4 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">D4D4</h1>
+        <div class="meta">
+            投稿日: 2025年08月21日 | ランク: 10
+        </div>
+        <a href="https://www.nmichaels.org/musings/d4d4/d4d4/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>これは、LLVMコンパイラがARMアーキテクチャの実行可能ファイルに挿入するトラップ命令に関するHacker Newsのスレッドの要約です。このトラップ命令は、本来はNOPスレッドをトラップし、攻撃者がそれらを使用してReturn-Oriented Programming（ROP）攻撃を実行するのを防ぐためのものです。しかし、ARM Thumbでは、この命令はトラップではなくジャンプとして解釈されるため、意図した緩和策が損なわれています。</p>
+<h2>トラップ命令の目的</h2>
+<ul>
+<li>リンカがコンパイルされたコード間に挿入するNOP命令のスレッドをトラップする。</li>
+<li>攻撃者がこれらのNOP命令を利用してROP攻撃を行うのを防ぐ。</li>
+<li>これにより、攻撃者はパディング範囲内の任意のアドレスにジャンプし、NOPをスライドしてターゲット関数に到達できる。</li>
+</ul>
+<h2>ARM Thumbにおける問題点</h2>
+<ul>
+<li>ARM Thumbでは、意図されたトラップ命令がトラップとして機能せず、代わりにジャンプとして解釈される。</li>
+<li>これにより、攻撃者は依然としてパディングへのジャンプを利用してコードを実行できるため、緩和策が無効になる。</li>
+<li>これは、OpenBSDがx86向けに実装したトラップスレッドをLLVMがARMに再実装する際に、元の設計を完全に理解していなかったことが原因である可能性がある。</li>
+</ul>
+<h2>コメントの重要性</h2>
+<ul>
+<li>コミットメッセージには命令の目的が記載されているが、コード自体には説明がないため、可読性と保守性が低下する。</li>
+<li>コードは自己文書化されるべきという考え方があるが、常に可能とは限らず、特に特定の値が選択された理由を説明する場合は難しい。</li>
+<li>コメントを追加すると、コードが変更されたときにコメントが嘘になる可能性があるため、保守コストが増加する。</li>
+<li>コミットメッセージは、コードの変更履歴とコンテキストを追跡するために重要であり、コードコメントだけでは不十分な場合がある。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このスレッドでは、LLVMコンパイラがARM Thumbで誤った命令を生成しているという問題を掘り下げています。この問題は、本来はセキュリティを強化するためのものですが、ARM Thumbではジャンプとして解釈されるため、実際には攻撃ベクトルとなる可能性があります。また、コードの可読性、自己文書化、コメントの役割についても議論されています。全体として、このスレッドは、コンパイラとリンカの微妙な相互作用、およびセキュリティ上の欠陥を特定して修正することの重要性を示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
