@@ -1,0 +1,8 @@
+{
+  "comments_id": "44980865",
+  "rank": 9,
+  "title": "Io_uring, kTLS and Rust for zero syscall HTTPS server",
+  "link": "https://blog.habets.se/2025/04/io-uring-ktls-and-rust-for-zero-syscall-https-server.html",
+  "created_date": "2025-08-22T20:12:56.501498",
+  "comments_summary": "これは、`io_uring`とRustを使って、syscallをほとんど行わずに動作する高性能なウェブサーバの構築について書かれた記事です。\n\n## io_uringとRust\n\n人々はRustで`io_uring`の安全な非同期ライブラリを構築することの難しさについて議論しています。`io_uring`は安全ではないAPIを持っており、メモリ管理は複雑であるためです。いくつかの提案は、リングが所有するバッファを使用し、コンパイラがメモリの安全性を保証できるようにすることです。\n\n## 並行処理と非同期処理のモデル\n\nRustの非同期モデル（async/await）は、GoのgoroutineやJavaのvirtual threadsと比較されています。\nRustのasyncモデルは、ゼロコスト抽象化を目指しており、メモリ効率が良いですが、複雑さが増しています。\nGoやJavaのモデルは、よりシンプルで使いやすいですが、オーバーヘッドが大きくなる可能性があります。\nRustのasyncモデルは、cancel safety（タスクが中断されたときにリソースが安全に解放されること）が問題になることがあります。\n\n## kTLS（Kernel TLS）\n\nkTLS（Kernel TLS）は、TLS暗号化をカーネルで行うことで、パフォーマンスを向上させる技術です。\n一部のディストリビューションではまだ完全にサポートされていませんが、Netflixなどの企業ではすでに使用されています。\n\n## スレッド数とCPUコア数\n\nCPUコアごとに1つのスレッドを使用することが常に最適であるとは限りません。\nI/Oバウンドなワークロードでは、CPUコア数よりも多くのスレッドを使用する方がパフォーマンスが向上する場合があります。\nスレッドごとのコアアーキテクチャでは、コア間の負荷を適切に分散することが重要です。\n\n## まとめ\n\nこの記事では、`io_uring`とRustを使ってsyscallをほとんど行わずに動作する高性能なウェブサーバの構築について議論しています。\n人々はRustで`io_uring`の安全な非同期ライブラリを構築することの難しさ、並行処理と非同期処理のモデル、kTLS（Kernel TLS）、スレッド数とCPUコア数について議論しています。"
+}
