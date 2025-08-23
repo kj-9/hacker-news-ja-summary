@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Speed-of-Light Flash Attention for 5090 in CUDA C++ - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Writing Speed-of-Light Flash Attention for 5090 in CUDA C++</h1>
+        <div class="meta">
+            投稿日: 2025年08月23日 | ランク: 8
+        </div>
+        <a href="https://gau-nernst.github.io/fa-5090/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、CUDA C++でAttentionメカニズムを実装することについて議論しています。特に、Tritonでは利用できないsm120向けのMXFP8 / NVFP4 MMAなどの機能を利用するために、CUDA C++を使用するモチベーションが述べられています。</p>
+<h2>パフォーマンスと価格</h2>
+<ul>
+<li>5090のBF16 TFLOPsは理論上209.5であり、これはサーバー向けのBlackwell（B200は2250、GB200は2500）の10%にも満たない。</li>
+<li>B200の価格は約30,000〜40,000ドル/GPUであるため、性能/ドルで比較すると、5090はお得とは言えない可能性がある。</li>
+<li>NVIDIAは4090以降、ゲーミングカードのテンソルコアの性能を制限しており、特にMLトレーニングで使用される可能性のある演算において制限がある。</li>
+<li>FP8およびFP16のmatmulは、FP16で累積する場合はフルスピードで実行されるが、FP32で累積する場合は半分のスピードでしか実行されない。</li>
+<li>ワークステーションクラスのカード（RTX Pro 6000など）では、この制限は解除されている。</li>
+</ul>
+<h2>ハードウェアとソフトウェアのサポート</h2>
+<ul>
+<li>PytorchはBlackwellアーキテクチャをネイティブにサポートしているが、パフォーマンスはHopperよりも悪いという意見がある。</li>
+<li>5090でFlash Attentionがネイティブに動作するかどうかについての質問があり、適切なアーキテクチャフラグをnvccに渡すことでコンパイルできるはずだが、新しいハードウェア機能を活用できるとは限らない。</li>
+</ul>
+<h2>その他の考慮事項</h2>
+<ul>
+<li>5090は4090よりもTDPが高く、電力制限も70%までしかできないため、ワークステーションでのML用途には不向きという意見がある。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この記事では、CUDA C++でのAttentionメカニズムの実装、5090のパフォーマンスと価格、ハードウェアとソフトウェアのサポート、その他の考慮事項について議論されています。5090はメモリ帯域幅は優れているものの、性能/ドルで比較するとB200ほどお得ではない可能性があり、ワークステーションでのML用途にはいくつかの制約があるようです。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
