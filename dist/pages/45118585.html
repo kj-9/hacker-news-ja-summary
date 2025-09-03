@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poor man&#x27;s bitemporal data system in SQLite and Clojure - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Poor man&#x27;s bitemporal data system in SQLite and Clojure</h1>
+        <div class="meta">
+            投稿日: 2025年09月03日 | ランク: 10
+        </div>
+        <a href="https://www.evalapply.org/posts/poor-mans-time-oriented-data-system/index.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、bitemporalityの概念、つまり「4月4日に入手可能なデータを使って、3月の損益を把握する」などの特定の時点でのデータの状態を追跡することについて述べています。</p>
+<h2>bitemporalityの概念とデータベース設計の課題</h2>
+<ul>
+<li>bitemporalityは、特定の時点でのデータの状態を把握したい場合に非常に役立つ概念です。</li>
+<li>しかし、このようなクエリをサポートするデータベース設計は一般的ではありません。</li>
+<li>Clojureはbitemporalityの概念をサポートしていますが、最近では閉鎖的な空間になっていることが残念です。</li>
+</ul>
+<h2>貧者のデータベースアプローチとSQLiteフォークの可能性</h2>
+<ul>
+<li>SQLiteを使った貧者のデータベースアプローチが提案されています。</li>
+<li>TursoのDBSPベースのインクリメンタルビューメンテナンス機能が、このアプローチにどのように役立つか興味深いでしょう。</li>
+<li>筆者は自身のシステムを完成させ、データを通して実行し、そのパフォーマンスを評価したいと考えています。</li>
+</ul>
+<h2>イベントソーシングと変更追跡の重要性</h2>
+<ul>
+<li>PostgreSQLでtstzrangeフィールドを使用してbitemporalシステムを実装した経験が共有されています。</li>
+<li>変更テーブルを使用して、データベースの変更前後の状態を追跡しています。</li>
+<li>データの品質が課題であり、より良い変更追跡システムと、データのクリーニング、消去、取り消しをサポートするツールが必要であることが強調されています。</li>
+<li>すべてをログとして扱うアプローチが推奨されており、イベントベースのシステムでドメインの更新や転送などのイベントを追跡することが提案されています。</li>
+</ul>
+<h2>現在のデータベースと時間データベースの比較</h2>
+<ul>
+<li>現在のデータベース（CRUDレコード）と時間データベース（ファクトログ）の違いが議論されています。</li>
+<li>現在のデータベースでは、CRUD操作をリアルタイムで監査ログに変換する必要がありますが、時間データベースでは、クエリ時に任意の時点のログからデータをピボットできます。</li>
+<li>時間データベースは、ディスクスペースが安価であることを利用して、複雑さとデータベース機能の間でより良いトレードオフを見つけることができます。</li>
+<li>時間データベースをモデル化する場合は、すべてのテーブルをファクトテーブルとして書き込み、通常のクエリには自動生成された「現在のビュー」バージョンを使用することが推奨されます。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この記事では、bitemporalityの概念、そのデータベース設計における課題、およびさまざまな実装アプローチについて議論されています。イベントソーシングと変更追跡の重要性が強調され、現在のデータベースと時間データベースの違いが比較されています。また、SQLiteやPostgreSQLなどの具体的なデータベースシステムでの実装経験も共有されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
