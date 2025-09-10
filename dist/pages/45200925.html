@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defeating Nondeterminism in LLM Inference - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Defeating Nondeterminism in LLM Inference</h1>
+        <div class="meta">
+            投稿日: 2025年09月10日 | ランク: 3
+        </div>
+        <a href="https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、LLM推論における非決定性の問題と、それを克服するためのアプローチについて議論しています。</p>
+<h2>非決定性の原因</h2>
+<ul>
+<li><strong>ハードウェアの差異</strong>: 異なるGPUやTPUのバージョンでは、コンパイラが操作を再配置する可能性があり、浮動小数点演算の結果が異なる場合があります。</li>
+<li><strong>コンパイラの最適化</strong>: コンパイラが浮動小数点演算の順序を再配置することがあり、特に浮動小数点数の加算は可換ではないため、結果に影響を与える可能性があります。</li>
+<li><strong>バッチ処理</strong>: LLMが複数のリクエストを同時に処理する際に、バッチサイズによって結果が変わる場合があります。これは、フォワードパスが「バッチ不変性」を持たないことが原因です。</li>
+<li><strong>MoEモデルのルーティング</strong>: Mixture of Experts（MoE）モデルでは、トークンごとにエキスパートのルーティングが行われますが、バッチレベルでの負荷分散を行うと非決定性が生じる可能性があります。</li>
+</ul>
+<h2>非決定性の問題点</h2>
+<ul>
+<li><strong>再現性の欠如</strong>: 同じ入力に対して異なる結果が得られるため、バグの再現やユニットテストが困難になります。</li>
+<li><strong>開発の難しさ</strong>: プロンプトを共有しても、開発者間で同じ結果が得られないため、共同作業が難しくなります。</li>
+<li><strong>法規制への抵触</strong>: 金融や法務などの分野では、非決定的な手法の使用が禁止されていたり、追加の要件が発生したりする場合があります。</li>
+</ul>
+<h2>非決定性への対処法</h2>
+<ul>
+<li><strong>決定的なソフトウェアの使用</strong>: LLM推論に関わるすべてのソフトウェアを決定的にすることで、同じプロンプトとシードで同じ結果を得ることができます。</li>
+<li><strong>コンパイラの制御</strong>: コンパイラによる操作の再配置を防止するために、コンパイラを適切に設定する必要があります。</li>
+<li><strong>固定シードによる疑似乱数サンプリング</strong>: 温度パラメータを0より大きく設定した場合でも、固定シードを持つ疑似乱数サンプリングを使用することで、決定的な推論を実現できます。</li>
+</ul>
+<h2>まとめ</h2>
+<p>LLM推論における非決定性は、ハードウェア、コンパイラ、バッチ処理、MoEモデルなど、さまざまな要因によって引き起こされます。この問題に対処することで、再現性の向上、共同開発の促進、法規制への準拠が可能になります。著者はLLMの非決定性というよりLLM推論を大規模なシステムで使用する場合の問題であると考えているようです。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
