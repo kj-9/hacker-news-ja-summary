@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinycolor supply chain attack post-mortem - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Tinycolor supply chain attack post-mortem</h1>
+        <div class="meta">
+            投稿日: 2025年09月17日 | ランク: 5
+        </div>
+        <a href="https://sigh.dev/posts/ctrl-tinycolor-post-mortem/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>npmのサプライチェーン攻撃についてと、それに対する可能な対策についての議論。</p>
+<h2>攻撃の経緯</h2>
+<p>angulartics2のリポジトリの管理権限を持つ協力者のGithubアカウントがハッキングされ、悪意のあるGithub Actionsワークフローがpushされた。このワークフローはnpmトークンを抽出し、攻撃者は盗まれたトークンを使用して20個のパッケージの悪意のあるバージョンを公開した。影響を受けたパッケージの1つである@ctrl/tinycolorは、週に約200万回ダウンロードされている。</p>
+<h2>2要素認証と手動検証</h2>
+<p>2要素認証は有用だが、複数の作者による暗号署名された承認を要求する方がより安全である。CIワークフローによる自動公開ではなく、2要素認証を使用した手動での<code>npm publish</code>を推奨する意見もあった。CIでMFAプロンプトを要求する簡易な方法が提供されることを望む声もある。</p>
+<h2>トークンとOIDC</h2>
+<p>広範な公開権限を持つトークンは危険であり、より良い認証方法が必要である。OIDCのようなソリューションもあるが、設定が難しく、根本的な解決策ではないという意見がある。トークンを短寿命にするか、手動検証を挟むべきである。</p>
+<h2>信頼できる公開</h2>
+<p>Trusted Publishingを利用することで、公開権限を持つ長期的なトークンが不要になる。CI VMでトークンが生成され、15分間のみ有効になる。</p>
+<h2>パッケージの依存関係と脆弱性のチェック</h2>
+<p>脆弱なnpmパッケージの存在をチェックするツールやスクリプトへの需要がある。</p>
+<h2>まとめ</h2>
+<p>今回のインシデントは、npmパッケージのサプライチェーンにおけるセキュリティの重要性を浮き彫りにした。2要素認証の強化、多要素承認、トークン管理の改善、そして手動検証の重要性が議論された。また、Trusted Publishingのような新しい技術の採用を推奨する声もあった。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
