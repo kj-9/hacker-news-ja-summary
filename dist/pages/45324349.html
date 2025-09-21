@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sj.h: A tiny little JSON parsing library in ~150 lines of C99 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Sj.h: A tiny little JSON parsing library in ~150 lines of C99</h1>
+        <div class="meta">
+            投稿日: 2025年09月21日 | ランク: 1
+        </div>
+        <a href="https://github.com/rxi/sj.h" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、最小限の状態とゼロアロケーションを特徴とする、rxi/sj.hという新しいJSONパーサーライブラリについて議論しています。</p>
+<h2>適合性テストとネストされたオブジェクト</h2>
+<p>人々は、ライブラリがJSONTestSuiteの適合性テストでどのように機能するか、また、どこまで深くネストされたオブジェクトを処理できるかについて疑問に思っています。あるユーザーは、ネストは深さカウンターとしてintを使用することで制限されていると指摘し、ポータブルなネスト深さの制限は32767であると述べています。別のユーザーは、ライブラリがオーバーフローをチェックしていない可能性があり、悪用可能な脆弱性になる可能性があると指摘しています。また、特定の実際の実装に基づいた適合性テストの有用性についても議論されています。</p>
+<h2>ユースケースと利点</h2>
+<p>このライブラリのユースケースについて議論されています。優れたJSONライブラリがたくさんある中で、これはなぜ必要なのかという疑問が提起されています。提案されたユースケースには、組み込みCPU、厳格なセキュリティ要件を持つプロジェクト、既存のコードベースへの簡単な統合、オーバーヘッドの最小化、ヒープアロケーションの回避、stdlibの使用の回避、シンプルなAPIなどがあります。また、大量のJSONダンプから一部のプロパティを抽出する際に、オーバーヘッドやアロケーションなしで解析できることが興味深いという意見もあります。</p>
+<h2>バリデーションとエラー処理</h2>
+<p>JSONの検証とエラー処理の欠如について懸念が表明されています。このライブラリはオブジェクトまたは配列を終了するために']'または'}'のいずれかを使用でき、空白文字として'\v'を許可するなど、RFCまたはjson.org JSONよりも寛容であることが指摘されています。あるユーザーは、これを「既知の正しいJSONのデータ抽出器」として扱うことを提案しています。また、最上位レベルで迷子の'}'を与えると、深さが負になる可能性があるバグが指摘されています。</p>
+<h2>整数オーバーフローとセキュリティへの影響</h2>
+<p>ライブラリが符号付き整数オーバーフローをチェックしていないという懸念が提起され、特定の入力が未定義の動作を引き起こす可能性があると指摘されています。この問題は、JSONが信頼できないソースから来る可能性があり、セキュリティに影響を与えるため、特に重要であると考えられています。ライブラリはすべての可能なエラーを処理する必要はないという意見もありますが、制限を文書化し、ユーザーがサポートされていない入力を渡すことを防ぎ、事後的にオーバーフローのケースを処理できるようにする必要があります。</p>
+<h2>複雑さ、安全性の考慮事項、および責任</h2>
+<p>最新のJSONライブラリがどれほど複雑になっているかについてコメントがあります。JSONパーサーライブラリは苦痛のブラックホールであるという意見もあり、特定のユースケースに必要なものだけを記述するのが最適なアプローチであると主張しています。また、ライブラリを使用する際に安全性が重要な場合は、ランダムで吟味されていないコードを使用すべきではないという意見もあります。ホビープロジェクトが実用的なものとなり、本番コードで使用され始め、CVEに発展する傾向があるという懸念も表明されています。ただし、ライセンスには、著者は損害賠償責任を負わないことが明記されています。</p>
+<h2>まとめ</h2>
+<p>rxi/sj.h JSONパーサーライブラリは、その最小限の状態、ゼロアロケーション、および簡単な統合を目的としていますが、適合性、検証、およびエラー処理の面でトレードオフがあります。いくつかのセキュリティ上の懸念が提起され、整数オーバーフローの可能性と、信頼できないソースからの入力を処理する際の潜在的な影響について議論されています。ライブラリが特定のユースケースに適しているかどうかは、特定のプロジェクトの要件とリスク許容度によって異なります。ライブラリを本番環境で使用する前に、制限事項を慎重に検討し、徹底的なテストを実施する必要があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>

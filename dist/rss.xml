@@ -1,5 +1,99 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><item><title>Philips announces digital pathology scanner with native DICOM JPEG XL output</title><link>https://www.philips.com/a-w/about/news/archive/standard/news/articles/2025/philips-announces-digital-pathology-scanner-with-native-configurable-dicom-jpeg-and-jpeg-xl-output-in-world-first.html</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45316833.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><item><title>Sj.h: A tiny little JSON parsing library in ~150 lines of C99</title><link>https://github.com/rxi/sj.h</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45324349.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この記事は、最小限の状態とゼロアロケーションを特徴とする、rxi/sj.hという新しいJSONパーサーライブラリについて議論しています。&lt;/p&gt;
+&lt;h2&gt;適合性テストとネストされたオブジェクト&lt;/h2&gt;
+&lt;p&gt;人々は、ライブラリがJSONTestSuiteの適合性テストでどのように機能するか、また、どこまで深くネストされたオブジェクトを処理できるかについて疑問に思っています。あるユーザーは、ネストは深さカウンターとしてintを使用することで制限されていると指摘し、ポータブルなネスト深さの制限は32767であると述べています。別のユーザーは、ライブラリがオーバーフローをチェックしていない可能性があり、悪用可能な脆弱性になる可能性があると指摘しています。また、特定の実際の実装に基づいた適合性テストの有用性についても議論されています。&lt;/p&gt;
+&lt;h2&gt;ユースケースと利点&lt;/h2&gt;
+&lt;p&gt;このライブラリのユースケースについて議論されています。優れたJSONライブラリがたくさんある中で、これはなぜ必要なのかという疑問が提起されています。提案されたユースケースには、組み込みCPU、厳格なセキュリティ要件を持つプロジェクト、既存のコードベースへの簡単な統合、オーバーヘッドの最小化、ヒープアロケーションの回避、stdlibの使用の回避、シンプルなAPIなどがあります。また、大量のJSONダンプから一部のプロパティを抽出する際に、オーバーヘッドやアロケーションなしで解析できることが興味深いという意見もあります。&lt;/p&gt;
+&lt;h2&gt;バリデーションとエラー処理&lt;/h2&gt;
+&lt;p&gt;JSONの検証とエラー処理の欠如について懸念が表明されています。このライブラリはオブジェクトまたは配列を終了するために']'または'}'のいずれかを使用でき、空白文字として'\v'を許可するなど、RFCまたはjson.org JSONよりも寛容であることが指摘されています。あるユーザーは、これを「既知の正しいJSONのデータ抽出器」として扱うことを提案しています。また、最上位レベルで迷子の'}'を与えると、深さが負になる可能性があるバグが指摘されています。&lt;/p&gt;
+&lt;h2&gt;整数オーバーフローとセキュリティへの影響&lt;/h2&gt;
+&lt;p&gt;ライブラリが符号付き整数オーバーフローをチェックしていないという懸念が提起され、特定の入力が未定義の動作を引き起こす可能性があると指摘されています。この問題は、JSONが信頼できないソースから来る可能性があり、セキュリティに影響を与えるため、特に重要であると考えられています。ライブラリはすべての可能なエラーを処理する必要はないという意見もありますが、制限を文書化し、ユーザーがサポートされていない入力を渡すことを防ぎ、事後的にオーバーフローのケースを処理できるようにする必要があります。&lt;/p&gt;
+&lt;h2&gt;複雑さ、安全性の考慮事項、および責任&lt;/h2&gt;
+&lt;p&gt;最新のJSONライブラリがどれほど複雑になっているかについてコメントがあります。JSONパーサーライブラリは苦痛のブラックホールであるという意見もあり、特定のユースケースに必要なものだけを記述するのが最適なアプローチであると主張しています。また、ライブラリを使用する際に安全性が重要な場合は、ランダムで吟味されていないコードを使用すべきではないという意見もあります。ホビープロジェクトが実用的なものとなり、本番コードで使用され始め、CVEに発展する傾向があるという懸念も表明されています。ただし、ライセンスには、著者は損害賠償責任を負わないことが明記されています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;rxi/sj.h JSONパーサーライブラリは、その最小限の状態、ゼロアロケーション、および簡単な統合を目的としていますが、適合性、検証、およびエラー処理の面でトレードオフがあります。いくつかのセキュリティ上の懸念が提起され、整数オーバーフローの可能性と、信頼できないソースからの入力を処理する際の潜在的な影響について議論されています。ライブラリが特定のユースケースに適しているかどうかは、特定のプロジェクトの要件とリスク許容度によって異なります。ライブラリを本番環境で使用する前に、制限事項を慎重に検討し、徹底的なテストを実施する必要があります。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45324349</guid></item><item><title>Timesketch: Collaborative forensic timeline analysis</title><link>https://github.com/google/timesketch</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45324343.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Googleのオープンソースプロジェクトであるapachepigに関するHacker Newsのコメントの要約です。&lt;/p&gt;
+&lt;h2&gt;Googleの所有権と製品の区別&lt;/h2&gt;
+&lt;p&gt;Googleがコードを所有しているにもかかわらず、apachepigが製品として認識されていない理由について議論されています。これは、Googleの従業員が業務中に開発したコードであるため、Googleが所有権を持つ一方で、Google自体が製品として公式に支持していないためであると考えられています。&lt;/p&gt;
+&lt;h2&gt;Googleのオープンソース公開プロセス&lt;/h2&gt;
+&lt;p&gt;Googleのオープンソース公開プロセスについて説明されています。GoogleのGitHubリポジトリで公開されたプロジェクトは、Googleが管理していますが、「Googleの製品ではない」という注意書きが追加されることで、単なるエンジニアによるコード公開であることが明確にされます。これは、Googleの製品のリリースや主要な戦略的オープンソースイニシアチブ（Goなど）とは異なります。&lt;/p&gt;
+&lt;h2&gt;個人の趣味プロジェクトとしての可能性&lt;/h2&gt;
+&lt;p&gt;Googleのプロセスでは、純粋な趣味プロジェクトであっても、Googleの著作権の下でリリースできることが言及されています。最初の作成者が、例外プロセスを使用せずにGoogleの著作権でリリースすることを選択した場合も考えられます。&lt;/p&gt;
+&lt;h2&gt;Googleの従業員の貢献&lt;/h2&gt;
+&lt;p&gt;Googleの従業員であれば、誰でもGoogle GitHubでコードを書いてオープンソース化できます。ただし、Googleが公式に支持しているわけではなく、少なくとも一人の従業員がその特定の取り組みに取り組んでいることを意味します。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;apachepigは、Googleの従業員が開発したオープンソースプロジェクトであり、GoogleのGitHubリポジトリで公開されています。ただし、Googleが公式に製品として支持しているわけではなく、従業員の個人的な取り組みや趣味プロジェクトである可能性もあります。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45324343</guid></item><item><title>LaLiga's Anti-Piracy Crackdown Triggers Widespread Internet Disruptions in Spain</title><link>https://reclaimthenet.org/laligas-anti-piracy-crackdown-triggers-widespread-internet-disruptions</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45323856.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この記事は、スペインのラ・リーガが著作権侵害対策として広範囲なインターネット遮断を実施していることについて議論しています。この遮断は、サッカーの試合の違法ストリーミングを阻止するために行われていますが、Cloudflareなどの正当なサービスも巻き込まれており、インターネットユーザーに広範な影響を与えています。&lt;/p&gt;
+&lt;h2&gt;著作権侵害対策とその影響&lt;/h2&gt;
+&lt;p&gt;人々は、ラ・リーガが著作権侵害対策として行っているインターネット遮断が、広範囲に及ぶ正当なサービスに影響を与えていることを批判しています。特に、Cloudflareのような主要なインフラサービスが遮断されることで、多くのウェブサイトやオンラインサービスが利用できなくなるという問題が指摘されています。&lt;/p&gt;
+&lt;h2&gt;スポーツ視聴の高コストと利便性の問題&lt;/h2&gt;
+&lt;p&gt;サッカーの試合を視聴するためのコストが高く、複数のサービスに加入する必要があるため、多くのファンが不満を抱いています。一方、海賊版ストリーミングは安価で便利であるため、そちらに流れる人が多いという意見があります。&lt;/p&gt;
+&lt;h2&gt;著作権とインターネットの自由&lt;/h2&gt;
+&lt;p&gt;ラ・リーガの著作権侵害対策が、インターネットの自由を侵害しているという懸念があります。一部のユーザーは、VPNの使用がほぼ必須になっている現状を嘆き、これは言論の自由に対する侵害であると主張しています。また、著作権侵害対策が過剰であり、正当なサービスやビジネスに損害を与えているという指摘もあります。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;ラ・リーガの著作権侵害対策は、サッカーの試合の違法ストリーミングを阻止するために行われていますが、広範囲なインターネット遮断を引き起こし、多くのユーザーに不便を強いています。高コストな視聴環境やインターネットの自由に対する侵害といった問題点が指摘されており、よりバランスの取れた対策が求められています。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45323856</guid></item><item><title>The University of Oxford has fallen out of the top three universities in the UK</title><link>https://hotminute.co.uk/2025/09/19/oxford-loses-top-3-university-ranking-for-the-first-time/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45323793.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのスレッドは、オックスフォード大学のランキング低下に関するポール・グレアムのツイートについて議論しています。&lt;/p&gt;
+&lt;h2&gt;ランキングと入学基準&lt;/h2&gt;
+&lt;p&gt;多くの人が、ランキングは学生の満足度や卒業後の進路など、さまざまな要素に基づいており、教育の質だけを反映しているわけではないと指摘しています。また、ランキングは操作可能であり、大学はランキングを上げるために戦略的に行動する可能性があると指摘されています。
+ポール・グレアムは、オックスフォード大学のランキング低下は、入学基準の変更、特に貧困層の学生の受け入れによるものだと示唆しています。この意見に対しては、オックスフォード大学の入学基準は依然として高く、ランキング低下の理由は他の要素にあるという反論があります。&lt;/p&gt;
+&lt;h2&gt;エリート校の選抜と多様性&lt;/h2&gt;
+&lt;p&gt;オックスフォード大学の選抜プロセスは、成績だけでなく、面接や背景なども考慮されます。一部の参加者は、独立学校の生徒はアプリケーションプロセス全体で有利な立場にあり、このことが不平等につながっていると主張しています。
+また、才能ある学生が経済的な理由でトップ大学への進学を諦めるケースがあることが指摘されています。一部の参加者は、アファーマティブ・アクション（積極的差別是正措置）のような政策は、才能のある学生が機会を得られるようにするために必要だと主張しています。&lt;/p&gt;
+&lt;h2&gt;英国と米国の教育システム&lt;/h2&gt;
+&lt;p&gt;英国と米国の教育システムの違いについても議論されています。米国の一部の大学は、国際学生に対して経済的援助を提供していますが、その数は限られています。また、英国の学生ローンと米国の学生ローンの違いも指摘されています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;このスレッドでは、大学ランキングの信頼性、エリート校の選抜プロセスにおける公平性、教育機会の平等性など、多くの問題が提起されています。参加者たちは、ポール・グレアムの意見に同意する人もいれば、反論する人もおり、活発な議論が展開されています。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45323793</guid></item><item><title>DXGI debugging: Microsoft put me on a list</title><link>https://slugcat.systems/post/25-09-21-dxgi-debugging-microsoft-put-me-on-a-list/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45323207.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この記事は、DirectXの最適化が特定の実行ファイル名でのみトリガーされるという問題について解説しています。この最適化は、SS14.Loader.exeという名前のプログラムでクラッシュを引き起こします。&lt;/p&gt;
+&lt;h2&gt;実行ファイル名のハック&lt;/h2&gt;
+&lt;p&gt;ソフトウェアが特定の実行ファイル名に基づいて動作を変えることは珍しくありません。例えば、OSやGPUドライバは、特定のゲームに対して最適化を行うために実行ファイル名をチェックすることがあります。しかし、この最適化が意図しないプログラムに影響を与えることがあります。&lt;/p&gt;
+&lt;h2&gt;互換性のための苦労&lt;/h2&gt;
+&lt;p&gt;Microsoftは、古いソフトウェアとの互換性を保つために多くの努力をしています。Raymond Chenのブログ「The Old New Thing」では、Microsoftが互換性を維持するために行っている様々なトリックが紹介されています。&lt;/p&gt;
+&lt;h2&gt;DirectXのDetour戦略&lt;/h2&gt;
+&lt;p&gt;DirectXチームは、OSのAPI呼び出しをDetourすることで最適化や機能拡張を実装しています。しかし、この方法には問題があり、例えば、Windows 11 ARM64ではPAC（Pointer Authentication Code）が有効になっている関数プロローグをDetourコードがサポートしていないためにクラッシュが発生します。&lt;/p&gt;
+&lt;h2&gt;Vulkanレイヤーの問題&lt;/h2&gt;
+&lt;p&gt;Vulkanレイヤーがシステム全体に影響を与えることも問題を引き起こす可能性があります。あるケースでは、ビデオキャプチャソフトウェアがインストールしたVulkanレイヤーが、Vulkanインスタンスの数に制限を設け、テスト環境でクラッシュを引き起こしました。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;この記事では、DirectXの最適化が特定の実行ファイル名でのみトリガーされるという問題と、それが引き起こす可能性のある問題について解説しました。また、互換性を維持するための努力や、Vulkanレイヤーの問題についても触れられています。全体として、OSやドライバの最適化は複雑であり、意図しない結果を引き起こす可能性があることが示唆されています。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45323207</guid></item><item><title>The Beginner's Textbook for Homomorphic Encryption</title><link>https://arxiv.org/abs/2503.05136</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45323027.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Qision: FHE（完全準同型暗号）に関するHacker Newsのコメントの要約&lt;/p&gt;
+&lt;p&gt;このスレッドでは、FHEの性能と実用性に関する議論がされています。&lt;/p&gt;
+&lt;h2&gt;FHEの演算制限と計算コスト&lt;/h2&gt;
+&lt;p&gt;FHEは暗号化されたデータに対して演算が可能ですが、演算回数に制限がある、または計算コストが非常に高いという認識があります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FHEスキームでは、暗号化されたデータに対して演算を行う回数に制限があり、結果が復号できなくなる可能性があるという指摘があります。&lt;/li&gt;
+&lt;li&gt;FHE演算は、プレーンテキストでの演算と比較して非常に高価であり、LLM（大規模言語モデル）の実行には向かないという意見があります。&lt;/li&gt;
+&lt;li&gt;FHE演算は、通常の演算よりも少なくとも100万倍遅いという意見があります。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;FHEのブートストラップ&lt;/h2&gt;
+&lt;p&gt;FHEにはブートストラップという技術があり、ノイズを除去して演算回数の制限をリセットできます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;完全準同型暗号（FHE）はブートストラップが可能で、暗号化された値からノイズを除去し、さらなる計算のために結果のノイズを除去できるという説明があります。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;FHEの実用性&lt;/h2&gt;
+&lt;p&gt;FHEは、クラウド環境でのデータ処理においてセキュリティ上の利点があると考えられていますが、計算コストの高さが実用化の妨げになる可能性があります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FHEは、クラウドプロバイダーがセキュリティ上の懸念なしにデータを使用できる方法として提案されています。&lt;/li&gt;
+&lt;li&gt;ただし、FHEに必要なプロセッサ容量が100倍から1000倍に増加する場合、大規模な利用は現実的ではないという懸念があります。&lt;/li&gt;
+&lt;li&gt;FHEの計算コストが高すぎるため、多くの人がプレーンテキストをセキュリティで保護する方法を選択するだろうという意見があります。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;FHEは暗号化されたデータに対する演算を可能にする強力な技術ですが、演算回数の制限や計算コストの高さが課題となっています。ブートストラップ技術によって演算回数の制限は克服できますが、計算コストは依然として高く、LLMのような大規模な処理には不向きです。クラウド環境でのデータ処理におけるセキュリティ上の利点はあるものの、計算コストとの兼ね合いが実用化の鍵となります。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45323027</guid></item><item><title>I forced myself to spend a week in Instagram instead of Xcode</title><link>https://www.pixelpusher.club/p/i-forced-myself-to-spend-a-week-in</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45322819.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この記事は、ソフトウェア開発者がアプリのマーケティングを学ぶことについてです。&lt;/p&gt;
+&lt;h2&gt;マーケティングは大変&lt;/h2&gt;
+&lt;p&gt;人々は、マーケティングは過小評価されがちな仕事であり、エンジニアは宣伝のためにソーシャルメディアや直接的なアウトリーチを試みるべきであると述べています。ソーシャルメディアでのエンゲージメントを維持することの難しさや、コンテンツ作成のアイデアを継続的に生み出すことの重要性について議論されています。&lt;/p&gt;
+&lt;h2&gt;「オーガニック」マーケティング戦略&lt;/h2&gt;
+&lt;p&gt;「オーガニック」マーケティングとは何か、またそれがソーシャルメディアでどのように実践されているかについての議論があります。多くの人は、この用語が誤解を招くものであり、多くの場合、広告収入を得るために「非社会的な行動」を偽装するために使われていると考えています。&lt;/p&gt;
+&lt;h2&gt;ネイティブ開発 vs クロスプラットフォーム開発&lt;/h2&gt;
+&lt;p&gt;React Nativeのようなクロスプラットフォーム開発ツールと比較して、iOSのネイティブ開発の長所と短所について議論されています。ネイティブ開発はより専門的なスキルセットを提供しますが、クロスプラットフォームツールはより高い移植性を提供する可能性があります。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;ソフトウェア開発者が自身のアプリを宣伝することは、製品自体を構築することと同じくらい重要です。これは困難な作業ですが、さまざまなマーケティング手法を理解し、製品の信頼性を維持することで、成功の可能性を高めることができます。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45322819</guid></item><item><title>Philips announces digital pathology scanner with native DICOM JPEG XL output</title><link>https://www.philips.com/a-w/about/news/archive/standard/news/articles/2025/philips-announces-digital-pathology-scanner-with-native-configurable-dicom-jpeg-and-jpeg-xl-output-in-world-first.html</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45316833.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;はい、了解しました。Hacker Newsのコメントを要約するアシスタントとして、指定されたスタイルに従って要約を作成します。コメントをご提供ください。&lt;/p&gt;</description><pubDate>2025-09-20 20:11:03</pubDate><guid>45316833</guid></item><item><title>TV Time Machine: A Raspberry Pi That Plays Random 90s TV</title><link>https://quarters.captaintouch.com/blog/posts/2025-09-20-tv-time-machine-a-raspberry-pi-that-plays-random-90s-tv.html</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45316244.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
@@ -208,7 +302,16 @@
 &lt;h2&gt;競合と保護&lt;/h2&gt;
 &lt;p&gt;GoogleやAppleがOSに実装することで、あなたの朝食を食べてしまうことから、どのように身を守るのでしょうか。もしこれが彼らにOSへの実装を促すなら、私たちは自分たちの仕事を果たしていることになり、方向転換して、他の人々の役に立つことを願うアイデアに取り組み続けることができます。&lt;/p&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;Blueは、ハードウェアを使用して電話を制御する音声アシスタントです。迅速な開発とYCの経験、iOSのアクセシビリティの制限、運転中の安全性への懸念、およびGoogleやAppleとの競争について議論があります。&lt;/p&gt;</description><pubDate>2025-09-19 20:12:15</pubDate><guid>45294390</guid></item><item><title>When Knowing Someone at Meta Is the Only Way to Break Out of "Content Jail"</title><link>https://www.eff.org/pages/when-knowing-someone-meta-only-way-break-out-content-jail</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45293273.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Blueは、ハードウェアを使用して電話を制御する音声アシスタントです。迅速な開発とYCの経験、iOSのアクセシビリティの制限、運転中の安全性への懸念、およびGoogleやAppleとの競争について議論があります。&lt;/p&gt;</description><pubDate>2025-09-19 20:12:15</pubDate><guid>45294390</guid></item><item><title>Calculator Forensics</title><link>https://www.rskey.org/~mwsebastian/miscprj/results.htm</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45293438.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;電卓の鑑識に関するHacker Newsのコメントの要約を以下に示します。&lt;/p&gt;
+&lt;p&gt;このスレッドでは、電卓の鑑識について議論されています。&lt;/p&gt;
+&lt;h2&gt;鑑識&lt;/h2&gt;
+&lt;p&gt;kazinator氏は、これらの電卓が（数値解析に対して）犯罪を犯したのかと冗談めかして尋ねています。&lt;/p&gt;
+&lt;h2&gt;その他&lt;/h2&gt;
+&lt;p&gt;_trampeltier氏は、このサイトを若い人たちに見せていると述べています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;このスレッドは、電卓の鑑識というトピックに関する軽い議論です。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45293438</guid></item><item><title>When Knowing Someone at Meta Is the Only Way to Break Out of "Content Jail"</title><link>https://www.eff.org/pages/when-knowing-someone-meta-only-way-break-out-content-jail</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45293273.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;この記事は、Metaのコンテンツモデレーションの問題点と、それに対する対策について議論しています。&lt;/p&gt;
 &lt;h2&gt;Metaのコンテンツモデレーションの問題点&lt;/h2&gt;
@@ -261,7 +364,15 @@
 &lt;h2&gt;EdTechの課題&lt;/h2&gt;
 &lt;p&gt;EdTech業界のビジネスモデルや、教育現場でのテクノロジーの導入における課題が指摘されています。EdTech製品が必ずしも教育の質を向上させるとは限らず、教育の成果を定量的に評価することの難しさが議論されています。また、EdTechの成功には、製品の質だけでなく、学校や教師のニーズに合致し、効果的に活用されることが重要であるという意見があります。&lt;/p&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;AIを活用した教育ツールは、学習体験を向上させる可能性を秘めている一方で、その効果や導入方法には慎重な検討が必要です。教育の質を向上させるためには、AI技術だけでなく、教育方法そのものの改善や、教師の役割を再評価することが重要です。また、EdTech業界は、ビジネスモデルの課題や、教育現場でのテクノロジーの適切な活用方法について、より深く検討する必要があります。&lt;/p&gt;</description><pubDate>2025-09-18 20:12:37</pubDate><guid>45292648</guid></item><item><title>Configuration files are user interfaces</title><link>https://ochagavia.nl/blog/configuration-files-are-user-interfaces/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45291858.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;AIを活用した教育ツールは、学習体験を向上させる可能性を秘めている一方で、その効果や導入方法には慎重な検討が必要です。教育の質を向上させるためには、AI技術だけでなく、教育方法そのものの改善や、教師の役割を再評価することが重要です。また、EdTech業界は、ビジネスモデルの課題や、教育現場でのテクノロジーの適切な活用方法について、より深く検討する必要があります。&lt;/p&gt;</description><pubDate>2025-09-18 20:12:37</pubDate><guid>45292648</guid></item><item><title>How Isaac Newton Discovered the Binomial Power Series (2022)</title><link>https://www.quantamagazine.org/how-isaac-newton-discovered-the-binomial-power-series-20220831/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45292084.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この記事はHacker Newsの記事「ニュートンがいかに二項冪級数を発見したか」に対するコメントをまとめたものです。&lt;/p&gt;
+&lt;h2&gt;数学のレンダリングエラー&lt;/h2&gt;
+&lt;p&gt;多くのユーザーが数式のレンダリングに関する問題点を報告しています。Chromeでは未レンダリングのLaTeX変数が表示され、Safariではエラーが発生します。Firefoxでは最初は正常に表示されますが、時間が経つとエラーが発生するとのことです。&lt;/p&gt;
+&lt;h2&gt;Epistola Posteriorの重要性&lt;/h2&gt;
+&lt;p&gt;この書簡の重要性は、ニュートンとライプニッツの優先権論争が激化した数十年間で浮上しました。この書簡は、ライプニッツの最初の出版物（1684年）よりもずっと前にニュートンが主要なアイデアを持っていたことを明らかにし、ニュートンの独立した発見を支持する王立協会の最終的な判断を裏付けました。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;記事「ニュートンがいかに二項冪級数を発見したか」では、数式のレンダリングに関する技術的な問題が指摘されています。また、Epistola Posteriorがニュートンとライプニッツの論争において重要な役割を果たしたことが議論されています。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45292084</guid></item><item><title>Configuration files are user interfaces</title><link>https://ochagavia.nl/blog/configuration-files-are-user-interfaces/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45291858.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;この Hacker News のコメントスレッドは、構成ファイル、特に KSON (JSON の上位集合) の使用について議論しています。スレッドでは、YAML の課題、より表現力豊かな構成言語の必要性、および構成ファイルをユーザーインターフェースとして扱うことの利点と欠点について掘り下げています。&lt;/p&gt;
 &lt;h2&gt;YAML の課題&lt;/h2&gt;
@@ -412,7 +523,17 @@
 &lt;li&gt;Serious Samの爆弾男と会話する。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;SCREAM暗号は、セキュリティ目的には実用的ではありませんが、ユーモラスな暗号化の方法として、または他の種類のテキスト操作の足がかりとして興味深いものです。&lt;/p&gt;</description><pubDate>2025-09-20 20:11:03</pubDate><guid>45287474</guid></item><item><title>Famous cognitive psychology experiments that failed to replicate</title><link>https://buttondown.com/aethermug/archive/aether-mug-famous-cognitive-psychology/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45279898.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;SCREAM暗号は、セキュリティ目的には実用的ではありませんが、ユーモラスな暗号化の方法として、または他の種類のテキスト操作の足がかりとして興味深いものです。&lt;/p&gt;</description><pubDate>2025-09-20 20:11:03</pubDate><guid>45287474</guid></item><item><title>40k-Year-Old Symbols in Caves Worldwide May Be the Earliest Written Language</title><link>https://www.openculture.com/2025/09/40000-year-old-symbols-found-in-caves-worldwide-may-be-the-earliest-written-language.html</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45286622.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;mdp2021というHacker Newsの記事に対するコメントの要約です。この投稿は、遠い過去の高度な文明の可能性と、言語の解釈における課題について議論しています。&lt;/p&gt;
+&lt;h2&gt;映画の類似性&lt;/h2&gt;
+&lt;p&gt;LargoLasskhyfvは、この遺跡が映画プロメテウス(2012年のエイリアン前日譚)の17分50秒のシーンを連想させると述べています。&lt;/p&gt;
+&lt;h2&gt;古代文明の可能性&lt;/h2&gt;
+&lt;p&gt;yieldcrvとdyauspitrは、人類の歴史と宇宙のタイムスケールについて議論しています。yieldcrvは、金属を使用しない文化では証拠が残りにくいことを指摘し、dyauspitrは4万年という期間が宇宙のタイムスケールでは短いことを強調しています。jampekkaは、ホモ・サピエンスの文化が30万年前に何度も興亡した可能性を指摘し、文化の蓄積が始まったのは約4万年前からだと述べています。&lt;/p&gt;
+&lt;h2&gt;言語解釈の課題&lt;/h2&gt;
+&lt;p&gt;txruは、このプレゼンテーションが言語学者を納得させる可能性は低いと指摘し、インフォグラフィックが同じ画像アセットを異なる意味で使用していることを批判しています。彼は、シンボルの写真や、その周辺の状況、類似したシンボルが広範囲に存在することを示す証拠を求めています。また、言語の共通性を示す際には、十分な証拠に基づいた判断が必要であることを強調し、「アルタイ語族」の例を挙げています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;コメント欄では、古代文明の痕跡の可能性と、言語の解釈における課題が議論されています。映画の類似性が指摘されたり、宇宙のタイムスケールにおける人類の歴史が議論されたりする一方で、言語の解釈においては、証拠に基づいた慎重なアプローチが求められています。&lt;/p&gt;</description><pubDate>2025-09-21 20:11:49</pubDate><guid>45286622</guid></item><item><title>Famous cognitive psychology experiments that failed to replicate</title><link>https://buttondown.com/aethermug/archive/aether-mug-famous-cognitive-psychology/</link><description>&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/45279898.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;心理学研究における再現性に関するHacker Newsのコメントです。&lt;/p&gt;
 &lt;h2&gt;心理学研究の再現性&lt;/h2&gt;
