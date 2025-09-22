@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cap&#x27;n Web: a new RPC system for browsers and web servers - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Cap&#x27;n Web: a new RPC system for browsers and web servers</h1>
+        <div class="meta">
+            投稿日: 2025年09月22日 | ランク: 7
+        </div>
+        <a href="https://blog.cloudflare.com/capnweb-javascript-rpc-library/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、Kenton Vandra氏によるJavaScript RPCライブラリ「Cap'n Web」に関するHacker Newsのスレッドをまとめたものです。Cap'n Webは、Webサーバ間の通信を容易にすることに重点を置いており、ケイパビリティベースのセキュリティモデルと、Promiseパイプライン処理を提供します。</p>
+<h2>主なテーマ</h2>
+<h3>Cap'n Webの設計と機能</h3>
+<p>Cap'n Webは、Cap'n Proto RPCを簡略化したもので、より少ない複雑さで同じ機能を実現することを目的としています。Promiseチェインが重要な機能であり、双方向呼び出しをサポートしています。さらに、WebSocket、HTTP、MessageChannelなどのさまざまなトランスポートをサポートし、さまざまなコンテキスト（Webワーカー、iframeなど）間での通信を可能にします。</p>
+<h3>スキーマレスアプローチ</h3>
+<p>Cap'n Webはスキーマレスであり、プロトコル自体はAPIの有効性を認識しません。ただし、TypeScriptとの併用が推奨され、TypeScriptのスキーマはビルド時の型チェックに使用され、ランタイムには消去されます。このアプローチにより、TypeScriptを使用する開発者は、別のスキーマ形式を学ぶ必要がなくなります。</p>
+<h3>GraphQLとの比較</h3>
+<p>Cap'n Webの<code>.map()</code>トリックは、N+1問題を回避するためのサーバ側の最適化なしでは、GraphQLを完全に置き換えるものではありません。ただし、データベースがCloudflare Durable Object内のsqliteである場合、N+1セレクトは問題ありません。</p>
+<h3>セキュリティ上の考慮事項</h3>
+<p>Cap'n Webは、Object.prototypeメンバーをオーバーライドすることを明示的にブロックし、意図しないコールバックの呼び出しを防ぎます。ブログ記事とreadmeの両方で、型チェックの重要性が強調されています。</p>
+<h3>状態管理とスケーラビリティ</h3>
+<p>Cap'n Webの状態は、単一のRPCセッションでのみ存続します。WebSocketを使用する場合、これはWebSocketの存続期間です。HTTPバッチトランスポートを使用する場合、セッションは一度にバッチの呼び出しを実行する単一のHTTPリクエストです。</p>
+<h2>まとめ</h2>
+<p>Cap'n Webは、Webサーバ間の通信を簡素化する可能性のある有望なJavaScript RPCライブラリです。ケイパビリティベースのセキュリティモデル、Promiseパイプライン処理、およびさまざまなトランスポートのサポートにより、柔軟性と機能が提供されます。ただし、スキーマレスアプローチ、状態管理、およびスケーラビリティに関する考慮事項は、本番環境で使用する前に慎重に評価する必要があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>

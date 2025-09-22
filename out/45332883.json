@@ -1,0 +1,8 @@
+{
+  "comments_id": "45332883",
+  "rank": 7,
+  "title": "Cap'n Web: a new RPC system for browsers and web servers",
+  "link": "https://blog.cloudflare.com/capnweb-javascript-rpc-library/",
+  "created_date": "2025-09-22T20:12:34.642012",
+  "comments_summary": "この記事は、Kenton Vandra氏によるJavaScript RPCライブラリ「Cap'n Web」に関するHacker Newsのスレッドをまとめたものです。Cap'n Webは、Webサーバ間の通信を容易にすることに重点を置いており、ケイパビリティベースのセキュリティモデルと、Promiseパイプライン処理を提供します。\n\n## 主なテーマ\n\n### Cap'n Webの設計と機能\n\nCap'n Webは、Cap'n Proto RPCを簡略化したもので、より少ない複雑さで同じ機能を実現することを目的としています。Promiseチェインが重要な機能であり、双方向呼び出しをサポートしています。さらに、WebSocket、HTTP、MessageChannelなどのさまざまなトランスポートをサポートし、さまざまなコンテキスト（Webワーカー、iframeなど）間での通信を可能にします。\n\n### スキーマレスアプローチ\n\nCap'n Webはスキーマレスであり、プロトコル自体はAPIの有効性を認識しません。ただし、TypeScriptとの併用が推奨され、TypeScriptのスキーマはビルド時の型チェックに使用され、ランタイムには消去されます。このアプローチにより、TypeScriptを使用する開発者は、別のスキーマ形式を学ぶ必要がなくなります。\n\n### GraphQLとの比較\n\nCap'n Webの`.map()`トリックは、N+1問題を回避するためのサーバ側の最適化なしでは、GraphQLを完全に置き換えるものではありません。ただし、データベースがCloudflare Durable Object内のsqliteである場合、N+1セレクトは問題ありません。\n\n### セキュリティ上の考慮事項\n\nCap'n Webは、Object.prototypeメンバーをオーバーライドすることを明示的にブロックし、意図しないコールバックの呼び出しを防ぎます。ブログ記事とreadmeの両方で、型チェックの重要性が強調されています。\n\n### 状態管理とスケーラビリティ\n\nCap'n Webの状態は、単一のRPCセッションでのみ存続します。WebSocketを使用する場合、これはWebSocketの存続期間です。HTTPバッチトランスポートを使用する場合、セッションは一度にバッチの呼び出しを実行する単一のHTTPリクエストです。\n\n## まとめ\n\nCap'n Webは、Webサーバ間の通信を簡素化する可能性のある有望なJavaScript RPCライブラリです。ケイパビリティベースのセキュリティモデル、Promiseパイプライン処理、およびさまざまなトランスポートのサポートにより、柔軟性と機能が提供されます。ただし、スキーマレスアプローチ、状態管理、およびスケーラビリティに関する考慮事項は、本番環境で使用する前に慎重に評価する必要があります。"
+}
