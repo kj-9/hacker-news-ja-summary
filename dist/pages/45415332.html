@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subtleties of SQLite Indexes - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Subtleties of SQLite Indexes</h1>
+        <div class="meta">
+            投稿日: 2025年09月29日 | ランク: 9
+        </div>
+        <a href="https://emschwartz.me/subtleties-of-sqlite-indexes/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事はSQLiteのインデックスについて解説し、インデックスがどのように機能するか、そしてその制限について議論しています。</p>
+<h2>インデックスの仕組みと制限</h2>
+<p>インデックスはソートされたリストであり、データベースエンジンがデータを効率的に検索するのに役立つショートカットです。ただし、インデックスは魔法ではなく、特定の制限があります。例えば、複合インデックスでは、インデックスの列の順序が重要であり、左から右への検索しかできません。また、範囲クエリに遭遇すると検索が停止することがあります。</p>
+<h2>SQLiteのクエリプランナー</h2>
+<p>SQLiteのクエリプランナーは、他のデータベース（PostgresやMariaDBなど）と比較して限定的である可能性があります。例えば、WHERE条件の順序に依存したり、複数のインデックスを同時に使用できなかったり、特定の種類の手術でスキャンに頼ったりすることがあります。しかし、他のデータベースもクエリプランニングに苦労することがあり、これはデータベースベンダー全体で難しい問題である可能性があります。</p>
+<h2>インデックス戦略</h2>
+<p>インデックスは、実際のクエリで使用されるものだけを追加するように注意することが重要です。インデックスを闇雲に追加するのではなく、各クエリを検討し、クエリに一致するインデックスを作成、変更、またはクエリ自体を書き換える必要があります。適切なデータベース設計には、どのような情報をどのパラメータで検索する必要があるかを正確に把握し、それに応じてテーブルとインデックスを設計することが含まれます。</p>
+<h2>まとめ</h2>
+<p>この記事では、SQLiteのインデックスの基本的な概念と、その使用に関するいくつかの重要な考慮事項について解説しました。インデックスはデータベースのパフォーマンスを向上させるための強力なツールですが、その仕組みと制限を理解し、適切なインデックス戦略を立てることが重要です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
