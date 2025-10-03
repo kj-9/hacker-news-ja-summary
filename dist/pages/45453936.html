@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Litestream v0.5.0 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Litestream v0.5.0</h1>
+        <div class="meta">
+            投稿日: 2025年10月03日 | ランク: 2
+        </div>
+        <a href="https://fly.io/blog/litestream-v050-is-here/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Fly.ioがLitestreamに再び注力し、LiteFSよりもLitestreamを優先するようになった経緯についてのHacker Newsでの議論。</p>
+<h2>LitestreamとLiteFSの比較</h2>
+<p>Litestreamは、設定と理解が容易であるため、LiteFSよりも好まれている。LiteFSはカスタムファイルシステムを実行・マウントする必要があるが、LitestreamはSQLiteデータベースファイルを指定するだけでよい。</p>
+<h2>Litestreamのテストと一貫性</h2>
+<p>Litestreamは、分散コンセンサスシステムではないため、Jepsenのテストには適していない。Litestreamは、書き込みが成功したことをクライアントに返す際、データのローカルディスクへの保存のみを保証し、非同期レプリケーションのため、S3などへの反映には遅延がある。CloudflareのDurable Objectsは、複数のネットワークレプリカへの書き込みが完了するまで処理をブロックする点で対照的である。</p>
+<h2>SQLite vs PostgreSQL</h2>
+<p>SQLiteは、ユーザー数が少なく、高度なデータベース機能が不要な小規模アプリに適している。Litestreamを使用してレプリケーションとバックアップを行う場合は、PostgreSQLを使用する方が良い場合もある。SQLiteは、読み取りが多いワークロードには適しているが、同時書き込みが多い場合は適していない。</p>
+<h2>Litestreamの使用例と設定</h2>
+<p>Litestreamは、バックアップツールとしてだけでなく、データベースのミラーリングにも使用できる。設定は非常に簡単で、S3バケットなどのストレージバケットにアクセスキーとデータベースファイルのパスを設定するだけでよい。Docker環境での使用も可能で、SQLiteデータベースをボリュームに置き、Litestreamを別のコンテナで実行することで実現できる。</p>
+<h2>N+1問題</h2>
+<p>SQLiteを使用すると、データベースがローカルにあるため、ネットワークレイテンシーが解消され、N+1問題が軽減される。JOINを使用することでN+1問題を回避できる。GraphQLを使用すると、APIサーバーとデータベースが同じマシン上にある場合、複数のデータベースクエリをまとめて実行し、ネットワークのラウンドトリップを減らすことができる。</p>
+<h2>まとめ</h2>
+<p>Fly.ioがLitestreamの開発を再開したことで、SQLiteデータベースのバックアップとレプリケーションが容易になった。Litestreamは設定が簡単で低コストであり、小規模なアプリやオフラインファーストのデザインに適している。ただし、大規模なアプリケーションや同時書き込みが多い場合は、PostgreSQLなどのより堅牢なデータベースが推奨される。また、N+1問題などのパフォーマンスに関する考慮事項も重要である。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+</body>
+</html>
