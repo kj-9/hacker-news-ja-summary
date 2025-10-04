@@ -186,7 +186,7 @@ def summaries_to_rss():
             
             # Add page link to description
             page_link = f"https://kj-9.github.io/hacker-news-ja-summary/pages/{link.comments_id}.html"
-            description_with_link = f"<p><a href=\"{page_link}\">日本語要約ページを読む</a></p>\n\n{markdown(link.comments_summary)}"
+            description_with_link = f"<p><a href=\"{link.link}\">元の投稿を読む</a></p><p><a href=\"{page_link}\">日本語要約ページを読む</a></p>\n\n{markdown(link.comments_summary)}"
             SubElement(item, "description").text = description_with_link
             
             SubElement(item, "pubDate").text = link.created_date.strftime(
