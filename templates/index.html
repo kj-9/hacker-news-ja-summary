@@ -15,12 +15,30 @@
             background-color: #f9f9f9;
         }
         .header {
+            position: relative;
             text-align: center;
             padding: 40px 0;
             background: white;
             border-radius: 8px;
             margin-bottom: 30px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
         }
         .header h1 {
             color: #ff6600;
@@ -204,10 +222,78 @@
             padding: 50px;
             color: #666;
         }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header,
+        body.dark-mode .date-section,
+        body.dark-mode .date-navigation,
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header h1,
+        body.dark-mode .date-header,
+        body.dark-mode .current-date {
+            color: #ff8c42;
+        }
+        body.dark-mode .header p,
+        body.dark-mode .article-meta,
+        body.dark-mode .loading,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .article-card {
+            background: #2a2a2a;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .article-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+        body.dark-mode .article-title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .article-title a:hover {
+            color: #ff8c42;
+        }
+        body.dark-mode .article-summary {
+            color: #b0b0b0;
+        }
+        body.dark-mode .rss-link,
+        body.dark-mode .nav-btn {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .rss-link:hover,
+        body.dark-mode .nav-btn:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .nav-btn:disabled {
+            background: #555;
+            color: #888;
+        }
+        body.dark-mode .current-date:hover {
+            background: #333;
+        }
+        body.dark-mode .date-selector {
+            background: #2a2a2a;
+            border-color: #444;
+        }
+        body.dark-mode .date-option:hover {
+            background: #333;
+        }
     </style>
 </head>
 <body>
     <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
         <h1>Hacker News 日本語要約</h1>
         <p>Hacker Newsの記事コメントを日本語で要約しています</p>
         <a href="rss.xml" class="rss-link">RSS フィードを購読</a>
@@ -331,6 +417,38 @@
         
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
     </script>
     
     <div class="footer">
