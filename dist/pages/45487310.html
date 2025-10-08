@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why We Need SIMD - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why We Need SIMD</h1>
+        <div class="meta">
+            投稿日: 2025年10月08日 | ランク: 9
+        </div>
+        <a href="https://parallelprogrammer.substack.com/p/why-we-need-simd-the-real-reason" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、SIMD（Single Instruction, Multiple Data）命令の利用、その利点と課題、そして将来の展望について議論しています。</p>
+<h2>SIMDの概念と最適化</h2>
+<ul>
+<li>SIMD命令を「サンドイッチトースター」に例え、一度に複数のデータ（サンドイッチ）を処理することで効率を高めるというアナロジーが紹介されています。</li>
+<li>最適化のためには、データをキャッシュに保持し、SIMDユニットを効率的に稼働させることが重要であると指摘されています。</li>
+</ul>
+<h2>SIMDの幅と将来の可能性</h2>
+<ul>
+<li>より広いSIMD、特にAVX-512のような改善が有用であるという意見が出ています。1024ビットや2048ビット幅の演算に対する要望があります。</li>
+<li>メモリ帯域幅も比例して増加する必要があり、さもなければコアが処理するデータが不足する可能性があります。</li>
+<li>小さな行列（4x4や16x16）をSIMDレジスタに格納し、行列演算のためのintrinsic関数が利用可能になることへの期待が表明されています。</li>
+<li>AVX512が現在のキャッシュラインサイズに達しているため、x86でのキャッシュラインサイズの増加が必要になるかもしれないという指摘があります。</li>
+</ul>
+<h2>SIMDの設計思想</h2>
+<ul>
+<li>複数の小さなユニットを使用する方が、柔軟性の点で優れているという意見があります（AppleのMシリーズチップとIntelのAVX*の比較）。</li>
+<li>しかし、NEONは今日の使用には小さすぎるという反論もあります。例えば、倍精度浮動小数点数を使用する場合、1つのレジスタに2つの値しか格納できず、非力であるとされています。</li>
+</ul>
+<h2>AVX512の普及と利点</h2>
+<ul>
+<li>Zen 4および5チップの普及により、AVX512がSteamハードウェア調査で約20%の実行ハードウェアに搭載されるようになったことが喜ばれています。</li>
+<li>AVX1/2と比較して、AVX512は書きやすく、単に幅が2倍になる以上の利点を持つ命令があることが指摘されています。</li>
+<li>具体的な例として、128バイトを入力として受け取る倍幅のバイトシャッフル（_mm512_permutex2var_epi8）が挙げられ、256バイトのルックアップテーブルから1サイクルあたり64個の答えを生成できることが述べられています。</li>
+</ul>
+<h2>SIMD vs GPU</h2>
+<ul>
+<li>GPUプログラミングと比較して、SIMDによるゲインは限定的であるが、小規模な倍率向上であり、ほぼすべての場所で利用可能であると指摘されています。</li>
+<li>C#ではVectorクラスを通じて簡単に使用でき、WASM SIMDはまだ改善の余地があるものの、現在の128ビットでもバッファ処理において劇的な改善が見られる例が紹介されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>全体として、Hacker Newsのコメントでは、SIMD命令の最適化、より広いSIMDの可能性、AVX512の普及、そしてSIMDとGPUの比較などが議論されています。SIMDは特定のケースで大きなパフォーマンス向上をもたらす可能性があるものの、その効果を最大限に引き出すためには、メモリ帯域幅やキャッシュの最適化、そして適切な命令の選択が重要であることが強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
