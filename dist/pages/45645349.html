@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production RAG: what I learned from processing 5M+ documents - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Production RAG: what I learned from processing 5M+ documents</h1>
+        <div class="meta">
+            投稿日: 2025年10月20日 | ランク: 3
+        </div>
+        <a href="https://blog.abdellatif.io/production-rag-processing-5m-documents" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Retrieval Augmented Generation（RAG）システムの実用的な最適化について議論しています。投稿者は、RAGシステムのパフォーマンスを向上させるために行った実験と、クエリ生成、リランキング、チャンク戦略などの重要な要素について共有しています。</p>
+<h2>リランキング</h2>
+<p>リランキングは、検索結果の精度を向上させるために重要であり、特に多数のチャンクを処理する場合に有効です。小規模なファインチューニングされたモデルを使用することで、計算コストを抑えつつ、関連性の高い結果を得ることができます。リランキングは、セマンティックな類似性だけでなく、クエリに対する関連性を評価するため、テキストの埋め込みとコサイン類似度による方法とは異なります。</p>
+<h2>クエリ生成</h2>
+<p>ユーザーのクエリを拡張し、より適切な検索結果を得るために、LLMを使用して追加の検索クエリを生成することが有効です。ユーザーのクエリが不明確な場合や、必要な情報が直接的に表現されていない場合に特に役立ちます。ただし、生成されるクエリのバリエーションによって結果が大きく異なる可能性があるため、複数のクエリを生成し、それらを組み合わせることで安定性を高めるアプローチも提案されています。</p>
+<h2>チャンク戦略</h2>
+<p>テキストをチャンクに分割する方法は、RAGシステムのパフォーマンスに大きな影響を与えます。適切なチャンクサイズや分割方法を見つけることは重要であり、LLMを使用してテキストを要約し、重要な部分を抽出する方法も有効です。ただし、リポジトリ内でチャンク処理がどのように行われているかについては議論があり、さらなる調査が必要です。</p>
+<h2>実際の利用状況とビジネス価値</h2>
+<p>RAGシステムの技術的な最適化だけでなく、実際の顧客利用状況やビジネス価値に焦点を当てることの重要性が指摘されています。プロセス効率の向上や具体的なビジネス価値に繋がらない場合、技術的な改善は単なる誇大宣伝に過ぎない可能性があります。特に、ユーザーがコンテキストをどのように理解し、利用するかのメンタルモデルを構築することが重要であり、チャット以外のUIデザインの必要性が議論されています。</p>
+<h2>まとめ</h2>
+<p>このスレッドでは、RAGシステムの最適化におけるリランキング、クエリ生成、チャンク戦略の重要性が強調されています。また、技術的な改善だけでなく、実際の利用状況やビジネス価値に焦点を当て、ユーザーのメンタルモデルを考慮したUIデザインの必要性が議論されています。さらに、自己ホストの定義や、外部サービスへの依存に関する議論も行われました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
