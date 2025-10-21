@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural audio codecs: how to get audio into LLMs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Neural audio codecs: how to get audio into LLMs</h1>
+        <div class="meta">
+            投稿日: 2025年10月21日 | ランク: 2
+        </div>
+        <a href="https://kyutai.org/next/codec-explainer" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドでは、LLM(大規模言語モデル)における音声理解と処理について議論されています。記事では、LLMが通常、音声をテキストに変換してから処理し、応答を生成するためにテキストから音声への変換を使用していることを指摘しています。これは本質的な音声理解ではなく、単なるラッパーであると主張しています。</p>
+<h2>音声のトークン化</h2>
+<ul>
+<li>スレッドでは、音声を直接トークン化し、それを基にLLMを構築することについての疑問が提起されています。音声データは大量に存在するため、理論的には可能であると考えられています。</li>
+<li>しかし、音声のトークン化はテキストよりも多くのトークンを消費し、効率性の問題があります。また、LLMをゼロからトレーニングするのに十分な音声データがあるかどうかという問題もあります。</li>
+<li>既存の音声データを活用する方法として、安価な電話プランを提供するMVNOを立ち上げて通話データを収集したり、過去の演説や現在のラジオ/テレビ放送を利用したりするアイデアが出されています。</li>
+<li>閉鎖字幕付きのテレビ番組や映画も利用できる可能性がありますが、ライセンスの問題や、テキストと音声の正確なタイミングを合わせる必要性があります。</li>
+</ul>
+<h2>音声処理の課題</h2>
+<ul>
+<li>音声信号は本質的に連続的であり、それを離散的なトークンに変換することが課題です。</li>
+<li>経験豊富なオーディオエンジニアは波形を見て特定の音素を識別できますが、LLMに適用するにはまだ困難があります。</li>
+<li>音声には言語、方言、イントネーション、表情、身振りなどの追加的な要素があり、テキストよりも複雑です。</li>
+</ul>
+<h2>音声コーデックの利用</h2>
+<ul>
+<li>従来のオーディオコーデック（MP3など）をトークン化に利用することについての議論があります。</li>
+<li>MP3は自己完結型のフレームで構成されており、人間の聴覚に不要な情報を削除するように設計されています。</li>
+<li>ただし、LLMのトレーニングには、可能な限り豊富なデータセットを使用することが望ましいと考えられています。</li>
+</ul>
+<h2>LLMの音声理解の限界</h2>
+<ul>
+<li>現在のLLMは、音声のピッチを理解するのが苦手であり、これはモデルが過剰にアラインメントされているか、音声学習がテキスト学習よりも難しいためであると考えられています。</li>
+<li>音声モデルはテキストと音声を組み合わせて学習することが多く、音声トークンが統合された音声テキスト変換になってしまう傾向があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>全体として、このスレッドでは、LLMにおける音声処理の可能性と課題、そして音声の本質的な特性を捉えるためのトークン化手法の重要性について議論されています。物理ベースのコーデックの可能性や、LLMの音声理解能力の向上のためのアプローチについても考察されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
