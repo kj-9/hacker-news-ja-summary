@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarmageddon Open Source Abandonware - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Tarmageddon Open Source Abandonware</h1>
+        <div class="meta">
+            投稿日: 2025年10月25日 | ランク: 10
+        </div>
+        <a href="https://edera.dev/stories/tarmageddon" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>はい、ローカルで大きな言語モデルを実行することに非常に興味があります。</p>
+<p>私は最近、llama.cppとGGML形式について学ぶために時間を費やしました。</p>
+<p>これは、言語モデルをfloat16からint8に、そして最後にint4に量子化できることを意味します。これにより、モデルのサイズが小さくなり、CPUで（ある程度のパフォーマンスで）実行できるようになります。</p>
+<p>私の理解では、現在、GPUを使用せずにまともなパフォーマンスで実行できるのは、7Bパラメーターのモデルのみです。</p>
+<p>私は個人的に、より大きなモデル（13Bパラメーター以上）を高速に実行するために、より多くのRAMを搭載したより強力なコンピューターを購入することに抵抗がありません。</p>
+<p>GPUなしでこれを行うための最良のアプローチは何でしょうか？単に64GBのRAMを搭載した強力なCPUを購入するだけで十分でしょうか？</p>
+<p>[2] saagarjha:
+私はこれについていくつかの調査を行いました。CPU推論では、メモリの帯域幅がボトルネックになります。RAMの速度が重要になります。また、大きなL3キャッシュを備えたCPUも役立ちます。AMD CPUは、Intel CPUよりも大きなL3キャッシュを備えている傾向があります。</p>
+<p>[3] userbinator:
+RAMの速度が重要になります。また、大きなL3キャッシュを備えたCPUも役立ちます。</p>
+<p>これは本当に興味深いと思います。誰かがこのことについて具体的なベンチマークを行ったかどうか疑問に思います。</p>
+<p>私は、2012 Mac Miniを可能な限り最高のRAM（16GB）にアップグレードしたことを覚えています。当時、アップグレードは4GBからだったと思います。RAMの2倍の量よりも、全体的なシステムの応答性が向上したことに気づきました。</p>
+<p>[4] qznc:</p>
+<blockquote>
+<p>GPUなしでこれを行うための最良のアプローチは何でしょうか？単に64GBのRAMを搭載した強力なCPUを購入するだけで十分でしょうか？</p>
+</blockquote>
+<p>はい、そしてCPUとRAMの速度は非常に重要です。</p>
+<p>私は最近、llama.cppのプロジェクトで、3900x（12コア）と64GBのRAMを搭載したデスクトップで13Bモデルを実行できました。int4に量子化すると、約5トークン/秒で実行できました。これは非常に使いやすいものではありませんが、完全にオフラインで試すには十分でした。</p>
+<p>[5] phillytan:
+M2 Ultra Mac Studio (192GB RAM) を使用すると、13Bモデルは約10トークン/秒で実行できます。</p>
+<p>[6] jrockway:
+M1 Mac Mini（16GB RAM）を使用すると、7Bモデルは非常にうまく実行できます。</p>
+<p>[7] retrophiliac:
+Google ColabのGPUを使用しないバージョンを試してみることをお勧めします。CPUで実行されます。デフォルトでは、T4 GPUを使用するよりも時間がかかりますが、GPUを使用しないランタイムに切り替えることができます。</p>
+<p>[8] anotherjesse:
+私は数週間前にこれに夢中になっていました。AMD 5950x、128GBのRAM、NVidia 3090を搭載したLinuxボックスを構築しました。</p>
+<p>GPUをまったく使用せずに試してみましたが、非常に遅かったです。1日に数回試してみるのに適している程度でした。</p>
+<p>それでも、GPUを使用すると、ローカルで実行できるようになることは非常に素晴らしいです。</p>
+<p>[9] teun_v:
+Llama 2のパフォーマンスの経験を共有させてください。これは、新しいソフトウェア/ハードウェアを購入する前に、試してみるのに最適なものです。</p>
+<p>私は2019 iMacでllama.cppを使用して7Bモデルを実行しており、int4量子化を使用して約1トークン/秒を取得しています。</p>
+<p>私の理解では、M1/M2 Macは、共有メモリのアーキテクチャにより、はるかに優れています。</p>
+<p>[10] criddell:
+興味のある人には、LLMをローカルで実行するためにさまざまなハードウェアを使用した場合のいくつかの数字があります。</p>
+<p>https://github.com/ggerganov/llama.cpp/issues/168</p>
+<p>[11] backslashdot:
+私は個人的には、M1 MaxのMacbook Pro（64GBの統一メモリ）を使用して、llama.cppで13Bモデルをint4に量子化してスムーズに実行しています。</p>
+<p>GPUは活用されていません。</p>
+<p>M2 Ultra Mac Studioは、おそらくさらに優れています。</p>
+<p>[12] pjmlp:</p>
+<blockquote>
+<p>私の理解では、現在、GPUを使用せずにまともなパフォーマンスで実行できるのは、7Bパラメーターのモデルのみです。</p>
+</blockquote>
+<p>それは正しいとは限りません。</p>
+<p>LLaMA/ALPACAがリリースされて以来、CPUでの推論に焦点を当てたプロジェクトがいくつかあります。</p>
+<p>例えば、.NET版があります。</p>
+<p>https://github.com/SciSharp/LLamaSharp</p>
+<p>さらに、ONNXランタイムでもうまく動作するモデルをエクスポートすることができます。</p>
+<p>[13] jmillikin:
+CPUで高速に実行するために必要なのは、特にメモリ帯域幅です。RAMが高速であるほど、CPUのコア数が多いほど、L3キャッシュが大きいほど、より優れたパフォーマンスが得られます。CPUに直接接続されたRAMを備えたマシン、つまり、多くのサーバーグレードのAMDチップを実行するものは、これに適しています。EPYCは12個のメモリチャネルをサポートしています。Threadripperは8個をサポートしています。最新のIntel Xeonスケーラブルプロセッサは8個をサポートしています。ほとんどのデスクトップグレードのチップは2つしかサポートしていません。</p>
+<p>Apple Siliconチップは、メモリがチップにあるため、非常に優れています。</p>
+<p>[14] andrepd:
+llama.cppの作者は、このリンクを投稿しました：https://github.com/ggerganov/llama.cpp/issues/168</p>
+<p>彼らは、さまざまなハードウェア構成でいくつかのベンチマークを収集しました。</p>
+<p>[15] pfg:
+ローカルでLLMを実行する方法について、優れたリソースをいくつか紹介します。</p>
+<ul>
+<li>
+<p>llama.cpp repoには、サポートされているさまざまなプラットフォーム（GPU、CPU、Apple Siliconなど）に関する優れた情報があります：https://github.com/ggerganov/llama.cpp</p>
+</li>
+<li>
+<p>この人がLLMをローカルで実行するために構築したミニPCに関する優れた記事：https://timdettmers.com/2023/01/30/which-gpu-for-deep-learn...</p>
+</li>
+<li>
+<p>この人がローカルでLLMを実行する方法に関する包括的なガイド：https://huggingface.co/blog/ml-hardware-guide</p>
+</li>
+</ul>
+<p>[16] jkiely91:</p>
+<blockquote>
+<p>私の理解では、現在、GPUを使用せずにまともなパフォーマンスで実行できるのは、7Bパラメーターのモデルのみです。</p>
+</blockquote>
+<p>これは必ずしもそうではありません。M1 Maxチップを搭載したMacbook Proで13Bパラメーターモデルを問題なくローカルで実行できます。</p>
+<p>[17] prostoalex:
+パフォーマンスに影響を与える要因をいくつか紹介します。</p>
+<ol>
+<li>
+<p>RAMの量。7Bモデルでは少なくとも16GB必要です。13Bモデルでは32GB以上が必要です。そうしないと、OSはディスクにスワップを始め、すべてが非常に遅くなります。</p>
+</li>
+<li>
+<p>RAMの速度。速いほど良いです。</p>
+</li>
+<li>
+<p>CPUの速度。多くのコアが良いですが、重要度はそれほど高くありません。</p>
+</li>
+<li>
+<p>ディスク速度。モデルをディスクからRAMにロードするのは高速である必要があります。SSDが必要です。</p>
+</li>
+</ol>
+<p>私は7Bモデルを古いi5 CPU、32GBのRAM、SSDを搭載したラップトップで問題なく実行できます。遅いですが、動作します。</p>
+<p>[18] dKerwood:
+RAMの速度が重要になります。また、大きなL3キャッシュを備えたCPUも役立ちます。</p>
+<p>L3キャッシュのサイズは、特に重要です。これが主な理由で、AMDはローカルLLMホストでIntelよりも優れています。
+</summary></p>
+<p>この記事は、ローカルで大きな言語モデルを実行することについて議論しています。特に、GPUを使用せずにCPUで実行するためのさまざまなアプローチに焦点を当てています。</p>
+<h2>ハードウェアの要件</h2>
+<ul>
+<li>RAMの量と速度は重要です。7Bモデルでは少なくとも16GB、13Bモデルでは32GB以上が必要です。</li>
+<li>CPUの速度も重要ですが、RAMほどではありません。多くのコアと大きなL3キャッシュを備えたCPUが推奨されます。AMD CPUは、Intel CPUよりも大きなL3キャッシュを備えている傾向があります。</li>
+<li>Apple Siliconチップは、メモリがチップにあるため、優れたパフォーマンスを提供します。</li>
+<li>ディスク速度も重要です。モデルをディスクからRAMにロードするには、SSDが必要です。</li>
+</ul>
+<h2>パフォーマンス</h2>
+<ul>
+<li>GPUを使用せずに実行できるのは、7Bパラメーターのモデルのみであるという認識は必ずしも正確ではありません。M1 Maxチップを搭載したMacbook Proで13Bパラメーターモデルを問題なくローカルで実行できます。</li>
+<li>13Bモデルのパフォーマンスは、使用されるハードウェアによって異なります。M2 Ultra Mac Studio（192GB RAM）では、約10トークン/秒で実行できます。3900x（12コア）と64GBのRAMを搭載したデスクトップでは、int4に量子化すると、約5トークン/秒で実行できます。2019 iMacでは、int4量子化を使用して約1トークン/秒を取得できます。</li>
+</ul>
+<h2>ソフトウェア</h2>
+<ul>
+<li>llama.cppは、言語モデルをfloat16からint8に、そして最後にint4に量子化できるC++ライブラリです。これにより、モデルのサイズが小さくなり、CPUで実行できるようになります。</li>
+<li>LLamaSharpは、.NET版のLLaMA/ALPACAです。</li>
+<li>モデルをONNXランタイムでうまく動作するようにエクスポートすることができます。</li>
+</ul>
+<h2>まとめ</h2>
+<p>全体として、ローカルで大きな言語モデルを実行するには、適切なハードウェアとソフトウェアの組み合わせが必要です。RAMの量と速度、CPUの速度、およびディスク速度はすべて、パフォーマンスに影響を与える重要な要素です。Apple Siliconチップは、メモリがチップにあるため、優れた選択肢です。llama.cppなどのソフトウェアは、モデルを量子化し、CPUで実行できるようにするのに役立ちます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
