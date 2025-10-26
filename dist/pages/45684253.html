@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The bug that taught me more about PyTorch than years of using it - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The bug that taught me more about PyTorch than years of using it</h1>
+        <div class="meta">
+            投稿日: 2025年10月26日 | ランク: 4
+        </div>
+        <a href="https://elanapearl.github.io/blog/2025/the-bug-that-taught-me-pytorch/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、PyTorchのMPSバックエンドにおけるバグの発見とデバッグの経験について述べています。</p>
+<h2>AI生成コンテンツの統合</h2>
+<p>読者は、AIが生成したコンテンツ（Adamオプティマイザの説明など）が記事に組み込まれていることが、読みにくさに繋がっていると感じています。一方、AIが生成したコンテンツは、詳細な情報を必要とする読者にとって役立つという意見もあります。</p>
+<h2>Placeholderクラスの設計</h2>
+<p>Placeholderクラスが入力のみを処理し、出力を処理しない不完全な抽象化であるという意見があります。Placeholderは入力と出力の違いを認識し、コピーバック自体を行うべきだという提案があります。</p>
+<h2>Apple MPSのバグ</h2>
+<p>Apple MPSバックエンドでのPyTorchの勾配計算におけるバグが報告されており、ハードウェアとPyTorchの連携に関する問題が指摘されています。</p>
+<h2>GPUとCUDAのバグ</h2>
+<p>GPUやCUDAにおけるバグの頻度について質問があり、特にテンソルコアの実装における数値的な差異に苦労している開発者の経験が共有されています。</p>
+<h2>PyTorchのバグとテスト</h2>
+<p>PyTorchには、モデルの品質に影響を与える可能性のある、見過ごされているバグが多数存在するとの意見があります。ただし、これらのバグは再現可能なテストケースを作成しやすいはずであり、もし存在すれば、すでに誰かが証明を試みているはずだという反論もあります。</p>
+<h2>その他の議論</h2>
+<ul>
+<li>SGD（確率的勾配降下法）という用語が「標準勾配降下法」と誤って使用されていた点が指摘され、修正されました。</li>
+<li>非連続なテンソルがPyTorchにおけるバグの主要な原因であるという意見があります。</li>
+<li>AppleがPyTorch MPSバックエンドへの貢献を減らし、独自のフレームワークであるMLXを開発したことに対する批判があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この記事は、PyTorchのMPSバックエンドにおけるバグの発見とデバッグの経験を詳細に記述しています。議論では、AI生成コンテンツの統合、Placeholderクラスの設計、Apple MPSのバグ、GPUとCUDAのバグ、PyTorchのバグとテスト、その他の関連トピックが取り上げられています。全体として、この記事は、MLフレームワークの複雑さと、ハードウェアとソフトウェアの連携における潜在的な問題について貴重な洞察を提供しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
