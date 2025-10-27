@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco opensourced MCP-Scanner for finding vulnerabilties in MCP server - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Cisco opensourced MCP-Scanner for finding vulnerabilties in MCP server</h1>
+        <div class="meta">
+            投稿日: 2025年10月27日 | ランク: 5
+        </div>
+        <a href="https://github.com/cisco-ai-defense/mcp-scanner" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <h2>MCP（Model Context Protocol）の現状と課題</h2>
+<p>この一連のコメントは、MCP（Model Context Protocol）の現状に対する不満や課題について議論しています。特に、認証、セキュリティ、実用性、そしてAIによって生成されたドキュメント（AI slop）の品質に関する問題が指摘されています。</p>
+<h2>認証とセキュリティの問題</h2>
+<ul>
+<li><strong>認証の複雑さ:</strong> MCPの認証方法が複雑で、特にOAuthの実装が不十分であるため、開発者がシンプルなMCPサーバーを構築し、ChatGPTやClaudeなどのAIモデルに安全に接続することが困難です。既存のSSOシステムとの連携も難しいとされています。</li>
+<li><strong>セキュリティの脆弱性:</strong> セキュリティ対策が不十分であり、ユーザーにローカルでNodeJSパッケージを実行させるなど、セキュリティリスクが高いと指摘されています。Dockerの使用や、不明な場所へのデータ送信も懸念されています。</li>
+<li><strong>エンタープライズ環境での利用の難しさ:</strong> 顧客認証の実装が困難であるため、企業がMCPを導入する際の大きな障壁となっています。</li>
+</ul>
+<h2>実用性と設計の問題</h2>
+<ul>
+<li><strong>CLIとの比較:</strong> MCPがCLI（コマンドラインインターフェース）と比較して、機能や効率の面で優位性を示せていないという意見があります。</li>
+<li><strong>エラー処理の簡略さ:</strong> エラー処理が単純なbooleanフィールドでしか行われていない点が批判されています。</li>
+<li><strong>AI slopの問題:</strong> MCPの仕様や関連ドキュメントがAIによって生成された「AI slop」である可能性が指摘されています。これにより、ドキュメントの品質が低く、実装が困難になっていると考えられています。</li>
+</ul>
+<h2>提案と将来の展望</h2>
+<ul>
+<li><strong>ローカルツールとしての利用:</strong> 認証を必要としないローカルツールに限定してMCPを利用する提案があります。</li>
+<li><strong>今後の改善への期待:</strong> MCPの改善を期待する声もありますが、AIによって生成された仕様に対する根本的な懸念も存在します。</li>
+</ul>
+<h2>まとめ</h2>
+<p>MCPは、認証、セキュリティ、設計の面で多くの課題を抱えており、現状ではエンタープライズ環境での利用や、ビジネス向けのツールとしての利用には適していないという意見が多く見られます。今後の改善が期待される一方で、AIによって生成された仕様に対する根本的な懸念も存在します。ローカルツールとしての限定的な利用が現実的な選択肢として提案されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

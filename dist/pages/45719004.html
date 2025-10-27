@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust cross-platform GPUI components - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Rust cross-platform GPUI components</h1>
+        <div class="meta">
+            投稿日: 2025年10月27日 | ランク: 10
+        </div>
+        <a href="https://github.com/longbridge/gpui-component" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>これは、RustのUIフレームワーク、特にGPUIとそのコンポーネントライブラリに関するHacker Newsのスレッドの要約です。</p>
+<h2>Rust UIの成熟度</h2>
+<p>RustのUIシーンは成熟してきており、<code>iced</code>、<code>egui</code>、<code>dioxus</code>、<code>slint</code>などの人気のあるオプションが、コンポーネントの豊富さの点で最も完全ではない可能性があるという意見があります。GPUIは有望な選択肢として注目されており、特にZedエディターで使用されていることから、現実世界での利用が進んでいると考えられています。しかし、UIフレームワークを選択する際には、デザインドキュメント、デバッグインフラ、アクセシビリティ対応などの要素も重要です。</p>
+<h2>エンタープライズ対応UI</h2>
+<p>「エンタープライズ対応」UIの定義は議論の余地があり、UIフレームワークの比較評価だけでなく、ビジネスロジックをRustで書き、GUIを動作させることに重点を置く組織もあります。<code>iced</code>を使用してリッチなエンタープライズ対応UIを構築した経験を持つ人もいますが、そのためにはカスタムテーマやウィジェットの作成など、多くの努力が必要でした。<code>egui</code>もAPIの表現力と優れたドキュメントで成功を収めています。</p>
+<h2>依存関係とコンパイル時間</h2>
+<p>GPUIコンポーネントライブラリは依存関係が約900と多いため、コンパイル時間が長くなる可能性があります。DioxusのSubsecondツールや、コアランタイムを動的ライブラリとしてコンパイルする方法など、コンパイル時間を短縮するためのアプローチも提案されています。</p>
+<h2>ゲーム開発におけるRust</h2>
+<p>Fyroxは成熟したRustゲームエンジンであるにもかかわらず、Bevyほど人気がありません。BevyはECS（Entity-Component-System）を採用しており、マーケティングにも成功していますが、ゲーム開発の現場ではまだ課題が残っています。Bevyは技術デモとしては優れていますが、実際のゲーム開発には適していないという意見もあります。ゲーム開発では、反復速度が重要であり、Rustの所有権ルールやボローチェッカーが開発の妨げになる場合があります。</p>
+<h2>アクセシビリティ</h2>
+<p>新しいUIフレームワークが登場するたびに、アクセシビリティ対応が重要な課題となります。GPUIのロードマップにはアクセシビリティが含まれていますが、Zedエディター（GPUIベース）はスクリーンリーダーに対して不透明です。SlintやQtなどのフレームワークが、アクセシビリティの面で優れているとされています。</p>
+<h2>ネイティブUIとカスタムUI</h2>
+<p>ファイルダイアログなどのネイティブUIコンポーネントを使用するか、カスタムUIを使用するかという議論があります。ネイティブUIは、ユーザーが慣れ親しんだ操作感を提供し、エンジニアリングの労力を削減できますが、カスタムUIは、より統一感のあるデザインや特定のワークフローに最適化されたUIを提供できます。</p>
+<h2>まとめ</h2>
+<p>GPUIとそのコンポーネントライブラリは、Rust UIの有望な選択肢であり、特にZedエディターで使用されていることから、現実世界での利用が進んでいると考えられます。しかし、依存関係の多さ、コンパイル時間、アクセシビリティ対応など、いくつかの課題も存在します。Rust UIフレームワークを選択する際には、これらの要素を考慮し、プロジェクトの要件に最適なものを選ぶ必要があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
