@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Propolis (YC X25) – Browser agents that QA your web app autonomously - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Propolis (YC X25) – Browser agents that QA your web app autonomously</h1>
+        <div class="meta">
+            投稿日: 2025年10月30日 | ランク: 6
+        </div>
+        <a href="https://app.propolis.tech/#/launch" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この Hacker News のコメントスレッドは、Marc と Matt による Propolis の発表とそれに対する議論です。Propolis は、ブラウザエージェントを使用してユーザーをシミュレートし、バグを報告し、e2e テストを作成するツールです。</p>
+<h2>製品の機能と利点</h2>
+<ul>
+<li>従来のカナリアリリースプロセスとは異なり、実際のエンドユーザーに影響を与える前に、シミュレートされたトラフィックに対するデプロイをカナリアテストできます。</li>
+<li>LLM を使用してチェックを評価するため、柔軟性が高く、非決定的な出力の品質に関連するバグも検出できます。</li>
+<li>ユーザーのジャーニーを考案し、摩擦点を特定し、e2e テストを提案するために連携する、ブラウザエージェントの「群れ」を実行します。</li>
+<li>生成されたテストを CI パイプラインの一部として実行し、より具体的なフローが動作し続けるようにします。</li>
+</ul>
+<h2>ユースケース</h2>
+<ul>
+<li>既存のエージェントのテスト: Propolis のエージェントは、他のエージェントに質問をしたり、UI を操作したりできます。</li>
+<li>オンボーディングフローのテスト: ログインしていない状態から開始し、必要なコンテキスト (Stripe テストカードなど) を与えることで、ほとんどのオンボーディングフローをステップスルーできます。ただし、複数ページのホップが必要な統合の設定は、まだ課題があります。</li>
+<li>不正/不正利用/コンプライアンスのテスト: Propolis は、不正利用ベクトル (バグの一種) のテストに役立ちます。これは、システムが期待どおりに動作する場合でも発生します。</li>
+<li>壊れた UI の検出: エージェントは VLMs を使用しているため、何かがおかしい場合にそれを検出できます。以前のバージョンと比較するのではなく、何かが壊れているかどうかについて独自の意見を持っています。</li>
+<li>OTP 保護されたフローの検証</li>
+</ul>
+<h2>統合</h2>
+<ul>
+<li>メールチェック: Propolis は、メールをチェックできます (有料顧客のエージェントは一意のアドレスで起動します)。</li>
+<li>Mailosaur との連携: これにより、メールやその他のサイドフローとの統合が可能になります。</li>
+</ul>
+<h2>価格</h2>
+<ul>
+<li>月額 1000 ドルで無制限に使用可能で、フィードバックや機能リクエストを求めるアーリーユーザー向けのアクティブなサポートが含まれています。</li>
+<li>より小規模なプロジェクトや個人的なプロジェクトで使用したい場合は、上限付きの使用/趣味プランも利用可能です。</li>
+</ul>
+<h2>課題</h2>
+<ul>
+<li>複数ページのホップが必要な統合の設定は、まだ課題があります。</li>
+<li>モバイルの処理はまだサポートされていません。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Propolis は、ブラウザエージェントを使用してユーザーをシミュレートし、バグを報告し、e2e テストを作成するツールです。さまざまなユースケースに対応しており、LLM やその他のツールとの統合により、包括的なテストソリューションを提供します。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
