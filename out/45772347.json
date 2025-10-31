@@ -1,0 +1,8 @@
+{
+  "comments_id": "45772347",
+  "rank": 7,
+  "title": "Nix Derivation Madness",
+  "link": "https://fzakaria.com/2025/10/29/nix-derivation-madness",
+  "created_date": "2025-10-31T20:13:41.468277",
+  "comments_summary": "この Hacker News のコメントスレッドは、Nix パッケージマネージャーの複雑さと、その設計上の決定による影響について議論しています。\n\n## CA (Content Addressed) Derivations とその影響\n\nCA derivations は、fixed-output derivations の一般化されたもので、Nix が derivations を処理する方法に影響を与えます。fixed-output derivations の存在下では、derivers が一意に決定されず、混乱を引き起こす可能性があります。CA derivations は、同一の derivation がユーザーによって異なる出力パスを生成する可能性もあります。\n\n## `deriver` フィールドの問題点と将来のProvenance Tracking\n\nNix の `deriver` フィールドは、derivation を作成するために使用された Nix 式への追跡可能性を提供する意図でしたが、実際にはそうではありません。このため、binary cache に記録された deriver がローカルの評価結果と一致しない場合に混乱が生じます。将来的に Nix は、store path がどこから来たのかを正確に示す適切な provenance tracking を導入することを目指しています。\n\n## ストアパスの命名規則に関する議論\n\nstore path の命名規則（ハッシュ値が先頭に来る形式）について、人間にとっての可読性の観点から議論がされています。ハッシュ値を先頭に置くことで、パッケージ名よりも設定から生成されたものが何かを重視する意図が伝えられます。一方、人間にとってはパッケージ名が先頭にある方が、ストア内のファイルを一覧表示する際に意味的にソートされ、読みやすくなります。\n\n## ストアディレクトリのアクセス制限の提案\n\nstore path に名前を付けない、ストアディレクトリの内容のリスト表示を許可しない、store path により多くの情報を付加することで、store path をより安全なcapabilityにできるという提案がなされています。しかし、これはデバッグを困難にするという批判もあります。\n\n## Nix の再構築の必要性\n\nNix は素晴らしい研究プロジェクトでしたが、今こそ根本から書き換えるべきだという意見があります。Guix は Nix と同様の概念を持つ代替手段ですが、パッケージの利用可能性では Nix に劣ります。"
+}

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nix Derivation Madness - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Nix Derivation Madness</h1>
+        <div class="meta">
+            投稿日: 2025年10月31日 | ランク: 7
+        </div>
+        <a href="https://fzakaria.com/2025/10/29/nix-derivation-madness" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この Hacker News のコメントスレッドは、Nix パッケージマネージャーの複雑さと、その設計上の決定による影響について議論しています。</p>
+<h2>CA (Content Addressed) Derivations とその影響</h2>
+<p>CA derivations は、fixed-output derivations の一般化されたもので、Nix が derivations を処理する方法に影響を与えます。fixed-output derivations の存在下では、derivers が一意に決定されず、混乱を引き起こす可能性があります。CA derivations は、同一の derivation がユーザーによって異なる出力パスを生成する可能性もあります。</p>
+<h2><code>deriver</code> フィールドの問題点と将来のProvenance Tracking</h2>
+<p>Nix の <code>deriver</code> フィールドは、derivation を作成するために使用された Nix 式への追跡可能性を提供する意図でしたが、実際にはそうではありません。このため、binary cache に記録された deriver がローカルの評価結果と一致しない場合に混乱が生じます。将来的に Nix は、store path がどこから来たのかを正確に示す適切な provenance tracking を導入することを目指しています。</p>
+<h2>ストアパスの命名規則に関する議論</h2>
+<p>store path の命名規則（ハッシュ値が先頭に来る形式）について、人間にとっての可読性の観点から議論がされています。ハッシュ値を先頭に置くことで、パッケージ名よりも設定から生成されたものが何かを重視する意図が伝えられます。一方、人間にとってはパッケージ名が先頭にある方が、ストア内のファイルを一覧表示する際に意味的にソートされ、読みやすくなります。</p>
+<h2>ストアディレクトリのアクセス制限の提案</h2>
+<p>store path に名前を付けない、ストアディレクトリの内容のリスト表示を許可しない、store path により多くの情報を付加することで、store path をより安全なcapabilityにできるという提案がなされています。しかし、これはデバッグを困難にするという批判もあります。</p>
+<h2>Nix の再構築の必要性</h2>
+<p>Nix は素晴らしい研究プロジェクトでしたが、今こそ根本から書き換えるべきだという意見があります。Guix は Nix と同様の概念を持つ代替手段ですが、パッケージの利用可能性では Nix に劣ります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
