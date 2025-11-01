@@ -1,0 +1,8 @@
+{
+  "comments_id": "45781298",
+  "rank": 4,
+  "title": "SQLite concurrency and why you should care about it",
+  "link": "https://jellyfin.org/posts/SQLite-locking/",
+  "created_date": "2025-11-01T20:11:11.330621",
+  "comments_summary": "この記事は、SQLiteの同時実行に関する問題と、Jellyfinメディアサーバーでのそれらの問題の解決策について議論しています。\n\n## SQLITE_BUSYとトランザクション管理\n\n*   SQLiteはデフォルトで「deferred」モードでトランザクションを開始し、書き込みを試みるまで書き込みロックを取得しません。\n*   SQLITE_BUSYエラーは、トランザクションが読み取りモードで開始され、別のトランザクションが書き込みモードで開始された後、最初のトランザクションが書き込みモードにアップグレードしようとしたときに発生します。\n*   解決策は、busy_timeoutを設定し、書き込みを行うトランザクションを「immediate」モードで開始することです。\n\n## SQLiteのデフォルトと設定\n\n*   SQLiteは、下位互換性のために、デフォルト設定が最適ではない場合があります。\n*   適切なPRAGMAを設定することで、SQLiteの動作を改善できます。\n*   推奨されるPRAGMAには、foreign_keys、recursive_triggers、journal_mode、busy_timeout、synchronous、cache_size、temp_store、wal_autocheckpoint、optimizeなどがあります。\n\n## 並行書き込みとアーキテクチャ\n\n*   SQLiteは一度に1つの書き込みしか処理できませんが、WAL（Write-Ahead Logging）モードを使用することで、読み取りと書き込みを並行して実行できます。\n*   並行書き込みを処理するために、単一の書き込み接続プールと複数の読み取り接続プールを使用するアーキテクチャが推奨されています。\n*   マルチプロセッシングを使用して並行書き込みを行う場合、書き込みをキューに入れてシリアル化する必要があります。\n\n## SQLiteのフォークと代替手段\n\n*   SQLiteは、テストスイートがプロプライエタリであるため、フォークが難しいです。\n*   SQLiteと互換性のある代替手段として、DuckDBがあります。\n*   DuckDBはOLAPワークロードに適していますが、OLTPワークロードではパフォーマンスが低下する可能性があります。\n\n## まとめ\n\nこの記事では、SQLiteの同時実行に関する問題と、それらを解決するためのさまざまな戦略について解説されています。SQLITE_BUSYエラーを回避するために、適切なトランザクション管理とPRAGMA設定が重要です。並行書き込みを行う場合は、キューイングやWALモードなどの手法を使用できます。また、SQLiteの代替手段としてDuckDBも検討できます。"
+}
