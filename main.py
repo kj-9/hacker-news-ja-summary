@@ -30,7 +30,7 @@ class HnLink(BaseModel):
         # use subprocess to run the command
         fragments = f'hn:{self.comments_id}'
         system_prompt = "$(cat system-prompt.txt)"
-        model = 'gemini-2.0-flash'
+        model = 'gemini-2.5-flash'
 
         cmd = f'llm --fragment "{fragments}" --system "{system_prompt}" --model "{model}"'
         logging.info(f"Running command: {cmd}")
