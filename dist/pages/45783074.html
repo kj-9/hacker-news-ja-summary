@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAssembly (WASM) arch support for the Linux kernel - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">WebAssembly (WASM) arch support for the Linux kernel</h1>
+        <div class="meta">
+            投稿日: 2025年11月03日 | ランク: 10
+        </div>
+        <a href="https://github.com/joelseverin/linux-wasm" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Linuxカーネルを直接WebAssembly (WASM) にコンパイルし、ブラウザで実行するプロジェクト（<a href="https://joelseverin.github.io/linux-wasm/">デモはこちら</a>）に関するものです。参加者はこの革新的なアプローチの性能、技術的課題、WASMエコシステム全体への影響、および潜在的なユースケースについて議論しています。</p>
+<h2>エミュレーションなしのWASM Linuxのアプローチと性能</h2>
+<p>このプロジェクトの最大の特徴は、x86_64などの命令セットアーキテクチャ（ISA）エミュレーション層を介さずに、Linuxバイナリを直接WASMにコンパイルして実行する点にあります。これにより、<code>container2wasm</code>や<code>jor1k</code>、<code>WebCM</code>といった既存のエミュレーションベースのソリューションと比較して、大幅な速度向上とネイティブに近い性能が期待されています。特に、全てのバイナリがWASMとしてコンパイルされ、各子プロセスが新しいWasm WebWorkerとして実行され、カーネルABIがWASMのエクスポート関数として公開される点が強調されています。既存のエミュレーションセットアップと比較して、性能が「完全に凌駕している」という報告もありますが、エミュレーションにはメモリ保護や既存のLinuxディストリビューションとの互換性といった利点があることも指摘されています。</p>
+<h2>技術的課題、バグ、機能制限</h2>
+<p>デモ版ではいくつかのバグや機能制限が報告されています。「フォーク爆弾」（<code>:(){ :|:&amp; };:</code>）によるVMクラッシュ、<code>du -h</code>や<code>wget</code>、<code>ping</code>コマンド実行時のクラッシュが挙げられています。特に<code>ping</code>に関しては、WASMが直接ネットワークソケットを開けないため、「raw socketの作成ができません」というエラーが発生し、メモリアクセス違反でクラッシュします。ネットワーク機能はJavaScriptを通じてネットワークデバイスドライバを記述することで実装可能ですが、CORSなどの問題でプロキシサーバーが必要になる可能性が指摘されています。また、プロジェクトのREADMEでFirefoxでは大規模なWASMプロジェクトのデバッグがうまくいかないという言及があり、議論の対象となりました。さらに、LLVMのビルドシステムにおける奇妙なバグ（複数回ビルドすると失敗する）も報告されています。</p>
+<h2>WebAssemblyの現状と将来性</h2>
+<p>WASMの普及については意見が分かれています。一部ではドキュメント不足や速度への懸念から「ブレイクスルー」が起きていないと認識されていますが、Figmaなどの主要なアプリケーションや、Wasm-GCの登場によりサーバーサイド言語でのWebサポートが改善されているといった具体的な進展も指摘されています。ブラウザでOS全体をロードすることについて、Ray20は期待を寄せるものの、charcircuitは数十MBのWebAssemblyでも問題になる中で、ギガバイト規模のダウンロードは現実的ではないと懸念を表明しています。将来的には、WASI-libcやWASIXのような関連技術との連携が、WASMの可能性をさらに広げると期待されています。</p>
+<h2>目的とユースケース</h2>
+<p>「何のために？」「誰がこれを使うのか？」という疑問に対し、複数の潜在的なユースケースが挙げられています。主なものとしては、オペレーティングシステムや特定のソフトウェアのダウンロードなしでのテスト、ChromebookなどでのLinuxの基礎を教える教育目的、特定のソフトウェアインストール制限の回避などがあります。また、ブラウザ上でLinuxのコードを実行できることの容易さが評価されています。究極的には、「狂ったアイデア」が後に標準となるソフトウェア開発の歴史に触れつつ、WASMが将来的にデスクトップLinuxの主要なプラットフォームになる可能性すら示唆されています。たとえ実用的な用途がすぐには見えなくても、技術的な「できるからやる」という動機や、実験的な価値も認められています。</p>
+<h2>まとめ</h2>
+<p>このプロジェクトは、ISAエミュレーションなしでLinuxをWebAssembly上で実行するという、非常に野心的かつ高速なアプローチを示しています。その性能は高く評価されているものの、「フォーク爆弾」やネットワーク機能の制限、LLVMのビルドバグ、Firefoxでのデバッグ問題など、現状では多くの技術的課題やバグが存在します。WASMエコシステム全体の成熟度や、巨大なOSをブラウザで実行する際のダウンロードサイズの問題も議論されていますが、OSやソフトウェアのテスト、教育、制限回避といった具体的なユースケースが提示されており、将来的にWebAssemblyが主要なプラットフォームとなる可能性を秘めた興味深い実験として注目されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
