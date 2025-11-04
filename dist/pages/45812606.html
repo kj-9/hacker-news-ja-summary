@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pg_lake: Postgres with Iceberg and data lake access - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Pg_lake: Postgres with Iceberg and data lake access</h1>
+        <div class="meta">
+            投稿日: 2025年11月04日 | ランク: 1
+        </div>
+        <a href="https://github.com/Snowflake-Labs/pg_lake" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p><code>pg_lake</code>は、PostgreSQLをIcebergデータレイクのクエリエンジンとして利用可能にするオープンソース拡張機能です。このプロジェクトはPostgreSQLユーザーがデータレイクをより効率的に操作できるよう、SnowflakeとCrunchy Dataによって共同で開発され、発表されました。</p>
+<h2>Postgresとデータレイクの統合</h2>
+<p><code>pg_lake</code>は、PostgreSQLを既存のIcebergデータレイクに接続し、PostgreSQL内から直接Icebergテーブルをクエリすることを可能にします。これにより、PostgreSQLユーザーは慣れ親しんだ環境でデータレイク分析を実行できます。</p>
+<ul>
+<li><strong>DuckDBによる効率的な処理</strong>: 内部的には、PostgreSQLはOLAPクエリエンジンとしてDuckDBを利用します。クエリの一部または全体をDuckDBに「プッシュダウン」し、リモートで効率的に処理させることで、PostgreSQLはデータソースとして機能しつつ、分析のパフォーマンスを向上させます。</li>
+<li><strong>独立した<code>pgduck_server</code></strong>: DuckDBは<code>pgduck_server</code>というPostgreSQLとは別のプロセスで動作します。この分離は、PostgreSQLのプロセス分離モデルに起因するスレッドやメモリ安全性の制限を回避し、オブジェクトストアキャッシュの共有やメモリ管理の合理化、システムの堅牢性向上に寄与します。</li>
+<li><strong>書き込み機能</strong>: Icebergテーブルへの書き込みもサポートされており、<code>COPY table TO 's3://mybucket/data.parquet'</code>のようなPostgreSQLの標準コマンドを使用してS3にParquet形式でデータをエクスポートできます。</li>
+<li><strong>アクセス制御</strong>: S3バケットへのアクセスはDuckDBのシークレットとして資格情報を設定することで制御されます。PostgreSQL側では、<code>pg_lake_read</code>などのロールを通じて読み書き権限を付与できますが、よりきめ細やかなパーミッション管理は今後の課題とされています。</li>
+</ul>
+<h2>Snowflakeの戦略と競合</h2>
+<p>Snowflakeがこのオープンソースプロジェクトに関与していることについて、「自社の主要製品をカニバライズするのではないか」という疑問が呈されました。</p>
+<ul>
+<li><strong>Icebergエコシステムへのコミットメント</strong>: SnowflakeはIcebergエコシステムへの強いコミットメントを示しており、顧客のニーズに応えることで、この新しいデータランドスケープでの収益機会を見出すことに賭けていると説明されています。</li>
+<li><strong>異種混合のコンピューティング環境</strong>: <code>pg_lake</code>はSnowflakeほどの大規模なスケーリングはしないものの、異種混合のコンピューティング環境の一部として機能します。これは、BIツール向けのデータ準備には大規模なシステムが必要だが、実際のBIクエリにはより安価なエンジンで十分というシナリオに合致します。</li>
+<li><strong>市場の反応</strong>: 一部のユーザーは、Snowflakeチームが外部Icebergテーブルの利用を積極的に推奨せず、自社ストレージへの移行を促す傾向があることや、Icebergでの機能サポートが戦略的に制限されているように見える、といった意見を述べています。</li>
+</ul>
+<h2>類似プロジェクトとの比較とアーキテクチャの選択</h2>
+<p><code>pg_lake</code>は、<code>DuckLake</code>や<code>pg_mooncake</code>といった他のPostgreSQLとデータレイクを統合するプロジェクトと比較されています。</p>
+<ul>
+<li><strong>DuckLakeとの違い</strong>: <code>DuckLake</code>がDuckDBをクエリフロントエンドとしPostgreSQLをバックエンドカタログとして利用するのに対し、<code>pg_lake</code>はPostgreSQLをクエリフロントエンドとカタログとし、DuckDBをバックエンドのクエリエンジンとして利用します。</li>
+<li><strong><code>pg_lake</code>の利点</strong>:<ul>
+<li>Iceberg形式を採用しているため、他のクエリエンジンとの高い相互運用性を持ちます。</li>
+<li>分析テーブルと運用テーブル間でのトランザクションをサポートし、PostgreSQLの堅牢なトランザクション保証を活用できます。</li>
+<li>PostgreSQLの永続性、<code>pg_cron</code>によるジョブスケジューリング、PL/pgSQLによるオーケストレーション機能を活用できます。</li>
+<li>開発者によると、<code>pg_lake</code>はPostgreSQLのSQL機能やトランザクションを犠牲にしない「成熟した」ソリューションであり、既存のワークロードへのスムーズな統合を重視しています。</li>
+</ul>
+</li>
+</ul>
+<h2>まとめ</h2>
+<p><code>pg_lake</code>は、PostgreSQLをIcebergデータレイクの強力なハブに変える画期的なオープンソース拡張機能です。これにより、PostgreSQLユーザーは既存のスキルセットで大規模な分析ワークロードに対応できるようになります。Snowflakeの支援により、このプロジェクトはIcebergエコシステムへの参加を促し、多様なコンピューティング環境におけるPostgreSQLの役割を拡大する可能性を秘めています。類似プロジェクトとの比較では、PostgreSQL中心のアプローチがもたらすトランザクション一貫性や運用の成熟度が強調されていますが、アクセス制御の粒度や大規模なクエリにおけるメモリ管理、外部メタデータ更新への対応など、今後の改善点が指摘されています。全体として、PostgreSQLがデータスタックの中心でさらに重要な役割を果たす「黄金時代」を象徴するプロジェクトと見なされています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
