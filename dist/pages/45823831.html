@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby and Its Neighbors: Smalltalk - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ruby and Its Neighbors: Smalltalk</h1>
+        <div class="meta">
+            投稿日: 2025年11月05日 | ランク: 5
+        </div>
+        <a href="https://noelrappin.com/blog/2025/11/ruby-and-its-neighbors-smalltalk/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Smalltalkのエコシステムの核となる「イメージ」の概念と、それがプログラミングのパラダイム、開発効率、そして普及に与えた影響について議論しています。</p>
+<h2>イメージの概念とその影響</h2>
+<p>Smalltalkの「イメージ」とは、アプリケーションの状態をフリーズ、配布、再開できるシステム全体の状態を指します。コメントでは、Smalltalkイメージの歴史的連続性（1972年の祖先が現代のシステムにも生きている）が強調されており、これを一種の「不滅性」と表現しています。アプリケーション開発を新しいSmalltalkバージョンの作成と捉える見方もあります。</p>
+<p>しかし、このイメージはSmalltalkの普及を阻んだ主要因と見なされることもあります。開発者がシステムを自由に検査・変更できる柔軟性（マルアビリティ）は、クライアントサイドアプリケーションのサポートを容易にする一方で、悪夢のようなサポート状況を生む可能性も指摘されています。現代のDockerコンテナやJavaScriptのブラウザ開発ツールが同様の機能を持つものの、Smalltalkのイメージは「時間の中で凍結された開発者の最終状態」として、現代の再現性の高いオープンソースのエコシステムとは対照的に捉えられています。</p>
+<p>一部のユーザーは、Smalltalkのイメージが「生きているエンティティ」としてのソフトウェアという哲学に根ざしており、ファイルベースのシステムとは異なるアプローチであったと擁護しています。また、現代のSmalltalkシステムはGitなどのバージョン管理システムをサポートしており、過去30年ほどはイメージを共有するだけでなく、コードをイメージ外で管理することが可能であるという指摘もあります。</p>
+<h2>開発とデプロイの課題</h2>
+<p>Smalltalkの開発環境は、実行中の環境内でコードを編集・デバッグできる「halt-and-continue」のような機能により、非常に効率的であると評価されています。これは、過去のBASICやLispマシン、現代のJupyterなどにも見られるプログラミングスタイルです。しかし、この「実行中の環境内にいる」という特性は、再現性の確保という点で課題を抱えています。イメージの状態がデプロイ時に再現しにくいという問題は、現代のソフトウェア開発において再現性を重視する流れとは対立します。</p>
+<p>商用Smalltalkアプリケーションのデプロイメントは、JavaScriptのミニファイやJavaのjlinkのように、不要な開発者ツールやクラスを削除する「ツリーシェイキング（dead code stripping）」によって行われ、軽量化されたイメージがネイティブの実行可能ファイルとして配布されていました。これにより、エンドユーザーは通常のアプリケーションと同様の体験を得られ、Smalltalkのフル機能のOSのような側面は表面に出ませんでした。</p>
+<h2>言語設計とAlan Kayのビジョン</h2>
+<p>Smalltalkの構文や言語設計については、Rubyと比較して後退しているという意見があります。しかし、Alan KayのSmalltalkに関するアイデアは、いまだに他の言語では達成されていない「壮大なビジョン」として高く評価されています。特に、エルラン（Erlang）が提供する耐障害性のある「ミニCPU」（生物学的細胞に似た「オブジェクト」）の概念に、Kayのビジョンへの近さを見る人もいます。RubyやElixirがSmalltalkの精神に近いとされる一方で、Alan Kay自身が必ずしも優れた言語設計者ではなかったという指摘もあり、より良い言語は彼のビジョンと現代の要件を組み合わせるべきだという議論がされています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Smalltalkの「イメージ」という独自の概念が、その革新性と同時に普及の妨げになったという二面性を浮き彫りにしています。イメージは、生きているシステムとしてのソフトウェアというSmalltalkの哲学を体現し、効率的な開発体験を提供しましたが、再現性の課題やファイルベースのツールエコシステムとの断絶を生み出しました。現代のSmalltalkはこれらの課題に対処しつつ、Alan Kayのビジョンは依然としてプログラミング言語設計の重要なインスピレーション源であり続けています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

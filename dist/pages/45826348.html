@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The state of SIMD in Rust in 2025 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The state of SIMD in Rust in 2025</h1>
+        <div class="meta">
+            投稿日: 2025年11月05日 | ランク: 4
+        </div>
+        <a href="https://shnatsel.medium.com/the-state-of-simd-in-rust-in-2025-32c263e5f53d" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、RustにおけるSIMD（Single Instruction, Multiple Data）の現状、特に<code>std::simd</code>が安定版になっていないことへの懸念、そしてその背景にあるRust開発コミュニティの課題について議論しています。</p>
+<h2>RustのSIMDライブラリと<code>std::simd</code>の現状</h2>
+<p><code>std::simd</code>はChromiumのようなプロジェクトで利用されているものの、まだNightly版に限定されており、安定版ではありません。SIMD実装の選択肢としては、Nightly版を許容できる場合は<code>std::simd</code>、マルチバージョニングが不要な場合は<code>wide</code>、それ以外では<code>pulp</code>または<code>macerator</code>が推奨されています。コメントの中には、<code>std::simd</code>が安定版ではないため、独自の<code>core::simd</code>の模倣を作成してNightly版の使用を回避している開発者もいます（ただし、これはx86のみのサポートで、ARMは未対応）。また、SIMDコードを扱う上での課題として、SIMD形式でのデータ保持や、非SIMD値との組み合わせにおける考慮事項が挙げられています。</p>
+<h2><code>std::simd</code>を含む多くの機能が安定版にならない理由</h2>
+<p>複数のユーザーが、<code>std::simd</code>やジェネレーターのような素晴らしい機能が「Nightly版のままである」状態に陥っている理由を疑問視しています。その理由として、以下の点が挙げられています。</p>
+<ul>
+<li><strong>品質の高い基準：</strong> <code>std</code>の品質基準が非常に高いこと。</li>
+<li><strong>他の不安定な機能への依存：</strong> <code>std::simd</code>が他の不安定な機能に依存していること。</li>
+<li><strong>既知のバグ：</strong> 未解決のバグが存在すること。</li>
+<li><strong>他の不安定な機能との競合：</strong> 他の機能と競合する可能性があること。</li>
+<li><strong>委員会による設計と合意形成：</strong> Rustには強力なリーダー（BDFL）がおらず、開発者が「十分良い」段階で機能を安定版に進めることが難しいこと。Rustの「ゼロコスト抽象化」などの高い基準が、ソリューションが「天から授けられた」と感じられるまで議論が続く要因となっています。</li>
+<li><strong>開発リソースの不足：</strong> Rustコンパイラの開発者のほとんどはボランティアであり、従来の企業のようなマネージャーが優先順位を決定し、作業を指示する構造ではないため、特定の機能が優先されないことがある。</li>
+<li><strong>サンプリングバイアス：</strong> 多くの機能は安定化されるが、ユーザーは長期間不安定なままの複雑なNightly機能に注目しがちであること。</li>
+</ul>
+<h2>開発コミュニティへの提案と課題</h2>
+<p>ボランティアベースの開発体制が、Rustの洗練された一貫性をもたらしていると評価される一方で、機能安定化の遅延という課題も生んでいます。あるユーザーは、<code>std::simd</code>の安定化に際してユーザーが金銭的な支援を申し出る「バウンティシステム」があれば、開発の促進に繋がるのではないかと提案していますが、実際に資金提供をするユーザーは少ないだろうという現実も指摘されています。</p>
+<h2>他の言語との比較</h2>
+<p>C#はRustよりも優れた安定版SIMDのサポートを持っているという意見も出ています。これに対し、C#がより歴史があり、企業（Microsoft）の支援を受けている成熟した言語であるのに対し、Rustは比較的新しく、長年小規模なボランティアグループによって運営されてきたことがその違いの要因であると指摘されています。</p>
+<h2>まとめ</h2>
+<p>Rustの<code>std::simd</code>は高性能な機能であるものの、高い品質基準、ボランティアベースの開発体制、機能間の依存性など様々な要因により、安定版への移行が遅れています。これにより、開発者はNightly版の使用を余儀なくされたり、独自の回避策を講じたりしています。Rustコミュニティは、品質と整合性を重視するがゆえに、機能の安定化に時間を要するという独特の課題を抱えています。SIMDを含む重要な機能の安定化を加速するためには、リソースの増強や新たな開発推進メカニズムが求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

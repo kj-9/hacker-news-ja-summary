@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The shadows lurking in the equations - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The shadows lurking in the equations</h1>
+        <div class="meta">
+            投稿日: 2025年11月05日 | ランク: 6
+        </div>
+        <a href="https://gods.art/articles/equation_shadows.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、「ファジーグラフ」（方程式の左右の差を色で表現するグラフ）に関するものです。著者がこれを「新しいグラフ作成法」と主張していることに対し、その真新しさや名称の適切性について様々な意見が交わされています。</p>
+<h2>新規性への疑問と既知の概念との類似性</h2>
+<p>多くのコメントは、著者が「新しいグラフ作成法」と主張している点に疑問を呈しています。
+*   この手法は本質的に、<code>z = |F(x, y)|</code> の3Dプロットを色で表示しているに過ぎない、という指摘があります (1.5)。これは50年遅れているとまで言われています。
+*   「レベルセット」や「等高線図」といった既存の数学的・可視化概念と非常に似ているとの声が多数あります (1.6, 1.6.1)。
+*   「ヒートマップ」、「符号付き距離関数 (Signed Distance Function - SDF) 」、「ドメインカラーリング」など、類似の可視化技術が既に存在するという意見も挙がっています (1.9, 1.8, 1.15, 1.20)。SDFとの違いについては、方程式の「エラー」を測るか、幾何学的な「距離」を測るかという点で詳細な議論もされています (1.9.1)。
+*   著者が「計算数学的視覚化の歴史全体において、方程式のグラフ作成はバイナリモードで行われてきた」と主張していることに対し、「滑稽なほど真実ではない」と強く反論する声もあります (1.5.4.1)。</p>
+<h2>ファジーグラフの利点と価値</h2>
+<p>新規性への批判がある一方で、ファジーグラフの教育的価値や直感的な理解しやすさを評価する声もあります。
+*   従来の白黒のグラフよりも多くの情報を提供しており、感銘を受けたというコメントがあります (1.1)。
+*   方程式の厳密な解だけでなく、「ほぼ解」となる領域を視覚化できる点がクールだという意見があります (1.5.5, 1.16)。これにより、誤差や感度を理解するのに役立つとされています。
+*   Michael Levin氏のバブルソートアルゴリズムに関する話のように、単純なアルゴリズムの挙動をこの方法で可視化することで、「可能性空間」を観察できるかもしれないという示唆もあります (1.3.1)。
+*   著者が「エラー」と呼ぶ概念（方程式の左右の差）は、最適化や勾配降下法における「エラー表面のヒートマップ」としてよく理解されていると指摘されています (1.20)。</p>
+<h2>実装と今後の可能性</h2>
+<p>技術的な側面や応用に関する議論もされています。
+*   Desmos 3DやCalcPlot3Dなどの既存ツールで同様のプロットが可能であることが示されています (1.5.2, 1.5.3)。
+*   著者は、この手法は「<code>abs(left-right)^fuzzyValue</code>」で計算されていると説明しています (1.11.1)。
+*   3D化やVRでの可視化、カオス関数への適用、放射状モードでのプロットなど、さらなる発展や応用を期待する意見もあります (1.10, 1.7, 1.23)。
+*   「エラー」という用語の適切性についても議論があり、著者はより良い用語があれば知りたいと述べています (1.13.1)。</p>
+<h2>まとめ</h2>
+<p>著者が提唱する「ファジーグラフ」は、方程式の「エラー」（左右の式の差）を色の濃淡で表現する可視化手法です。多くのコメントは、この手法が「レベルセット」「ヒートマップ」「符号付き距離関数」といった既存の概念と類似しており、著者が主張するような「全く新しいグラフ作成法」ではないと指摘しています。しかし、その教育的価値や、厳密な解だけでなく「ほぼ解」となる領域を直感的に示す能力は評価されています。既存のツールでの実装可能性や、3D化・VR応用への期待も寄せられており、用語の適切性に関する議論も行われています。全体として、新規性への強い批判がありつつも、その表現力自体は一定の評価を得ています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
