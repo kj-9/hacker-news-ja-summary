@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift on FreeBSD Preview - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Swift on FreeBSD Preview</h1>
+        <div class="meta">
+            投稿日: 2025年11月06日 | ランク: 2
+        </div>
+        <a href="https://forums.swift.org/t/swift-on-freebsd-preview/83064" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>SwiftがFreeBSDに移植されたというHacker Newsの発表は、コミュニティ内で幅広い議論を巻き起こしました。主な話題は、SwiftをAppleのエコシステム外、特にサーバーサイドや他のOSで利用することの実現可能性、SwiftとRustやGoなどの他の言語との比較、そして移植プロセスにおける技術的な詳細に集中しています。</p>
+<h2>FreeBSDへのSwift移植の容易さ</h2>
+<p>コメント欄では、SwiftをFreeBSDに移植することがLinuxに比べて理論上容易かどうかについて議論されました。macOSとFreeBSDの共有された歴史は、一見すると有利に思えるものの、その共有コンポーネントが非常に古いものであるため、実際にはそれほど大きな違いはないだろうという意見が優勢でした。また、LLVMが特定のOSを「優遇」するという考え方についても疑問が呈されました。LLVMはFreeBSDにとっても重要なコンパイラ基盤であり、FreeBSDがLLVMベースのプロジェクトでLinuxよりも低層に扱われるのは、需要と供給の問題である可能性が指摘されています。</p>
+<h2>Appleエコシステム外でのSwiftの利用</h2>
+<p>SwiftがAppleのiOS/macOS開発以外で実際に使われているかという疑問に対して、Swiftがサーバーサイドのバックエンド言語として十分に有能であり、Vaporのようなフレームワークがプロダクションで使用されていることが挙げられました。しかし、Node.jsやPythonのような成熟したエコシステムを持つ言語と比較して、Swiftをサーバーサイドで利用することの正当性を見つけるのは難しいという意見もありました。それでも、iOS/macOSアプリとバックエンドでコードベースを共有できるという利点から、特定の用途ではSwiftが選択肢となり得ると考えられています。ただし、SwiftUIのようなApple固有のUIフレームワークがクロスプラットフォームになる可能性は低いと見られています。</p>
+<h2>Swiftと他の言語との比較</h2>
+<p>SwiftはRustと比較されることがあり、メモリ安全性やデータ競合安全性を提供すると指摘されています。しかし、Rustの厳密なライフタイム分析と比較すると、Swiftの安全性モデルは普遍的ではないという反論もありました。また、SwiftはRustよりも学習曲線が緩やかで、構文が親しみやすいという利点も挙げられています。他にも、SwiftはGoに近いという意見もありました。全体として、Swiftは強力なコンパイル言語であるものの、その用途や特性について、他のモダンな言語との間で活発な比較が行われています。</p>
+<h2>Swiftの成熟度とエコシステム</h2>
+<p>サーバーサイドのSwiftプロジェクトとしては、Vaporが残る唯一の主要なフレームワークであり、KituraやPerfectは開発停止しています。現状では、iOS開発者が少規模なサーバーをデプロイする際に利用するケースが多いようです。エコシステムの成熟度に関しては、まだ未熟であり、ビルドシステムもGradleなどと比較して劣るとの指摘がありました。多くのオープンソースライブラリが個人のプロジェクトであり、更新されていないケースも多いようです。</p>
+<h2>その他の技術的側面</h2>
+<p>SwiftコンパイラがPython 3を依存関係として必要とすることについて、なぜコンパイル済みシステム言語がスクリプト言語に依存するのかという疑問が呈されました。これに対し、テストスイートやLLVM LITなどのツールがPythonで実装されているためであるとの説明がなされ、Rustも同様のケースがあることが示されました。また、AppleがOCI準拠のコンテナをSwiftで開発している可能性があり、これがFreeBSDでのコンテナ化に貢献するかもしれないという期待も述べられました。</p>
+<h2>まとめ</h2>
+<p>SwiftのFreeBSDへの移植は、Appleエコシステム外でのSwiftの可能性を広げる一歩として歓迎されています。しかし、その利用の正当性、サーバーサイドの採用、他の言語との競合、エコシステムの成熟度については、まだ課題が多く残されています。Swiftの移植の容易さや、Pythonへの依存などの技術的な側面も議論の対象となりました。Swiftは素晴らしい言語であると評価されつつも、ツールやエコシステムの発展が今後の成功の鍵となると考えられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
