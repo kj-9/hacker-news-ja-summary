@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaving Meta and PyTorch - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Leaving Meta and PyTorch</h1>
+        <div class="meta">
+            投稿日: 2025年11月07日 | ランク: 9
+        </div>
+        <a href="https://soumith.ch/blog/2025-11-06-leaving-meta-and-pytorch.md.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、MetaのAIチームのリーダーの一人であるSoumith Chintala氏の退職について議論しています。彼はPyTorchプロジェクトを共同で立ち上げた人物であり、コメントの多くはPyTorchの成功とTensorFlowの失敗、そしてその要因に焦点を当てています。また、Chintala氏の退職が何を意味するのか、AI業界の現状、そして彼の次のステップについても様々な憶測が飛び交っています。</p>
+<h2>PyTorchの成功とTensorFlowの失敗の要因</h2>
+<p>コメントの大部分は、PyTorchがAIシーンで優位に立ち、TensorFlow（特にTF1）が失敗した理由を分析しています。</p>
+<ul>
+<li><strong>動的計算グラフとデバッグのしやすさ:</strong> PyTorchの最大の利点として、動的計算グラフ（define-by-run）が挙げられています。これにより、ユーザーは通常のPythonコードのようにモデルを定義し、デバッグ時にprint文を使用したり、各ステップを検査したりすることができました。一方、TF1の静的計算グラフはコードが冗長でデバッグが困難であり、初心者にとっては特に敷居が高かったと指摘されています。</li>
+<li><strong>PythonicなAPIと開発者体験:</strong> PyTorchはNumPyに近い、よりPythonicなAPIを提供し、開発者体験が優れていたと多くの人が感じています。TF1は低レベルで理解しにくく、ドキュメントも不十分で、まるでGoogleの内部ツールをそのまま公開したようだったという意見があります。</li>
+<li><strong>Kerasの統合の遅れとTF2への移行の混乱:</strong> TF1の学習曲線の急峻さを緩和するためにKerasが統合されましたが、時期が遅すぎたこと、またTF2への移行が既存ユーザーを混乱させ、古いTF1のドキュメントが残っていたことなども、ユーザー離れの一因とされています。</li>
+<li><strong>コミュニティとアクセシビリティ:</strong> Soumith Chintala氏を含むPyTorchチームは、オープンソースコミュニティに対して非常に協力的で、質問や貢献に対してオープンな姿勢を示しました。これにより、多くの開発者（博士号を持たない人も含む）がPyTorchに惹きつけられ、広く普及する要因となりました。</li>
+</ul>
+<h2>JAXへの言及とPyTorchの将来</h2>
+<p>PyTorchに加えて、JAXも言及されています。JAXはNumPyとPythonの機能をベースに、関数型プログラミングと高パフォーマンスな自動微分、JITコンパイルを提供するフレームワークです。</p>
+<ul>
+<li><strong>JAXの利点:</strong> JAXユーザーは、関数と勾配という異なる思考モデルが自分に合っていると述べています。<code>jax.jit</code>が副作用のない「関数型」の記述を強制するため、より明確で高速なコードにつながると評価されています。</li>
+<li><strong>PyTorchの将来:</strong> 一部のコメントでは、現在のAIコード開発のペースではPyTorchも1〜2年で「古い歴史」になる可能性があるという見方もあります。しかし、他のコメントでは、PyTorchはすでに確立されたエコシステムと強力なネットワーク効果を持っているため、簡単に取って代わられることはないだろうと反論しています。新しいフレームワークがPyTorchを凌駕するためには、トレーニングコストを大幅に削減したり、PyTorchでは実装できない新しいアーキテクチャを提供したりするような、決定的な優位性が必要だと指摘されています。</li>
+</ul>
+<h2>Soumith Chintala氏の退職と彼の動機</h2>
+<p>Soumith Chintala氏の退職に対するコメントは、彼への感謝と敬意が中心です。</p>
+<ul>
+<li><strong>「小さなこと」への探求:</strong> Chintala氏は、次に「何か小さなこと、新しいこと、まだ完全に理解していないこと、不快なこと」をやりたいと述べています。これは、彼が既存の巨大なプロジェクトから離れて、新たな挑戦を求めていることを示唆しています。</li>
+<li><strong>Curiosity（好奇心）の重要性:</strong> 彼の退職の動機として「好奇心が最終的に勝った」という言葉が引用され、多くの人が仕事における好奇心や探求心の重要性に共感しています。</li>
+<li><strong>MetaのAIの独自性に対する見方:</strong> 一部のコメントは、彼がMetaを離れることは、MetaのAI関連の独自性や革新性が外部の機会に比べて限定的であるという認識を示唆していると解釈しています。しかし、他のコメントでは、これは個人的な動機（例えば、家族との時間、金銭的な安定、新しい挑戦への欲求）によるものであり、MetaのAIの状況を反映しているわけではないと反論しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Soumith Chintala氏のMeta退職に関するHacker Newsのコメントは、彼が共同設立したPyTorchのAI業界における成功とその要因（特に動的計算グラフ、PythonicなAPI、開発者体験、オープンなコミュニティアプローチ）について深く掘り下げています。同時に、TensorFlowが同じ分野で直面した課題も浮き彫りになりました。Chintala氏の退職は、個人的な探求心と「小さなこと」への回帰願望に起因すると広く理解されており、多くの人が彼の功績を称え、今後の挑戦にエールを送っています。また、JAXのような新しいフレームワークへの言及や、PyTorchがAI技術の急速な進化の中でどのように位置づけられるかについての議論も展開され、AI業界のダイナミズムを反映しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
