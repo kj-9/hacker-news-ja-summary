@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firefox Forcing LLM Features - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Firefox Forcing LLM Features</h1>
+        <div class="meta">
+            投稿日: 2025年11月08日 | ランク: 10
+        </div>
+        <a href="https://equk.co.uk/2025/10/28/firefox-forcing-llm-features/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、Firefoxに導入されたLLM（大規模言語モデル）機能に対するユーザーの反応と懸念に焦点を当てています。これらの機能は、設定の変更やオプトアウトのプロセス、およびMozillaのユーザープライバシーへの姿勢について議論を呼んでいます。</p>
+<h2>LLM機能の探し方と無効化</h2>
+<p>多くのユーザーは、Firefoxに導入されたLLM機能（AIチャットボット、ページ要約、AIによるタブグループ化など）をどこで見つけ、どのように無効化するのかを尋ねています。</p>
+<ul>
+<li><code>about:config</code> で <code>browser.ml.enable</code> などの設定を検索することで見つけられます。</li>
+<li>最近のアップデートではサイドバーにこれらの機能が表示されるとの報告もあります（Windowsで確認されたが、Arch Linux + Sway WMでは見られず）。</li>
+<li>右クリックメニューに「Ask an AI chatbot」という選択肢があるというコメントもあります。</li>
+<li>一部のユーザーは、GUIのチェックボックスで簡単に無効にできると主張していますが、他のユーザーは、それがすべての設定を変更するわけではないため、<code>about:config</code> でさらに変更する必要があると指摘しています。</li>
+<li>NixOSユーザー向けに、<code>wrapFirefox</code> の <code>extraPrefs</code> を使用してこれらの設定をハードコードする方法が共有されています。ただし、これはサポートされていない設定方法であり、Mozillaが設定を変更すると再有効化される可能性があると警告されています。</li>
+</ul>
+<h2>オプトアウトとユーザー体験</h2>
+<p>FirefoxのLLM機能はデフォルトで有効になっている（オプトアウト方式）ため、多くのユーザーが不満を表明しています。</p>
+<ul>
+<li>テレメトリーと同様に、AI機能もオプトインであるべきだと主張されています。Mozillaが「プライバシーと保護をデフォルトで」と謳っているにもかかわらず、オプトアウトであることはユーザーに敵対的だと感じられています。</li>
+<li>「Pocket 2.0」になる、あるいは既存のユーザーを遠ざける行為だと懸念されています。特にLinux/オープンソースコミュニティはFirefoxの生命線であり、彼らはこれらの機能を求めていないと指摘されています。</li>
+<li>アップデート時にプロンプトなしでデフォルトで有効にされる機能は、通常「ユーザーに敵対的」だと見なされます。</li>
+<li>一部のユーザーは、モバイル版（iOS）の「Summarize Page」機能が「Find in Page」の隣にあり、誤ってタップしやすい、またはシェイクジェスチャーで起動してしまうため、特に煩わしいと述べています。</li>
+</ul>
+<h2>LLM機能への肯定的意見と懸念</h2>
+<p>LLM機能の有用性や、Mozillaがそれらを導入する理由についての意見は分かれています。</p>
+<ul>
+<li>肯定的な意見としては、ローカルLLMによる翻訳機能が非常に有用であり、企業のサービスよりも優れている点が挙げられています。プライバシーを重視するユーザーにとっても、ページをGoogleなどに送信せずに要約・翻訳できるローカルAI機能は魅力的であると指摘されています。</li>
+<li>一部のユーザーは、サイドバーのチャット機能が便利であり、リソースを消費しないと述べています。また、Perplexityが検索プロバイダーの一つになっていることなど、一部の機能は単なる設定変更に過ぎないと指摘しています。</li>
+<li>「AIの有用性を否定する人々は、もはやフラットアーサー（地動説否定論者）に危険なほど近づいている」という意見もあります。</li>
+<li>一方、なぜこれらのニッチな機能が拡張機能ではなくブラウザ本体に組み込まれる必要があるのか、という疑問も投げかけられています。</li>
+<li>過度なメモリやCPU使用量に関する報告が、実際にLLM機能に関連しているのか、それとも他の要因によるものなのか、明確な根拠が不足しているとの指摘もあります。</li>
+<li>ユーザーは、将来的にLLMが広告まみれのウェブサイトを消化したり、ユーザーが望むコンテンツを整理して提示したりするなど、より受動的なブラウジングを可能にする可能性を予測しています。</li>
+</ul>
+<h2>Firefoxの代替ブラウザ</h2>
+<p>LLM機能の導入を懸念するユーザーは、代替のFirefoxフォークや他のブラウザについて言及しています。</p>
+<ul>
+<li>Waterfox（メンテナー自身がコメントしている）、Tor Browser、Mull、LibreWolfなどが代替として挙げられています。</li>
+<li>LibreWolfは、メインラインFirefoxのようにスパイウェアを無効にするのではなく、必要なものを有効にする方針であると述べられています。</li>
+<li>一部のユーザーは、FloorpやZenを好意的に挙げています。</li>
+<li>Waterfoxのメンテナーは、これらの機能を導入するMozillaの意図を理解しつつも、ユーザーに選択肢を与えるために、通知とオプトインの選択肢を提供すべきだと提案しています。Waterfoxでは、翻訳のような有用なML機能はオプトインにしているとのことです。</li>
+</ul>
+<h2>まとめ</h2>
+<p>FirefoxへのLLM機能の導入は、ユーザーコミュニティ内で賛否両論を巻き起こしています。多くのユーザーは、これらの機能がデフォルトで有効になっていること（オプトアウト方式）や、設定が隠れていて無効化しにくいことに不満を感じています。彼らは、Mozillaがそのプライバシーを重視するブランドイメージに反していると批判し、テレメトリーと同様にLLM機能もオプトインであるべきだと主張しています。一方で、ローカルLLMによる翻訳や要約などの特定の機能には有用性を認める声もあり、ブラウザにAI機能が組み込まれること自体を否定する意見は少ないです。しかし、それがどのように統合され、ユーザーに提示されるべきかについては、より丁寧なアプローチ（明確な通知、オプトイン、簡単な無効化）を求める意見が支配的です。これにより、既存ユーザーの離反を防ぎ、新しい技術を取り入れつつも、ユーザー中心の体験を維持することが求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
