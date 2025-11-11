@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikaday: A friendly guide to front-end date pickers - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Pikaday: A friendly guide to front-end date pickers</h1>
+        <div class="meta">
+            投稿日: 2025年11月11日 | ランク: 8
+        </div>
+        <a href="https://pikaday.dbushell.com" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にネイティブのHTML日付ピッカー（<code>&lt;input type="date"&gt;</code>など）の長所と短所、そしてJavaScript製のピッカーとの比較について議論しています。多くのユーザーがネイティブピッカーの限界を指摘し、より柔軟で機能豊富なカスタムピッカーの必要性を主張しています。</p>
+<h2>ネイティブピッカーの限界と使いやすさ</h2>
+<p>多くのコメントが、ネイティブの日付ピッカーの使いやすさや機能性に疑問を呈しています。</p>
+<ul>
+<li><strong>機能と柔軟性の欠如</strong>: ネイティブピッカーはユーザー設定に基づく異なる日付フォーマットの処理が難しい（TheSisb2）。また、複数日付の選択、特定の月のみの選択、年単位の選択、月・週・カスタム期間のピッカーなど、より多様な選択肢が必要とされている（vswaroop04, sureglymop）。</li>
+<li><strong>デザインとカスタマイズの制約</strong>: JavaScript製のピッカーは、ネイティブピッカーの使いにくさを改善し、より多くの機能を提供できる（carlosjobim）。</li>
+<li><strong>「今日」「明日」の曖昧さ</strong>: フライト予約などでは、「今日」「明日」といった相対的な日付が、ユーザーのローカルタイム、サーバータイム、GMTのどれに基づくのか不明瞭で混乱を招くことがある（kmoser）。</li>
+</ul>
+<h2>カスタム（JavaScript製）ピッカーの利点と必要性</h2>
+<p>ネイティブピッカーの欠点を補うために、多くのユーザーがカスタムピッカーの利点を強調しています。</p>
+<ul>
+<li><strong>特定のユースケースへの対応</strong>: 旅行予約システムのように固定されたスケジュールや、Calendlyのようなタイムスロットピッカーなど、特定のニーズにはカスタムピッカーが適している（kmoser, Onavo）。</li>
+<li><strong>多様な日付・時間表現</strong>: 午前0時を過ぎた時間を「25時」と表記するような、一般的な24時間制とは異なる時間表現（交通機関など）の例が挙げられ、カスタムUIの必要性が示唆されている（cryptoz, evertheylen, ChadNauseam）。</li>
+<li><strong>UXの最適化</strong>: ユーザーが誕生日を入力する際は数値入力が速い一方、週末の空き状況を探すディナー予約にはカレンダー表示が役立つなど、文脈に応じた適切なピッカー選択が重要である（pimlottc）。</li>
+</ul>
+<h2>Pikadayの現状と代替案</h2>
+<p>かつて人気だったJavaScript製の日付ピッカーライブラリ「Pikaday」については、その開発元が既にプロジェクトをアーカイブしており、現代のウェブ開発には適していないとの指摘がありました。</p>
+<ul>
+<li><strong>Pikadayの非推奨</strong>: Pikadayは<code>&lt;input type="date"&gt;</code>がブラウザでサポートされる前、およびカスタム要素やコンポーネントフレームワークが登場する前に開発されたものであり、現在では非推奨とされている（AugurCognito, nhumrich）。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、ネイティブのHTML日付ピッカーが持つ機能的・デザイン的な限界を強く指摘しています。特に、複雑な日付形式の処理、特定のビジネスロジックに合わせた柔軟なUI、または高度なUX要件を満たすためには、カスタム（JavaScript製）の日付・時刻ピッカーが不可欠であるという意見で概ね一致しています。かつて人気だったPikadayのようなライブラリが現代では推奨されないという事実は、ウェブ技術の進化とともに日付ピッカーの実装アプローチも変化していることを示唆しています。最終的には、文脈とユーザーのニーズに合わせて最適なピッカーを選択し、必要であればカスタムソリューションを導入することが、より良いユーザーエクスペリエンスを提供するために重要であると結論付けられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

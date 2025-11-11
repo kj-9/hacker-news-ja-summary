@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Latency on Windows (2024) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Terminal Latency on Windows (2024)</h1>
+        <div class="meta">
+            投稿日: 2025年11月11日 | ランク: 1
+        </div>
+        <a href="https://chadaustin.me/2024/02/windows-terminal-latency/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、Windows Terminalの機能、パフォーマンス、およびWindowsが開発プラットフォームとして利用されることの意義について議論されています。</p>
+<h2>QuickEditモードとユーザー体験</h2>
+<p>多くのユーザーがWindows Terminalの「QuickEditモード」に言及しており、これが意図せずスクロールを一時停止させたり、実行中のプロセスを停止させたりする原因となることに不満を表明しています。この機能は長年存在し、設定で無効にできることが指摘されています。一部のユーザーは、新バージョンのWindows Terminalをインストールすることでこの問題が解決されることも指摘しています。</p>
+<h2>シリアル通信のサポート</h2>
+<p>Windows Terminalでシリアル通信（DB9/RS232）のネイティブサポートを求める声があります。現在PuTTYやHyperTerminalを使っているユーザーは、Windows Terminalに統合されることを望んでいます。代替としてTera Termが推奨されています。</p>
+<h2>GPUアクセラレーションとパフォーマンス</h2>
+<p>GPUアクセラレーションの利用、特にWezTermのようなターミナルにおけるレンダリングパイプラインの課題が議論されています。NVIDIAの設定に関連するDXGIの問題や、Web GPU Vulkanレンダラー使用時のメモリリークや遅延が指摘されています。また、Windows Terminalのバージョン1.22でスループットが大幅に改善され、一部のシナリオでは最大16倍高速になったという公式情報も共有されています。</p>
+<h2>Windowsを開発OSとして使う意義</h2>
+<p>「ゲーミングOSでターミナルを使う意味は何か？」という問いに対し、多くのユーザーがWindowsが単なるゲーミングOSではないことを強調しています。WSL (Windows Subsystem for Linux) の登場により、Windows TerminalとWSLを組み合わせた開発体験は非常に優れており、macOSやLinuxマシンに別途投資することなく開発が可能であると説明されています。</p>
+<ul>
+<li><strong>コスト効率:</strong> WindowsマシンはMacに比べて同等かそれ以上のスペックで半額程度の費用で入手できることが指摘されています。</li>
+<li><strong>企業の採用:</strong> 多くの大企業でWindowsが標準OSとして採用されており、DevOpsやクラウドの専門家もWindows環境で作業する必要があるため、ターミナルは不可欠です。企業環境ではITチームによってWindowsの肥大化やプライバシー問題が管理されている側面も強調されています。</li>
+<li><strong>開発者の好み:</strong> Windows上で日常的にプログラミングを行うユーザーもおり、WSL2とWindows Terminalの組み合わせが非常に快適であると述べています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Windows Terminalがその使いやすさ、パフォーマンス、およびWindowsを開発プラットフォームとして利用する利便性から、ユーザーにとって重要なツールであることを示しています。QuickEditモードのような長年の課題は解消されつつあり、WSLとの連携によりWindowsは開発環境としても強力な選択肢となっています。企業環境での普及やコストメリットも、その重要性を裏付けています。将来的にはシリアル通信のネイティブサポートやさらなるGPUアクセラレーションの最適化が期待されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
