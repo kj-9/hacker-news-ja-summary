@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async and Finaliser Deadlocks - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Async and Finaliser Deadlocks</h1>
+        <div class="meta">
+            投稿日: 2025年11月12日 | ランク: 9
+        </div>
+        <a href="https://tratt.net/laurie/blog/2025/async_and_finaliser_deadlocks.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、主に非同期コードにおける並行性、ロック管理の課題、そしてリソース解放メカニズムとしてのファイナライザー（特にPython）の性質について議論されています。あるコメントは、今回の投稿が過去の議論と重複していると指摘しています。</p>
+<h2>非同期コードにおける並行性問題とロック管理</h2>
+<p>コメントでは、非同期コードを「IOを伴う逐次処理」と「複数の問い合わせを並行処理する」の2つのモードで利用する経験が共有されています。逐次処理の場合、長時間のロック保持がシステムを停止させるため、有限状態機械に分割し、ロックは同期部分のみに限定することが推奨されています。一方、並行処理では、純粋関数として扱うことが理想的だと指摘されており、副作用がないことで書き込みロックの必要性がなくなり、デッドロック（ダイニング・フィロソファー問題）を回避できるものの、一貫した適用は困難であると述べられています。非同期コードがロックを保持すると問題が生じやすく、非同期処理と楽観的ロックは相性が良い可能性があると示唆されています。</p>
+<h2>ファイナライザーとグローバル共有状態の複雑さ</h2>
+<p>コメントでは、記事中の「有用なファイナライザーはグローバル共有状態に触れる必要がある」という記述に対し、「絶望を放棄せよ（Abandon hope）」と表現されています。これは、グローバル共有状態を扱うことの難しさと、それがもたらす潜在的な問題を強調しています。また、ファイナライザーと非同期コードの組み合わせが、既存の問題を増幅させる可能性があるとの見解も示されています。</p>
+<h2>ファイナライザーのメカニズムと構文糖衣の有無</h2>
+<p>記事で示された削除（delete）が非同期コードとは関係なく、単に構文糖衣によって関数呼び出しが隠されているだけだという主張がありました。これに対し、Pythonのファイナライザーの例に言及していると仮定し、それは構文糖衣ではなく、PyPyで実行した際のファイナライザーの呼び出しタイミングが異なること（プログラム終了前に呼び出されない可能性もある）で確認できると反論がなされています。</p>
+<h2>まとめ</h2>
+<p>コメントでは、非同期コードの利用における並行性制御とロック管理の複雑さが中心的な話題となっています。特に、純粋関数として処理することの利点と、グローバル共有状態を扱うファイナライザーの難しさについて議論されました。また、ファイナライザーが単なる構文糖衣であるか、それともより低レベルなリソース解放メカニズムであるかについても意見が交わされています。これらの議論は、複雑なシステムにおけるリソース管理と並行処理の設計上の課題を浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
