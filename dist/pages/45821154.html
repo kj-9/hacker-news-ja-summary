@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incus-OS: Immutable Linux OS to run Incus as a hypervisor - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Incus-OS: Immutable Linux OS to run Incus as a hypervisor</h1>
+        <div class="meta">
+            投稿日: 2025年11月14日 | ランク: 10
+        </div>
+        <a href="https://linuxcontainers.org/incus-os/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>IncusOSは、プライベートクラウド向けのソフトウェアで、既存のVMware環境をIncusOSに変換できると説明されています。これは、Incusというシステムコンテナおよび仮想マシンマネージャーをベースにしたOSで、軽量で柔軟性の高い仮想化環境を提供します。</p>
+<h2>Incusとは何か、そしてその出自</h2>
+<p>Incusは、元々Canonicalが開発していたLXDのフォークです。CanonicalがLXDをApache 2.0からAGPLv3にライセンス変更し、コントリビューターにCLA（Contributor License Agreement）への署名を義務付けたことで、コミュニティが懸念を抱き、主要な開発者がLXDをフォークしてIncusプロジェクトを立ち上げました。LXD自体はオープンソースのままでしたが、これらの変更がフォークの主な動機となりました。IncusはLXDの初期のフォークから大きく進化しており、多くの点でLXDよりも優れていると評価されています。</p>
+<h2>IncusOSの機能とProxmoxとの比較</h2>
+<p>IncusOSは、システムコンテナ（LXC）とQEMU/KVMを利用した仮想マシン（VM）の両方をサポートする仮想マシンマネージャー（VMM）です。IncusのAPIとCLIは、コンテナとVMに対して一貫した管理インターフェースを提供します。
+IncusOSは、以下のような点でProxmoxと比較され、優れていると評価されています。</p>
+<ul>
+<li><strong>軽量性:</strong> Incusは非常に軽量で、Proxmoxよりもリソース消費が少ない。</li>
+<li><strong>柔軟性:</strong> ProxmoxがDebianベースに固定されているのに対し、Incusは様々なLinuxディストリビューション上で動作可能（ただし、IncusOS自体はDebianベース）。</li>
+<li><strong>使いやすさ:</strong> Terraformプロバイダー、使いやすいCLI、主要なディストリビューションのプリビルドイメージ（VMwareのようにVMごとにテンプレートを作成する必要がない）が利用可能。</li>
+<li><strong>セキュリティ:</strong> デフォルトでSecureBootが有効になっていたり、きめ細やかなネットワークルール設定が可能なACLが用意されており、より強固なセキュリティ設定が可能。</li>
+<li><strong>ストレージとクラスタリング:</strong> ZFS、Btrfs、Cephなどの複数のストレージドライバーをサポートし、クラスタリング機能も優れている。</li>
+<li><strong>プロファイルシステム:</strong> ProxmoxのIDマッピングよりもシンプルな権限設定（例：「shift=true」）や、設定の重複を避けるための強力なプロファイルシステムを備えている。</li>
+</ul>
+<h2>IncusOSの課題と今後の展望</h2>
+<p>IncusOSは、シェルアクセスを制限しているため、システム全体の増分バックアップのような特定のタスクが難しく、ユーザーはIncusOSのCLI/APIを介して操作する必要があるという課題が指摘されています。個々のインスタンスやボリュームのバックアップは「incus export」で可能ですが、システム全体の簡単なバックアップ方法はまだ確立されていません。
+また、IncusOSは、Fedora SilverblueやmacOSのような「変更不可能なOS」の概念と類似しており、コアファイルシステムは検証済みで変更不可能であり、変更はオーバーレイを介して行うという提案がなされています。これにより、システムをハッキングしつつも、簡単に元の状態に戻せる柔軟性が生まれる可能性があります。
+一方で、Incusは異なるアーキテクチャ（x86とARMなど）を持つサーバーを同じクラスター内で管理できるなど、ユニークで強力な機能も持っています。</p>
+<h2>まとめ</h2>
+<p>IncusOSは、LXDのフォークであるIncusをベースとした、軽量で多機能なシステムコンテナおよび仮想マシンマネージャー（VMM）です。Proxmoxと比較して、軽量性、柔軟性、使いやすさ、高度なセキュリティ機能、そして強力なプロファイルシステムなどの点で優位性を持つと評価されています。シェルアクセスの制限によるバックアップの課題はありますが、異なるアーキテクチャの混在クラスタ管理など独自の強みも持ち、ホームラボや仮想化環境の構築において有望な選択肢として注目されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

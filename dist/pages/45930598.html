@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structured Outputs on the Claude Developer Platform (API) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Structured Outputs on the Claude Developer Platform (API)</h1>
+        <div class="meta">
+            投稿日: 2025年11月14日 | ランク: 7
+        </div>
+        <a href="https://www.claude.com/blog/structured-outputs-on-the-claude-developer-platform" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>これらのコメントは、Claudeが新たに構造化出力（特にJSON形式）をサポートしたことに対するHacker Newsユーザーの反応を議論しています。多くのユーザーがこの機能の重要性を強調し、これまでの回避策や技術的な実装方法について言及しています。</p>
+<h2>構造化出力の重要性と待望感</h2>
+<p>多くのコメントで、構造化出力、特にJSON形式はLLM（大規模言語モデル）を活用した自動化やマルチステップのエージェントシステムにおいて「核心的」かつ「根本的」な機能であると述べられています。人々は、出力が必ず構造に従うという保証があることで、システムの信頼性が向上し、失敗からの回復（リトライ）の必要性が減ると考えています。Anthropicがこの機能を今になって追加したことに対し、以前からこれを実装していたOpenAIやGeminiなどの競合他社と比較して、驚きの声が上がっています。</p>
+<h2>以前の回避策と課題</h2>
+<p>公式な構造化出力機能が提供されるまで、ユーザーはClaudeで同様の効果を得るために様々な「トリック」や回避策を用いていました。これには、望ましいスキーマを持つツールを定義し、APIにそのツールを常に使用させる方法や、プロンプトに期待されるJSON出力の一部（例：<code>{"data":</code>）を先行入力して、モデルに残りの部分を生成させるという「信じられないような」推奨事項も含まれていました。しかし、これらの方法は保証がなかったり、依然としてリトライが必要になったりすることがあり、他のモデル（Geminiなど）でJSONスキーマを指定しても、信頼性に課題がある場合があることも指摘されています。</p>
+<h2>技術的な実装方法</h2>
+<p>この機能がどのように実現されているかという疑問に対し、コメントでは「文法ベースの推論」という技術的な仕組みが説明されています。これは、OpenAIやllama.cppでも使用されているトリックであり、所望の出力構造に合致する文法がコンパイルされ、トークン生成プロセス中に、その文法に適合するトークンのみが次のトークンとして選択されるというものです。これにより、モデルの出力が確実に指定された構造に従うことが保証されます。</p>
+<h2>まとめ</h2>
+<p>Claudeが構造化出力をサポートしたことは、LLMベースの自動化システムを構築する開発者にとって非常に重要な進歩として歓迎されています。この機能は、これまで煩雑な回避策や不確実性によって困難だった堅牢なシステムの構築を容易にし、その技術的な実現には文法ベースの推論という手法が用いられていることが明らかにされました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
