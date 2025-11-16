@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heretic: Automatic censorship removal for language models - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Heretic: Automatic censorship removal for language models</h1>
+        <div class="meta">
+            投稿日: 2025年11月16日 | ランク: 2
+        </div>
+        <a href="https://github.com/p-e-w/heretic" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、LLMの検閲（または「安全アライメント」）を削除するツール「Heretic」を中心に議論されています。ユーザーは、オープンソースモデルにおけるこの種の作業を高く評価しており、特にGPT-OSSのようなモデルの「ロボトミー化」への対策として注目しています。</p>
+<h2>検閲と安全アライメント</h2>
+<p>LLMの検閲は、ユーザーに不利益な情報を提供したり、特定の話題を拒否したりする傾向を指します。コメントでは、GPT-4がヘリウム飛行船の駐車やアスパルテームの海洋投下といった奇妙なリクエストを拒否した事例や、クロロホルムの使用に関する質問を拒否した事例が挙げられています。これは、モデルが特定のキーワード（「ハッキング」「自殺」など）に対して過度に慎重になるように学習されているためと考えられています。</p>
+<p>LLM企業が過度に慎重になるのは、犯罪や悲劇がモデルのチャット履歴と結びつけられ、メディアの炎上につながることを懸念しているためだという意見があります。また、LLMに損害が発生した場合の法的責任の所在が不明確であるため、企業はユーザーが原因となることを望んでおり、過剰な安全対策を講じているという指摘もあります。</p>
+<p>しかし、一部のユーザーは、この「安全アライメント」は浅薄であり、脱獄が容易であることを示唆する研究（「Refusal in Language Models Is Mediated by a Single Direction」）に言及しています。</p>
+<h2>Hereticの活用と技術的側面</h2>
+<p>Hereticは、高価な後続トレーニングなしにLLMから検閲を削除するツールとして紹介されています。これは、モデルの「拒否」行動が、残差空間の単一の方向に沿った値の追加によって操作できるという仮説に基づいています。Optunaのようなハイパーパラメータ最適化ツールを組み合わせることで、拒否率を低減させる最適な設定を効率的に見つけることができます。</p>
+<p>Hereticは、主に「有害な行動」データセット（mlabonne/harmful_behaviorsなど）を用いてモデルをデセンサリングします。これにより、モデルはハッキング、違法薬物の販売、自殺方法の指示など、通常は拒否するようなトピックについても情報を提供するようになります。中国の政治的に敏感な話題（天安門事件、ウイグル人強制労働など）についても、公式APIとは異なり、ローカルでロードしたモデルは既に問題なく話すことができるという指摘もあります。</p>
+<h2>検閲の倫理的・社会的影響</h2>
+<p>コメントでは、LLMの検閲が知的多様性を排除し、ユーザーがクリティカルシンキングを放棄してLLMの作成者が植え付けた価値観を受け入れてしまうことへの懸念が表明されています。インターネットがかつては「政府をハッキングする方法」のような情報も得られた場所であったが、現在は企業主導の検索結果によって制限されているのと同様の状況がLLMにも見られるという意見があります。</p>
+<p>また、「AI安全」という名目の検閲が、実際には「ブランド安全」を意味しているという批判もあります。企業は、爆弾のレシピを提供したことで悪用された場合に自社の名前がニュースになることを恐れているが、同様の情報はウェブ検索で簡単に見つけられるため、これは「安全劇場」に過ぎないという主張です。ユーザーは、本当のAI安全とは、AIが核ミサイルを発射したり、殺傷スイッチなしでロボット軍を制御したりすることの防止であり、言論の検閲ではないと考えています。</p>
+<h2>まとめ</h2>
+<p>Hereticは、LLMの「安全アライメント」として知られる検閲を、大規模な再トレーニングなしに効果的に除去するツールとして注目されています。この技術は、LLMの拒否行動が単一の残差空間の方向によって制御されているという理論に基づいています。ユーザーは、このアライメントがモデルの知的多様性を損ない、クリティカルシンキングの欠如を助長する可能性を懸念しており、真のAI安全は検閲ではなく、悪意のある物理的な能力の抑制にあると主張しています。Hereticのようなツールの開発は、LLMが提供する情報の自由と、それに関連する倫理的・社会的な影響について、活発な議論を巻き起こしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
