@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okta&#x27;s NextJS-0auth troubles - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Okta&#x27;s NextJS-0auth troubles</h1>
+        <div class="meta">
+            投稿日: 2025年11月20日 | ランク: 9
+        </div>
+        <a href="https://joshua.hu/ai-slop-okta-nextjs-0auth-security-vulnerability" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Oktaがオープンソースプロジェクトに対するパッチの処理方法、特にAIによって生成されたコミットメッセージと不適切な貢献者帰属にまつわる問題について議論しています。全体として、Oktaの製品、セキュリティ、エンジニアリングに関する否定的な見解が多数を占めています。</p>
+<h2>Oktaのオープンソース貢献プロセスの問題</h2>
+<p>多くのユーザーは、Oktaがオープンソースプロジェクトへのパッチを処理する方法に問題があると指摘しています。特に、AIが生成したと思われるコミットメッセージと、貢献者への不適切な帰属（元の貢献者の名前ではなくAIが提案した名前を誤って使用したこと）が批判されています。これは、企業が外部からの貢献を歓迎していないか、プロセスが非常に煩雑であることを示唆していると見られています。また、GitHubが企業に対してプルリクエストの無効化を許可すべきだという意見や、大規模な企業は社内リポジトリからGitHubへ一方的に同期するツールを使用しているという指摘もあります。</p>
+<h2>Oktaの製品とエンジニアリングの品質</h2>
+<p>コメントの大部分は、Oktaの製品とエンジニアリングの品質に対する強い不満と批判で占められています。「アマチュアアワー」「最低限の製品」「より悪い製品で他社を出し抜く」といった表現が使われ、Oktaが機能性よりも購買部門が求める機能を優先する「Enterprise™企業」であると見られています。セキュリティ企業でありながら基本的なミスが多いことや、過去のGo SDKでの類似の問題も指摘され、多くのユーザーはOktaのセキュリティに対する信頼性に疑問を抱いています。Auth0をかつて利用していた人々からも、Oktaとの統合後に問題が生じたことへの後悔の声が聞かれました。</p>
+<h2>マネージドOAuthソリューションの代替案</h2>
+<p>Oktaに対する批判を受け、ユーザーはマネージドOAuthソリューションの代替案について議論しています。KeycloakやAuthentik、FusionAuthなどが代替として提案されており、Oktaよりも優れた製品であるとされています。特に、多くの企業がOAuth/OIDCの導入に多額の費用をかけてOktaのようなサービスを利用しているが、KeycloakやAuthentikのようなセルフホストソリューションでも十分に対応可能であり、複雑な中央認証機能は「YAGNI (You Ain't Gonna Need It)」であるという意見があります。</p>
+<h2>LLM（大規模言語モデル）の利用について</h2>
+<p>一部のコメントは、AIが生成したコミットメッセージから派生して、LLMの利用について議論しています。LLMを学習ツールとして評価する一方で、コミュニケーションツールとしての利用には批判的な意見があります。特に、AIが人として振る舞うことや、人間が生成したかのように見せかけることに対して不誠実さを感じるという声があります。ただし、社会不安を抱える人が執筆の際にLLMから構造的なサポートを得ることについては肯定的な意見もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Oktaのオープンソースプロジェクトに対する貢献プロセスの不手際（特にAIによるコミットメッセージと不適切な帰属）を厳しく批判しています。この問題は、より広範なOktaの製品品質、エンジニアリング能力、そしてセキュリティプラクティスに対する不信感へと発展しています。多くのユーザーはOktaを「ゴミ」と評し、その信頼性と価値に疑問を呈しており、KeycloakやAuthentik、FusionAuthといった代替のマネージドOAuthソリューションを推奨しています。また、AIの利用がこの問題に絡んだことで、コミュニケーションにおけるLLMの適切な利用方法についても議論が提起されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
