@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We should all be using dependency cooldowns - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">We should all be using dependency cooldowns</h1>
+        <div class="meta">
+            投稿日: 2025年11月21日 | ランク: 5
+        </div>
+        <a href="https://blog.yossarian.net/2025/11/21/We-should-all-be-using-dependency-cooldowns" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、依存関係の「クールダウン」期間という概念について議論されており、これは新しい依存関係が公開されてから、本番環境での使用に適していると見なされるまでの待機期間を指します。このアイデアは、悪意のあるパッケージや意図しないバグからプロジェクトを保護することを目的としていますが、トレードオフと賛否両論があります。</p>
+<h2>クールダウン期間の概念と実装</h2>
+<p>クールダウン期間は、新しいパッケージが公開されてから本番環境での使用に適していると見なされるまでの待機期間です。これにより、悪意のあるコードやバグが発見される時間が与えられるという考えです。自動更新をCI/CDパイプラインに組み込み、定期的なパッケージ取得とマニフェスト記録、セキュリティ問題チェック、統合テストの実行、問題がなければ自動マージを行うことが提案されています。また、大量のセキュリティレポートを効率的にフィルタリングするためにLLMの利用や、検証済みのパッケージのみを提供する centralized service の必要性も言及されています。</p>
+<h2>クールダウンのメリットとデメリット</h2>
+<p>クールダウン期間の主なメリットは、サプライチェーン攻撃や意図しないバグからプロジェクトを保護することです。多くの人が、ゆっくりと更新することでセキュリティ問題の多くが解決できると考えています。特に、継続的デプロイメントを行わない多くのソフトウェアは、数週間から数か月のより遅いリリースサイクルで運用されており、これによりほとんどの問題は発生しないと指摘されています。しかし、一方でクールダウン期間中に既知の脆弱性に晒されるリスクがあるという懸念も示されています。バグや脆弱性が発見されても、クールダウン期間中は修正を適用できない可能性があるため、セキュリティではなく、むしろバグを遅延させてしまうことになります。一部のユーザーは、最新のバージョンを実行することが最もバグの少ないLinux体験であると主張し、依存関係の積極的なアップグレードを推奨しています。</p>
+<h2>依存関係の管理とアプローチ</h2>
+<p>コメントでは、依存関係管理に対する様々なアプローチが議論されています。</p>
+<ul>
+<li><strong>積極的な更新 vs. 慎重な更新</strong>: 毎日すべての依存関係をアップグレードする人もいれば、必要に応じて（バグ修正や機能強化、脆弱性パッチのためなど）のみ更新すべきだと考える人もいます。後者の意見の多くは、更新はシステムにリスクを導入する行為であり、むやみに行うべきではないと考えています。</li>
+<li><strong>手動レビューと自動化のバランス</strong>: クールダウンは「愚かな」自動化に適用すべきであり、エンジニアの専門的な判断とは別物であるという意見があります。セキュリティパッチや重要なバグ修正が必要な場合は、エンジニアが変更をレビューし、手動で更新を適用する責任を負うべきだとされています。</li>
+<li><strong>依存関係の最小化</strong>: 依存関係の数と複雑さを制限するポリシーの必要性を主張する声もあります。LTS（Long Term Support）リリースを提供するなど、より合理的な依存関係ツリーの維持が提案されています。AIの活用により、ファーストパーティによる実装が、短期および長期の両方でより安価/容易/迅速になるケースが増え、依存関係に頼らない選択肢が増える可能性も指摘されています。</li>
+<li><strong>ディストリビューションモデル</strong>: Debianの安定版モデルのように、ディストリビューションが共通の依存関係を管理し、数年ごとに完全なシステムアップグレードを行うアプローチは、時間が経つにつれてより合理的であるという意見があります。</li>
+<li><strong>ベンダー依存</strong>: サプライチェーン攻撃を完全に軽減するために、脆弱なサプライチェーンを排除し、ベンダー依存を強化するアプローチが挙げられています。</li>
+</ul>
+<h2>コミュニティへの影響と課題</h2>
+<p>「もし全員がクールダウン期間を採用した場合、悪意のあるものが発見される機会が減る」という懸念も表明されています。誰もが待機している場合、初期の採用者が減り、脆弱性の発見が遅れる可能性があるという議論です。また、多くのセキュリティ問題はプロアクティブなサードパーティのセキュリティベンダーによって発見されるという前提が正しいのかという疑問も投げかけられています。</p>
+<h2>まとめ</h2>
+<p>依存関係の「クールダウン」期間は、サプライチェーン攻撃や意図しないバグからシステムを保護する有効な手段となり得るとする意見がある一方で、既知の脆弱性に晒されるリスクや、必要なバグ修正を遅らせる可能性などのデメリットも指摘されています。また、すべての依存関係を常に最新に保つべきか、あるいは必要に応じて慎重に更新すべきかについても意見が分かれています。効果的な依存関係管理には、自動化とエンジニアの専門的な判断のバランス、依存関係の最小化、そして場合によってはディストリビューションモデルのようなより広範なアプローチを組み合わせることが重要であるという示唆が見られます。最終的には、プロジェクトの特性、攻撃対象領域、および組織のセキュリティ要件に基づいて、慎重な検討と批判的思考が必要とされています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

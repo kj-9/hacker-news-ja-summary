@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Durable Execution Engine with SQLite - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Building a Durable Execution Engine with SQLite</h1>
+        <div class="meta">
+            投稿日: 2025年11月21日 | ランク: 8
+        </div>
+        <a href="https://www.morling.dev/blog/building-durable-execution-engine-with-sqlite/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、耐久性のある実行（Durable Execution）という概念とその利点、特にメッセージキューや従来のワークフロー管理との比較、そしてその歴史的背景や実装の方向性について議論されています。</p>
+<h2>シリアライズ可能な継続としての耐久性のある実行の再発明</h2>
+<p>多くのコメンターは、耐久性のある実行が「シリアライズ可能な継続」の概念の再発明であると指摘しています。数年ごとにこのアイデアが新しい形で現れることが言及され、Janet言語のコルーチンシリアライズ機能や、イメージベースプログラミングがこの種のタスクを簡素化できる可能性が挙げられています。また、この再発明が「トランザクション性」を伴うのかという疑問も投げかけられています。</p>
+<h2>メッセージキューとの比較と耐久性のある実行の利点</h2>
+<p>耐久性のある実行の主なメリットは、開発の人間工学と、長期にわたる複雑なワークフローの状態管理の容易さにあります。メッセージキューでもワークフローはモデル化できますが、コメンターは、メッセージキューをデータベースのように使うのはアンチパターンであり、特にタスクの状態追跡（キュー、保留中、失敗、キャンセル、完了）、優先順位の変更、属性による検索など、運用上の要件には不向きだと指摘しています。耐久性のある実行は、オーケストレーターが再デプロイされても実行中のタスクの状態を失わずに済む点や、命令型コードで中断した場所から自動的に再開できる能力、クラッシュプルーフなアルゴリズムでループ、try/catch、高度な条件ロジックを実装できる点が評価されています。裏側ではキューやイベントソーシングが使われているものの、開発者にとっての抽象化が重要とされます。</p>
+<h2>シンプルな実装への関心</h2>
+<p>一部のコメンターは、耐久性のある実行に関するシンプルなソリューションが増えるべきだと考えています。PostgreSQLのような既存のデータベースを使って、わずか数千行のコードで堅牢な耐久性のある実行システムを構築できる例が示され、既存の市場ソリューションよりも運用が容易で使いやすいと評価されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsの議論では、耐久性のある実行は「シリアライズ可能な継続」の再発明であり、特に長期にわたる複雑なワークフローやタスクの状態管理において、メッセージキューに比べて優れた開発の人間工学と運用上の利点を提供するという点で注目されています。また、既存のインフラストラクチャを活用したシンプルで効率的な実装へのニーズも高まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

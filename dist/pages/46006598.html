@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solving Fizz Buzz with Cosines - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Solving Fizz Buzz with Cosines</h1>
+        <div class="meta">
+            投稿日: 2025年11月21日 | ランク: 6
+        </div>
+        <a href="https://susam.net/fizz-buzz-with-cosines.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>FizzBuzz問題をTensorFlowで解くというJoel Grusのブログ記事に対するコメント。この記事では、FizzBuzzのロジックを条件分岐なしで、閉形式の数式として表現する試みがなされています。</p>
+<h2>FizzBuzzの目的と態度の重要性</h2>
+<p>FizzBuzzは、単なる能力テストではなく、候補者の態度を測るものだという意見が繰り返し述べられています。課題を簡単すぎると見下したり、不真面目な態度で臨む候補者は採用されないとされています。ただし、この文脈での具体的な面接のやり取りは、インターネット上のジョークである可能性が指摘されています。</p>
+<h2>閉形式の表現に関する議論</h2>
+<p>記事で言及されている「閉形式の表現（closed-form expression）」の定義について、コメント欄で議論が交わされています。</p>
+<ul>
+<li><strong>定義の曖昧さ:</strong> 閉形式の表現が「基本的な操作の有限な組み合わせ」と説明されているものの、その「基本的な操作」に条件分岐（<code>if</code>文など）が含まれるのかどうか疑問が呈されています。</li>
+<li><strong>記事での定義:</strong> 記事では、加算、減算、乗算、除算、指数、対数、三角関数などが「基本的な操作」として挙げられていますが、明確な普遍的な定義がないことも指摘されています。</li>
+<li><strong>実装上の矛盾？:</strong> 配列のインデックスアクセス<code>s[i]</code>は、実質的に条件分岐に近い機能を持つのではないかという見方もあります。</li>
+</ul>
+<h2>その他の評価と関連技術</h2>
+<ul>
+<li>多くのコメントで、TensorFlowでFizzBuzzを解くアイデアが「素晴らしい（very nice）」、「非常にクール（very cool!）」と評価されています。</li>
+<li>このアプローチが、FizzBuzzの可除性プロパティを単一の関数にまとめている点で、ラマヌジャン和（Ramanujan Sums）と類似しているという指摘もあります。</li>
+<li>実装によっては、約2^50程度の数値で計算が破綻する可能性があるとの懸念も示されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Joel Grus氏のTensorFlowによるFizzBuzzの実装は、その独創性から高い評価を得ています。コメントでは、FizzBuzzが単なるコーディング能力だけでなく、候補者の態度を測る側面も持つという点が強調されました。また、「閉形式の表現」の定義の曖昧さや、それが条件分岐を含みうるかどうかの議論が交わされました。さらに、このアプローチが数学的にラマヌジャン和と関連付けられる可能性や、数値計算の限界に関する懸念も示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

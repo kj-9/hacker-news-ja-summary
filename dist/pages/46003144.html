@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAWK: LLMs can write a language interpreter - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">FAWK: LLMs can write a language interpreter</h1>
+        <div class="meta">
+            投稿日: 2025年11月21日 | ランク: 10
+        </div>
+        <a href="https://martin.janiczek.cz/2025/11/21/fawk-llms-can-write-a-language-interpreter.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、LLM（大規模言語モデル）を利用してプログラミング言語（特にDSLやAWKライクな言語）を開発する試みとその是非について活発な議論が交わされています。多くの人々がLLMの能力に驚きと可能性を感じる一方で、その限界、品質、そして人間の学習や達成感への影響について懸念を表明しています。</p>
+<h2>LLMによる言語開発の可能性と成功例</h2>
+<p>多くのユーザーがLLM、特にClaude CodeやChatGPT、Geminiを使ってプログラミング言語やDSLを開発することの可能性を強調しています。
+- <strong>効率と迅速性</strong>: 数週間かかる作業を数日で、あるいはより短時間で完了させられるという意見が多く、「LLMを使わなければそもそも着手しなかった」という声もあります。これは、趣味のプロジェクトなど、時間的制約がある場合に特に有効だと考えられています。
+- <strong>複雑なタスクの自動化</strong>: Lexer、Parser、コンパイラの生成、既存のパーサーの書き換え（Bisonから再帰下降へ）、さらにはRubyをCosmopolitanに移植するような非常に複雑なタスクにLLMが成功した例も報告されています。
+- <strong>学習支援</strong>: LLMは新しい技術（Tree-sitter、LSPプロトコルなど）を学ぶ際の強力な助けとなり、プロトタイプ作成を加速させるといった学習ツールとしての側面も評価されています。</p>
+<h2>LLMコードの品質と限界</h2>
+<p>LLMが生成するコードの品質と限界については、多くの懸念が示されています。
+- <strong>「ゴミ」コード問題</strong>: LLMが生成するコードは「ほぼ正確な既存ライブラリの複製」か「完全にゴミ」のどちらかであるという厳しい意見や、本質的な理解なしに生成されたコードは「結果として間違いなくゴミ」であるという批判もあります。
+- <strong>深層理解の欠如</strong>: LLMがコードの「深層理解」を伴わずに生成するため、ユーザーは自身の作業内容を深く理解できないという問題が提起されています。ただし、実際に使用する過程で理解を深めることができるという反論もあります。
+- <strong>エラー修正の難しさ</strong>: LLMは文法的な間違いや非効率なソリューション、非推奨/存在しないAPIを使用することがあり、修正を求めると別の部分を壊したり、架空のAPIを生成したりする場合があるとの報告があります。
+- <strong>複雑なコードベースでの限界</strong>: 大規模で複雑なコードベースにおいて、変更の伝播や競合状態の理解など、人間が苦労するような問題に対してLLMは依然として苦戦するという意見があります。</p>
+<h2>人間の学習、達成感、そしてAIとの協業</h2>
+<p>AIによるコード生成が人間の学習や達成感に与える影響についても、様々な視点から議論が展開されています。
+- <strong>「歩くこと」と「目的地」</strong>: 目的地に到達すること自体が目的ではない（「歩くこと」が目的な場合もある）という比喩を用いて、プログラミングにおける「楽しさ」や「学習」の価値を強調する意見があります。
+- <strong>達成感の希薄化</strong>: AIが大部分を生成したコードに対して、自分が「作った」という達成感を得られるのか疑問を呈する声や、「自分を欺いている」と感じるという意見もあります。
+- <strong>新しい形の「楽しさ」</strong>: 一方で、LLMによって普段は時間がなくてできないような野心的なプロジェクトに取り組めること自体が「楽しい」という意見も多く、CNCマシンを使う木工職人のように、AIを「ツール」として活用することで新たな創造的な活動が可能になるとも考えられています。
+- <strong>テスト駆動開発の重要性</strong>: LLMと効果的に協業するためには、広範なテストスイートを用意することが不可欠であるという指摘がされています。テストが「ガードレール」となり、LLMの「盲目的な飛行」を防ぐことができるとされています。</p>
+<h2>プロンプトとセッションの共有の価値</h2>
+<p>LLMを利用した開発の経験を共有する際、プロンプトや会話の全履歴を共有することの重要性も指摘されています。
+- <strong>再現性と学習</strong>: プロンプトを共有することで、他のユーザーがその成功を再現し、LLMとの対話方法を学ぶことができるため、AIツールの「マニュアルがない」現状において非常に価値があると考えられています。
+- <strong>「思考プロセス」の可視化</strong>: LLMの「思考プロセス」を追跡することで、LLMがどのように問題を解決しているかを理解し、それが「推論」であると確信する人もいます。</p>
+<h2>まとめ</h2>
+<p>LLMを用いたプログラミング言語開発は、生産性を劇的に向上させ、通常は時間と専門知識を必要とする複雑なタスクを、より多くの人々が楽しめる趣味のプロジェクトへと変革する可能性を秘めています。しかし、生成されるコードの品質、LLMの深層理解の限界、そして人間の学習と達成感に対する影響については、依然として活発な議論と懸念が存在します。効果的なLLMとの協業には、堅牢なテストスイートの構築や、LLMからのアウトプットを盲目的に受け入れず、批判的に評価する姿勢が不可欠です。同時に、プロンプトや対話の共有は、この新しい開発パラダイムの集合的な学習と発展に貢献するでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
