@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racket v9.0 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Racket v9.0</h1>
+        <div class="meta">
+            投稿日: 2025年11月23日 | ランク: 5
+        </div>
+        <a href="https://blog.racket-lang.org/2025/11/racket-v9-0.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Racketプログラミング言語のバージョン9.0での並列スレッド導入に関する発表をきっかけに、Racketの多様な用途、教育現場での役割、そして言語としての成熟度やツールに関するHacker Newsの議論が展開されました。</p>
+<h2>Racketの用途と特性</h2>
+<p>Racketは、単なるプログラミング言語にとどまらず、「言語構築キット」としての特性が強調されています。教育、研究、そして特定のドメインでのツール作成など、幅広いニッチで活用されています。過去にはHacker Newsの基盤であるArc言語がRacketで書かれていたことや、CloudflareのTopazポリシーエンジンで使用されている例も挙げられました。一般的な用途としては、メールボット、Moodleバックアップクリーナー、C言語のマクロプロセッサ、GUIアプリケーション、静的サイトジェネレーター、ゲームのマップ設計用カスタム言語など、多岐にわたる個人的なプロジェクトでの利用例が紹介されています。</p>
+<h2>教育ツールとしてのRacketの評価</h2>
+<p>Racketは、多くの大学でCS初年度のコースに採用されており、特にHTDP (How to Design Programs) やPLAI (Programming Languages: An Interpreter) のようなカリキュラムで利用されています。学生の中にはLisp特有の構文や関数型プログラミングのアプローチ（再帰による反復、不変性）に苦労し、Racketを嫌う人もいますが、一方でその利点に気づき、プログラミング言語への深い理解や愛情を育むきっかけとなった学生もいます。あるユーザーは、C++でのインタープリタ実装の苦労を通じて、Racketのパターンマッチングや関数型プログラミングのテスト容易性を高く評価しています。また、Racketが「良いソフトウェアを書くための核となる概念を教える」という点で成功しているなら、卒業後に使われなくても価値があるという意見もあります。</p>
+<h2>Racket 9.0: 「成熟」と「進化」を巡る議論</h2>
+<p>Racket 9.0での並列スレッド導入は大きなニュースとして注目されていますが、一部では、言語の公式説明にある「成熟し洗練されている」という表現との間に矛盾を感じるという意見が出ました。しかし、これは2017年から進められてきた内部的なChez Schemeへの書き換え（Racket CS）が完了した結果であり、PythonやOCamlも最近同様に並列処理の問題に取り組んでいる例が挙げられました。Racketの開発陣は、この大がかりな内部リファクタリングを8年かけて行い、APIの安定性を保ちながら完了させたことが、むしろ言語の成熟度を証明していると主張しています。</p>
+<h2>開発環境とLisp系言語の可能性</h2>
+<p>DrRacket IDEについては、直感的でなく扱いにくいという意見がある一方で、統合されたマクロステッパーなど独自の優れた機能も持っていると評価されています。VSCode、Emacs、Vimといった主要なエディタ向けの良好なサポートも存在します。また、Lisp系言語の低レベルプログラミングへの適性についても議論があり、GCに依存せず手動でメモリ管理を行えば、組み込みシステムなどメモリ制約のある環境でも活用できる可能性が指摘されています。さらに、限定継続といった高度なプログラミング概念がRacketで利用できることが紹介され、ビジネスプロセス管理システムでの応用例や、最近注目されているエフェクトシステムとの関連性についても触れられました。</p>
+<h2>まとめ</h2>
+<p>Racket 9.0の並列スレッド導入は、Racketが教育現場での重要な役割を担いつつ、研究や言語設計、さらには実用的なアプリケーション開発においても進化を続ける多用途な言語であることを示しています。そのLisp系の特性から、学習には独特の障壁があるものの、プログラミングの深い概念を理解する上で強力なツールとなり得ます。また、大規模な内部書き換えを成功させたことは、言語としての成熟度と安定性を示す証拠と見なされており、将来的にはより幅広い分野での活用が期待されます。DrRacket IDEへの賛否は分かれるものの、他のエディタとの連携も充実しており、そのユニークな特性はプログラマーに新たな視点を提供し続けています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native Secure Enclave backed SSH keys on macOS - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Native Secure Enclave backed SSH keys on macOS</h1>
+        <div class="meta">
+            投稿日: 2025年11月23日 | ランク: 1
+        </div>
+        <a href="https://gist.github.com/arianvp/5f59f1783e3eaf1a2d4cd8e952bb4acf" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、macOSのSecure Enclave（またはTouch ID）をSSHキーの認証に使用する新しいネイティブ機能について議論しています。多くのユーザーがこの機能に肯定的な意見を持ち、既存のサードパーティツール（Secretiveなど）からの移行や、YubiKeyなどのハードウェアキーの代替としての利用について話しています。</p>
+<h2>macOSのネイティブ機能と既存ツールの比較</h2>
+<p>ユーザーは、macOS Sonomaの新しいネイティブ機能が、これまでSSHキー管理に使われてきたSecretiveのようなサードパーティツールに代わる、より簡単で安全な方法を提供すると評価しています。</p>
+<ul>
+<li><strong>Secretiveからの移行</strong>: 多くのユーザーがSecretiveを長年使用してきましたが、一部でバグがあることや、サードパーティツールであることへの懸念から、ネイティブ機能への移行を検討しています。特に、SecretiveがSSHキー操作のたびに確認を求めるUXは評価されていますが、ネイティブ機能も同様のセキュリティ強化を提供します。</li>
+<li><strong>YubiKeyとの比較</strong>: YubiKeyのような物理キーも依然として強力な選択肢ですが、このネイティブ機能は特定の使用ケースにおいて優れた代替手段となり得ると考えられています。特に、YubiKeyのセットアップの手間や、特定のSSHエージェントとの互換性の問題に触れる声もあります。</li>
+</ul>
+<h2>キーのセキュリティとバックアップ</h2>
+<p>Secure Enclaveに保存されるキーの性質について、特にエクスポート可能性とバックアップの重要性について議論が集中しています。</p>
+<ul>
+<li><strong>エクスポート不可能性とセキュリティ</strong>: Secure Enclaveに生成されたキーはエクスポートできないため、セキュリティ上の利点があります。これは、キーがデバイスから物理的に抽出されないことを意味し、YubiKeyと同様のセキュリティモデルを提供します。</li>
+<li><strong>バックアップと運用上の課題</strong>: エクスポート不可能なキーはセキュリティを向上させますが、デバイスの紛失時にキーを失うという運用上の課題も生じさせます。ユーザーは、複数のキーを生成してバックアップとして使用することや、エクスポート可能な（パスワードで保護された）キーのバリアントを安全なオフラインストレージに保存することを提案しています。</li>
+<li><strong>エクスポート可能なキーの利用</strong>: 記事の筆者は、Secure Enclaveがキーを暗号化して保存し、エクスポート時にパスワードで再暗号化する「exportable」なキーの作成方法も紹介しています。これにより、キーはエクスポートされるまでSecure Enclave内で保護され、エクスポート後も強力なパスワードで保護されるため、災害復旧の選択肢として利用できます。</li>
+</ul>
+<h2>SSHキーとGPGキー、および関連技術</h2>
+<p>議論はSSHキーだけでなく、GPGキーや他の認証技術にも広がっています。</p>
+<ul>
+<li><strong>GPGキーとの関連</strong>: Secure EnclaveでのGPGキーのサポートについて尋ねる声があり、Gitコミット署名にSSHキーを使用できることが指摘されています。</li>
+<li><strong>Passkeysとの差別化</strong>: iCloudで同期されるPasskeysとの違いについても触れられており、Secure EnclaveのSSHキーは現時点ではiCloud同期の対象外であると説明されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>macOSのSecure EnclaveをSSHキー認証に利用するネイティブ機能は、その利便性とセキュリティ強化からHacker Newsコミュニティに概ね好意的に受け入れられています。特に、従来のサードパーティツールからの移行や、YubiKeyのような物理キーに対する代替案として期待されています。キーのエクスポート不可能性がもたらすセキュリティ上の利点と、それに伴うバックアップや運用上の課題について活発な議論が交わされており、複数のキーの利用やエクスポート可能なキーの安全な管理が推奨されています。この機能は、SSHキー管理におけるセキュリティと利便性のバランスを改善する一歩として評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

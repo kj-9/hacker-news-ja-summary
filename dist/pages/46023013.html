@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaders: How to draw high fidelity graphics with just x and y coordinates - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Shaders: How to draw high fidelity graphics with just x and y coordinates</h1>
+        <div class="meta">
+            投稿日: 2025年11月23日 | ランク: 4
+        </div>
+        <a href="https://www.makingsoftware.com/chapters/shaders" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、シェーダー（特にフラグメントシェーダー）について書かれた記事と、それに関連するグラフィックプログラミングの概念、ツール、そしてGPUプログラミング全般の課題について議論しています。</p>
+<h2>シェーダーとレイトレーシング</h2>
+<p>コメントは、シェーダー（特にフラグメントシェーダー）がどのように機能するか、そしてレイトレーシング技術との関連性について議論しています。Shadertoyのようなツールで「レイトレーシングをシェーダー内で行う」ことができるが、これは実際には「レイマーチング」と呼ばれる技術であることが指摘されています。レイマーチングはSigned Distance Functions (SDFs) を利用して複雑なジオメトリを効率的にトレースする手法であり、従来の解析的なレイトレーシングとは異なります。一部のユーザーは「レイトレーシング」を包括的な用語と捉え、レイマーチングもその一種であると考えています。</p>
+<h2>グラフィックAPIとクロスプラットフォーム性</h2>
+<p>記事中のグラフィックAPIの図（OpenGL, WebGL, WebGPUがVulkanの上に構築され、VulkanがD3D12とMetalに繋がる）について、複数のユーザーが間違いを指摘しています。特に、WebGLとWebGPUはVulkanを経由せず直接D3DやMetalにアクセスすること、Vulkanはオープンソースではなくオープンスタンダードであること、そしてWebGPUがブラウザに限定されないクロスプラットフォームなライブラリ（Dawnやwgpu-rs）として利用可能であることなどが挙げられています。VulkanがAppleプラットフォームでもMoltenVKなどの翻訳レイヤーを介して動作することも言及されています。</p>
+<h2>フラグメントシェーダーの直感性</h2>
+<p>フラグメントシェーダーでのプログラミングについて、「座標を受け取って色を出力する」という考え方が、従来のペンと紙で絵を描くのと逆転しており、非直感的であるという意見が述べられています。オブジェクトを操作するのではなく、オブジェクトの周囲の空間を操作する感覚に近いと説明されています。しかし、この非直感性は、フラグメントシェーダーが意図されていない目的（例えば、単純な図形の描画）に利用される場合に生じるものであり、本来の「シェーディング」（マテリアル、光の方向などを考慮して色を計算する）という目的ではより自然であるという反論もあります。</p>
+<h2>GPUプログラミングの課題と開発者体験</h2>
+<p>GPUプログラミングは、その複雑さ、抽象化の深さ、デバッグツールの不足、ハードウェア・ソフトウェアの差異などから、「開発者体験」が非常に悪いと指摘されています。OpenGLやDirectX12以前は、低レベルなハードウェアを抽象化しようとしたが、それが逆に悪影響を及ぼしたという見方もあります。一部のベテラン開発者は現状に満足しているが、GPUの応用範囲が広がる中で、より良い開発者体験の必要性が認識されています。</p>
+<h2>記事とサイトの評価</h2>
+<p>多くのコメントは、記事の品質、特に美しいイラストと分かりやすい説明を高く評価しています。ウェブサイト全体のデザインやスクロールバーのインタラクションも好評です。ただし、記事がまだ未完成な部分があること（SDFの章など）や、ライセンスキーを要求される点について疑問が呈されていますが、著者が書籍の出版を計画しているためではないかと推測されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、シェーダーに関する記事を巡って、技術的な誤りの指摘、異なる解釈の提示、そしてより広範なGPUプログラミングの課題について活発な議論が展開されました。特に、シェーダーの動作原理やグラフィックAPIのクロスプラットフォーム性に関する情報が詳細に交換され、GPUプログラミングの学習者や経験者にとって示唆に富む内容となっています。同時に、記事の質の高さと、今後の改善点についても建設的な意見が述べられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
