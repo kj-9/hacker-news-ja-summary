@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moving from OpenBSD to FreeBSD for firewalls - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Moving from OpenBSD to FreeBSD for firewalls</h1>
+        <div class="meta">
+            投稿日: 2025年11月24日 | ランク: 8
+        </div>
+        <a href="https://utcc.utoronto.ca/~cks/space/blog/sysadmin/OpenBSDToFreeBSDMove" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、OpenBSDのパフォーマンス、特に10Gイーサネットにおけるファイアウォールとしての性能に関する議論に集中しています。OpenBSDと他のOS（FreeBSD、Linux）との比較、PFファイアウォールの利点、OpenBSDのアップデートポリシーなどが主なテーマです。</p>
+<h2>OpenBSDのパフォーマンスとアップデートポリシー</h2>
+<p>コメントでは、OpenBSDのTCP処理の改善によりパフォーマンスが向上する可能性が指摘されていますが、これが直接ファイアウォールの性能（特にPF）に影響するかは疑問視されています。あるユーザーは、4コアマシンで10並列TCPストリームで12%〜22%、単一TCPストリームで38%〜100%の改善が見られたと報告しています。</p>
+<p>OpenBSDの企業での採用については、6ヶ月ごとのアップグレードが必要でLTS（長期サポート）がない点が課題として挙げられています。これはセキュリティが非常に優れていても、頻繁なアップグレードを望まない企業にとっては障壁となります。一方で、OpenBSDのアップデートは非常に簡単だという意見もあります。また、OpenBSDプロジェクト自体がLTSリリースを目標としていないため、LTSが必要な場合は他のOSを検討すべきだと述べられています。</p>
+<h2>ファイルシステム（UFS）と堅牢性</h2>
+<p>OpenBSDのファイルシステムであるUFSについても議論されています。一部のユーザーはUFSの堅牢性に懸念を示していますが、多くのOpenBSDユーザーは、ログファイル以外の大量のデータをローカルドライブに書き込まない一般的な使用例（ルーター、メールサーバー、Webサーバーなど）ではUFSで十分だと考えています。ただし、停電時のfsckでの手動介入を避けるため、UPSの使用や重要なデータのバックアップは推奨されています。</p>
+<h2>ファイアウォールとしてのBSD、特にPFの利点</h2>
+<p>Hacker Newsのコメントでは、なぜBSD、特にOpenBSDがファイアウォールとして人気があるのかについて多くの議論が交わされています。主な理由は、Packet Filter（PF）の優れた機能と使いやすさに集約されます。</p>
+<p>PFは「非常に優れた設定言語を持つ、非常に有能なファイアウォール」と評価されており、その直感的な設定ファイルは他の多くのファイアウォール設定と比較しても「あるべき姿」だと絶賛されています。Linuxのiptablesやnftablesと比較しても、PFは「新鮮な空気」のようだと表現されています。OpenBSDからFreeBSDへの移行は、どちらもPFを使用しているため、Linuxへの移行よりもはるかに簡単だと考えられています。</p>
+<p>Linuxのファイアウォール（iptables、nftables）も改善されてきていますが、多くのユーザーはPFの優位性を強調しています。</p>
+<h2>10GイーサネットとHacker Newsの投稿</h2>
+<p>一部のコメントでは、10Gイーサネットのパフォーマンスに関する議論がもはやそれほど興味深いものではないという意見もあります。2005年頃には新技術だったかもしれないが、現在は一般的になっているため、200Gや400Gアダプタ、あるいはNetflixがBSDで実施しているようなオフロードなしでのパフォーマンスに関する話であれば、もっと興味を引くかもしれないと述べられています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、OpenBSDが優れたセキュリティと、特にPFファイアウォールによる強力で使いやすいネットワーク管理機能を持っていることを示しています。しかし、LTSの欠如と頻繁なアップグレードサイクルは、企業での採用を阻む要因となり得ます。パフォーマンスに関しては、最近のTCP処理の改善が見られるものの、特定のユースケース（例：10Gイーサネットのファイアウォール性能）での具体的なベンチマーク比較が求められています。全体として、OpenBSDは特定のニーズ（特にPFの利点を活かしたい場合）に対して非常に魅力的な選択肢ですが、その利用には組織のアップグレードポリシーやファイルシステムの要件を考慮する必要があります。PFの直感的な設定言語は、多くのユーザーがBSDをファイアウォールとして選択する主要な理由となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
