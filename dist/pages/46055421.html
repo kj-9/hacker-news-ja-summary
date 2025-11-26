@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Process Control in Python - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Statistical Process Control in Python</h1>
+        <div class="meta">
+            投稿日: 2025年11月26日 | ランク: 8
+        </div>
+        <a href="https://timothyfraser.com/sigma/statistical-process-control-in-python.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、大手テック企業（FANG）でディープラーニングベースの時系列異常検知システムを、よりシンプルな統計的プロセス制御（SPC）モデルに置き換えることに成功したというユーザーの経験が語られています。この置き換えにより、訓練パラメーターの数が大幅に削減され、システムの管理が容易になった一方で、AIの誇大宣伝と古典的な統計的手法とのバランスに関する議論が活発に行われています。</p>
+<h2>ディープラーニングから古典的統計への回帰</h2>
+<p>あるユーザーは、FANG企業で数千もの複雑なディープネット時系列異常検知器を、統計的（非パラメトリック、セミパラメトリック）プロセス制御モデルに置き換えることに成功したと報告しています。新しいモデルは3～4桁少ない訓練パラメーターを使用し、3～4人のチームで数千のストリームを処理できる程度に十分な複雑さしか持っていません。ディープネットモデルが必要とする膨大な手間や、デバッグや理解の難しさから解放されたとのことです。小規模なチームや限られたリソースの場合、時系列異常検知には統計ベースのモデルが強く推奨されています。</p>
+<h2>AIの誇大宣伝に対する懐疑論</h2>
+<p>多くのコメント投稿者は、現在のAIの誇大宣伝に懐疑的な見方を示しています。「派手なML」が推し進められている多くのユースケースには、地味で扱いやすい古典的な解決策が存在すると指摘されています。LLMにユーザーの質問に答えさせる代わりに、顧客からのチケットをレビューしてFAQを改善する、RAGの代わりにDBAが特定のビジネス質問に答えるレポートを作成する、LLMでコードを生成する代わりに、より表現力豊かなフレームワークやライブラリを開発する、といった例が挙げられています。</p>
+<h2>古典的アプローチの利点とAIの課題</h2>
+<p>古典的な統計モデルは、その透明性、信頼性、そして少ないリソースで運用できるという点で評価されています。特に、統計的プロセス制御（SPC）は製造業などの分野で依然として重要であり、テストや品質エンジニアが統計的管理を独自に設定する方が、AIモデルを導入するよりもはるかに価値があるという意見もあります。一方、AIモデルはデバッグ、トレーニング、更新を継続的に行う必要があり、その維持には多大なリソース（人員と計算能力の両方）がかかるという課題が指摘されています。</p>
+<h2>AIモデルの擁護と現在の能力</h2>
+<p>一部のユーザーは、AIモデルの現在の能力を強く擁護しています。デモ段階をはるかに超え、弁護士事務所、病院、研究所などで研究や定型作業に活用されていると指摘しています。生成AIはクリエイティブ産業を文字通り消し去りつつあり、PhotoshopのようなツールやGoogle検索の未来にも影響を与えるだろうと主張しています。</p>
+<h2>組織における意思決定の複雑さ</h2>
+<p>組織における意思決定の難しさも議論されています。数十億ドル規模の投資をした場合、その意思決定を正当化するツールを選ぶ傾向があり、代替案を検討する余裕がないことがあります。データに基づいたアプローチも、データの分析と解釈に依存するため、主観的になりがちです。真の進歩は、データ、論理、知識ベースを謙虚な姿勢で組み合わせることから生まれると示唆されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、AI技術の急速な進歩と、長年にわたり確立されてきた古典的な統計的手法の価値との間の緊張関係を浮き彫りにしています。多くのユーザーがAIの過度な誇大宣伝に懐疑的であり、多くのビジネス課題には、ディープラーニングのような複雑なAIモデルよりも、よりシンプルで解釈可能、かつ低リソースで運用できる古典的な統計的手法や「地味な」ソリューションが依然として有効であると主張しています。特に、時系列異常検知や統計的プロセス制御（SPC）の分野では、古典的アプローチへの回帰が成功事例として共有されました。一方で、AIモデルの現在の驚くべき能力を擁護し、さまざまな産業での具体的な応用例を挙げる声もあり、技術の進化と実用性のバランスが議論の中心となっています。組織の意思決定の複雑さや、技術選択における政治的・主観的な要素も、この議論の重要な側面として認識されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
