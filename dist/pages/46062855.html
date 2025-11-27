@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Strong Consistency? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why Strong Consistency?</h1>
+        <div class="meta">
+            投稿日: 2025年11月27日 | ランク: 6
+        </div>
+        <a href="https://brooker.co.za/blog/2025/11/18/consistency.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「結果整合性」という概念、特にそれが「結局は整合性がない」と見なされるべきか、それとも「最終的に整合性がある」という元の意味が有効かについて議論しています。また、開発者がシステム設計で整合性をどのように扱うべきか、特に「書き込み後の読み取り」シナリオやトランザクションの使用について焦点を当てています。</p>
+<h2>結果整合性とは何か？</h2>
+<p>一部のコメントは、システムが常に変化を受け入れている場合、「結果整合性」は「決して整合性がない」と呼ぶべきだと主張しています。なぜなら、システムが整合した状態になる時点が一度もないため、整合性の問題はデータの利用者に押し付けられるからです。これに対し、他のコメントは、単一の書き込みの観点から見れば、書き込みが停止すれば最終的に整合的になるとして、「最終的に整合的になる」という表現を擁護しています。銀行の送金を例に挙げ、お金は「最終的に」届くため、「決して整合的ではない」とは言えないと説明しています。ただし、もし銀行取引が結果整合的である場合、受信者は「決して」確実ではない可能性があり、取引が後で完了するという状態自体が整合した状態であるという意見もあります。</p>
+<h2>トランザクションと整合性</h2>
+<p>強い整合性を得るための標準的な方法として、SQLで<code>BEGIN TRANSACTION</code>と<code>COMMIT TRANSACTION</code>の間に全ての操作を囲むことが提案されています。これにより、書き込み時にはマスタデータベースと通信する必要があるものの、これは通常の手順とされています。</p>
+<h2>書き込み後の読み取り問題</h2>
+<p>多くのコメントは、不必要な「書き込み後の読み取り」を止めるよう推奨しています。これは、データベースが生成する値（タイムスタンプやUUIDv1）が必要な場合や、並行環境で複数行を挿入した場合を除いて、ほとんどのケースで不要だとされています。MySQLでは、挿入された自動インクリメント値をカーソルから取得でき、MariaDB、SQLite、Postgresでは<code>RETURNING</code>句を使用して挿入した行全体を取得できます。</p>
+<p>しかし、「書き込み後の読み取り」が必要なシナリオ、例えばブラウザでリソースを保存した後にF5キーを押して保存された内容を確認する場合、レプリカが追いついていないと整合性の問題が発生する可能性があります。この問題の解決策として、ローカルストレージ、スティッキーセッション、コンシステントハッシュキャッシュなどが提案されていますが、これらは結局「書き込み後の読み取り」を達成しようとしているに過ぎないという意見もあります。書き込み後の読み取りシナリオで、整合性トークンを使用し、セカンダリが追いついていない場合にプライマリにリダイレクトする方法も提案されています。</p>
+<h2>正確性とトレードオフ</h2>
+<p>システム設計における「正確性」が、最高の品質レベルではなく、唯一の合理的な状態として扱われるべきだという意見もあります。マルチプレイヤーゲームのネットワークを例にとり、UDPパケットの半分が失われるような状況でも、プレイヤーの正確な位置を気にしないわけではなく、システムは更新がどれだけ頻繁に成功するかの許容範囲を持っていると説明されています。</p>
+<p>しかし、異なる整合性モデルが存在するのは、特定のビジネス要件を持つ問題領域において、異なるトレードオフが好ましいからです。例えば、ライブストリーミングでは、パフォーマンス特性が異なるため、強い整合性を追求する代わりに、一時的にパケットが失われてもストリームが完全に中断しないような設計が選ばれることがあります。もしパフォーマンス特性が同じであれば、人々は強い整合性を選択するでしょう。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、結果整合性の定義に関する哲学的な議論から始まり、それが「最終的に整合的」なのか「決して整合的ではない」のかという点について意見が分かれました。実用的な観点からは、トランザクションを用いた強い整合性の確保や、不必要な「書き込み後の読み取り」の回避が推奨されています。特に「書き込み後の読み取り」問題は、キャッシュやリダイレクトなどの解決策が提案されつつも、依然として設計上の課題であることが示されました。最終的に、整合性はシステムの正確性にとって重要であるものの、パフォーマンスや特定のビジネス要件との間でトレードオフが存在することが強調されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
