@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>28M Hacker News comments as vector embedding search dataset - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">28M Hacker News comments as vector embedding search dataset</h1>
+        <div class="meta">
+            投稿日: 2025年11月28日 | ランク: 1
+        </div>
+        <a href="https://clickhouse.com/docs/getting-started/example-datasets/hackernews-vector-search-dataset" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、Hacker Newsのコメントを埋め込みベクトルに変換し、検索可能なデータベースとして公開するプロジェクトに関するものです。コメントは、データ永続性、法的問題、およびLLM（大規模言語モデル）への利用可能性について議論しています。</p>
+<h2>HNコメントの永続性とAIへの利用</h2>
+<p>多くのユーザーは、一度投稿されたHNコメントが事実上「永遠に残る」と認識しています。複数のHNデータセットのレプリカが存在すること、そしてAIモデルのトレーニングデータとして利用されていることが指摘されています。リンク切れやインターネットアーカイブの存在を挙げて、コメントの永続性に疑問を呈する意見もありますが、オリジナルソースが失われても他の場所にコピーされている可能性が高いという意見もあります。また、AIモデルに組み込まれることで、コメントが何百万、何十億ものローカルデバイスに拡散され、文字通り「花崗岩に刻まれた」かのように永続的になると考えられています。</p>
+<h2>HNコメントデータのサイズと圧縮</h2>
+<p>Hacker Newsの全投稿とコメントのデータサイズについて議論されています。あるユーザーは、埋め込みメタデータを含めて合計55GBだと推測していますが、別のユーザーは、テキストデータ単体では非圧縮で17.68GB、圧縮で5.67GBと報告しています。これは驚くほど小さいサイズであり、テキストが非常に効率的な情報表現手段であることが示唆されています。埋め込みデータがテキスト自体よりも大きな容量を占める可能性があることも指摘されています。</p>
+<h2>法的・倫理的な問題と利用規約</h2>
+<p>HNのコメントが第三者によって処理され、AIモデルのトレーニングに利用されていることに対し、ユーザーからは法的・倫理的な懸念が表明されています。Hacker Newsの利用規約では、ユーザーコンテンツの非独占的、全世界的、ロイヤリティフリーのライセンスをY Combinatorとその関連会社に付与するとされています。しかし、このデータベースの作成者がY Combinatorの関連会社であるかどうかが疑問視され、コメントの商業利用や派生作品の作成が禁止されているという指摘もあります。OpenAIなどのLLM開発企業が著作権侵害で訴訟を起こされている現状も言及されていますが、これまでのところ大きなペナルティは見られないという意見もあります。</p>
+<h2>HNコメントを活用した新しい機能のアイデア</h2>
+<p>Hacker Newsのコメントデータを活用した新しい機能のアイデアも提案されています。例えば、右クリックメニューに「類似の文章」オプションを追加し、現在のコメントと意味的に関連する過去のコメントへのリンクを表示する機能や、直接的なリンクではなく意味的な関連性に基づいてコメント、返信、スレッドを関連付ける「セマンティック・スレッド」のアイデアなどが挙げられています。これにより、過去の議論を参考にしたり、同じ議論が繰り返されていないかを確認したりできると期待されています。</p>
+<h2>埋め込みモデルの選択に関する議論</h2>
+<p>ベクトル埋め込みに使用されるモデルの選択についても議論されています。多くのユーザーが、一般的なチュートリアルで使われている<code>all-MiniLM-L6-v2</code>は古く、最新のアーキテクチャやデータトレーニングパイプラインの進歩を反映していないと指摘しています。代わりに、より新しいオープンウェイトモデルとして<code>EmbeddingGemma</code>、<code>bge-base-en-v1.5</code>、<code>nomic-embed-text-v1.5</code>、<code>Qwen3-Embedding-0.6B</code>などが推奨されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、HNコメントのデータが様々な形で収集・利用され、特にAIモデルのトレーニングに活用されている現状について深く掘り下げています。ユーザーは、コメントの永続性、データサイズ、そして自身の投稿に対する法的・倫理的な権利について懸念を表明しています。一方で、これらのデータを活用してHN体験を向上させる新しい機能のアイデアや、埋め込みモデルの技術的な選択に関する活発な議論も展開されています。このスレッドは、オンラインコンテンツの利用とプライバシー、そしてAI時代におけるデジタルフットプリントの意義について、多くの重要な問いを提起しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

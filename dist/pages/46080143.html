@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>True P2P Email on Top of Yggdrasil Network - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">True P2P Email on Top of Yggdrasil Network</h1>
+        <div class="meta">
+            投稿日: 2025年11月28日 | ランク: 9
+        </div>
+        <a href="https://github.com/JB-SelfCompany/Tyr" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、Yggdrasilネットワーク上で動作する分散型メールシステム「Tyr」（そしてその基盤となるYggmail）について議論しています。特に、オフラインでのメッセージ配信の仕組み、セキュリティ、および従来のインターネットメールとの比較が焦点となっています。</p>
+<h2>オフラインメッセージングとストア＆フォワード</h2>
+<p>Yggmail（Tyrの基盤）は、明示的なストア＆フォワード機能を持たず、メッセージは送信ノードの送信ボックスに保持され、宛先がオンラインになるまで再試行され続けます。これはMeshtasticやReticulumのようなメッセージがピア間をホップするシステムとは異なります。</p>
+<p>一部のコメントでは、ユーザーが複数の「メールサーバー」（例えば、モバイルフォンとホームサーバー）を同期させて運用することで、少なくとも1つがオンラインになる確率が高まり、信頼性が向上するという意見があります。</p>
+<p>Secure Scuttlebutt (SSB) のような過去のシステムは、3ホップ以内のすべてのピアにプライベートメッセージを分散し、オフラインのピアはオンラインになったときに同期してメッセージを復号化していました。これは、現在のYggdrasil/Yggmailのモデルとは異なるアプローチです。</p>
+<h2>セキュリティと暗号化</h2>
+<p>Yggdrasilネットワーク自体が暗号化されているため、Tyr上でDeltaChatなどを使用する場合、第三者のメールハブが存在しない限り、プレーンテキストのメールを送信しても問題ないという意見があります。Yggmailは「メッシュネットワーキング時代のエンドツーエンド暗号化メール」と評されています。</p>
+<p>一方で、メッセージングにおける「機密性、匿名性、検閲耐性、信頼性、使いやすさ」という複雑なトリレンマを解決しようとしすぎた結果、多くの人がGmailやWhatsAppに流れたという指摘もあります。Yggdrasilは、インターネットの原点に回帰するアイデアを持ち、多くの問題を解決すると見られています。</p>
+<h2>Yggdrasilと従来のインターネットメールの比較</h2>
+<p>Yggdrasilは、従来のインターネットとは異なるアプローチを取り、分散型かつエンドツーエンドの暗号化された通信を可能にします。Tyrは、SMTP/IMAPプロトコルを使用するDeltaChatやArcaneChatのようなモダンなチャットインターフェースと連携し、Yggdrasilネットワークを介してピアツーピアでメッセージを送受信できます。これにより、中央サーバーなしでメッセージが交換されます。</p>
+<p>VPSやRaspberry Pi、古いスマートフォンなどでTyrを実行することで、サーバーがオンラインである限り、従来のサーバー間設定のように機能し、オフライン時にメッセージを取得することが可能です。これにより、携帯電話アプリが停止した場合にメッセージが失われるのを防ぐことができます。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Yggdrasilネットワーク上で動作する分散型メールシステム「Tyr」と「Yggmail」に高い関心を示しています。主な論点は、オフラインでのメッセージ配信が再試行ベースであること、Yggdrasil自体が提供する暗号化によるセキュリティ、そしてDeltaChatなどのクライアントとの連携による中央サーバー不要のピアツーピア通信の可能性です。参加者たちは、過去のLinuxディストリビューションやメッシュネットワークの経験を振り返りつつ、Yggdrasilがインターネットの原点に回帰し、現代のメッセージングの課題を解決する可能性に期待を寄せています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
