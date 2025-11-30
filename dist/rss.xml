@@ -1,5 +1,137 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><item><title>Framework Computer Now Sponsoring LVFS / Fwupd Development</title><link>https://www.phoronix.com/news/Framework-Sponsoring-LVFS</link><description>&lt;p&gt;&lt;a href="https://www.phoronix.com/news/Framework-Sponsoring-LVFS"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46089980.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><item><title>You Want Microservices, but Do You Need Them?</title><link>https://www.docker.com/blog/do-you-really-need-microservices/</link><description>&lt;p&gt;&lt;a href="https://www.docker.com/blog/do-you-really-need-microservices/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46099367.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントでは、マイクロサービスの導入に対する懐疑論が多数を占め、その複雑さや運用上の課題、代替案について活発な議論が交わされています。多くの人が、マイクロサービスは特定の状況でのみ有効であり、万能の解決策ではないと考えています。&lt;/p&gt;
+&lt;h2&gt;マイクロサービスへの懐疑論と課題&lt;/h2&gt;
+&lt;p&gt;多くのコメントは、マイクロサービスに対する懐疑的な見方を示しています。2018-2019年頃にピークを迎えたものの、現在では特定の状況以外で良いと考える人は少ないという意見があります。特に、システムの不必要な複雑性を増大させ、学習曲線が高く、中小企業ではオーバースペックであるという指摘が見られます。あるユーザーは、マイクロサービスは「ゼロ金利政策（ZIRP）時代の産物」であり、3層アーキテクチャがほとんどのワークロードで堅牢であると主張しています。&lt;/p&gt;
+&lt;p&gt;また、マイクロサービスを導入する組織が陥りやすいミスとして、共有データベースの使用、APIバージョニングの欠如、ドメインの不適切な分離、同期アップグレードが必要な共有ライブラリの利用などが挙げられています。組織の効率性を損なう可能性も指摘され、技術的なメリットよりも意思決定や変更にかかる時間の増加が問題視されています。&lt;/p&gt;
+&lt;h2&gt;代替案としてのモノリス、WebAssembly、単一バイナリ&lt;/h2&gt;
+&lt;p&gt;マイクロサービスの代替案として、様々なアプローチが提案されています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;WebAssemblyモジュール:&lt;/strong&gt; マイクロサービスではなく、自己完結型のWebAssemblyモジュールを望む声があります。これにより、環境依存を減らし、パフォーマンスと分離を両立できる可能性が議論されていますが、具体的なベンチマークデータはまだ少ないようです。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;単一の実行可能バイナリ:&lt;/strong&gt; 全ての機能（HTMLテンプレート、JavaScript、CSSなどを含む）を単一の巨大なバイナリにコンパイルするアプローチ（Golangバイナリ、Scalaのuberjar、Deno Compileなど）が、ホスト環境に依存せず簡単にデプロイできる利点から支持されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;マクロサービス/ゴルディロックス・サービス:&lt;/strong&gt; マイクロサービスのような極端な分割ではなく、システムのドメインやリソース要件に基づいて「適切にサイズ調整された」サービス（「マクロサービス」や「ゴルディロックス・サービス」）を求める声もあります。これらは軽量なインフラストラクチャで認証・認可をサービス内部で処理し、Kubernetesのような複雑なオーケストレーションなしにDocker Composeなどでローカルに起動できることを理想としています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;データベース管理と共有データ問題&lt;/h2&gt;
+&lt;p&gt;マイクロサービス環境下でのデータベース管理、特に共有データベースの問題が重要なテーマとして浮上しています。共有データベーステーブルは、大規模なシステムにおいて「修正が非常に大変」な問題を引き起こすことが指摘されています。データベースは「姿を変えたグローバル変数」であるという認識も示されています。解決策として、複数のアプリケーションロジックが同じデータにアクセスする場合に、それらの間に内部APIを設けてアクセスを仕様に合わせることや、クライアントにはストアドプロシージャの実行のみを許可することなどが提案されています。&lt;/p&gt;
+&lt;h2&gt;マイクロサービスの適切な適用場面&lt;/h2&gt;
+&lt;p&gt;マイクロサービスが本当に有効なのは、どのような状況かについても議論されています。最も一般的な意見として、システムの異なるコンポーネント間でスケーリング要件が著しく異なる場合に、複数のサービスが必要になるという点が挙げられます。また、Kubernetesのような高度なインフラストラクチャは、専門のチームやエンジニアがいて、ブルー/グリーンデプロイメントや高度なスケーリングなどの機能が本当に必要な場合にのみ意味があるという見方もあります。逆に言えば、それらの要件がない場合は、DockerやPodman、VPSなどのシンプルな構成で十分に対応できることが多いとされています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントからは、マイクロサービスがもはや銀の弾丸ではなく、その導入には慎重な検討が必要であるという強い認識が伺えます。多くの開発者は、不必要な複雑性を避け、運用コストを削減するために、WebAssemblyモジュール、単一の実行可能バイナリ、あるいは「ゴルディロックス・サービス」のような、より実用的でドメイン駆動の代替アプローチを求めています。マイクロサービスが真に価値を発揮するのは、コンポーネント間のスケーリング要件が大きく異なる場合や、大規模な組織が専門的なチームと高度なインフラストラクチャを管理できる特定の状況に限定されるという共通認識があります。最終的には、技術的な流行に流されず、システムの複雑さを最小限に抑え、組織の効率性を考慮したアプローチを選択することが重要であると結論づけられます。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46099367</guid></item><item><title>Program-of-Thought Prompting Outperforms Chain-of-Thought by 15% (2022)</title><link>https://arxiv.org/abs/2211.12588</link><description>&lt;p&gt;&lt;a href="https://arxiv.org/abs/2211.12588"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46099108.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントスレッドは、大規模言語モデル（LLM）がコード実行を通じて推論能力を強化する手法について議論しており、その現状、影響、そしてセキュリティ上の課題に焦点を当てています。&lt;/p&gt;
+&lt;h2&gt;既存のLLMへの統合&lt;/h2&gt;
+&lt;p&gt;多くのコメントが、LLMがコード実行を通じて推論を強化するこの手法が、既に現在のモデル（GPT-5.xやClaude 4.xなど）に組み込まれていると指摘しています。コード実行が有効な場合、これらのLLMは推論ステップを助けるために自動的にPythonコードを実行しているようです。この開発は、新しいモデルの最もクールな進歩の一つとして特に注目されています。&lt;/p&gt;
+&lt;h2&gt;セキュリティリスクとサンドボックスの必要性&lt;/h2&gt;
+&lt;p&gt;生成されたコードを実行することの安全性に関する懸念が提起されています。この手法はAIが将来のAI呼び出しを置き換えるプログラムを出力するという点で「自己破壊的なプロンプティング」とも呼ばれていますが、同時に大幅な結果の改善をもたらすとも指摘されています。しかし、生成されたコードの実行は通常安全ではないため、攻撃の対象となるリスクがあります。そのため、サンドボックス環境の使用が不可欠であり、Langchainのような主要なAIエージェントプレイヤーが既にこのための解決策を提供しているとされています。&lt;/p&gt;
+&lt;h2&gt;論文の文脈と情報鮮度&lt;/h2&gt;
+&lt;p&gt;元の論文が2022年のものであると指摘されており、LLM技術の急速な進化を考慮すると、その内容が既に現在のモデルに統合されているか、あるいはある程度陳腐化している可能性があるという示唆がなされています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントは、LLMにおけるコード実行による推論が、既に最新のモデルに広く統合されていることを示唆しています。この技術はAIの能力を劇的に向上させる一方で、生成されたコードの実行に伴うセキュリティ上のリスクが大きな懸念事項であり、安全なサンドボックス環境の確保が不可欠であると強調されています。また、論文の発表時期を考慮すると、その内容が現在の技術水準をどこまで反映しているかという点も議論されています。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46099108</guid></item><item><title>Don't push AI down our throats</title><link>https://gpt3experiments.substack.com/p/dont-push-ai-down-our-throats</link><description>&lt;p&gt;&lt;a href="https://gpt3experiments.substack.com/p/dont-push-ai-down-our-throats"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46098992.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントスレッドは、AIが過剰に宣伝され、その価値が疑わしいにもかかわらず企業によって強引に導入されている現状に対する広範な不満を表明しています。ユーザーは、AIをめぐる誇大広告と、それが消費者のデータプライバシー、製品品質、およびソフトウェア開発プロセスに与える影響について懸念を抱いています。&lt;/p&gt;
+&lt;h2&gt;AIの過剰な宣伝と誇大広告&lt;/h2&gt;
+&lt;p&gt;多くのコメントは、AIがアメリカンフットボールのテレビ中継での広告やWorkdayの広告のように、あらゆる場所で過剰に宣伝されていると指摘しています。人々は、AIの推進が真の価値からではなく、投資家を安心させ、景気低迷の中で成長を維持しようとする企業側の「現金争奪戦」に起因すると見ています。もしAIが本当に素晴らしいものであれば、人々はそれを「求める」だろうに、企業は「押し付けなければならない」のは、それが「カス」だからだと皮肉る声もあります。&lt;/p&gt;
+&lt;h2&gt;データプライバシーと強制的なデータ共有&lt;/h2&gt;
+&lt;p&gt;最も懸念されている点の1つは、AI製品がユーザーにデータ共有を強いる方法です。ユーザーは、Google Geminiのような有料サービスでさえ、データをトレーニングに使用しないという約束のためにアクティビティ履歴をオフにすることを要求するなど、不合理なデータ共有条件を課していることに不満を感じています。Pixel Watchのアップデートが、GoogleがユーザーコンテンツでAIをトレーニングすることを許可しない限り、機能を使えなくしたという具体例も挙げられています。これは、製品の利用と引き換えに、ユーザーが意図しない形でデータを共有させられているという認識を生んでいます。&lt;/p&gt;
+&lt;h2&gt;製品品質とユーザーエクスペリエンスの低下&lt;/h2&gt;
+&lt;p&gt;ユーザーは、AIが製品に統合されることで、むしろ品質や使いやすさが損なわれていると感じています。MicrosoftのCopilotボタンが新しいラップトップに強制的に搭載され、意図しないクリックでアクティベートされ、ユーザーの作業を中断させる「ダークパターン」の例が挙げられています。また、AIが「吐き気を催すようなカス」を生成する「コンテンツ希釈」に使われ、最終的には誰も読まず、別のAIで要約されるという無駄なサイクルを生み出しているという批判もあります。このようなAIの「強制」は、ユーザーエクスペリエンスを悪化させ、消費者に選択の余地を与えていないと多くの人が感じています。&lt;/p&gt;
+&lt;h2&gt;投資と経済的圧力&lt;/h2&gt;
+&lt;p&gt;AIの推進は、多額の投資と経済的圧力によって駆動されていると多くの人が見ています。AI企業は、投資家に対して「投資が無駄ではなかった」と示すために、AIを強引に導入しているという意見があります。景気低迷の中で、AIは「明るい材料」として見なされており、下降圧力の中で成長を維持しようとする試みだと分析されています。これは、AIが真のニーズや価値に基づいて導入されているのではなく、投資の正当化や株価維持のための手段として使われているという見方を裏付けています。&lt;/p&gt;
+&lt;h2&gt;法的・倫理的な懸念&lt;/h2&gt;
+&lt;p&gt;AIの訓練データに関する著作権侵害や盗作の問題も提起されています。LLMが「ライフワークを盗用している」と批判され、著作権者への適切な支払いなしに大規模なデータセットを使用することは「経済的に実行不可能ではない」が「経済的に不採算」であるという意見もあります。また、AI機能の強制的な追加に対して「法律が必要だ」という声も上がっていますが、同時に政府が企業による機能追加を制限することへの懸念も示されています。これは、AIの導入が法的・倫理的な枠組みを必要としていることを示唆しています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントスレッドは、AIが現代社会において過剰に喧伝され、その真の価値が疑問視されているにもかかわらず、企業によって強引に導入されている現状に対する強い不満と懸念を浮き彫りにしています。ユーザーは、AIの押し付けがデータプライバシーの侵害、製品品質の低下、および望ましくないユーザーエクスペリエンスにつながっていると認識しており、その背景には投資家の期待に応え、経済的圧力を乗り切ろうとする企業の動機があると見ています。著作権侵害や倫理的な問題も指摘され、AIの導入が真のニーズではなく、市場の力学と利益追求によって駆動されているという批判的な見解が支配的です。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46098992</guid></item><item><title>Writing a Good Claude.md</title><link>https://www.humanlayer.dev/blog/writing-a-good-claude-md</link><description>&lt;p&gt;&lt;a href="https://www.humanlayer.dev/blog/writing-a-good-claude-md"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46098838.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;コメントが提供されなかったため、要約を作成できません。コメントを貼り付けてもう一度お試しください。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46098838</guid></item><item><title>ETH-Zurich: Digital Design and Computer Architecture; 227-0003-10L, Spring, 2025</title><link>https://safari.ethz.ch/ddca/spring2025/doku.php?id=start</link><description>&lt;p&gt;&lt;a href="https://safari.ethz.ch/ddca/spring2025/doku.php?id=start"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46098747.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このコメントスレッドでは、Onur Mutlu氏によるETH Zurichのコンピュータシステム講義について、その内容、YouTubeでの公開、他のコースとの比較、およびETHの他のプロジェクトについて議論されています。&lt;/p&gt;
+&lt;h2&gt;Onur Mutlu氏の講義とリソース&lt;/h2&gt;
+&lt;p&gt;Onur Mutlu氏によるETH Zurichのコンピュータシステム講義は高く評価されており、その優れた内容はYouTubeチャンネル「OnurMutluLectures」で公開されています。このチャンネルには本コースのプレイリストも含まれており、アクセスしやすいリソースとして認識されています。&lt;/p&gt;
+&lt;h2&gt;NAND2Tetrisとの比較&lt;/h2&gt;
+&lt;p&gt;NAND2Tetrisコースと比較してどうかという質問に対し、Onur Mutlu氏の講義はNAND2Tetrisよりも「はるかに要求が厳しい」（より深く、高度な内容）と評されています。これは、彼の講義がより詳細で専門的な知識を求めることを示唆しています。&lt;/p&gt;
+&lt;h2&gt;ETH Zurichの他の成果&lt;/h2&gt;
+&lt;p&gt;ETH Zurichが開発したオープンソースデザインの成功に驚きの声が上がっており、それらが多くの場所で活用されていることが指摘されています。また、ETH ZurichはJSONiqをクエリ言語とするデータレイク向けのRumbleDBプロジェクトも開発していることが紹介されており、その使いやすさから注目を集めています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Onur Mutlu氏によるETH Zurichのコンピュータシステム講義は、その質の高さとYouTubeでの公開により広く評価されています。NAND2Tetrisと比較してより高度な内容を提供するとされており、ETH Zurichはオープンソースデザイン全般の成功に加え、RumbleDBのような先進的なプロジェクトでもその技術力を示しています。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46098747</guid></item><item><title>ESA Sentinel-1D delivers first high-resolution images</title><link>https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Sentinel-1D_delivers_first_images_from_Antarctica_to_Bremen</link><description>&lt;p&gt;&lt;a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Sentinel-1D_delivers_first_images_from_Antarctica_to_Bremen"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46098673.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このコメントスレッドは、欧州宇宙機関（ESA）の宇宙研究と地球科学における成果、特にSentinel画像やEuclidミッションへの関心と、それに対する米国の状況との比較について議論しています。&lt;/p&gt;
+&lt;h2&gt;欧州宇宙機関（ESA）の評価と期待&lt;/h2&gt;
+&lt;p&gt;人々は、欧州連合（EU）が宇宙研究と地球科学の分野で進歩していることを歓迎し、ESAのミッションを高く評価しています。特にEuclidミッションによる宇宙の視界が「信じられないほど素晴らしい」と評され、関連動画が共有されています。&lt;/p&gt;
+&lt;h2&gt;ESAデータへのアクセスと更新頻度&lt;/h2&gt;
+&lt;p&gt;ESAのSentinel画像については、以前は多くの人が楽しんで閲覧していたものの、最近は更新が不規則になっているという指摘があります。地球の美しさを伝えるこれらの画像が、より定期的（毎日または毎週）にアップロードされることへの期待が表明されています。&lt;/p&gt;
+&lt;h2&gt;米国の宇宙開発との比較&lt;/h2&gt;
+&lt;p&gt;一部のコメントでは、EU/ESAの台頭を、特定の政権（「King Pedophile」という表現で示唆される）によってNASAが「壊滅させられ」、米国が宇宙開発競争から一時的に脱落した状況と対比させています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントスレッドでは、欧州宇宙機関（ESA）が宇宙研究と地球科学の分野で目覚ましい成果を上げていることへの賞賛が集まっています。特にEuclidミッションの成果は高く評価されていますが、Sentinel画像のような一般公開データの更新頻度については、より定期的な公開を望む声も上がっています。また、一部ではEU/ESAの台頭を、米国の特定の政権下でのNASAの停滞と対比させる見解も示されています。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46098673</guid></item><item><title>LLVM-MOS – Clang LLVM fork targeting the 6502</title><link>https://llvm-mos.org/wiki/Welcome</link><description>&lt;p&gt;&lt;a href="https://llvm-mos.org/wiki/Welcome"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46098359.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;LLVMが6502プロセッサをサポートすることで、レトロゲーム機（NES、C64）向けの開発が現代的なC言語で可能になることについてのコメント。&lt;/p&gt;
+&lt;h2&gt;現代的なC言語での6502開発の可能性&lt;/h2&gt;
+&lt;p&gt;人々は、6502プロセッサ向けのプログラミングが、かつては「奇妙なコード」を必要とすると警告されていたにもかかわらず、LLVMのサポートによって通常のC言語で開発できるようになったことに驚きと喜びを表明しています。NES向け開発において、このプロジェクトが従来の障壁を取り除いていると感じられています。&lt;/p&gt;
+&lt;h2&gt;プロジェクトの進捗と実用性&lt;/h2&gt;
+&lt;p&gt;このプロジェクトは過去5年間で目覚ましい進歩を遂げており、かつては非実用的と思われていたことが現実のものとなったことへの賞賛が寄せられています。将来的には65816ターゲットへの対応も期待されています。&lt;/p&gt;
+&lt;h2&gt;他のコンパイラとの比較とベンチマーク&lt;/h2&gt;
+&lt;p&gt;既存の6502 Cコンパイラ、特にcc65とのコードサイズや速度に関する比較への関心が高いです。コメントでは、現代の6502 Cコンパイラを比較したベンチマークサイトが共有され、ただしバイナリサイズには標準ライブラリのサイズも含まれるため、純粋なコード生成密度を示すものではないという注意点が指摘されました。&lt;/p&gt;
+&lt;h2&gt;LLVMフォークの理由&lt;/h2&gt;
+&lt;p&gt;なぜこのプロジェクトがLLVM本体への貢献ではなく、フォークとして開発されたのかという疑問が提起されています。本家LLVMへのコード貢献の難しさがその理由ではないかとの推測もあります。&lt;/p&gt;
+&lt;h2&gt;Rust for 6502 (Rust-mos)&lt;/h2&gt;
+&lt;p&gt;関連情報として、このLLVMフォーク上で動作し、Commodore-64で実行可能なコードを生成するRustフォーク「rust-mos」が紹介されています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;このHacker Newsのスレッドは、LLVMが6502プロセッサをサポートすることで、NESやCommodore-64といったレトロシステム向けのプログラミングが現代のC言語で可能になったことへの興奮と評価で溢れています。プロジェクトの長年の進捗が称賛される一方で、既存のコンパイラとの性能比較や、LLVM本体に統合されずフォークとして開発された理由について議論されています。また、この技術を基盤としたRustフォークも登場しており、レトロコンピューティング開発に新たな選択肢と可能性をもたらしていることが示唆されています。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46098359</guid></item><item><title>Migrating Dillo from GitHub</title><link>https://dillo-browser.org/news/migration-from-github/</link><description>&lt;p&gt;&lt;a href="https://dillo-browser.org/news/migration-from-github/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46096800.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Dilloブラウザプロジェクトが、GitHubのアクセシビリティ問題、パフォーマンスの低下、過度なJavaScript依存、特定のワークフローへの適合性の欠如を理由に、GitHubから離れることを発表しました。この決定は、オープンソースコミュニティにおけるGitHubの現状と代替プラットフォームに関する広範な議論を引き起こしています。&lt;/p&gt;
+&lt;h2&gt;GitHubのフロントエンド問題&lt;/h2&gt;
+&lt;p&gt;コメントでは、GitHubのフロントエンドがJavaScriptなしではほとんど機能しないこと、そして過去にはサポートされていたグレースフルデグラデーションが失われたことが指摘されています。ユーザーは、GitHubがコア製品機能をReactに移行したことが、サイトの動作が遅くなり、アクセシビリティが低下した主な原因だと推測しています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript依存とアクセシビリティ&lt;/strong&gt;: GitHubのフロントエンドがJavaScriptに過度に依存しているため、JavaScriptをサポートしないブラウザ（Dilloなど）では利用できないことが問題視されています。一部のコメントは、これはWCAG（ウェブコンテンツアクセシビリティガイドライン）上のアクセシビリティ問題ではないと主張していますが、JavaScriptをサポートしない、または最新のJavaScript VMを要求するブラウザのユーザーにとっては実用上の問題です。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;パフォーマンスの低下&lt;/strong&gt;: Reactへの移行後、GitHubのサイト速度が著しく低下したと多くのユーザーが報告しています。特にモバイルデバイスでは読み込みが遅いという懸念があります。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;「アプリのような体験」への移行&lt;/strong&gt;: GitHubの社員によるプレゼンテーションでは、「アプリのような体験」への顧客の期待とモバイルからの利用増加がReact採用の理由として挙げられています。しかし、多くのユーザーはデスクトップでの利用が主であり、この方向性がデスクトップユーザーの体験を犠牲にしていると批判しています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;GitHub代替プラットフォーム&lt;/h2&gt;
+&lt;p&gt;GitHubへの不満が高まる中、代替となるGitホスティングプラットフォームへの関心が高まっています。特にForgejoとGiteaが注目されています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Forgejo/Gitea&lt;/strong&gt;: リソース消費量が少なく、メンテナンスが容易である点が評価されています。Go言語で書かれた単一バイナリであるため、GitLabのような多くのサービスを必要とせず、メモリ消費も大幅に少ないと報告されています。また、パッケージレジストリやOpenIDプロバイダー機能も内蔵しており、自己ホスティングに非常に適しているとされています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitLab&lt;/strong&gt;: 一部のユーザーはGitLabのUXデザインを評価する一方で、リソース消費の多さ、機能の肥大化、有料プランへの機能移行を批判しています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分散化の動き&lt;/strong&gt;: GitHubのような単一の支配的なプラットフォームへの依存を避け、分散型・連邦型のソリューションを求める声も上がっています。SourcehutやTangledのようなプラットフォームも言及されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;ワークフローと哲学の違い&lt;/h2&gt;
+&lt;p&gt;GitHubのプッシュモデル（通知中心）と、Dilloプロジェクトが好むプルモデル（必要な時に情報を取りに行く）の間の違いが議論されています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;プッシュモデル vs. プルモデル&lt;/strong&gt;: GitHubはイベント発生時に通知する「プッシュモデル」を推奨しているのに対し、Dilloプロジェクトはユーザーが情報を探しに行く「プルモデル」を好んでいます。これは、オフラインでの作業や、中断を最小限に抑えたいというニーズに基づいています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;メールベースのワークフロー&lt;/strong&gt;: LinuxカーネルやSourcehutが採用しているような、メールでのパッチ交換によるワークフローがプルモデルの具体例として挙げられています。これにより、オフラインでのレビューや作業が容易になります。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;独自のバグトラッカー&lt;/strong&gt;: DilloプロジェクトがMarkdownファイルを解析してHTMLページを生成するシンプルな独自のバグトラッカー「buggy」を作成したことは、Hacker Newsの「ハッカー精神」の表れとして賞賛されています。これは、複雑なUIを持つ既存のツールに頼らず、自身のニーズに合わせたシンプルなソリューションを構築するアプローチです。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;DilloプロジェクトがGitHubから離れる決定は、GitHubの進化、特にそのフロントエンドの技術的選択とユーザーエクスペリエンスに関する広範な不満を浮き彫りにしています。パフォーマンスの低下、過度なJavaScript依存、そして特定の作業モデルへの適合性の欠如が主要な懸念事項として挙げられています。これにより、ForgejoやGiteaといったより軽量で自己ホスティングに適した代替プラットフォームへの関心が高まり、オープンソースコミュニティにおけるGitホスティングの分散化の動きが加速していることが示唆されています。また、GitHubの「アプリのような体験」へのシフトが、すべてのユーザーニーズを満たしているわけではないことも明らかになりました。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46096800</guid></item><item><title>Windows drive letters are not limited to A-Z</title><link>https://www.ryanliptak.com/blog/windows-drive-letters-are-not-limited-to-a-z/</link><description>&lt;p&gt;&lt;a href="https://www.ryanliptak.com/blog/windows-drive-letters-are-not-limited-to-a-z/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46096556.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントスレッドは、Windowsのドライブレターの隠れた柔軟性と、NTカーネルがユーザーに公開しているものとの違いについて議論しています。特に、アルファベット以外の文字をドライブレターとして使用できることや、それがどのように動作するか、そして潜在的なセキュリティ上の意味合いに焦点を当てています。&lt;/p&gt;
+&lt;h2&gt;Windowsのドライブレターの内部動作と柔軟性&lt;/h2&gt;
+&lt;p&gt;多くのコメントは、Windows NTカーネルがユーザーに公開されているものよりもはるかに柔軟であるという認識を共有しています。&lt;code&gt;C:\foo&lt;/code&gt;を&lt;code&gt;\??\C:\foo&lt;/code&gt;に変換する&lt;code&gt;RtlDosPathNameToNtPathName_U&lt;/code&gt;のような内部関数が、実際には&lt;code&gt;€:&lt;/code&gt;のような非標準的なドライブレターを可能にしていることを説明しています。これらのドライブレターはファイルエクスプローラーには表示されませんが、特定のコードページではアクセス可能であり、&lt;code&gt;{GUID}&lt;/code&gt;形式で機能へのディープリンクを作成することもできます。これは、GUIがその下にあるGUIDからアクションへの逆マッピングに大きく依存しているためであり、COMベースのコンポーネントシステムに関連しています。Xbox 360が「Game:\foo」や「Hdd0:\foo」のような文字列全体をドライブレターとして持っていたという記憶も共有されています。&lt;/p&gt;
+&lt;h2&gt;マルウェアの可能性とセキュリティ上の懸念&lt;/h2&gt;
+&lt;p&gt;ドライブレターの隠れた柔軟性は、マルウェア作成者にとって「非常に迷惑なマルウェア」を書くための素晴らしい方法と見なされています。非標準的なドライブレターを使用することで、マルウェアが特定の場所からファイルを隠したり、アンチウイルスソフトウェアのクラッシュを引き起こしたりする可能性があるという懸念が表明されています。ただし、ほとんどのドライブ操作には管理者権限が必要であることや、隠されたDosツリーを簡単にスキャンできないようにしながら、マルウェアがスキャンを困難にする方法についての疑問も提起されています。代替データストリーム（ADS）がファイル隠蔽の別の方法として言及されており、これらは今でも「Webのマーク」として広く使用され、セキュリティソフトウェアによって監視されています。&lt;/p&gt;
+&lt;h2&gt;ドライブレターの歴史と慣習&lt;/h2&gt;
+&lt;p&gt;コメントでは、Windowsのドライブレターシステムがどのように進化してきたかについても歴史的な考察がなされています。&lt;code&gt;A:&lt;/code&gt;と&lt;code&gt;B:&lt;/code&gt;がフロッピーディスクドライブに予約され、&lt;code&gt;C:&lt;/code&gt;が最初のハードドライブであったという古い慣習が思い出されています。&lt;code&gt;D:&lt;/code&gt;がCD-ROMドライブに割り当てられていた時代から、今日の2番目の内部ストレージデバイスやSDカードスロットに変わった経緯も議論されています。多くのユーザーは、ドライブレターのシステムが時代遅れであり、問題を引き起こす可能性があると考えています（例：外部ドライブのドライブレターが「盗まれる」問題）。しかし、Windowsにはドライブレターの割り当てを固定したり、ディレクトリをマウントポイントとして使用したりする機能も備わっています。&lt;/p&gt;
+&lt;h2&gt;WindowsとLinuxの比較、代替のファイルシステムアクセス方法&lt;/h2&gt;
+&lt;p&gt;Windowsのドライブレターシステムは、LinuxのUUIDベースのパーティション識別やディレクトリへのマウント機能と比較されています。Windowsでもドライブレターの代わりにNTFSのディレクトリマウントポイントを使用できることが指摘されています。これはPowerShellの&lt;code&gt;Add-PartitionAccessPath&lt;/code&gt;コマンドレットやディスク管理GUIを通じて設定でき、アプリケーションがパスをカスタマイズできない場合の回避策として特に便利です。また、Windows NTカーネルの「オブジェクトマネージャー」は、レジストリや証明書など、多くのものを単一のグローバルVFSレイアウトとして参照するUnixの&lt;code&gt;/proc&lt;/code&gt;や&lt;code&gt;/sys&lt;/code&gt;に似た概念を持っていることも説明されています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントスレッドは、Windowsのドライブレターシステムが、長年のDOS互換性層の下に、驚くほど柔軟で強力なNTカーネルの設計を隠していることを明らかにしています。非標準的な文字やGUIDをドライブレターとして使用する能力は、マルウェアの潜在的な隠蔽メカニズムとして懸念される一方で、より柔軟なファイルシステム管理（マウントポイントなど）のための高度な機能も提供しています。長年の慣習と現代的なシステムの間の緊張は、Windowsが古いソフトウェアとの後方互換性を重視していることに起因しており、その結果、現在のユーザーにとって古風で問題のあると感じられる側面が残っています。しかし、WindowsはLinuxのような代替手段と同様に、UUIDベースの識別やディレクトリへのマウントといった洗練された機能も内部的にはサポートしており、ユーザーはそれらを利用することができます。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46096556</guid></item><item><title>Advent of Code 2025</title><link>https://adventofcode.com/2025/about</link><description>&lt;p&gt;&lt;a href="https://adventofcode.com/2025/about"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46096337.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントスレッドは、Advent of Code (AoC) の2025年版が発表されたことを受けて、興奮と様々な意見を表明しています。特に、グローバルリーダーボードの廃止、AIの利用、およびAoCに最適なプログラミング言語についての議論が活発です。&lt;/p&gt;
+&lt;h2&gt;グローバルリーダーボードの廃止とAI利用への影響&lt;/h2&gt;
+&lt;p&gt;AoCのグローバルリーダーボードが廃止されたことについて、多くのユーザーが肯定的に捉えています。作者がDDoS攻撃や過度な競争、ユーザーのストレスを理由に廃止したことが説明され、これは本来のコンテストの精神に反するという意見が多く見られました。特に、LLM（大規模言語モデル）の台頭により、AIによる自動提出がランキングを占めるようになったことが、廃止の大きな要因として挙げられています。多くのユーザーは、競争よりも問題解決の楽しみや学習を重視しており、リーダーボードの廃止がその精神を取り戻すのに役立つと述べています。一部のユーザーは、リーダーボードの存在がパズル設計にも影響を与えていた可能性があると指摘しています。&lt;/p&gt;
+&lt;h2&gt;AIと競争の倫理&lt;/h2&gt;
+&lt;p&gt;AIをAoCパズルを解くために使うべきか否かについては、賛否両論があります。AoCのFAQでは「AIを使うべきではない」と明言されており、「他人にジムに行ってもらって強くなれると思うか？」という例えが用いられています。多くの人は、AIの使用は「チート」であり、個人の達成感を損なうものだと考えています。しかし、中にはAIを新しいツールとして探索し、その能力を評価するために使うことは「異なるジムに行く」ようなものだと考える人もいます。LLMの進化により、AIが非常に高い性能で問題を解決できるようになったため、競争環境でのAIの使用は倫理的な問題として深く議論されています。&lt;/p&gt;
+&lt;h2&gt;プログラミング言語の選択&lt;/h2&gt;
+&lt;p&gt;AoCパズルを解くのに適した「非主流」または「珍しい」プログラミング言語についての議論も盛り上がっています。PythonやC++が主流である一方で、Kotlin、Clojure、Haskell、Elixir、Scheme、Go、Nim、Ruby、Prolog、R、Crystal、F#、Julia、さらにはSQLやGame Boy ASM、独自の言語など、多種多様な言語が挙げられました。多くのユーザーは、AoCを新しい言語を学ぶ機会として利用しており、特定の言語が文字列処理、データ構造操作、機能プログラミング、パフォーマンス、表現力などの点でAoCに適している理由を説明しています。特に、データ構造の操作や標準ライブラリの豊富さが重視される傾向があります。&lt;/p&gt;
+&lt;h2&gt;その他の注目点&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;パズルの日数&lt;/strong&gt;: 今年は24日間ではなく12日間に短縮されたことについて、ホリデーシーズン中の時間的制約を考慮すると歓迎すべき変化だと感じるユーザーが多いようです。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サインアップの問題&lt;/strong&gt;: GoogleやGitHubなどの外部サービスを介したログインが必須であることに、プライバシーの懸念を示す声もありますが、Redditなどの「使い捨てアカウント」が利用できるという代替案も提示されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;インプットの共有制限&lt;/strong&gt;: パズルのテキストや入力ファイルをリポジトリに含めないよう求めるルールについて、一部のユーザーは理解を示しつつも、テストのためにインプットをコミットする必要があるため不便だと感じています。インプットはユーザーごとに異なる場合があり、それが競争上の公平性を保つためであるという説明もありました。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;イベントへの感謝&lt;/strong&gt;: 多くのユーザーが、毎年楽しい問題を提供してくれるAoCの作成者に感謝の意を表明しています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;2025年のAdvent of Code開催発表は、コミュニティに歓迎されていますが、グローバルリーダーボードの廃止が最も大きな話題となっています。この変更は、AIによる自動提出とそれに伴う過度な競争やストレスといった問題への対応であり、多くのユーザーが本来の「問題解決を楽しむ」というAoCの精神を取り戻す機会として肯定的に捉えています。AIの利用については倫理的な議論が続き、競争ではなく学習と探求のためのツールとしての使用が推奨されています。また、参加者たちはAoCを新しいプログラミング言語を学ぶ絶好の機会と捉え、多種多様な言語の適性について活発な意見交換を行っています。&lt;/p&gt;</description><pubDate>2025-11-30 20:13:11</pubDate><guid>46096337</guid></item><item><title>Framework Computer Now Sponsoring LVFS / Fwupd Development</title><link>https://www.phoronix.com/news/Framework-Sponsoring-LVFS</link><description>&lt;p&gt;&lt;a href="https://www.phoronix.com/news/Framework-Sponsoring-LVFS"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46089980.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Hacker Newsのコメントが提供されていません。要約するには、コメントの本文が必要です。&lt;/p&gt;</description><pubDate>2025-11-29 20:13:16</pubDate><guid>46089980</guid></item><item><title>An update on the Farphone's battery</title><link>https://far.computer/battery-update/</link><description>&lt;p&gt;&lt;a href="https://far.computer/battery-update/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/46089579.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows drive letters are not limited to A-Z - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Windows drive letters are not limited to A-Z</h1>
+        <div class="meta">
+            投稿日: 2025年11月30日 | ランク: 3
+        </div>
+        <a href="https://www.ryanliptak.com/blog/windows-drive-letters-are-not-limited-to-a-z/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Windowsのドライブレターの隠れた柔軟性と、NTカーネルがユーザーに公開しているものとの違いについて議論しています。特に、アルファベット以外の文字をドライブレターとして使用できることや、それがどのように動作するか、そして潜在的なセキュリティ上の意味合いに焦点を当てています。</p>
+<h2>Windowsのドライブレターの内部動作と柔軟性</h2>
+<p>多くのコメントは、Windows NTカーネルがユーザーに公開されているものよりもはるかに柔軟であるという認識を共有しています。<code>C:\foo</code>を<code>\??\C:\foo</code>に変換する<code>RtlDosPathNameToNtPathName_U</code>のような内部関数が、実際には<code>€:</code>のような非標準的なドライブレターを可能にしていることを説明しています。これらのドライブレターはファイルエクスプローラーには表示されませんが、特定のコードページではアクセス可能であり、<code>{GUID}</code>形式で機能へのディープリンクを作成することもできます。これは、GUIがその下にあるGUIDからアクションへの逆マッピングに大きく依存しているためであり、COMベースのコンポーネントシステムに関連しています。Xbox 360が「Game:\foo」や「Hdd0:\foo」のような文字列全体をドライブレターとして持っていたという記憶も共有されています。</p>
+<h2>マルウェアの可能性とセキュリティ上の懸念</h2>
+<p>ドライブレターの隠れた柔軟性は、マルウェア作成者にとって「非常に迷惑なマルウェア」を書くための素晴らしい方法と見なされています。非標準的なドライブレターを使用することで、マルウェアが特定の場所からファイルを隠したり、アンチウイルスソフトウェアのクラッシュを引き起こしたりする可能性があるという懸念が表明されています。ただし、ほとんどのドライブ操作には管理者権限が必要であることや、隠されたDosツリーを簡単にスキャンできないようにしながら、マルウェアがスキャンを困難にする方法についての疑問も提起されています。代替データストリーム（ADS）がファイル隠蔽の別の方法として言及されており、これらは今でも「Webのマーク」として広く使用され、セキュリティソフトウェアによって監視されています。</p>
+<h2>ドライブレターの歴史と慣習</h2>
+<p>コメントでは、Windowsのドライブレターシステムがどのように進化してきたかについても歴史的な考察がなされています。<code>A:</code>と<code>B:</code>がフロッピーディスクドライブに予約され、<code>C:</code>が最初のハードドライブであったという古い慣習が思い出されています。<code>D:</code>がCD-ROMドライブに割り当てられていた時代から、今日の2番目の内部ストレージデバイスやSDカードスロットに変わった経緯も議論されています。多くのユーザーは、ドライブレターのシステムが時代遅れであり、問題を引き起こす可能性があると考えています（例：外部ドライブのドライブレターが「盗まれる」問題）。しかし、Windowsにはドライブレターの割り当てを固定したり、ディレクトリをマウントポイントとして使用したりする機能も備わっています。</p>
+<h2>WindowsとLinuxの比較、代替のファイルシステムアクセス方法</h2>
+<p>Windowsのドライブレターシステムは、LinuxのUUIDベースのパーティション識別やディレクトリへのマウント機能と比較されています。Windowsでもドライブレターの代わりにNTFSのディレクトリマウントポイントを使用できることが指摘されています。これはPowerShellの<code>Add-PartitionAccessPath</code>コマンドレットやディスク管理GUIを通じて設定でき、アプリケーションがパスをカスタマイズできない場合の回避策として特に便利です。また、Windows NTカーネルの「オブジェクトマネージャー」は、レジストリや証明書など、多くのものを単一のグローバルVFSレイアウトとして参照するUnixの<code>/proc</code>や<code>/sys</code>に似た概念を持っていることも説明されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、Windowsのドライブレターシステムが、長年のDOS互換性層の下に、驚くほど柔軟で強力なNTカーネルの設計を隠していることを明らかにしています。非標準的な文字やGUIDをドライブレターとして使用する能力は、マルウェアの潜在的な隠蔽メカニズムとして懸念される一方で、より柔軟なファイルシステム管理（マウントポイントなど）のための高度な機能も提供しています。長年の慣習と現代的なシステムの間の緊張は、Windowsが古いソフトウェアとの後方互換性を重視していることに起因しており、その結果、現在のユーザーにとって古風で問題のあると感じられる側面が残っています。しかし、WindowsはLinuxのような代替手段と同様に、UUIDベースの識別やディレクトリへのマウントといった洗練された機能も内部的にはサポートしており、ユーザーはそれらを利用することができます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

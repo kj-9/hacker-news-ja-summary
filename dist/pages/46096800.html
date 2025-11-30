@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migrating Dillo from GitHub - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Migrating Dillo from GitHub</h1>
+        <div class="meta">
+            投稿日: 2025年11月30日 | ランク: 7
+        </div>
+        <a href="https://dillo-browser.org/news/migration-from-github/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Dilloブラウザプロジェクトが、GitHubのアクセシビリティ問題、パフォーマンスの低下、過度なJavaScript依存、特定のワークフローへの適合性の欠如を理由に、GitHubから離れることを発表しました。この決定は、オープンソースコミュニティにおけるGitHubの現状と代替プラットフォームに関する広範な議論を引き起こしています。</p>
+<h2>GitHubのフロントエンド問題</h2>
+<p>コメントでは、GitHubのフロントエンドがJavaScriptなしではほとんど機能しないこと、そして過去にはサポートされていたグレースフルデグラデーションが失われたことが指摘されています。ユーザーは、GitHubがコア製品機能をReactに移行したことが、サイトの動作が遅くなり、アクセシビリティが低下した主な原因だと推測しています。</p>
+<ul>
+<li><strong>JavaScript依存とアクセシビリティ</strong>: GitHubのフロントエンドがJavaScriptに過度に依存しているため、JavaScriptをサポートしないブラウザ（Dilloなど）では利用できないことが問題視されています。一部のコメントは、これはWCAG（ウェブコンテンツアクセシビリティガイドライン）上のアクセシビリティ問題ではないと主張していますが、JavaScriptをサポートしない、または最新のJavaScript VMを要求するブラウザのユーザーにとっては実用上の問題です。</li>
+<li><strong>パフォーマンスの低下</strong>: Reactへの移行後、GitHubのサイト速度が著しく低下したと多くのユーザーが報告しています。特にモバイルデバイスでは読み込みが遅いという懸念があります。</li>
+<li><strong>「アプリのような体験」への移行</strong>: GitHubの社員によるプレゼンテーションでは、「アプリのような体験」への顧客の期待とモバイルからの利用増加がReact採用の理由として挙げられています。しかし、多くのユーザーはデスクトップでの利用が主であり、この方向性がデスクトップユーザーの体験を犠牲にしていると批判しています。</li>
+</ul>
+<h2>GitHub代替プラットフォーム</h2>
+<p>GitHubへの不満が高まる中、代替となるGitホスティングプラットフォームへの関心が高まっています。特にForgejoとGiteaが注目されています。</p>
+<ul>
+<li><strong>Forgejo/Gitea</strong>: リソース消費量が少なく、メンテナンスが容易である点が評価されています。Go言語で書かれた単一バイナリであるため、GitLabのような多くのサービスを必要とせず、メモリ消費も大幅に少ないと報告されています。また、パッケージレジストリやOpenIDプロバイダー機能も内蔵しており、自己ホスティングに非常に適しているとされています。</li>
+<li><strong>GitLab</strong>: 一部のユーザーはGitLabのUXデザインを評価する一方で、リソース消費の多さ、機能の肥大化、有料プランへの機能移行を批判しています。</li>
+<li><strong>分散化の動き</strong>: GitHubのような単一の支配的なプラットフォームへの依存を避け、分散型・連邦型のソリューションを求める声も上がっています。SourcehutやTangledのようなプラットフォームも言及されています。</li>
+</ul>
+<h2>ワークフローと哲学の違い</h2>
+<p>GitHubのプッシュモデル（通知中心）と、Dilloプロジェクトが好むプルモデル（必要な時に情報を取りに行く）の間の違いが議論されています。</p>
+<ul>
+<li><strong>プッシュモデル vs. プルモデル</strong>: GitHubはイベント発生時に通知する「プッシュモデル」を推奨しているのに対し、Dilloプロジェクトはユーザーが情報を探しに行く「プルモデル」を好んでいます。これは、オフラインでの作業や、中断を最小限に抑えたいというニーズに基づいています。</li>
+<li><strong>メールベースのワークフロー</strong>: LinuxカーネルやSourcehutが採用しているような、メールでのパッチ交換によるワークフローがプルモデルの具体例として挙げられています。これにより、オフラインでのレビューや作業が容易になります。</li>
+<li><strong>独自のバグトラッカー</strong>: DilloプロジェクトがMarkdownファイルを解析してHTMLページを生成するシンプルな独自のバグトラッカー「buggy」を作成したことは、Hacker Newsの「ハッカー精神」の表れとして賞賛されています。これは、複雑なUIを持つ既存のツールに頼らず、自身のニーズに合わせたシンプルなソリューションを構築するアプローチです。</li>
+</ul>
+<h2>まとめ</h2>
+<p>DilloプロジェクトがGitHubから離れる決定は、GitHubの進化、特にそのフロントエンドの技術的選択とユーザーエクスペリエンスに関する広範な不満を浮き彫りにしています。パフォーマンスの低下、過度なJavaScript依存、そして特定の作業モデルへの適合性の欠如が主要な懸念事項として挙げられています。これにより、ForgejoやGiteaといったより軽量で自己ホスティングに適した代替プラットフォームへの関心が高まり、オープンソースコミュニティにおけるGitホスティングの分散化の動きが加速していることが示唆されています。また、GitHubの「アプリのような体験」へのシフトが、すべてのユーザーニーズを満たしているわけではないことも明らかになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Want Microservices, but Do You Need Them? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">You Want Microservices, but Do You Need Them?</h1>
+        <div class="meta">
+            投稿日: 2025年11月30日 | ランク: 2
+        </div>
+        <a href="https://www.docker.com/blog/do-you-really-need-microservices/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、マイクロサービスの導入に対する懐疑論が多数を占め、その複雑さや運用上の課題、代替案について活発な議論が交わされています。多くの人が、マイクロサービスは特定の状況でのみ有効であり、万能の解決策ではないと考えています。</p>
+<h2>マイクロサービスへの懐疑論と課題</h2>
+<p>多くのコメントは、マイクロサービスに対する懐疑的な見方を示しています。2018-2019年頃にピークを迎えたものの、現在では特定の状況以外で良いと考える人は少ないという意見があります。特に、システムの不必要な複雑性を増大させ、学習曲線が高く、中小企業ではオーバースペックであるという指摘が見られます。あるユーザーは、マイクロサービスは「ゼロ金利政策（ZIRP）時代の産物」であり、3層アーキテクチャがほとんどのワークロードで堅牢であると主張しています。</p>
+<p>また、マイクロサービスを導入する組織が陥りやすいミスとして、共有データベースの使用、APIバージョニングの欠如、ドメインの不適切な分離、同期アップグレードが必要な共有ライブラリの利用などが挙げられています。組織の効率性を損なう可能性も指摘され、技術的なメリットよりも意思決定や変更にかかる時間の増加が問題視されています。</p>
+<h2>代替案としてのモノリス、WebAssembly、単一バイナリ</h2>
+<p>マイクロサービスの代替案として、様々なアプローチが提案されています。</p>
+<ul>
+<li><strong>WebAssemblyモジュール:</strong> マイクロサービスではなく、自己完結型のWebAssemblyモジュールを望む声があります。これにより、環境依存を減らし、パフォーマンスと分離を両立できる可能性が議論されていますが、具体的なベンチマークデータはまだ少ないようです。</li>
+<li><strong>単一の実行可能バイナリ:</strong> 全ての機能（HTMLテンプレート、JavaScript、CSSなどを含む）を単一の巨大なバイナリにコンパイルするアプローチ（Golangバイナリ、Scalaのuberjar、Deno Compileなど）が、ホスト環境に依存せず簡単にデプロイできる利点から支持されています。</li>
+<li><strong>マクロサービス/ゴルディロックス・サービス:</strong> マイクロサービスのような極端な分割ではなく、システムのドメインやリソース要件に基づいて「適切にサイズ調整された」サービス（「マクロサービス」や「ゴルディロックス・サービス」）を求める声もあります。これらは軽量なインフラストラクチャで認証・認可をサービス内部で処理し、Kubernetesのような複雑なオーケストレーションなしにDocker Composeなどでローカルに起動できることを理想としています。</li>
+</ul>
+<h2>データベース管理と共有データ問題</h2>
+<p>マイクロサービス環境下でのデータベース管理、特に共有データベースの問題が重要なテーマとして浮上しています。共有データベーステーブルは、大規模なシステムにおいて「修正が非常に大変」な問題を引き起こすことが指摘されています。データベースは「姿を変えたグローバル変数」であるという認識も示されています。解決策として、複数のアプリケーションロジックが同じデータにアクセスする場合に、それらの間に内部APIを設けてアクセスを仕様に合わせることや、クライアントにはストアドプロシージャの実行のみを許可することなどが提案されています。</p>
+<h2>マイクロサービスの適切な適用場面</h2>
+<p>マイクロサービスが本当に有効なのは、どのような状況かについても議論されています。最も一般的な意見として、システムの異なるコンポーネント間でスケーリング要件が著しく異なる場合に、複数のサービスが必要になるという点が挙げられます。また、Kubernetesのような高度なインフラストラクチャは、専門のチームやエンジニアがいて、ブルー/グリーンデプロイメントや高度なスケーリングなどの機能が本当に必要な場合にのみ意味があるという見方もあります。逆に言えば、それらの要件がない場合は、DockerやPodman、VPSなどのシンプルな構成で十分に対応できることが多いとされています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントからは、マイクロサービスがもはや銀の弾丸ではなく、その導入には慎重な検討が必要であるという強い認識が伺えます。多くの開発者は、不必要な複雑性を避け、運用コストを削減するために、WebAssemblyモジュール、単一の実行可能バイナリ、あるいは「ゴルディロックス・サービス」のような、より実用的でドメイン駆動の代替アプローチを求めています。マイクロサービスが真に価値を発揮するのは、コンポーネント間のスケーリング要件が大きく異なる場合や、大規模な組織が専門的なチームと高度なインフラストラクチャを管理できる特定の状況に限定されるという共通認識があります。最終的には、技術的な流行に流されず、システムの複雑さを最小限に抑え、組織の効率性を考慮したアプローチを選択することが重要であると結論づけられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
