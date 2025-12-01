@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghostty compiled to WASM with xterm.js API compatibility - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ghostty compiled to WASM with xterm.js API compatibility</h1>
+        <div class="meta">
+            投稿日: 2025年12月01日 | ランク: 5
+        </div>
+        <a href="https://github.com/coder/ghostty-web" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p><code>ghostty-web</code>プロジェクトに関するHacker Newsのコメントは、WebAssemblyベースのシェルとの統合、パフォーマンス最適化の提案、およびVS Codeターミナルとしての潜在的な利用可能性について議論しています。</p>
+<h2>Wasmer/WebAssembly.sh との統合</h2>
+<p>一部のユーザーは、<code>wasmerio/webassembly.sh</code>を統合することで、ブラウザ内でパッケージインストールも可能な高機能なシェル環境を実現できる可能性を指摘しています。プロジェクトの作者であるkylecarbs氏は、現在のコマンドラインでの試用が必要なUXを改善するため、この統合に前向きな姿勢を示しています。WasmerioチームのSyrus氏も協力の意を表明し、<code>wasmer-js</code>の新しいバージョンが統合を容易にすると述べています。</p>
+<h2>パフォーマンスとGhostty RenderState API</h2>
+<p>Ghosttyの共同作成者であるmitchellh氏は、<code>ghostty-web</code>の現状のパフォーマンス、特にビューポートの取得方法に懸念を示し、ベンチマークの実施を促しています。また、より高性能なデルタ更新レンダラーを可能にするGhosttyの新しい<code>RenderState API</code>への移行を強く推奨しており、現在の行ごとの取得方法よりも効率的だと指摘しています。kylecarbs氏は、現段階ではパフォーマンスよりも概念実証（POC）に重点を置いていると認めつつ、<code>RenderState API</code>への切り替えとベンチマークの実施を計画していると述べています。彼はGhosttyチームの協力に感謝し、プロジェクトの構築の容易さに驚いたとコメントしています。</p>
+<h2>VS Code (code-server) ターミナルとしての可能性</h2>
+<p>あるユーザーは、<code>ghostty-web</code>がVisual Studio Code（特に<code>code-server</code>）のターミナルとして利用できるかどうかを質問しました。これに対し、kylecarbs氏は「まさにそれが目標だ」と肯定的に回答しており、将来的には<code>xterm.js</code>のドロップイン代替となることを目指していることが示唆されています。</p>
+<h2>まとめ</h2>
+<p><code>ghostty-web</code>プロジェクトは、WebAssemblyベースのシェル統合によるUX改善、Ghosttyの高性能な<code>RenderState API</code>を活用したパフォーマンス最適化、そして最終的にはVS CodeなどのIDEにおける<code>xterm.js</code>の代替となることを目指している初期段階のプロジェクトです。コミュニティからは、パフォーマンスに関する具体的な改善提案と、潜在的な応用分野への大きな期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

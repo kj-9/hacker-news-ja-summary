@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why xor eax, eax? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why xor eax, eax?</h1>
+        <div class="meta">
+            投稿日: 2025年12月01日 | ランク: 6
+        </div>
+        <a href="https://xania.org/202512/01-xor-eax-eax" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、x86アセンブリにおけるレジスタをゼロにするための一般的なイディオムである<code>xor eax,eax</code>について議論しています。この命令は、そのコンパクトさ、効率性、そして現代のCPUでの最適化された振る舞いから、<code>mov eax,0</code>のような他の方法よりも推奨されています。</p>
+<h2>コードの効率性と歴史的背景</h2>
+<p>多くのコメント投稿者は、<code>xor eax,eax</code>が<code>mov eax,0</code>よりも短い命令であるため、メモリ使用量を節約し、命令フェッチを高速化するという点で、特に初期のCPUやメモリ制約の厳しいシステムにおいて重要であったことを指摘しています。
+- 8086プロセッサの時代から、<code>xor ax,ax</code>は<code>mov ax,0</code>よりもバイト数を節約し、効率的でした。
+- Z80やIBM 370などの他のアーキテクチャでも、同様の理由でレジスタ自身とXOR演算を行うことでレジスタをクリアするイディオムが存在しました。
+- Pentium Proのような一部のプロセッサでは<code>mov</code>が推奨された時期もありましたが、一般的には<code>xor</code>が標準的です。</p>
+<h2>現代のCPUでの最適化（ゼロ化イディオム）</h2>
+<p>この議論の核心は、現代のx86 CPUが<code>xor eax,eax</code>のようなゼロ化イディオムをパイプラインの早い段階で認識し、特別に最適化しているという点です。
+- CPUは、この命令をレジスタリネーミングのトリックとして扱い、古い値への依存性を断ち切り、レジスタをゼロ化された物理レジスタに割り当てることで、実質的に実行キューから命令を削除し、<strong>ゼロサイクル</strong>で実行します。
+- この最適化は、<code>mov eax,0</code>のような他の命令にも技術的には適用可能ですが、<code>xor eax,eax</code>がより一般的で短いため、CPUベンダーはそちらを最適化する傾向にあります。
+- 部分レジスタ書き込み（例：64ビットレジスタの<code>rax</code>のうち32ビットの<code>eax</code>に書き込む）の場合、x86-64アーキテクチャは上位32ビットを自動的にゼロクリアします。これは、下位互換性のためだけでなく、アウトオブオーダー実行における依存関係を解消するためにも役立ちます。</p>
+<h2>RISC-Vとの比較（ゼロレジスタの有無）</h2>
+<p>コメントスレッドでは、x86に専用のゼロレジスタがないことと、RISC-VのようなRISCアーキテクチャがゼロレジスタを持つことの是非が比較されています。
+- RISC-Vでは、専用のゼロレジスタ（<code>x0</code>）を設けることで、<code>mov</code>、<code>nop</code>、<code>load immediate</code>などの多くの命令を、ゼロレジスタを使った加算やORなどの基本的な命令で代替できます。これにより、命令セットのシンプル化とハードウェアの複雑性軽減に貢献します。
+- RISC vs CISCの議論に発展し、RISCのシンプルさとCISCのコンパクトさのトレードオフが語られています。現代のCPUでは、CISC命令は内部的にRISC風のマイクロオペレーションに変換されるため、両者の区別は曖昧になっているという意見もあります。
+- ゼロレジスタを持つRISCアーキテクチャでも、命令エンコーディングの設計には課題があり、RISC-Vの固定長32ビット命令形式や即値の扱いに批判的な意見も見られます。</p>
+<h2>その他</h2>
+<ul>
+<li><code>xor eax,eax</code>は、他のフラグ（キャリーフラグなど）もクリアするため、サブトラクション（<code>sub eax,eax</code>）とは微妙に異なる振る舞いをします。</li>
+<li>過去のZ80や6502のようなマイクロプロセッサの時代に、XOR演算が暗号化ルーチンやスプライト操作に使われたり、アセンブリプログラマーが手作業で機械語を記述した時代の思い出話も語られています。</li>
+<li>現代のソフトウェア開発における効率性の欠如（巨大なElectronアプリなど）との対比も述べられています。</li>
+</ul>
+<h2>まとめ</h2>
+<p><code>xor eax,eax</code>は、x86アセンブリにおいてレジスタをゼロクリアするコンパクトで効率的なイディオムです。この命令は、命令セットの設計における歴史的な制約から生まれましたが、現代のCPUでは「ゼロ化イディオム」として特別に最適化され、実質ゼロサイクルで実行されます。これは、レジスタリネーミングなどのアウトオブオーダー実行の仕組みと結びついています。議論は、x86のゼロレジスタの欠如とRISC-Vのゼロレジスタを持つ設計との比較にも及び、命令セット設計のトレードオフと進化が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
