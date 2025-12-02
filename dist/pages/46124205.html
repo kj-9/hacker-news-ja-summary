@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100k TPS over a billion rows: the unreasonable effectiveness of SQLite - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">100k TPS over a billion rows: the unreasonable effectiveness of SQLite</h1>
+        <div class="meta">
+            投稿日: 2025年12月02日 | ランク: 2
+        </div>
+        <a href="https://andersmurphy.com/2025/12/02/100000-tps-over-a-billion-rows-the-unreasonable-effectiveness-of-sqlite.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、SQLiteをデータベースとして使用する際の利点、特にパフォーマンスとシンプルさに焦点を当てて議論しています。多くのコメントは、特定のワークロードやアーキテクチャにおいて、ネットワークデータベース（PostgreSQLなど）ではなくSQLiteを選択する合理性について論じています。</p>
+<h2>パフォーマンスとスケーリング</h2>
+<p>コメントでは、SQLiteのパフォーマンスの高さ、特にデータが単一マシンに収まる場合に強調されています。多くのユーザーは、ネットワーク遅延がないため、ローカルに組み込まれたSQLiteがリモートデータベースよりもはるかに高速であることを指摘しています。</p>
+<ul>
+<li><strong>単一マシンでの高いスループット:</strong> データがRAMに収まる、または単一マシンで処理できる場合、SQLiteは非常に高いスループットを発揮します。あるユーザーは、単一のラップトップで10万TPSを達成できると述べています。</li>
+<li><strong>ネットワークのボトルネック回避:</strong> ネットワークを介したデータベース接続は、特にトランザクションが頻繁な場合にパフォーマンスのボトルネックになることが指摘されています。SQLiteはアプリケーションと同じプロセスで動作するため、このオーバーヘッドを完全に回避できます。</li>
+<li><strong>スケールアップ vs スケールアウト:</strong> 安定したワークロードではスケールアップ（より強力な単一マシンを使用）が多くの問題を解決しますが、突発的な負荷（急増するトラフィックなど）に対する弾力性はスケールアウト（複数のマシンに分散）の方が優れていると議論されています。しかし、SQLiteの驚異的なパフォーマンスは、かつては分散システムが必要だったような多くのワークロードを単一マシンで処理可能にしています。</li>
+</ul>
+<h2>ホスティングとコスト</h2>
+<p>SQLiteのような組み込みデータベースを使用する場合のホスティングの選択肢とコスト効率も議論の的となっています。</p>
+<ul>
+<li><strong>クラウド vs ベアメタル:</strong> 大規模なRAMとvCoreを持つAWSインスタンス（u-24tb1.112xlargeなど）は高価ですが、Hetznerのようなプロバイダーからベアメタルマシンを借りると、コアあたりのパフォーマンスが2～3倍高く、コストを90%削減できるという意見があります。</li>
+<li><strong>Hetznerの官僚主義:</strong> Hetznerはコストパフォーマンスが高い一方で、一部のユーザーはアカウント開設や管理における「官僚的な書類手続き」を問題視しています。ただし、他のユーザーはID/パスポートの合理的な確認要件を除けば、Hetznerとのやり取りは非常にスムーズだと反論しています。</li>
+</ul>
+<h2>SQLiteのプロダクション利用と課題</h2>
+<p>SQLiteを本番環境で「限界まで」活用した事例や、それに伴う課題についても言及されています。</p>
+<ul>
+<li><strong>成功事例:</strong> Expensifyのブログ記事「Scaling SQLite to 4M QPS on a Single Server」が、SQLiteを大規模に活用した最も極端な事例として挙げられています。また、TxtAIや個人のウェブサイト（limereader.com）でSQLiteがコンテンツストレージとしてうまく機能している例も紹介されています。</li>
+<li><strong>WALモードとレプリケーション:</strong> WAL (Write-Ahead Logging) モードは、SQLiteの性能と信頼性を向上させる重要な機能として認識されています。Litestreamのようなツールは、SQLiteのレプリケーションを可能にし、ウェブアプリケーションでの利用をより現実的なものにしています。</li>
+<li><strong>マルチスレッドアクセス:</strong> SQLiteを複数のスレッドから安全にアクセスする場合、<code>SQLITE_OPEN_FULLMUTEX</code>フラグの使用や、書き込みを単一スレッドに集中させるMPSC (Multi-Producer, Single-Consumer) キューの利用が推奨されています。各スレッドに個別のコネクションを使用することも良いアプローチとされています。</li>
+<li><strong>デプロイとダウンタイム:</strong> 組み込みデータベースはアプリケーションと同じインスタンスに存在するため、アプリケーションの再デプロイやデータベースのマイグレーションは、リモートデータベースの場合よりも複雑になり、ダウンタイムが発生する可能性があると指摘されています。永続ストレージやNVMeの使用、そしてLitestreamのようなツールが、この課題を軽減するのに役立ちます。</li>
+<li><strong>WAL破損の懸念:</strong> WALチェックサムがサイレントに失敗し、データが失われる可能性についての過去の議論が持ち出されています。しかし、健全なディスクとファイルシステムがあれば、SQLite WALの破損は起こらないと反論されています。</li>
+</ul>
+<h2>議論の対象と「リンゴとオレンジ」の比較</h2>
+<p>記事がSQLiteとPostgreSQLを比較している点について、一部のコメントでは「リンゴとオレンジ」の比較であるとの批判があります。</p>
+<ul>
+<li><strong>異なる問題/解決策:</strong> SQLiteがローカルに組み込まれたデータベースであるのに対し、PostgreSQLは通常ネットワークを介してアクセスされるデータベースであり、両者を直接比較することは適切ではないという意見があります。</li>
+<li><strong>記事の意図:</strong> 記事の著者は、SQLiteとPostgreSQLを直接比較するのではなく、「ネットワークデータベースの根本的な限界」を説明することを意図していたと述べています。多くのワークロードでは、ネットワークの遅延がボトルネックであり、ローカルデータベースはその問題を解決するというのが主な論点です。</li>
+<li><strong>非効率な業界パターン:</strong> データベースを別のホストで実行するという業界の一般的なパターンは、実際には非効率である可能性があるという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このスレッドは、SQLiteが特定の条件下、特にデータが単一マシンに収まり、ネットワーク遅延がボトルネックとなるようなワークロードにおいて、非常に強力で効率的なデータベースソリューションであることを示しています。クラウドコストの削減、シンプルなアーキテクチャ、高いスループットといった利点が強調される一方で、弾力性の欠如、デプロイの複雑さ、マルチスレッドアクセス時の注意点といった課題も議論されています。最終的には、「どのデータベースが最適か」ではなく、「アーキテクチャがネットワーク境界を越える必要があるか」という根本的な問いが重要であるという点で意見が一致しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
