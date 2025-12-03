@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCE Vulnerability in React and Next.js - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">RCE Vulnerability in React and Next.js</h1>
+        <div class="meta">
+            投稿日: 2025年12月03日 | ランク: 7
+        </div>
+        <a href="https://github.com/vercel/next.js/security/advisories/GHSA-9qr9-h5gf-34mp" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのスレッドは、React Server Components (RSC) における重大なリモートコード実行 (RCE) の脆弱性 (CVE-2025-55182) に関するものです。この脆弱性は、サーバーがクライアントからの悪意のあるペイロードを安全でない方法で逆シリアル化し、サーバー上でコード実行を可能にするというもので、CVSSスコアは10.0と評価されています。</p>
+<h2>CVE-2025-55182の深刻度と影響範囲</h2>
+<p>コメントでは、このCVEがCVSSスコア10.0という最高レベルであり、広く利用されているプロジェクトであるNext.jsにバンドルされていることから、その深刻さが強調されています。影響を受けるパッケージは実験的なものとマークされていましたが、Next.jsを介して間接的に利用されているため、実際の利用数はnpmのダウンロード数よりもはるかに多いと指摘されています。Vercel、Cloudflare、Netlify、Deno Deployなどのプラットフォームは、この問題に対処するための軽減策を迅速に展開していますが、ユーザーには直ちにアップグレードするよう強く推奨されています。</p>
+<h2>React Server Componentsの設計思想への批判</h2>
+<p>多くのコメントが、RSCの根本的な設計選択、特に「魔法のような」クライアントとサーバー間の結合や、明確なRPC層の欠如に対して批判的です。ユーザーは、サーバー機能を「シームレスに」呼び出すことで、セキュリティとパフォーマンスに大きな影響を与える境界が曖昧になることを懸念しており、これが今回のRCEにつながったと見ています。従来のRPCフレームワークがスキーマや明示的なサービス定義を必要とするのに対し、ReactがAPIサーフェスをバンドラーに依存させ、エンドポイントをクライアントの要求に任せたことが問題の原因であるという意見があります。</p>
+<h2>RSCの価値と代替手段に関する議論</h2>
+<p>RSCが提供するメリット（例：より簡単なリアクティビティ、API応答がHTMLでパース可能である必要がない、コードが実行される場所の柔軟性）を擁護する意見もありますが、多くの開発者はRSCの複雑さと、従来のHTMLページやHTMXのようなアプローチ、あるいはSSRと比較した場合の実質的な利点について疑問を呈しています。Reactが複雑な新機能に投資する一方で、開発者体験や既存の課題解決に注力すべきだという声も上がっています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、React Server Componentsの重大なRCE脆弱性に関するもので、その深刻度、広範な影響、そしてRSCの根本的な設計選択に対する強い批判が中心となっています。多くのコメントが、クライアントとサーバー間の「魔法のような」統合や、明確なRPC層の欠如が今回の脆弱性につながったと指摘しており、RSCの価値と代替手段についても活発な議論が交わされています。この事件は、ReactおよびNext.jsチームにとって信頼性の危機であり、今後の開発における設計思想の見直しを促すものとなるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
