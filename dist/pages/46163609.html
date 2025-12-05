@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patterns for Defensive Programming in Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Patterns for Defensive Programming in Rust</h1>
+        <div class="meta">
+            投稿日: 2025年12月05日 | ランク: 3
+        </div>
+        <a href="https://corrode.dev/blog/defensive-programming/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Rustにおける防御的プログラミングパターンに関する記事について議論しています。特に、ビジネスロジックの「フットガン」（自己破壊的なバグ）を防ぐためのAPI設計、PartialEqの実装、および<code>bool</code>パラメータの代替方法に焦点を当てています。</p>
+<h2>記事の質の高さと実用性</h2>
+<p>多くのコメント投稿者は、この記事がRustの最高の記事の一つであり、非常に実用的であると高く評価しています。通常のAPI設計における防御的プログラミングの側面をカバーしており、多くのRust記事が扱う「unsafe」のような高度なトピックではなく、ビジネスロジックにおけるバグを防ぐための現実的なアプローチを示している点が特に好評です。一時的な可変性（temporary mutability）のパターンも多くの読者に新しい視点を提供しました。</p>
+<h2><code>TryFrom</code>とエラーハンドリング</h2>
+<p><code>From</code>トレイトの実装における<code>unwrap_or_else()</code>の使用に関して議論があり、<code>TryFrom</code>トレイトがRust 1.34で導入されたため、それ以前のコードであれば理解できるという意見がありました。Rustに不慣れな人にとっては<code>unwrap_or_else()</code>が命令的で脅迫的に聞こえるという意見もあり、それに対して<code>map_or_else</code>や<code>ok_or_else</code>といった類似のメソッドが挙げられました。</p>
+<h2><code>bool</code>パラメータの代替としてのEnum</h2>
+<p><code>bool</code>パラメータを避ける方法として、構造体で<code>bool</code>をラップする方法や、enumと<code>match</code>文を使用する方法が議論されました。多くの人は<code>bool</code>パラメータよりもenumと<code>match</code>文を好む傾向があります。enumを使用することで、ロジックをカプセル化するトレイトを実装したり、enumのどのメンバーに対しても実行される便利な関数を<code>impl {}</code>ブロックで追加したりできるという提案がありました。</p>
+<h2><code>PartialEq</code>の実装と構造体の分解</h2>
+<p><code>PizzaOrder</code>の例における部分的な等価性の実装について、<code>ordered_at</code>タイムスタンプを無視して比較するという問題が提示されました。これに対して、問題を解決する最も簡単な方法は、<code>PizzaOrder</code>を<code>PizzaDetails</code>と<code>PizzaOrder</code>の2つの構造体に分解し、<code>PizzaDetails</code>で<code>PartialEq</code>を導出し、<code>PizzaOrder</code>の<code>PartialEq</code>実装で<code>self.details == rhs.details</code>を比較することだという意見がありました。これは、関連性のない懸念事項を一つの構造体にまとめすぎないようにするという設計原則を示しています。</p>
+<h2>コーディングパターンのモニタリング</h2>
+<p>異なるコードベースで使用されるコーディングパターンを継続的に監視するチームの価値について疑問が投げかけられました。SOCチームやQAチームのように、コードベースのライフサイクルを通じてコーディングパターンがどのように進化するかを追跡することは、自動化されたコード分析ツールではカバーしきれない領域で有用である可能性があります。大手テック企業にはそれに近いチームが存在するが、数百万行のコードでは難しいという見解が示されました。</p>
+<h2>まとめ</h2>
+<p>この記事は、Rustにおける防御的プログラミング、特にビジネスロジックのバグを防ぐためのAPI設計とパターンについて、非常に実用的で高品質な情報を提供していると広く評価されています。<code>PartialEq</code>の適切な実装、<code>bool</code>パラメータの代替としてのenumの活用、そして一時的な可変性パターンが主な焦点です。コメントでは、これらのパターンに関する具体的な疑問や、より広範なコード品質管理の課題についても議論が展開されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
