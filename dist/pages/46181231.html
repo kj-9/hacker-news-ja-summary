@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Titans architecture, helping AI have long-term memory - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Google Titans architecture, helping AI have long-term memory</h1>
+        <div class="meta">
+            投稿日: 2025年12月07日 | ランク: 3
+        </div>
+        <a href="https://research.google/blog/titans-miras-helping-ai-have-long-term-memory/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Googleの研究論文「Titans: Learning to Memorize at Test Time」について議論しています。この論文は、LLM（大規模言語モデル）に推論時に学習させる新しいアーキテクチャ「Titans」を提案しており、長期記憶と自己修正能力を持つことを特徴としています。</p>
+<h2>オープンリサーチと企業の貢献</h2>
+<p>GoogleがこのようなレベルのAI研究を公開していることについて、多くのユーザーが評価しています。同様にMeta（Llama、VGGT、Dinov3、Segment Anythingなど）やByteDance（Lumineなど）もオープンな研究を進めていることが挙げられています。しかし、Googleが過去には初期の重要な技術（GFS, BigTable, Borgなど）を遅れて公開していたことや、MetaのAI研究に対する評価が分かれていること（一部は素晴らしい研究と評価する一方で、実用モデルの提供が遅れていることを批判）も指摘されています。</p>
+<h2>Titansの機能と潜在的影響</h2>
+<p>Titansアーキテクチャは、推論時にモデルが学習し、長期記憶を形成する能力を持つ点が注目されています。これは、現在のLLMの大きな欠点である「ステートレス性」を克服し、ユーザーとの長期的なインタラクションを通じてパーソナライズされた学習を可能にすると考えられています。一部のユーザーは、これを「AIにおけるリムビックシステム（辺縁系）」と表現し、AIに感情的な状態や「欲求」を導入する可能性を示唆していますが、そのリスク（アライメント問題）を懸念する声もあります。</p>
+<h2>課題と実用化への道のり</h2>
+<p>論文で提案されているTitansアーキテクチャが実際にどれほどの価値を持つのかについては、懐疑的な意見もあります。論文が公開されてから時間が経っているにもかかわらず、GoogleがTitansベースのモデルコードやウェイトを公開していないことが指摘されています。これは、Google自身がこのアーキテクチャを大規模にスケールアップする意欲がない、あるいはまだ実用的なレベルではないためではないかという見方もあります。また、新しいアーキテクチャが既存のTransformerベースのLLMのエコシステムに取って代わることの難しさ（パス依存性）も議論されています。</p>
+<h2>AIビジネスと製品戦略</h2>
+<p>AI技術が製品にどのように統合されるか、そしてどの企業がこの分野で成功するかについての議論も活発です。一部のユーザーは、最終的に「勝利」するのは、優れたモデルだけでなく、既存の製品ラインにAIをうまく組み込み、具体的な問題を解決する製品デザインに焦点を当てる企業であると主張しています。Google（検索、YouTube、GCP）とAmazon（Retail、AWS）は、強力なインフラと既存のビジネスを活用できるため有利であると見られています。OpenAIのようなモデル開発に特化した企業は、他社への依存度が高いことから長期的な収益性で苦戦する可能性が指摘されています。</p>
+<h2>まとめ</h2>
+<p>Googleの「Titans」論文は、LLMが推論時に学習し、長期記憶を持つことで、より人間らしいインタラクションを可能にする可能性を提示し、Hacker Newsで活発な議論を巻き起こしました。この技術がAIの未来において重要なステップとなり得ると期待される一方で、その実用性や、オープンリサーチにおける企業の真の意図、そしてAIビジネスにおける製品戦略の重要性について、多角的な視点から議論が交わされています。特に、現在のAIモデルが抱えるステートレス性の問題を克服し、ユーザー固有の経験に基づいて進化するAIの実現が、今後の主要なテーマとなることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
