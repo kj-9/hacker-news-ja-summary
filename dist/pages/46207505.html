@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>If you&#x27;re going to vibe code, why not do it in C? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">If you&#x27;re going to vibe code, why not do it in C?</h1>
+        <div class="meta">
+            投稿日: 2025年12月09日 | ランク: 5
+        </div>
+        <a href="https://stephenramsay.net/posts/vibe-coding.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、LLMによる「Vibe Coding」の概念と、AIが生成するコードに最適なプログラミング言語についての議論で賑わっています。著者はCやアセンブリ言語でのVibe Codingの可能性を探りますが、コメントの多くは、AIが生成するコードの品質と、Rustのような、より厳格なチェックと安全機能を持つ言語の利点に焦点を当てています。</p>
+<h2>Vibe Codingの有効性と現実性</h2>
+<p>Vibe Coding（ユーザーがLLMにコード生成を依頼し、その出力の多くをレビューせずに受け入れること）の有効性について、コミュニティは意見が分かれています。</p>
+<ul>
+<li><strong>肯定派</strong>: 一部のユーザーは、Vibe Codingが特に概念実証や小規模プロジェクトで非常に効果的であると主張しています。LLMが要約し、アルゴリズムを実装するのを手伝うことで、生産性を10倍に高めることができるという人もいます。Webアプリをわずか5日で開発した例も挙げられています。</li>
+<li><strong>否定派</strong>: 多くの人は、Vibe Codingが「雑多なコード」や「ひどいもの」を生み出し、長期的な保守性や堅牢性に欠けると考えています。実際の商業用ソフトウェア開発では、漠然とした要件、移り変わる予算、経験の浅いユーザーといった課題があるため、Vibe Codingは現実的ではないと指摘されています。既存のオープンソースプロジェクトで大規模なバグを修正する際にLLMが失敗したという経験も共有されています。</li>
+<li><strong>AIの生産性向上</strong>: AIがコード自体を書くかどうかに関わらず、要件の収集、コードの検査、レビュー、バグの発見、情報調査など、多くの面で開発者の生産性を大幅に向上させることができるという意見は広く共有されています。AIのスキル不足を指摘する批判に対し、それは「AIスキル不足」であり、AIを適切に活用できていないだけだと反論する人もいます。</li>
+</ul>
+<h2>AI生成コードに最適な言語</h2>
+<p>AIがコードを生成する際に最適な言語は何かという問いに対して、様々な意見が交わされています。</p>
+<ul>
+<li><strong>C/アセンブリの課題</strong>: 著者はCやアセンブリでのVibe Codingの可能性を提示していますが、多くのコメントはこれに強く反対しています。Cはメモリ安全性の問題や未定義の動作、デバッグの難しさがあり、LLMがこれらの問題を回避できるとは考えにくいと指摘されています。特に、既存のCコードベースには質の悪いコードが大量に存在するため、LLMが質の高いCコードを生成できる可能性は低いとされます。アセンブリに至っては、デバッグの困難さ、移植性のなさ、複雑さから、現実的ではないという意見が支配的です。</li>
+<li><strong>Rustの利点</strong>: Rustは、Vibe Codingに非常に適している言語として頻繁に挙げられています。Rustの型システム、ライフタイム、メモリ安全性保証は、LLMがメモリ安全性の問題やその他の論理エラーを減らすのに役立つとされています。コンパイラからの豊富なフィードバックは、LLMが間違いを特定し、修正するのに役立つという意見もあります。ただし、Rustは論理エラー自体を防ぐわけではないという反論も一部にあります。</li>
+<li><strong>その他の高水準言語</strong>: Haskell、Lean、Clojure、Go、Elixir、Python、C#、Java、Swiftなどの高水準言語も議論の対象となっています。HaskellやLeanのような形式的な言語は「真のゴールドスタンダード」と見なされることもありますが、LLMの学習データが不足しているという課題があります。LLMは、人間にとって読みやすい言語や、安全機能が組み込まれている言語でより良いパフォーマンスを発揮する傾向があるという意見もあります。LLMは、特定の言語のエコシステムやコードパターンに影響されるため、言語選択が生成されるコードの品質に大きな影響を与えるという観察もなされています。</li>
+<li><strong>言語設計の未来</strong>: AIがコードを生成する時代において、プログラミング言語はどのように設計されるべきかという根本的な問いも提起されています。LLM向けに最適化された、厳格な仕様、強力な静的型付け、豊富なテスト、例外処理などを備えた、人間にとっては記述に手間がかかるが正確性を保証する言語の可能性が議論されています。</li>
+</ul>
+<h2>要件定義とソフトスキル</h2>
+<p>コード生成以外の開発プロセスにおけるAIの役割についても議論されています。</p>
+<ul>
+<li><strong>要件定義の難しさ</strong>: 多くの開発者は、コーディングそのものよりも、不明確で不完全な要件を明確にすることに、より大きな課題を感じています。PMやステークホルダーが要件を正確に言語化できないことが、生産性の主なボトルネックであると指摘されています。</li>
+<li><strong>AIによる要件支援</strong>: LLMは、漠然としたチケットを正確にしたり、ステークホルダーとの議論のプラットフォームを作成したりするなど、要件定義のプロセスを支援できるという意見もあります。これにより、PMが「愚かな質問」をLLMに投げかけ、そこから詳細な要件セットを構築できる可能性も示唆されています。しかし、LLMがドメイン知識や製品知識をどこから得るのか、また非技術的なステークホルダーがロボットとのコミュニケーションに忍耐強く対応できるのかという懸念も表明されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、LLMによるVibe Codingの現実的な有効性について活発な議論が交わされていることを示しています。著者のCやアセンブリでのVibe Codingの提案は懐疑的に受け止められ、多くの開発者は、メモリ安全性や厳格な型チェックを提供するRustのような言語が、AIが生成するコードの品質を保証するために好ましいと考えています。また、AIはコード生成だけでなく、要件定義や情報収集など、ソフトウェア開発プロセスの他の側面でも大きな生産性向上をもたらす可能性があるという見方が共有されています。LLMの出現により、プログラミング言語の設計哲学自体が再考される時期が来ているという洞察も示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

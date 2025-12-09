@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaiju – General purpose 3D/2D game engine in Go and Vulkan with built in editor - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Kaiju – General purpose 3D/2D game engine in Go and Vulkan with built in editor</h1>
+        <div class="meta">
+            投稿日: 2025年12月09日 | ランク: 9
+        </div>
+        <a href="https://github.com/KaijuEngine/kaiju" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Go言語で書かれたゲームエンジン「Kaiju Engine」に関するもので、その性能主張、開発プロセス、ガベージコレクション（GC）の利用、そしてオープンソースのゲームエンジンプロジェクト全般に対する見方について議論されています。</p>
+<h2>「vibe coded」かどうか</h2>
+<p>一部のユーザーは、READMEファイルの絵文字の多さや文法ミスから、このプロジェクトが「vibe coded」（衝動的、勢いでコーディングされた）ように見えるとコメントしています。しかし、TheDongは2015年から2023年までのコミット履歴から、少なくとも一部は「vibe coding」以前から存在すると指摘しています。また、READMEがLLM（大規模言語モデル）によって生成されたものではないと推測する意見もあります。</p>
+<h2>macOSでの動作に関する課題</h2>
+<p>MindSpunkは、macOSでの動作が困難な理由として、ウィンドウ処理や入力にSDLのようなライブラリを使用せず、Objective-CやSwiftのmacOSインターフェースにGoコードからバインドするのが難しいこと、さらにMoltenVKの統合が必要なことを挙げています。</p>
+<h2>ガベージコレクション（GC）の利用について</h2>
+<p>コメントでは、ゲームエンジンにおけるGCの利用とそれに対する認識が大きく議論されています。</p>
+<ul>
+<li><strong>Unity/GodotとGC</strong>: 多くのGodotユーザーはGDScriptやC#を使用しており、これらの言語はGCを利用しています。UnityユーザーもGCのコストを認識し、オブジェクトプーリングなどで回避策を講じていると述べられています。</li>
+<li><strong>GDScriptと参照カウント</strong>: GDScriptはGCではなく参照カウントを使用しており、これが「stop-the-world」なGCポーズを回避すると主張されています。しかし、参照カウントもCS（コンピュータサイエンス）の観点からはGCアルゴリズムの一種であり、参照カウントが連鎖的にデリファレンスと解放を引き起こすことでバースト的なパフォーマンスになる可能性も指摘されています。</li>
+<li><strong>GCとゲームのパフォーマンス</strong>: ゲーム開発では平均フレームタイムよりもピークフレームタイムが重要視されるため、GCポーズは特に問題視されます。しかし、Goや最近のC#はGCフリーズを最小限に抑えるように進化しており、実装によっては良好なパフォーマンスを達成できるという意見もあります。</li>
+<li><strong>Unreal EngineとGC</strong>: Unreal EngineもC++方言やブループリントでGCを利用しており、もはや純粋な手動メモリ管理だけのゲームエンジンは稀であるという見解が示されています。</li>
+</ul>
+<h2>ゲームエンジン開発とゲーム制作</h2>
+<p>多くのGitHubリポジトリにゲームエンジンが溢れている現状について議論されています。</p>
+<ul>
+<li><strong>エンジン開発の魅力</strong>: エンジン開発は技術的な最適化に焦点を当てることができ、ゲーム制作のような「楽しいか」といった主観的な問題に直面する必要がないため、技術者にとって魅力的だとされています。</li>
+<li><strong>「エンジンを作るよりゲームを作る方が簡単」という意見</strong>: エンジンは目標が曖昧でステークホルダーがいないため、ゲームを作るよりも「簡単」だと指摘する意見があります。ゲームは具体的な目標とトレードオフを伴うため、エンジンが本当に有用になるのはゲームを実際に作るときだと述べられています。</li>
+<li><strong>学習ツールとしてのエンジン開発</strong>: エンジン開発は、高性能プログラミングを学ぶための楽しく魅力的な手段として認識されています。ただし、実際にゲームを出荷する難しさは別途存在します。</li>
+<li><strong>ポートフォリオプロジェクトとしての価値</strong>: エンジン開発は、大学の卒業論文やAAAスタジオのエンジンプログラマー職につながる価値あるポートフォリオプロジェクトとなり得るとも言われています。</li>
+</ul>
+<h2>「Unityより9倍速い」という主張について</h2>
+<p>Kaiju Engineの「Unityより9倍速い」という主張は、多くのコメントで疑問視されています。</p>
+<ul>
+<li><strong>空のシーンでのベンチマーク</strong>: このベンチマークは空のシーンで行われており、実際のゲームワークロードにおけるエンジンの振る舞いを反映していないと批判されています。これは、抽象化レイヤーの薄さを測るものであり、実用的なパフォーマンス指標ではないと指摘されています。</li>
+<li><strong>誤解を招く表現</strong>: このような主張は「disingenuous」（不誠実）であり、プロジェクトを真剣に受け止めるべきではないという厳しい意見もあります。</li>
+<li><strong>オーバーヘッドと実際のパフォーマンス</strong>: 成熟したエンジンが必要とするツール、シーングラフの複雑さ、エディタ統合、GCプレッシャーなどからのオーバーヘッドがない分、非常に軽量なエンジンが「速く」感じることはあるものの、実際のゲームでは意味がないとされています。</li>
+</ul>
+<h2>その他のコメント</h2>
+<ul>
+<li><strong>コンパイル時間</strong>: Goの利点として、バイナリのコンパイル時間の速さが挙げられています。</li>
+<li><strong>アセンブリコード</strong>: 作者がアセンブリコードを書くことが「幸福の大きな後押し」になったという記述に対し、具体的な例を求める声があります。</li>
+<li><strong>サウンド機能</strong>: サウンドを作成できるかという質問があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Kaiju Engineに関するHacker Newsのコメントは、Goで書かれた新しいゲームエンジンに対する期待と批判が入り混じったものです。特に「Unityより9倍速い」という空のシーンでの性能主張は、実際のゲーム開発におけるエンジンの有用性を示すものではないとして強く疑問視されています。しかし、GC言語での高性能プログラミングの探求、エンジン開発を通じた学習の機会、そして既存のエンジンにはない新しいアプローチへの関心も示されています。ガベージコレクションの性質とそのゲームにおける影響についても活発な議論が展開され、エンジン開発とゲーム制作の違いについても興味深い考察がなされています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
