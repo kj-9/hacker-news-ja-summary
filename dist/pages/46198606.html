@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why the Sanitizer API is just `setHTML()` - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why the Sanitizer API is just `setHTML()`</h1>
+        <div class="meta">
+            投稿日: 2025年12月10日 | ランク: 9
+        </div>
+        <a href="https://frederikbraun.de/why-sethtml.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ブラウザに新しいHTML Sanitizer APIを組み込むという提案に関する記事について議論しています。現在のHTMLサニタイズライブラリを置き換えることを目的としたこのAPIのセキュリティ、使いやすさ、および設計上の考慮事項に焦点が当てられています。</p>
+<h2>新しいSanitizer APIの必要性</h2>
+<p>コメントの多くは、DOMPurifyのような既存のライブラリの必要性をブラウザAPIに組み込むことで置き換えるというSanitizer APIの目的を支持しています。特に、「Mutation XSS (mXSS)」の問題が強調されています。これは、HTMLを文字列にサニタイズしてから<code>innerHTML</code>に設定する従来の方法が、HTML解析の不安定さや文脈依存性により、予期せぬ脆弱性を引き起こす可能性があるというものです。新しいAPIは、この二重解析のエラーをなくし、より安全なサニタイズプロセスを提供することが期待されています。</p>
+<h2>APIの設計と命名</h2>
+<p>APIの設計と命名について、いくつかの重要な議論がありました。
+*   <strong>文脈の欠如</strong>: 記事の著者が、開発中のAPIが何であるかという文脈を冒頭で提供していないことに対して、読者が混乱したという批判がありました。多くのブログ記事は、その分野の専門家ではない幅広い読者層に読まれるため、冒頭で簡単な文脈を提供することの重要性が強調されています。
+*   <strong>安全なAPI設計</strong>: セキュリティ関連のAPIは、開発者が意図せずとも安全な方法を使用するように設計されるべきだという意見が多く見られました。例えば、Rustの<code>unsafe</code>キーワードや<code>danger_accept_invalid_certs</code>のような命名規則を引用し、安全な関数を<code>setHTML</code>、危険な関数を<code>setUnsafeHTML</code>のように明確に区別することで、安全なデフォルトを奨励すべきだと提案されています。
+*   <strong><code>innerHTML</code>との関係</strong>: 新しい<code>setHTML</code>メソッドの導入は、<code>innerHTML</code>が将来のセキュリティ問題の源になる可能性を残すという懸念が表明されました。しかし、<code>innerHTML</code>の振る舞いを変えることは既存のウェブを壊すため不可能であり、新しいメソッドが既存の<code>innerHTML</code>の安全な代替となることが目標とされています。リンターが<code>innerHTML</code>の使用を警告し、<code>setHTML</code>の使用を推奨するように、開発ツールで対応できるという意見もありました。</p>
+<h2>mXSSとHTML解析の複雑さ</h2>
+<p>mXSS（Mutation XSS）は、議論の中心的なトピックでした。
+*   <strong>mXSSの危険性</strong>: HTMLの解析は安定しておらず、HTMLの文字列が解析、シリアライズ、そして再び解析されることで、元の意図と異なるものになる可能性があるという問題が指摘されています。特に、<code>&lt;option&gt;</code>や<code>&lt;table&gt;</code>などの特定のHTML要素の文脈依存的な解析が、XSS脆弱性を引き起こす例として挙げられています。記事で参照されているSonarSourceのブログ記事が、この概念を詳しく説明しています。
+*   <strong>サーバーサイドサニタイズ</strong>: サーバーサイドでのサニタイズが多くのアプリケーションで行われているため、サーバーサイドで文字列をサニタイズしてクライアントに送るアプローチが実際に危険な例があるのかという疑問が呈されました。これに対し、mXSSがその危険性を示す例であると説明されています。
+*   <strong>XHTMLの可能性</strong>: HTMLの複雑な解析動作を避けるために、厳密なXML方言であるXHTMLを使用すべきだという意見も少数ながらありました。しかし、XHTMLは整形式性を保証するものの、HTMLのセマンティックな妥当性まではカバーしないため、ブラウザは依然として不正なネスティングに対処する必要があるという反論がありました。</p>
+<h2>サニタイズの限界</h2>
+<p>HTMLサニタイズの概念自体が、根本的に解決不可能な問題であるという懐疑的な意見も存在しました。
+*   <strong>「何でもいいから安全に」</strong>: HTMLサニタイズは、「ユーザーが何を望んでいるかを明確に述べられない」究極の「意図を察してほしい」問題であると主張されています。任意の文字列が信頼できるソースからの正当なマークアップなのか、それともテキストとして扱うべき信頼できない入力なのかを知る必要性がある限り、サニタイズは根本的に解決できないという見解です。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、新しいHTML Sanitizer APIの提案が、Mutation XSS（mXSS）のような既存のセキュリティ問題に対処するための有望な解決策であるという一般的な認識を示しています。特に、HTMLの文脈依存的な解析を考慮することで、より安全なサニタイズが可能になると期待されています。しかし、APIの設計、命名、そして既存の<code>innerHTML</code>との共存方法については、開発者が誤って安全でないパスを使用しないようにするための慎重な検討が求められています。また、HTMLサニタイズの複雑さと根本的な課題についても議論され、サニタイズは常に「魔法の杖」ではなく、開発者の注意と理解が不可欠であることが示唆されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
