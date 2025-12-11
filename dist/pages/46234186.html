@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Sim – Apache-2.0 n8n alternative - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Sim – Apache-2.0 n8n alternative</h1>
+        <div class="meta">
+            投稿日: 2025年12月11日 | ランク: 6
+        </div>
+        <a href="https://github.com/simstudioai/sim" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Sim (エージェントワークフロー構築のためのオープンソースのビジュアルエディタ) の紹介と、その機能、実装、今後の方向性、および初期ユーザーからのフィードバックに関するコメント。</p>
+<h2>Simの概要と主要機能</h2>
+<p>投稿者（OP）は、Simをエージェントワークフローを構築するためのオープンソースのビジュアルエディタとして紹介しています。プロダクション環境でのエージェントのデバッグの困難さや、既存のコードファーストフレームワークやワークフロープラットフォームのオーバーヘッドが開発の動機となっています。Simは、きめ細かな制御と容易な可観測性を提供することを目指しており、主な機能として以下が挙げられます。</p>
+<ul>
+<li><strong>UI/UX</strong>: ドラッグ＆ドロップ式のキャンバス。</li>
+<li><strong>豊富なブロック</strong>: Slack、GitHub、Notion、SSH、MongoDB、S3、Pineconeなど138種類のブロック。</li>
+<li><strong>AI機能</strong>: きめ細かなツール呼び出し制御、スライディングウィンドウをサポートする会話メモリ、ネイティブRAG（ドキュメントアップロード、チャンク、埋め込み、ベクトル検索）、Copilotによる自然言語でのワークフロー構築。</li>
+<li><strong>堅牢な実行</strong>: ワークフローはDAG（有向非巡回グラフ）として構成され、デフォルトで並行実行。ループ（for, forEach, while, do-while）や並列ファンアウト/ジョインもサポート。</li>
+<li><strong>可観測性</strong>: ネストされたワークフローやツール呼び出しのための詳細なロギングとトレーススパン。</li>
+<li><strong>管理機能</strong>: ワークフローデプロイのバージョン管理とロールバック、Human-in-the-loopブロック。</li>
+<li><strong>エージェントプロバイダとの連携</strong>: OpenAI、Anthropic、Gemini、Ollamaなど、選択したモデルへのプロンプト、ツール、応答形式の直接パススルー。</li>
+</ul>
+<p>OPは、今後独自のMCPサーバーの提供や、ワークフローをMCPサーバーとしてデプロイする機能に取り組む予定であると述べています。</p>
+<h2>ワークフローのループ処理と実装</h2>
+<p>ユーザーから「ループ処理をどのように扱うか、多くのワークフロービルダーがここで苦労している」との質問が寄せられました。特にネストされたループがパフォーマンスに与える影響について懸念が示されました。</p>
+<p>OPは、Simではループに2つの番人（sentinel）ノードと後方エッジを使用し、各イテレーション前に条件チェックとループ変数の更新を行うと説明しました。UI上では、これは単一のブロックとして表現され、ユーザーはコレクションまたはイテレーション数を定義できます。また、ネストされたループについては、パフォーマンスの問題ではなく、ユーザーの混乱を避けるため、現時点ではクライアントサイドでのサポートはしていないと回答しました。Simではループごとにランタイムコピーを作成することはないため、パフォーマンスの問題は発生しないとのことです。</p>
+<h2>UI/UXとドキュメンテーションに関するフィードバック</h2>
+<p>ユーザーから、READMEに掲載されているGIFアニメーションが速すぎて、何が起こっているのかを理解しにくいというフィードバックがありました。OPはこの意見を受け入れ、GIFの速度を調整する意向を示しました。</p>
+<h2>まとめ</h2>
+<p>Simは、エージェントワークフローの構築に特化したオープンソースのビジュアルエディタであり、開発者はエージェントのデバッグの難しさや既存ツールの課題を解決するためにSimを開発しました。ドラッグ＆ドロップUI、多様なサービス連携、先進的なAI機能、そして堅牢なワークフロー実行メカニズム（DAG、並行実行、ループ処理）を特徴としています。ユーザーからのループ処理に関する具体的な質問に対し、開発者はその実装メカニズムを詳細に説明し、UI/UXに関するフィードバック（READMEのGIFの速度）にも迅速に対応する姿勢を見せています。Simはきめ細かな制御と高い可観測性を実現しつつ、将来的にMCPサーバーとしての展開も視野に入れています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

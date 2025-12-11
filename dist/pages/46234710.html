@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Litestream VFS - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Litestream VFS</h1>
+        <div class="meta">
+            投稿日: 2025年12月11日 | ランク: 4
+        </div>
+        <a href="https://fly.io/blog/litestream-vfs/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>ユーザーは、Litestream v0.5.3で導入された読み取り専用VFSオプションについて議論しています。特に、SQLiteをサーバーサイドで利用する方法、S3との連携、レプリケーションの機能、そしてLiteFSとの違いに焦点を当てています。</p>
+<h2>SQLiteのサーバーサイド利用とLitestream VFS</h2>
+<p>多くのユーザーがSQLiteをサーバーサイドで利用することについて言及しており、以前は一時的な流行だと考えられていたものの、現在ではCMS、ブログ、Eコマースプラットフォームなどの読み取り中心のプロジェクトで、運用が簡単でコストが低いとして活用されていることが示唆されています。Litestream VFSは、この利用モデルにおいて、S3などのオブジェクトストレージからの読み取り専用アクセスを可能にし、特に「config management」のようなシナリオで理にかなっていると評価されています。あるユーザーは、プロダクションデータベースをローカルにダウンロードしてテストできる開発体験の良さを強調しています。</p>
+<h2>Litestream VFSの機能と利点</h2>
+<p>Litestream VFSは、SQLiteデータベースをS3などのオブジェクトストレージから直接読み取り専用で利用できる機能を提供します。これにより、以下の利点が挙げられています。
+*   <strong>バックアップとリカバリの簡素化</strong>: Litestreamはリアルタイムに近いバックアップを提供し、従来の<code>.backup</code>コマンドの代替として機能します。VFSを利用することで、S3上のデータベースに対して直接クエリを実行でき、過去の時点でのデータを確認することも可能です。
+*   <strong>水平スケーリングの可能性</strong>: K8sのような環境で、S3上のDBを共有キャッシュのように利用し、複数の読み取り専用ポッドからアクセスする可能性が議論されています。ただし、現在のVFSは読み取り専用であり、書き込み機能は今後の課題とされています。
+*   <strong>運用コストの削減</strong>: サーバーサイドでのSQLite利用が「super cheap（非常に安い）」と評されており、Litestream VFSはその低コスト運用をさらに促進します。
+*   <strong>開発体験の向上</strong>: プロダクションデータベースをローカルで簡単にテストできる点が評価されています。
+*   <strong>自動更新</strong>: データベースがリモートで更新された場合、Litestream VFSは毎秒新しいバックアップデータをポーリングし、自動的に最新の状態に同期します。</p>
+<h2>LiteFSとの関係とLTXフォーマット</h2>
+<p>コメントでは、LitestreamとLiteFSの違いについて明確化が求められています。開発者によると、LiteFSはFUSEファイルシステムを使用してトランザクション対応のレプリケーションを行うのに対し、LitestreamはFUSEを必要としない運用ツールであり、バックアップとリストアに特化しています。Litestream v0.5では、LiteFSのために開発されたLTX（SQLiteデータ配送ファイルフォーマット）が統合され、より効率的なページセットの転送が可能になりました。</p>
+<h2>課題と今後の展望</h2>
+<p>現在のLitestream VFSは読み取り専用ですが、書き込み機能の可能性も議論されています。しかし、複数のノードからの書き込みによる競合管理（トランザクション、コンフリクト解決）など、「新しい問題」が生じる可能性が指摘されています。開発者は、S3を用いた分散リースに関する概念実証に取り組んでおり、内部的にはVFSに書き込み機能を追加するユースケースを検討しているものの、まだ開発には着手していないと述べています。</p>
+<h2>まとめ</h2>
+<p>Litestream v0.5.3の読み取り専用VFSオプションは、SQLiteのサーバーサイド利用において、特にS3などのオブジェクトストレージと連携した読み取り中心のアプリケーションに大きな可能性をもたらします。リアルタイムに近いバックアップ、簡単な災害復旧、水平スケーリングの可能性、そして優れた開発体験は、その主要な利点として挙げられます。LiteFSとの違いも明確にされ、LTXフォーマットの導入により効率が向上しています。将来的には書き込み機能の追加が期待される一方で、分散環境でのトランザクション管理といった課題も浮上しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
