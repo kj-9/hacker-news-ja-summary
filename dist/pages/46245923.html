@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async DNS - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Async DNS</h1>
+        <div class="meta">
+            投稿日: 2025年12月12日 | ランク: 3
+        </div>
+        <a href="https://flak.tedunangst.com/post/async-dns" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、<code>pthread_cancel</code>の問題点、非同期DNSの実装、および関連する課題について議論しています。</p>
+<h2><code>pthread_cancel</code>の設計上の欠陥と代替案</h2>
+<p>多くのコメント投稿者は、<code>pthread_cancel</code>が元々欠陥のある設計であり、標準化されたこと自体が驚きだと述べています。これは、プログラミングにおいて予期せぬ場所で非同期にスレッドを停止させるため、リソースリークやデッドロックなどのバグを引き起こしやすいという点が指摘されています。Javaは同様の理由でスレッドキャンセレーションを非推奨にしていますが、Haskellには依然として存在し、低レベルのライブラリコードではバグの原因となることがあります。</p>
+<p>しかし、一部の意見では、<code>pthread_cancel</code>は「ほとんど良い」機能であり、キャンセル時にスレッドを終了させる代わりに次のシステムコールで<code>ECANCELED</code>を返すようにすれば、非常に有用な機能になり得ると主張されています。Muslにはこのアイデアを実装した非公式の拡張機能が存在し、標準化されるべきだという意見もあります。</p>
+<h2>非同期DNS実装の困難さと必要性</h2>
+<p>イベントベースの非同期DNSリゾルバの実装が、なぜ広く普及した堅牢な形でないのかという疑問が提起されています。C言語では難しいが、Rustでは可能であり、Hickoryのようなプロジェクトは内部でこれを行っていると指摘されています。</p>
+<p>しかし、DNSは実際には簡単ではないという反論もあります。特に、アプリケーションがシステムのレゾルバを使用したい場合、システムの構成メカニズム（macOSでのVPNや接続に応じたレゾルバ選択ロジック、nsswitchなどのプラグインシステム）に統合する必要があり、これは非常に複雑です。一方で、DNSプロトコル自体はエレガントでミニマルであり、システムが不必要な複雑さを加えただけだと主張する意見もあります。</p>
+<p>解決策として、POSIXが新しいバージョンのDNS解決を仕様化すること、libcが拡張機能を追加すること、またはLinuxやWindowsでアプリケーションがlibcをバイパスすることなどが提案されています。PythonのGeventやSwiftでの独自実装の例も挙げられており、非同期DNSクライアントは独自に実装することも可能であると示唆されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、<code>pthread_cancel</code>の根本的な欠陥と、非同期DNSの実装における複雑さを中心に展開されました。<code>pthread_cancel</code>は、その設計が非同期的な性質からくるデッドロックやリソースリークのリスクを伴うため、多くのプログラマから問題視されています。一方で、適切な実装（キャンセル時にエラーコードを返すなど）があれば有用になり得るとの意見もあります。</p>
+<p>非同期DNSについては、プロトコル自体のシンプルさとは裏腹に、システムレゾルバへの統合や多様な環境への対応の難しさが指摘されています。しかし、PythonのGeventやSwiftでの独自実装の成功例から、特定のアプリケーションにとってはカスタムソリューションも現実的であることが示されています。これらの議論は、システムの低レベルAPI設計と、ネットワーク機能の実装における複雑なトレードオフを浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
