@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop crawling my HTML you dickheads – use the API - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Stop crawling my HTML you dickheads – use the API</h1>
+        <div class="meta">
+            投稿日: 2025年12月14日 | ランク: 6
+        </div>
+        <a href="https://shkspr.mobi/blog/2025/12/stop-crawling-my-html-you-dickheads-use-the-api/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、ウェブスクレイピングにおいてAPIではなくHTMLが使われることの是非、特にAIやLLMの時代におけるこの慣習について議論しています。</p>
+<h2>HTMLは「標準」である</h2>
+<p>多くのコメント投稿者は、HTMLがウェブコンテンツの「カノニカル（規範的）な形式」であり、人間が消費するものであるため、スクレイパーにとっても主要なターゲットとなるべきだと主張しています。APIは「概念的に二次的」であり、古くなる可能性があるか、サイト運営者によって制限される可能性がある（例：RedditのAPI料金引き上げ）と指摘されています。HTMLは「どこでも機能する」ため、スクレイパーはサイトごとに異なるAPIを学ぶよりも、HTMLの解析に普遍的な方法を適用することを好みます。また、LLMはHTMLの曖昧さを解消し、レイアウトや視覚的表現、情報の関連性を解釈できるため、人間とエージェント/AIの両方に情報を伝える上で「プレゼンテーションが重要」だと考える人もいます。</p>
+<h2>APIとLLMの効率性・正確性</h2>
+<p>APIを推奨する意見は、LLMがHTMLを解析する際の計算コストと不正確さについて警告しています。LLMによるHTML解析は「300,000,000サイクル」かかる可能性があり、結果は「部分的にランダムで予測不可能」であるのに対し、APIは「約200,000サイクル」で「正確な結果」をもたらすと指摘されています。また、APIは「非常に明示的な構造化データ」を提供するため、真の正確性、特異性、曖昧さのなさが要求されるシステムには不可欠だとされています。しかし、APIが望むデータを持っていない場合、この議論は「無意味」になるという反論もあります。</p>
+<h2>WordPress APIの利用</h2>
+<p>元の投稿者は、自分のサイトがWordPressベースであり、そのAPIはWordPressサイト全体で「同一のスキーマ」を持つため、スクレイパーが簡単に利用できるはずだと主張しています。しかし、スクレイパー側は、すべてのサイトのAPIに対応することは現実的ではなく、「Googleのリソース」がなければ「無限の戦い」になると反論しています。また、APIドキュメントを読み解く手間や、既存のクライアントライブラリの信頼性への懸念も表明されています。</p>
+<h2>スクレイピングへの対抗策と倫理</h2>
+<p>コメントでは、スクレイピングに対抗するための様々なアイデアが提案されています。例えば、HTMLテンプレートをプロンプトポイズニングする（ただしLLMがこれを検出する可能性も指摘）、サイトをGodot Engineのようなゲームエンジンで作成する、WASMにコンパイルする、GETリクエストでIPをブロックリストに入れるといったものです。また、多くのAI企業が「許可なく他人のコンテンツ」を基盤に構築されており、「x-ai-instructions header」のようなオプトイン方式のrobots.txtに似た提案が無視される可能性が高いという倫理的な批判も含まれています。</p>
+<h2>まとめ</h2>
+<p>この議論は、ウェブスクレイピングにおける実用性、効率性、倫理という相反する側面を浮き彫りにしています。HTMLは人間の消費とスクレイピングの両方にとって実質的な標準と見なされており、AIの進化がその解析能力をさらに高めている一方で、APIは構造化されたデータアクセスを提供しますが、その多様性と維持の負担が採用の妨げとなっています。WordPressのような共通のAPIを持つプラットフォームは解決策となり得ますが、スクレイパー側は普遍的なHTML解析を優先する傾向にあります。最終的に、スクレイピングに対抗する技術的・倫理的な戦いは継続されており、AIがウェブコンテンツとどのように相互作用するかはまだ流動的です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
