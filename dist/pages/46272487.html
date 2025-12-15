@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avoid UUID Version 4 Primary Keys in Postgres - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Avoid UUID Version 4 Primary Keys in Postgres</h1>
+        <div class="meta">
+            投稿日: 2025年12月15日 | ランク: 10
+        </div>
+        <a href="https://andyatkinson.com/avoid-uuid-version-4-primary-keys" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsでのコメントは、PostgreSQLのプライマリキーとしてUUIDv4を使用することのデメリットと、UUIDv7やその他の代替案に関する議論が中心です。特に、パフォーマンス、セキュリティ、スケーラビリティ、設計原則といった側面から多角的な意見が交わされました。</p>
+<h2>UUIDv4の問題点</h2>
+<p>多くのコメントが、UUIDv4をプライマリキーとして使用することの問題点を指摘しています。主な懸念は以下の通りです。</p>
+<ul>
+<li><strong>B-Treeインデックスの断片化とパフォーマンス低下</strong>: UUIDv4はランダムな値であるため、データベースのB-Treeインデックスにランダムに挿入され、インデックスの断片化を引き起こします。これにより、書き込み（挿入）パフォーマンスが低下し、キャッシュの効率も悪くなります。PostgreSQLなどのデータベースでは、WAL（Write-Ahead Log）の肥大化にもつながります。</li>
+<li><strong>ストレージスペースの消費</strong>: 128ビットのUUIDは、64ビットのBIGINTと比較して2倍のストレージを消費します。数億行を超える大規模なテーブルでは、この差が無視できないコストになります。</li>
+<li><strong>ソートの非効率性</strong>: ランダムなUUIDv4は自然なソート順を持たないため、作成日時などでソートしたい場合に別途タイムスタンプカラムが必要となり、インデックスの利用が難しくなります。</li>
+</ul>
+<h2>UUIDv7とその他の代替案</h2>
+<p>UUIDv4の課題に対する解決策として、いくつかの提案がなされました。</p>
+<ul>
+<li><strong>UUIDv7</strong>: コメントの多くは、UUIDv7がUUIDv4の良い妥協点であると指摘しています。UUIDv7はタイムスタンプ情報を含むため、実質的に時間順にソート可能であり、B-Treeインデックスの断片化を軽減し、パフォーマンスを向上させます。PostgreSQL 18ではネイティブサポートされています。ただし、タイムスタンプが公開されることによる情報漏洩のリスクを懸念する声もあります（後述）。</li>
+<li><strong>BIGINTなどのシーケンス番号</strong>: 記事の推奨の一つは、内部IDとして（Auto-incrementing）BIGINTを使用することです。これはパフォーマンス面で最も優れていますが、分散システムでのID生成や、IDが公開される場合の情報漏洩（German tank problemなど）といった課題があります。</li>
+<li><strong>整数IDの難読化</strong>: 内部的には整数IDを使用し、外部に公開する際にはAESなどのブロック暗号やSipHashで難読化（暗号化）してUUIDv47のような形式にする方法も提案されました。これにより、整数IDのパフォーマンスとUUIDの非推測性を両立できますが、暗号鍵の管理や実装の複雑さが増すというデメリットがあります。</li>
+<li><strong>ULID / Snowflake ID</strong>: UUIDv7と同様にタイムスタンプを含むID形式として、ULIDやSnowflake IDが挙げられました。これらは順序性があり、分散システムでのID生成に適しています。</li>
+</ul>
+<h2>セキュリティと情報漏洩</h2>
+<p>UUIDv7を使用する際の大きな懸念として、タイムスタンプがIDに埋め込まれることによる情報漏洩のリスクが議論されました。</p>
+<ul>
+<li><strong>作成日時の漏洩</strong>: UUIDv7は作成日時を含むため、IDからレコードが作成されたおおよその時間を推測できます。これにより、競合他社による新規ユーザー獲得数の追跡や、ユーザーアカウントの作成時期が公開されることによるプライバシー侵害（年齢差別やプロファイリングなど）の可能性が指摘されました。</li>
+<li><strong>「隠れた情報」の問題</strong>: IDに意味のある情報（誕生日、性別など）を含めるべきではないという意見が強く出ました。たとえそれが意図しない情報であっても、Hyrum's Law（ユーザーが利用可能なシステム動作に依存する）により、何らかの形で利用されたり、予期せぬ問題を引き起こしたりする可能性があります。</li>
+</ul>
+<h2>スケーラビリティと分散システム</h2>
+<p>ID選択は、システムの規模とアーキテクチャに大きく依存するという意見が多く見られました。</p>
+<ul>
+<li><strong>モノリシック vs 分散</strong>: 記事の文脈はPostgreSQLを使用するモノリシックアプリケーションに焦点を当てていますが、CockroachDBやGoogle Spannerのような分散データベースでは、ホットシャード（特定ノードへの書き込み集中）を避けるためにランダムなIDの方が推奨される場合があります。</li>
+<li><strong>クライアントサイドでのID生成</strong>: UUIDは、クライアントが事前にIDを生成できるため、分散システムやオフライン環境でのデータ作成、または複雑なリレーションを持つオブジェクトツリーの一括作成などに非常に有用です。これは、シーケンス番号にはない大きな利点です。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsの議論から、PostgreSQLのプライマリキーとしてUUIDv4を使用することは、特に大規模なOLTP（オンライン・トランザクション処理）システムにおいて、パフォーマンス（B-Treeインデックスの断片化、キャッシュ効率の低下）とストレージ効率の観点から問題があるという認識が共有されています。</p>
+<p>UUIDv7は、タイムスタンプを含むことでUUIDv4のパフォーマンス上のデメリットを改善する有望な代替案ですが、IDに作成日時が埋め込まれることによる情報漏洩のリスクを考慮する必要があります。このリスクは、アプリケーションの要件や公開するデータの性質によって重要度が異なります。</p>
+<p>最終的なID選択は、システムの規模、分散の程度、パフォーマンス要件、セキュリティとプライバシーへの配慮といった多くの要因を考慮した上でのトレードオフとなります。内部IDには効率的なBIGINTを使用し、外部に公開するIDにはUUID（UUIDv7を含む）や難読化されたIDを使用するなど、ユースケースに応じて異なるアプローチを組み合わせることも一般的です。一概に「これを使用すべき」という万能な答えはなく、個々の状況に応じた慎重な検討が求められます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

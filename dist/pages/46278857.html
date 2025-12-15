@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-Bus is a disgrace to the Linux desktop - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">D-Bus is a disgrace to the Linux desktop</h1>
+        <div class="meta">
+            投稿日: 2025年12月15日 | ランク: 3
+        </div>
+        <a href="https://blog.vaxry.net/articles/2025-dbusSucks" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、D-Busとその代替案について議論しています。特に、D-Busのセキュリティ、設計上の問題点、および代替テクノロジーの提案に焦点が当てられています。</p>
+<h2>D-Busのセキュリティと設計上の問題点</h2>
+<p>D-Busのセキュリティの脆弱性が主要な懸念事項として挙げられています。特に、「キーリングがアンロックされている場合、バス上のどのアプリケーションでもストア内の全てのシークレットを読み取ることができる」という点が指摘され、驚きと批判の声が上がっています。これは、Flatpakのようなサンドボックス環境を使用しない限り、セキュリティ上の大きな欠陥であると見なされています。また、D-Busの設計自体が「a{sv}」（辞書型）などのデータ形式の使いにくさや、プロトコル仕様の不足も批判されています。さらに、NetworkManagerなど一部のD-Bus対応アプリケーションが「精神病質的」な挙動を示し、DOS脆弱性の原因となることが指摘されています。</p>
+<h2>代替案と新プロジェクト</h2>
+<p>元の記事の著者（Hyprlandの開発者）がD-Busの問題に不満を抱き、新しいバス「hyprtavern」を開発していることに対して、様々な反応があります。</p>
+<ul>
+<li><strong>Systemdとの統合への懸念</strong>: D-Busの代替がsystemdに統合されるのではないかという皮肉な懸念が複数回表明されています（例: systemd-busdd）。</li>
+<li><strong>「hyprtavern」の現状</strong>: 新プロジェクト「hyprtavern」がC++で書かれていることに対して、「安全でない言語でOSの重要な部分を書くのはやめるべき時期ではないか」という意見があります。しかし、コード量が少ないため、大きな問題ではないという反論もあります。また、現時点ではドキュメント、仕様、十分なテストがないことが指摘され、コミュニティの支持を得るためには、Charlie Marshのruffやuvのような、より建設的なアプローチが必要だという意見もあります。</li>
+<li><strong>既存技術の再利用</strong>: Androidで広く使われているBinderの再利用が提案されています。Binderは数十億のデバイスに展開されており、堅牢性が高く、多くの開発者が理解しているため、良い代替案になる可能性があるとされています。しかし、Binderのユーザー空間実装がAndroid以外に少ないという反論もあります。また、Waylandプロトコルの再利用も提案されています。</li>
+</ul>
+<h2>D-Busの普及と「Worse is Better」の原則</h2>
+<p>D-Busが広く普及していることに対し、「なぜ最も優れたソリューションが選ばれないのか」という疑問が呈されています。D-BusがGNOMEとRed Hatとの関連性によって普及したという指摘や、「Worse is better（下手な方が良い）」という哲学が背景にあるという意見もあります。多くのユーザーにとって「十分良い」ソリューションであれば、それが採用される傾向にあるという見方も示されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、D-Busのセキュリティ、設計上の欠陥、およびその代替案について活発な議論が交わされています。特に、キーリングのシークレットがバス上のどのアプリケーションにもアクセス可能であるというセキュリティ上の懸念が強く指摘されています。新しいバスの提案「hyprtavern」に対しては、C++の使用やドキュメント・テストの不足が懸念される一方で、既存の堅牢な技術（Binder、Waylandプロトコル）の再利用も提案されています。D-Busの普及が、必ずしも技術的な優位性ではなく、歴史的経緯や「十分良い」という実用性によるものであるという見方も示されており、D-Busの現状に対する不満と、より良い解決策への期待が入り混じった議論が展開されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
