@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garage – An S3 object store so reliable you can run it outside datacenters - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Garage – An S3 object store so reliable you can run it outside datacenters</h1>
+        <div class="meta">
+            投稿日: 2025年12月19日 | ランク: 2
+        </div>
+        <a href="https://garagehq.deuxfleurs.fr/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Minioの代替となるセルフホスト型S3互換オブジェクトストレージソリューション「Garage」について議論しています。Minioを巡る最近の問題を受け、多くのユーザーがGarageに注目しています。</p>
+<h2>Minioの代替としてのGarage</h2>
+<p>Minioの問題を受けて、Garageの採用が増えているというコメントが多数寄せられています。ユーザーはMinioからGarageへの移行に関するアドバイスを求めており、特にローカル開発環境での利用に関心が高まっています。Garageはデプロイが簡単でドキュメントも充実しているため、有望な代替案と見なされています。</p>
+<h2>データ永続性と信頼性</h2>
+<p>Garageのデータ永続性に関する議論は活発です。特に、電源喪失時にメタデータが破損する可能性があるという公式ドキュメントの記述が懸念されています。しかし、開発者（lxpz氏）は、Garageが3つのレプリカノードを前提として設計されており、1つのノードがクラッシュしてもクラスタは完全に機能すると説明しています。また、2つのノードがクラッシュした場合でもデータは失われないと述べています。メタデータの破損は「クラッシュ状態」の一部であり、クラスタは残りのコピーからデータを回復できるため、回復がより迅速になるように定期的なスナップショットを推奨しています。
+一方で、LMDBデータベースエンジンのデフォルト設定が電源喪失に対して頑健ではないことや、チェックサムや整合性検証がメタデータストレージ自体にはないという点について、懸念が示されています。</p>
+<h2>機能と互換性</h2>
+<p>いくつかのユーザーは、GarageのS3 API互換性における特定の機能の欠如について言及しています。特に、「条件付きPUT」（If-Match / If-None-Match）とオブジェクトタグのサポートがないことが指摘されています。開発者は、条件付き書き込みがGarageのコア設計であるCRDT（競合解決型レプリカデータ型）では実現できないと説明しています。また、オブジェクトタグについてはフィードバックとして受け止めると述べています。</p>
+<h2>競合製品との比較</h2>
+<p>コメントでは、Minioの他にRustFS、Versity S3 Gateway、Ceph S3 Gateway、rclone serve S3、SeaweedFS、Vast、Syncthingなど、他のS3互換ストレージや同期ツールとの比較も行われています。RustFSは中国製であるという非技術的な理由や、分散システムアーキテクチャがまだ初期段階であるという技術的な理由から除外される可能性があると指摘されています。SeaweedFSはベンチマークで好成績を収めていると評価されています。Syncthingとの比較では、GarageがHTTP APIを提供し、S3互換性という特定の課題を解決するのに対し、Syncthingはフォルダの同期に適しているという違いが明確にされています。</p>
+<h2>その他</h2>
+<ul>
+<li><strong>リソース要件</strong>: ローカル開発環境でのRAM使用量について懸念がありましたが、開発者によると小さなローカル開発サーバーでは50〜100MB程度であり、公式ドキュメントの「1GB」は誤解を招く表現であることが示唆されました。</li>
+<li><strong>ウェブサイトのデザイン</strong>: プロジェクトのウェブサイトが芸術的で美しいと評価されていますが、読みやすさやアクセシビリティの懸念も表明されています。</li>
+<li><strong>整合性モデル</strong>: Garageは「書き込み後の読み取り整合性」（Read-after-write consistency）をサポートしていると説明されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Garageは、Minioの代替として注目を集めているセルフホスト型S3互換オブジェクトストレージソリューションです。そのシンプルなデプロイと良好なパフォーマンスは評価されていますが、電源喪失時のメタデータ永続性や、条件付きPUT、オブジェクトタグなどのS3機能の欠如が主な懸念点として挙げられています。開発者は、レプリケーションによる高い信頼性と、書き込み後の読み取り整合性を強調しており、特定の機能については今後の改善を示唆しています。ローカル開発やデータエンジニアリングのスクリプトでの利用に特に適していると考えられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

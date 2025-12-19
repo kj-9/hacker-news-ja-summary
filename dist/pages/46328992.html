@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Engineering US Airline&#x27;s PNR System and Accessing All Reservations - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Reverse Engineering US Airline&#x27;s PNR System and Accessing All Reservations</h1>
+        <div class="meta">
+            投稿日: 2025年12月19日 | ランク: 7
+        </div>
+        <a href="https://alexschapiro.com/security/vulnerability/2025/11/20/avelo-airline-reservation-api-vulnerability" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Avelo航空券の予約コードの脆弱性に関する記事について議論しています。</p>
+<h2>記事の質とAIの使用について</h2>
+<p>一部のユーザーは、記事がAIによって過度に執筆されていると感じています。その理由として、箇条書きの多用、不必要な扇情的な表現（例：「The requests flew. There was no WAF, no IP blocking, no CAPTCHA.」）、そして「emダッシュ」の使用などが挙げられています。しかし、emダッシュの使用については、人間も使用することがあるため、AIの唯一の指標とはならないという反論もありました。一方で、AIが生成したような独特の「臭い」や情報密度の低さを指摘する意見もあります。AIの活用が「AIスロップ」と軽々しく呼ばれることに対する懸念も表明され、執筆者がAIを使いすぎた場合と、AIが原稿を改善するために使用された場合の違いについて議論されました。</p>
+<h2>脆弱性の詳細とAveloの対応</h2>
+<p>この脆弱性は、予約コードのみでチケットデータを提供するレート制限のないエンドポイントに関するもので、総当たり攻撃によって検索空間全体をブルートフォースできる可能性があると説明されています。ユーザーは、Aveloチームが迅速かつ専門的に対応し、発見を真摯に受け止め、問題の修復に迅速に取り組んだことを評価しています。</p>
+<h2>報奨金とデータ漏洩の責任</h2>
+<p>脆弱性の発見者がバグバウンティ（報奨金）を受け取らなかったのではないかという懸念が表明されました。多くのユーザーは、企業がデータの漏洩に対して責任を負わず、セキュリティ研究者の善意に頼って無料で作業を行わせることへの不満を述べています。PII（個人を特定できる情報）の漏洩に対して金銭的価値を割り当て、組織に罰金を科し、その一部を内部告発者に支払う法律の必要性が提案されています。GDPR（一般データ保護規則）がそのような法律の一つとして挙げられていますが、報奨金には「倒錯的なインセンティブ」があるとの指摘もあります。</p>
+<h2>航空会社の技術スタックとリクエスト処理能力</h2>
+<p>記事で主張されている「6時間で10万リクエスト/秒」という処理能力について、一部のユーザーは疑問を呈しています。通常の主要航空会社が1日あたり40万〜50万人の乗客を処理することを考慮しても、1秒あたり10万リクエストを処理するデータベースを持つことは非現実的だと指摘されています。現在の航空会社の顧客向け技術スタックがどのようになっているかについての議論が見られます。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Avelo航空の予約システムに関するセキュリティ脆弱性記事について、記事の質、AIの関与、脆弱性の内容、Aveloの対応、そしてデータ漏洩に対する企業の責任と報奨金制度のあり方について多岐にわたる議論を展開しました。特に、記事がAIによって執筆されたかどうかという点と、データ漏洩に対する法的な責任や報奨金制度の導入の必要性について活発な意見交換が行われました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
