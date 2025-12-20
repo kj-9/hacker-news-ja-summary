@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log level &#x27;error&#x27; should mean that something needs to be fixed - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Log level &#x27;error&#x27; should mean that something needs to be fixed</h1>
+        <div class="meta">
+            投稿日: 2025年12月20日 | ランク: 4
+        </div>
+        <a href="https://utcc.utoronto.ca/~cks/space/blog/programming/ErrorsShouldRequireFixing" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、ログレベル（特に<code>ERROR</code>と<code>WARNING</code>）の適切な使用法について議論しています。多くのユーザーが、エラーログは人間による対応が必要な場合にのみ使用すべきであるという原則に同意しつつ、その定義や適用範囲について異なる見解を示しています。</p>
+<h2><code>ERROR</code>ログの定義とトリガー</h2>
+<p>多くのコメントで、<code>ERROR</code>ログは「人間による対応が必要な状況」または「システム全体が正しく機能していない状態」を示すべきだという意見が述べられています。</p>
+<ul>
+<li><strong>即時の対応が必要な問題</strong>: <code>todsacerdoti</code>のコメント[1.1]にある<code>shadowgovt</code>は、<code>ERROR</code>はプログラムがクラッシュしてもおかしくない状況だが、より大きなコンテキスト（複数のスレッドでWebリクエストを処理するプログラムで、1つのハンドラがハングして終了しなければならない場合など）が稼働を維持するためにクラッシュしなかった場合に使うと述べています。<code>raldi</code>[1.1.1]は、ステージングやカナリア環境で<code>ERROR</code>が記録されたらデプロイをブロックすべきだとしています。<code>jillesvangurp</code>[1.3]は、<code>ERROR</code>がアラートをトリガーすることにゼロトレランスであると述べています。</li>
+<li><strong>システムの責任範囲</strong>: <code>shadowgovt</code>[1.1]は、信頼できないソースからの不正なWebクエリは「エラー」ではないと主張しています。なぜなら、信頼できないソースに正しい形式の入力を強制することはできないからです。<code>raldi</code>[1.2]は、データベースタイムアウトやダウンストリームサービスのエラー、無効なリクエスト（HTTP 4xx）などは<code>ERROR</code>ログに含めるべきではない例として挙げています。これらは、そのサービス自体の問題ではなく、他の責任者や呼び出し元の問題であることが多いためです。</li>
+<li><strong>「修正可能」か「予期された」か</strong>: <code>eterm</code>[1.13]は、<code>Critical</code>/<code>Fatal</code>は人間による介入なしに回復不可能、<code>Error</code>は人間による介入なしには回復可能だがデータ/状態損失がある、<code>Warning</code>は介入なしで回復可能だが課題として記録されるべき、と区別しています。<code>Error</code>は「こんなことは起こり得ないと思っていた」、<code>Warning</code>は「これは起こり得るかもしれないと思っていた」という違いがあるとしています。</li>
+</ul>
+<h2><code>WARNING</code>ログの定義とトリガー</h2>
+<p><code>WARNING</code>ログは、開発者が予測・処理したが、より大きなコンテキストが悪い状態にある可能性を示す条件に使用されることが多いです。</p>
+<ul>
+<li><strong>予測されたが望ましくない状態</strong>: <code>shadowgovt</code>[1.1]は、<code>WARNING</code>は「信頼できるソースからのクエリだが、構成が無効すぎて破棄する必要があった」ような状況や、「信頼できるソースが非推奨APIを呼び出している」ような状況に使用すると述べています。これらはオンコール担当者がフォローアップすべき対象となります。</li>
+<li><strong>軽微な問題や一時的な状態</strong>: <code>teo_zero</code>[1.14]は、接続タイムアウトして30秒後に再試行する場合を<code>WARNING</code>とし、5回の試行後に接続を諦めた場合を<code>ERROR</code>としています。<code>bqmjjx0kac</code>[1.13.1.1]も、試行が失敗したら<code>WARNING</code>、最終的な試行が失敗したら<code>ERROR</code>とすべきだという意見です。</li>
+</ul>
+<h2>議論のポイントと対立する意見</h2>
+<p>ログレベルの定義は、組織の文化、システムの性質、責任の分担によって大きく異なります。</p>
+<ul>
+<li><strong>ログとメトリクスの役割</strong>: <code>raldi</code>[1.2.2.1.1.1]や<code>eterm</code>[1.13.1.2]は、データベースタイムアウトのような頻繁に発生しうる事象は、<code>ERROR</code>ログではなくメトリクスで追跡すべきだと主張しています。しかし、<code>electroly</code>[1.2.2.1.2]や<code>Hizonner</code>[1.2.2.1.3]は、ログが問題の原因を特定するのに直接役立つ場合があるとして、メトリクスだけでは不十分だと指摘しています。</li>
+<li><strong>下流サービスの問題</strong>: <code>zbentley</code>[1.2.3]は、多くの下流サービスの問題は、それらを消費するサービスのエラーログで、下流サービスの所有者が検出するよりもずっと早く観測されると主張しています。そのため、消費側サービスでも下流サービスの問題を<code>ERROR</code>として扱うべきだという現実的な意見があります。これに対し<code>raldi</code>[1.2.3.1]は、メトリクスとアラートで十分だと反論しています。</li>
+<li><strong>ライブラリのログ</strong>: <code>layer8</code>[1.19]は、モジュール化されたコードやライブラリがログを出す際の問題を提起しています。ライブラリは、自身の操作上のエラーがプログラム全体のレベルでエラーであるかを判断できないためです。<code>ivan_gammel</code>[1.19.1]は、ライブラリは<code>DEBUG</code>レベル以上でログを出すべきではないと強く主張し、より上位のレベルで報告すべき情報はクライアントコードにイベントや例外として渡すべきだとしています。</li>
+<li><strong>メッセージの行動可能性</strong>: <code>rwmj</code>[1.10]は、エラーメッセージは「問題を修正するために取るべき行動」を伝えるものであるべきだと主張しています。しかし、<code>hyperadvanced</code>[1.10.2]や<code>throw3e98</code>[1.10.3]は、分散システムやユーザー側のハードウェアの問題では、そのような具体的な行動をログに記載するのは困難であるか、誤解を招く可能性があると反論しています。</li>
+<li><strong>コンテキスト依存性</strong>: 多くのコメントで、ログレベルの適切な使用は「コンテキストに依存する」という意見が出されています。<code>mfuzzey</code>[1.4]は、システムのデプロイ方法や管理方法によって異なるため、一般的なコードでログレベルを決定するのは難しいと指摘しています。<code>zamadatix</code>[1.4.1.1]は、エラーの定義は「プログラムが指示されたタスクを完了できなかったこと」と「明示的にローカルで何かを変更する必要があること」のどちらで見るかによって異なり、最終的には合意形成が重要であると結論付けています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、ログレベル、特に<code>ERROR</code>と<code>WARNING</code>の定義と使用法について活発な議論が展開されました。多くの参加者は、<code>ERROR</code>ログが人間による介入や対応が必要な状況を示すべきであるという原則に同意していますが、その「人間による介入」の範囲や責任の所在、およびログとメトリクスの役割分担については意見が分かれました。</p>
+<p>主要な意見としては、<code>ERROR</code>はプログラムがタスクを完了できなかった、あるいは人間による即時の修正が必要な、予期せぬ重大な問題を示すべきだというものです。一方、<code>WARNING</code>は予測されたが望ましくない状態、あるいはシステムが対処できたが注意を払うべき軽微な問題を示すべきだとされています。</p>
+<p>しかし、実際のシステムの複雑さ、分散システムにおけるエラーの責任分担、ライブラリによるログの問題、ログメッセージの行動可能性といった側面から、これらの原則を一律に適用することの難しさも浮き彫りになりました。最終的には、組織の運用体制やシステムの特性に合わせて、ログレベルの共通認識と具体的なガイドラインを確立することが重要であるという見方が支配的でした。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
