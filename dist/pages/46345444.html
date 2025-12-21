@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARIN Public Incident Report – 4.10 Misissuance Error - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">ARIN Public Incident Report – 4.10 Misissuance Error</h1>
+        <div class="meta">
+            投稿日: 2025年12月21日 | ランク: 5
+        </div>
+        <a href="https://www.arin.net/announcements/20251212/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、北米のIPアドレスを管理する組織であるARINが、IPアドレスブロックを誤って再割り当てしたインシデントに関するものです。コメントでは、このインシデントの原因、ARINの対応、およびそれが示唆するより広範な問題について議論されています。</p>
+<h2>ARINの手数料とサービス</h2>
+<p>コメントの一部では、ARINの手数料とサービス品質について議論されています。あるユーザーは、数年前にARINが手数料を大幅に引き上げたにもかかわらず、サービスが改善されていないと不満を述べています。しかし、別のユーザーは、現在ARINは小規模な組織にとってRIPE（欧州のRIR）よりもはるかに安価であると指摘し、その証拠として両者の2026年の料金表を提示しています。全体として、RIR（地域インターネットレジストリ）は、特定のポリシーや料金体系に不満がある場合でも、一貫性と信頼性があると評価されています。</p>
+<h2>手作業によるエラーとExcelへの依存</h2>
+<p>多くのコメントは、ARINが今回のインシデント報告書で、手作業による検証プロセス、特にExcelへの依存を率直に認めている点に注目しています。ユーザーは、IPブロックの割り当てのような重要なプロセスが、スプレッドシートに基づいたワークフローで行われていたことに驚きと懸念を表明しています。この状況は、多くの企業でExcelが重要なデータを管理するために使用されている一般的な傾向を反映していると指摘されています。しかし、このような手作業のプロセスはエラーが発生しやすく、自動化が不可欠であるという認識が広まっています。</p>
+<h2>自動化の必要性とそのリスク</h2>
+<p>ARINがプロセスを自動化する必要があると述べたことについて、コメントでは賛否両論が上がっています。多くのユーザーは、手作業でのエラーのリスクを減らすために自動化は良い考えだと考えています。特に、報告書がフラットファイルやスプレッドシートに依存していたと述べていることから、ソフトウェアによる自動化は改善と見なされています。「自動化」がLLM（大規模言語モデル）を意味するわけではないという意見もあります。しかし、他のユーザーは、自動化への道は常に障害に満ちている可能性があると警告しています。過去の経験から、これまで問題がなかった手動システムに投資することは難しいが、今回のインシデントが自動化への動機付けになると考えられています。</p>
+<h2>RPKIとインシデント検出</h2>
+<p>このインシデントの興味深い点は、RPKI（Resource Public Key Infrastructure）がこの問題を防げなかったことです。影響を受けた顧客の報告によると、ARINがIPブロックを誤って再割り当てした際、関連するRPKI ROA（Route Origin Authorization）も削除されたため、RPKIの観点からはすべてが有効に見えました。これは、RPKIがハイジャックから保護するものの、RIR自体による間違いを防ぐわけではないことを示しています。影響を受けた顧客は、欠落しているROAを検出するためのチェックを追加することで、同様のインシデントを将来的に早期に発見できるようになると述べています。</p>
+<h2>透明性と信頼</h2>
+<p>多くのユーザーは、ARINがこのインシデントについて示した透明性を高く評価しています。企業用語を使わず、「手作業によるExcelベースの検証に頼って失敗した」と正直に認めたことは、「糖衣錠なし」の報告として歓迎されています。この率直な姿勢は、ARINが問題を真剣に受け止め、改善に取り組んでいることを示しており、将来的に同様のインシデントが再発する可能性を低くすると考える人もいます。</p>
+<h2>まとめ</h2>
+<p>ARINのIPアドレスブロック誤再割り当てインシデントは、手作業の検証プロセス、特にExcelへの過度な依存がインターネットの基盤レベルでいかに危険であるかを浮き彫りにしました。ARINの率直なインシデント報告書は、多くのコメントで称賛され、彼らが問題から学び、自動化を通じて改善しようとしていることを示唆しています。また、このインシデントは、RPKIのようなセキュリティメカニズムもRIR自体のミスに対しては脆弱であるという教訓を与え、欠落したROAの検出といった追加の監視の必要性を示しました。この出来事は、重要なインターネットインフラストラクチャを管理する組織において、信頼性、透明性、そして堅牢な自動化プロセスの重要性を改めて認識させました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
