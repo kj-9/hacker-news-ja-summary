@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let&#x27;s write a toy UI library - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Let&#x27;s write a toy UI library</h1>
+        <div class="meta">
+            投稿日: 2025年12月22日 | ランク: 8
+        </div>
+        <a href="https://nakst.gitlab.io/tutorial/ui-part-1.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>WinAPIを基盤としたUIツールに関するコメントで、その実装技術、目的、そしてUIライブラリ開発における複雑性とその効果的な設計アプローチについて議論されています。</p>
+<h2>技術的基盤とプロジェクトの目的</h2>
+<p>投稿されたプロジェクトは、<code>CreateWindow</code>、<code>SetWindowText</code>、<code>SendMessage</code>といったWinAPIのウィンドウ管理機能を利用していると指摘されています。その目的については、「アプリケーションビルダー」なのかという質問が挙がっています。</p>
+<h2>UIライブラリ開発の複雑性</h2>
+<p>UIライブラリは、単なる「おもちゃ」として扱わなければ、すぐに大規模で手に負えないものになる可能性があると警告されています。例として、Qtの<code>QWidget</code>の部分的な実装だけで50万行近くのコードがあることが挙げられ、UIライブラリが本質的に複雑であることを示唆しています。</p>
+<h2>効果的なUIライブラリ設計のアプローチ</h2>
+<p>UIライブラリを開発する際には、初期段階で複雑性を受け入れ、起こりうるあらゆる事態を想定して設計することが、後の大きな複雑性を避ける上で重要だと提案されています。特にUIフレームワークにおいては、「YAGNI (You Ain't Gonna Need It)」の原則はあまり当てはまらず、フォーカスシステムやアクセシビリティなどの機能を最初から考慮に入れるべきだと強調されています。後からこれらの機能を付け加えようとすると、コードが捻じ曲がり、全体がうまくフィットしなくなる結果を招くと指摘されています。これは、小屋の基礎を作った後に高層ビルが必要だとわかるようなものだと例えられています。</p>
+<h2>まとめ</h2>
+<p>このコメントスレッドでは、WinAPIを使ったUIツールの技術的側面に触れつつ、UIライブラリ開発が本質的に抱える複雑性と、それをいかに効果的に管理・設計すべきかについて深い議論が交わされました。特に、初期段階での包括的な設計と、YAGNI原則に過度に依存しないアプローチが、堅牢なUIフレームワーク構築には不可欠であるという点が強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
