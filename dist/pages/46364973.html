@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test, don&#x27;t (just) verify - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Test, don&#x27;t (just) verify</h1>
+        <div class="meta">
+            投稿日: 2025年12月23日 | ランク: 9
+        </div>
+        <a href="https://alperenkeles.com/posts/test-dont-verify/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、AI支援プログラミングがコード生成のボトルネックをコードの検証に移すという著者の主張を中心に展開しています。特に、フォーマル検証（形式的検証）の役割、AIの活用可能性、そしてテストと型付けの有効性について議論が集中しています。</p>
+<h2>フォーマル検証の実現可能性とAIの役割</h2>
+<p>多くのコメントは、AIがフォーマル検証を主流にするという著者の主張について懐疑的または慎重な姿勢を示しています。一部のユーザーは、AIがフォーマル検証のツールにアクセスし、その出力を活用することで、検証プロセスを支援できると考えています（1.3.1.1）。また、近年のAIの進化（特にLLM）により、これまでROIの観点から不可能だったAlloyモデルの作成などが可能になり、状況が質的に変化したと指摘する意見もあります（1.3.2）。一方で、AIが数百万行のコードを完全に形式的に検証する日がすぐに来るわけではないという現実的な見方もありますが、ビジネスロジックや分散トランザクションを扱う5〜10kLOCのモジュールであれば、AIを使ったモデリングは現実的になったという意見もあります（1.10）。</p>
+<p>しかし、AIがフォーマル検証に直接優れているわけではないという意見も強く、LLMスタイルのAIは形式的検証にはあまり適していないと指摘されています（1.3.1）。フォーマル検証には膨大な量の学習データが必要ですが、そのようなデータはまだ存在しないため、大規模な合成データ生成が必要であり、その信頼性を人間が検証することが難しいという課題も挙げられています（1.7）。また、パフォーマンスや時間計算量といった要素を考慮しない「技術的に正しい」コードをAIが生成する可能性があり、数週間にもわたるAIの検証がコスト的に許容できるのかという疑問も呈されています（1.17）。</p>
+<h2>テストと型付けの重要性</h2>
+<p>AI支援プログラミングにおいて、フォーマル検証ほど完全でなくても、テスト駆動開発（TDD）が多くの利点をもたらすという意見が多く見られます（1.9）。AI支援TDDは、AIがテストと実装の両方を生成することで「二重帳簿方式」のような働きをし、エラーの可能性を低減する可能性が指摘されています（1.9.1）。しかし、AIが単にテストをパスさせるために無意味なテストを考案する可能性も指摘されており、人間によるTDDほど信頼できないという懸念も示されています（1.9.1.1.2、1.9.1.2.1）。</p>
+<p>静的型付け言語の重要性も強調されています。型付けは、プログラムの状態に関する仮定のずれに起因するバグの大部分を防止し、コードの推論を容易にする一種の検証であると考えられています（1.5、1.13）。特にRustのような言語はメモリの安全性を検証する上で非常に有用とされています（1.5）。静的型チェックは、無数のユニットテストの代わりになり、「すべてのxについて」考えることを強制することで、より深い思考を促すと主張されています（1.13.2、1.13.2.1）。動的型付け言語でのプログラミング経験から、型を隠し、暗黙の型変換を行う言語は、初期の親しみやすさがあるものの、最終的にはメンテナンスの問題やバグにつながるとの声もあります（1.13.2.6）。ただし、ClojureやCommon Lispのような一部の動的言語は、イミュータブルな性質やデータ中心のアプローチにより、型エラーの問題が少ないという反論もあります（1.13.1、1.13.1.1）。</p>
+<h2>その他の論点</h2>
+<ul>
+<li><strong>デプロイ速度のボトルネック</strong>: AIがコードを生成する速度は速いが、安全にデプロイする速度はそれほど速くないという著者の主張に共感する意見が多いです（1.2）。しかし、このボトルネックはコンピュータプログラミングの初期から常に存在していたという意見もあります（1.2.1、1.2.2）。</li>
+<li><strong>Verification-Guided Development (VGD)</strong>: 著者のVGDアプローチについて、詳細な記事やチュートリアルを求める声があります（1.1）。</li>
+<li><strong>仕様の課題</strong>: フォーマル検証やAI支援プログラミングの最大の課題の一つは、完全な形式仕様の作成自体が難しいことであると認識されています（1.16）。既存のソフトウェアには仕様がないため、これを克服するには時間がかかると考えられています。</li>
+<li><strong>誤字脱字</strong>: AI生成コンテンツの完璧さとは対照的に、人間の文章にある誤字脱字が、手作り感を醸し出し、微笑ましいというコメントもあります（1.21）。</li>
+</ul>
+<h2>まとめ</h2>
+<p>AI支援プログラミングがコード生成の効率を大幅に向上させる一方で、コードの品質と信頼性を確保するための検証プロセスが新たなボトルネックとして浮上していることが、議論の核となっています。フォーマル検証は理想的な目標として認識されていますが、その現実的な適用範囲、AIの能力、およびコストに関する懸念が表明されています。当面の間は、TDDや静的型付けといった既存の強力な手法が、AI支援開発におけるコード品質を維持するための重要な手段であり続けるという見方が優勢です。AIはこれらの検証プロセスを支援するツールとして期待されていますが、自動化された完全な検証への道のりはまだ長いと考えられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

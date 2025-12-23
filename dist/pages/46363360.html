@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant database clones with PostgreSQL 18 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Instant database clones with PostgreSQL 18</h1>
+        <div class="meta">
+            投稿日: 2025年12月23日 | ランク: 8
+        </div>
+        <a href="https://boringsql.com/posts/instant-database-clones/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、PostgreSQLのデータベースクローニング機能、特にPostgres 18で導入される予定の「instant clones」と、既存の代替ソリューションについて議論しています。コメントは主に、開発やテスト環境でのデータベースクローニングの有用性、既存の技術（ZFS、Btrfs、CoWストレージなど）との比較、および関連するツールやサービスに焦点を当てています。また、PostgreSQLの全体的な評価や、AIによるコード生成に関する活発な議論も展開されています。</p>
+<h2>統合テストと開発ワークフロー</h2>
+<p>多くのユーザーが、統合テストや回帰テスト、学習環境の提供において、データベースの迅速なクローン作成が非常に有用であると強調しています。
+*   <strong>統合テストと回帰テスト:</strong> OP（元の記事の著者）は、この機能が自身の統合テストと回帰テストのユースケースに合致し、大規模なデータセットの操作を容易にすると述べています。
+*   <strong>テストコンテナとの併用:</strong> テストコンテナ内での動作について疑問が呈されており、OPは基盤となるボリュームへのioctlコールが必要であり、ボリュームのマウントが必要になると推測しています。
+*   <strong>開発環境の効率化:</strong> 複数のコードインスタンスをより簡単に立ち上げるためのgit worktreesのセットアップにも役立つという意見や、SQLマイグレーションの反復作業を楽にするという意見があります。
+*   <strong>既存のソリューション:</strong> Neon Postgresのブランチ機能が、アクティブな接続があるライブデータベースでのプレビューデプロイやマイグレーションのドライランに利用できることが挙げられています。また、AWS Auroraのクローン機能も参照されていますが、新しいクラスターのプロビジョニングに時間がかかるため、統合テストには実用的ではないと指摘されています。</p>
+<h2>クローニング技術と代替案</h2>
+<p>コメントスレッドでは、Postgres 18の機能だけでなく、他のファイルシステムやデータベースに依存しないクローニング技術についても言及されています。
+*   <strong>ZFS/XFS reflinks:</strong> 記事の主要なトピックであり、Postgres 18で導入される予定の機能です。ZFSやXFSのreflinksを利用して、コピーオンライトでデータベースのクローンを瞬時に作成します。
+*   <strong>HAMT (Hash Array Mapped Trie):</strong> 不変データ構造を使用するデータベースは、ZFS/XFSだけでなく任意のファイルシステムで瞬時クローンを可能にするという理論が提示され、ClickHouseやDatomicが例として挙げられています。
+*   <strong>LVM/Btrfsスナップショット:</strong> ファイルシステムレベルのスナップショットを利用して、データベースのクローンを作成する方法も提案されています。MariaDBでの瞬時リセットの課題を解決する可能性も議論されていますが、DBの再起動が必要になる点や、パフォーマンスに関する懸念も示されています。
+*   <strong>トランザクションセッション:</strong> 各テストを独自のトランザクションセッション内で実行し、テスト後にロールバックすることで、データベースの状態をリセットする方法も提案されています。これは高速ですが、オートインクリメントIDがロールバックされないという欠点があります。
+*   <strong>ツールとサービス:</strong>
+    *   <strong>pgtt (Postgres Test Tool):</strong> BenjaminFaalが開発した、Postgresベースのアプリケーションのローカルテスト/開発を簡素化するGUIツール。テンプレートをスナップショットとして使用し、それらを簡単に切り替える機能を提供します。
+    *   <strong>Velo:</strong> elitanが開発した、ZFSスナップショットを使用してPostgreSQLのインスタントブランチングを行うツール。Postgres 18以前のバージョンで動作し、完全なサーバー分離を提供します。</p>
+<h2>AI生成コードに関する議論</h2>
+<p>Veloの作者がClaude AIを使用してプロジェクトを構築したことが判明し、AI生成コードの品質、信頼性、および開示の必要性について熱い議論が展開されました。
+*   <strong>品質と信頼性:</strong> AI生成コードは、特にデータベースクローニングのような「ミッションクリティカルな」ツールでは、人間によるレビューや厳密なテストが不可欠であるという懸念が表明されています。一方で、テスト目的であればLLM駆動型開発を受け入れるべきだという意見もあります。
+*   <strong>開示の必要性:</strong> AIツールの使用を明示的に開示すべきかどうかが議論されました。一部のユーザーは、開示は信頼性を高めると主張し、他のユーザーは、コードがどのように書かれたかよりも、その品質と機能が重要であると反論しました。
+*   <strong>「Vibe Coding」批判:</strong> AIによる「vibe coding」（直感的なコーディング）は、コードの品質を低下させ、保守性を損なう可能性があるという批判がありました。</p>
+<h2>PostgreSQLの現状と競合データベース</h2>
+<p>PostgreSQLが多機能で優れたSQLデータベースとして広く認識されている一方で、他のデータベースとの比較も行われています。
+*   <strong>PostgreSQLの利点:</strong> 多くのユーザーは、PostgreSQLが「万能」であり、無料で提供されていることから、他のSQLデータベースを使用する理由が疑問視されるほどであると考えています。
+*   <strong>PostgreSQLの限界:</strong> 大規模なデータセットでのパフォーマンス問題や、組み込みのパーティショニングの課題が指摘されています。また、分析クエリにはClickHouseのようなカラム型データベースが依然として高速であること、MySQLがマスター・マスターレプリケーションで優れていること、MongoDBが地理的分散やシャーディングで優れていることなども挙げられています。
+*   <strong>マイグレーションとシャーディング:</strong> MySQLのVitessのような成熟したシャーディングソリューションがPostgreSQLには不足しているという指摘があり、Nekiのような新しいプロジェクトに期待が寄せられています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、PostgreSQLのデータベースクローニング機能が開発者コミュニティにとって非常に価値のある進化であることを示しています。特に統合テスト、開発環境の迅速な構築、およびマイグレーションのドライランにおいて、そのメリットが強調されています。既存のZFSスナップショットやNeonのようなサービスを利用した代替ソリューションも活発に議論されており、PostgreSQLエコシステムの多様性と革新性がうかがえます。</p>
+<p>一方で、AIによるコード生成は、その効率性と可能性を認めつつも、特にミッションクリティカルな用途での信頼性と品質について、コミュニティ内で慎重な議論が巻き起こっています。最終的には、コードがどのように生成されたかよりも、その機能性、堅牢性、および作者による継続的なサポートが重要であるという意見が支配的ですが、透明性に対する期待も存在します。</p>
+<p>PostgreSQLは多機能で強力なデータベースとしての地位を確立していますが、特定のワークロード（OLAP、大規模な分散システムなど）においては、引き続き他の専門データベースが選択肢となることも示唆されています。全体として、データベース技術の進化と、それを取り巻く開発実践の変化に関する洞察に満ちた議論が展開されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

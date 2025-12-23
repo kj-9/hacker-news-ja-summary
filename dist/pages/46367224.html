@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabrice Bellard Releases MicroQuickJS - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Fabrice Bellard Releases MicroQuickJS</h1>
+        <div class="meta">
+            投稿日: 2025年12月23日 | ランク: 1
+        </div>
+        <a href="https://github.com/bellard/mquickjs/blob/main/README.md" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Fabrice Bellard氏によるJavaScriptエンジン「MicroQuickJS」の発表について議論しています。特に、その軽量性、組み込みシステムでの可能性、そしてBellard氏のプログラマーとしての伝説的な地位に焦点が当てられています。</p>
+<h2>Fabrice Bellard氏への賞賛</h2>
+<p>コメントの多くは、Fabrice Bellard氏の驚異的な生産性と多様なプロジェクト（FFmpeg, QEMU, QuickJSなど）に対する深い尊敬と賞賛で満たされています。彼は「史上最高の天才プログラマー」や「10xプログラマー」の例として挙げられ、その一貫性と技術力が高く評価されています。また、彼が少ない依存関係とツールで、頑強なコンピュータサイエンスに基づいた完全なプログラムを書くという手法に注目が集まっています。</p>
+<h2>MicroQuickJSの用途と特徴</h2>
+<p>MicroQuickJSは、わずか10KBのRAMで動作する非常に軽量なJavaScriptエンジンであり、主に組み込みシステムやリソースが限られた環境での利用が期待されています。</p>
+<ul>
+<li><strong>組み込みシステム</strong>: ESP32やArduinoのようなボードをJavaScriptでプログラミングする可能性が議論されており、CircuitPythonやEspruinoの代替となり得ると考えられています。特に、<code>malloc()</code>の非依存性がこの用途での主要な特徴として挙げられています。</li>
+<li><strong>WebAssemblyでの利用</strong>: Untrustedコードをサンドボックスで実行する目的で、Python FFIライブラリとして、またはWebAssemblyにコンパイルしてDeno, Node.js, Pyodide, Wasmtimeから呼び出すという実験が紹介されています。これにより、メモリと時間の両方を厳しく制限できる強固なサンドボックスが提供されるとされています。</li>
+<li><strong>JSの制限</strong>: MicroQuickJSの「stricter mode」は、JavaScriptを互換性の制約なしに組み込みシステムに最適化するために、ES5に近いサブセットをサポートし、不要な機能を制限しています。これにより、簡素化と効率化が実現されています。</li>
+</ul>
+<h2>Webの軽量化と将来性</h2>
+<p>MicroQuickJSの発表は、より軽量で効率的なWebの姿を求める議論にも繋がっています。</p>
+<ul>
+<li><strong>「Lite Web」の提案</strong>: 小型で効率的なJSサブセット、HTML、CSSを使い、それをサポートするシンプルなブラウザで構成される「新しいWeb」のアイデアが提示されています。これにより、既存のWebの肥大化と複雑さから脱却し、より高速でリソース消費の少ない体験を提供できると期待されています。</li>
+<li><strong>課題と実現可能性</strong>: この「Lite Web」が普及するかについては懐疑的な意見もありますが、一部のユーザーは、高速でシンプルなサービスへの需要や、アドブロッカーの使用率の高さに希望を見出しています。Markdown over HTTPなどの代替案も提案されています。</li>
+<li><strong>Webアプリとネイティブアプリ</strong>: ブラウザをドキュメントレンダラーとGUIアプリケーションの実行環境として分離すべきという意見や、Webのポータビリティとサンドボックス化の利点を評価する意見も存在します。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Fabrice Bellard氏の新作「MicroQuickJS」は、その極めて軽量な設計と組み込みシステムでの可能性から大きな注目を集めています。コメントでは、Bellard氏のプログラマーとしての非凡な才能と、彼の作品が技術コミュニティに与える影響に対する深い尊敬が繰り返し表明されています。また、MicroQuickJSは、Webの肥大化に対する解決策としての「軽量なWeb」の可能性や、 untrusted コードを安全に実行するためのサンドボックス技術としての応用についても活発な議論を促しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
