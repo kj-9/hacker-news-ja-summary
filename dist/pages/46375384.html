@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When Compilers Surprise You - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">When Compilers Surprise You</h1>
+        <div class="meta">
+            投稿日: 2025年12月24日 | ランク: 4
+        </div>
+        <a href="https://xania.org/202512/24-cunning-clang" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、コンパイラが整数の合計を計算するループを最適化してO(1)の閉形式（ガウスの公式）に変換するという話題を中心に展開しています。特に、Matt Godbolt（Compiler Explorerの作成者）がこの最適化に驚いていることに対し、他のユーザーがさまざまな意見を述べています。</p>
+<h2>コンパイラ最適化の驚きと「基本的な性質」</h2>
+<p>多くのユーザーは、コンパイラがO(n)のループをO(1)の閉形式に最適化することに驚きを表明しています。特に、Matt Godbolt自身がこの最適化に驚いているという点が強調されています。しかし、一部のユーザーはこれを「基本的かつ不可欠な最適化」と見なし、CSの学位を持つ人なら認識できるはずだと主張しています。この対立は、コンパイラ最適化の深さと、それが専門家にとってもいかに複雑であるかを浮き彫りにしています。</p>
+<h2>浮動小数点数と閉形式の限界</h2>
+<p>インタビューで整数の合計に関する質問をする際、浮動小数点数を使った場合の挙動について言及があります。浮動小数点演算は結合法則が成り立たないため、厳密なO(1)の閉形式解は存在しないとされています。しかし、回答が<code>float32</code>の場合は2^24、<code>float64</code>の場合は2^53未満の整数であれば、浮動小数点数でも整数を完全に表現できるため、技術的には閉形式解が適用可能であるという指摘がなされています。</p>
+<h2>インタビューの質問としての妥当性</h2>
+<p>「整数の合計」に関する質問が、開発者の面接において適切かどうかについて議論が展開されています。あるユーザーはこれを「役に立たない雑学」と批判し、面接官が賢く見せようとしているだけだと示唆しています。一方で、この質問は、候補者がアセンブリコードを見たり、最適化についてどのように思考するかを評価するための良い出発点となると擁護する意見もあります。知識そのものよりも、問題解決へのアプローチや学習意欲を見るためのツールとして有効だとされています。</p>
+<h2>GCCとClangの比較</h2>
+<p>GCCがこの種の最適化を行わない（またはClangに比べて劣る）という点も話題になっています。多くのユーザーは、Clang/LLVMがより積極的で高度な最適化を行う傾向にあると指摘しており、これはLLVMが比較的新しいコンパイラ技術を取り入れやすい設計であることに起因すると説明されています。この特定の最適化は「Scalar Evolution (SCEV)」という技術によるものであり、LLVMでは複雑な実装（約14,000行のコード）によって実現されています。</p>
+<h2>まとめ</h2>
+<p>本コメントスレッドでは、コンパイラによるループの閉形式への最適化、特に整数の合計の最適化について活発な議論が交わされました。この最適化がMatt Godboltのような専門家をも驚かせることが、コンパイラ技術の複雑さと奥深さを示しています。また、この種の知識が面接で問われることの妥当性や、GCCとClangの間での最適化能力の差についても言及され、コンパイラ技術への理解度、面接戦略、そしてソフトウェア開発におけるパフォーマンス意識の重要性に関する多角的な視点が提示されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
