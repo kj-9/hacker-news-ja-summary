@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 3.15’s interpreter for Windows x86-64 should hopefully be 15% faster - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Python 3.15’s interpreter for Windows x86-64 should hopefully be 15% faster</h1>
+        <div class="meta">
+            投稿日: 2025年12月25日 | ランク: 1
+        </div>
+        <a href="https://fidget-spinner.github.io/posts/no-longer-sorry.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Pythonインタープリターのコアループを最適化するための、特にMSVCコンパイラにおける新しい「テールコーリング」アプローチに関する記事について議論しています。このアプローチは、巨大な単一関数で構成される既存のインタープリターループがコンパイラのヒューリスティックを阻害するという問題に対処し、インライン化などの最適化を可能にすることでパフォーマンスを向上させるとされています。</p>
+<h2>パフォーマンス最適化の現状と期待</h2>
+<p>コメントでは、Pythonのコアループの最適化が「ローハンギングフルーツ」のように見え、なぜこれまでハイパー最適化されていなかったのかという疑問が提起されています。これに対し、Pythonは元々速度よりもコードのシンプルさを優先しており、JITコンパイルのような大幅な速度向上はGuido Van Rossumが引退した後から本格化したという意見があります。また、PyPyのような高速なPython実装が存在するにもかかわらず、CPythonはC拡張機能との互換性を維持する必要があるため、大幅な変更が難しいという点が指摘されています。</p>
+<h2>MSVCの新しい<code>[[msvc::musttail]]</code>属性</h2>
+<p>この最適化の中心となっているのは、MSVCコンパイラに最近導入された実験的な<code>[[msvc::musttail]]</code>属性です。これにより、CPythonの「テールコーリング」インタープリターがMSVC環境でテールコール最適化を強制できるようになり、パフォーマンスの向上が期待されています。この属性が発表されてからわずか数週間でCPythonに組み込まれたことは、CPython開発チームの迅速な対応と、インタープリターの内部ループがいかに「ハイパー最適化」されているかの証拠と見なされています。MicrosoftがPythonのパフォーマンス向上に投資する理由として、Azure上のPythonワークロード、Excel for Python、Pylanceなどの開発ツールにおけるPythonサポートなどが挙げられています。</p>
+<h2>以前のベンチマーク結果と透明性</h2>
+<p>過去のPython 3.14の性能向上に関する主張が、特定のコンパイラのバグによって誇張されていたという事例が言及されています。筆者はこれについて「早期に公開し、間違いを犯すことを厭わない」という姿勢で透明性を重視していることを説明しており、これによりバグが早期に発見され、CPython全体に利益をもたらしたと述べています。この透明性と真実への献身は、コミュニティから高く評価されています。新しいデザインは、コンパイラの最適化の「気まぐれ」に左右されにくくなるという利点も指摘されています。</p>
+<h2>PythonとJavaScriptのパフォーマンス比較</h2>
+<p>JavaScriptのV8エンジンと比較してPythonインタープリターがはるかに遅い理由についての議論もあります。これに対し、GoogleがV8に投入した膨大なリソース、JavaScriptのウェブにおける中心性、そしてPythonのC拡張エコシステムが内部変更を制限している点が挙げられています。Pythonは言語としての「動的さ」もJavaScriptより高く、これが最適化を難しくしている要因とも言われています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、Pythonインタープリターの速度向上の取り組み、特にMSVCコンパイラにおける新しいテールコーリング最適化と<code>[[msvc::musttail]]</code>属性の導入に焦点を当てています。CPythonの過去の速度重視ではない開発方針やC拡張機能との互換性維持の難しさが、パフォーマンス最適化の障壁として挙げられる一方で、Microsoftとの協力による新たな最適化の機会が生まれていることが示されています。筆者の透明性の高いコミュニケーション姿勢はコミュニティから好意的に受け止められており、継続的な小規模な改善がPythonの広範なユーザーベースにとって重要であるという認識が共有されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
