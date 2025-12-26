@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package managers keep using Git as a database, it never works out - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Package managers keep using Git as a database, it never works out</h1>
+        <div class="meta">
+            投稿日: 2025年12月26日 | ランク: 3
+        </div>
+        <a href="https://nesbitt.io/2025/12/24/package-managers-keep-using-git-as-a-database.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのスレッドは、パッケージ管理システムがGitをバックエンドとして使用することの課題と利点について議論しています。多くの人気のあるパッケージマネージャーが当初Gitを「データベース」として利用したものの、スケーリングの問題に直面し、より効率的なソリューションへの移行を余儀なくされたという記事の主張に焦点を当てています。</p>
+<h2>Gitのデータモデルとスケーリングの限界</h2>
+<p>Gitのデータモデル（Merkleツリーに埋め込まれたネットワークデータベースのようなもの）は当初から強力であるものの、Linuxカーネルのようなプロジェクト規模を超えてスケーリングすることには限界があるという意見があります。記事で指摘されている問題の多くは、Gitのコンテンツアドレスツリー自体ではなく、プロトコルやGitHubの実装に起因すると考えられています。Gitはハッシュアドレスツリーを効率的に保存できますが、効率的な転送は苦手です。<code>go get</code>のパフォーマンス問題やNixpkgsの課題も、GitHubからの効率的なデータ転送の欠如に起因していると指摘されています。</p>
+<h2>Gitを「データベース」として使うことの倫理と実用性</h2>
+<p>「動いているうちは簡単な方法を使い、問題が起きたら直す」というアプローチが議論されています。Juliaパッケージマネージャーはその一例で、問題が発生したら改善するシンプルなパスがあると主張されています。しかし、このアプローチは「非倫理的」であり、「怠惰なエンジニアリング」の典型だと批判する声もあります。スケーリングの問題を後回しにすると、修正が困難で費用のかかるものになる可能性があります。一方で、リソースが限られているプロジェクトが成功するかどうかわからない段階で、最初から過剰に設計されたソリューションに投資するのは現実的ではないという意見もあります。Git（特にGitHubの無料ホスティング）は、プロジェクトの立ち上げ時に魅力的で経済的な選択肢となり得ます。</p>
+<h2>コモンズの悲劇とユーザー時間の外部性</h2>
+<p>GitHubの無料利用は「コモンズの悲劇」に例えられています。エンジニアリング時間ばかりに焦点を当て、ユーザー時間を軽視する傾向があり、その結果、ユーザーは余分なデータダウンロードや待ち時間を強いられています。しかし、GitHubがMicrosoftによって所有されていることから、これを「コモンズ」と呼ぶのは不適切だという反論もあります。しかし、無制限に無料で利用できるリソースは、それが誰かの所有物であっても「コモンズの悲劇」のような影響を受ける可能性があるという見解も提示されています。</p>
+<h2>Gitの代替案と改善策</h2>
+<p>Gitの限界に対する具体的な解決策として、Goモジュールプロキシの導入や、Goパッケージパスの<code>.git</code>サフィックスの追加、<code>GOPRIVATE</code>環境変数の設定など、<code>go get</code>のパフォーマンス問題を改善する方法が挙げられています。また、Tailscale DNSと証明書を使用してサービスをインターネットに公開せずに有効な証明書を取得する方法も提案されています。将来的には、OCIアーティファクト（コンテナレジストリと同じプロトコル）をパッケージマネージャーのバックエンドとして使用することが推奨されており、Homebrewがすでに採用している例も紹介されています。SQLiteをパッケージマネージャーのデータベースとして使用することや、rsyncベースのシステム（Gentooなど）やappend-only tarファイルをインデックスとして使用するシステム（Hackageなど）も代替案として挙げられています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsの議論は、多くのパッケージマネージャーがGitを初期のデータストアとして利用し、GitHubの無料ホスティングの恩恵を受けて成長したという事実を浮き彫りにしています。このアプローチは、プロジェクトの初期段階での開発コストと複雑さを大幅に削減できるという利点がある一方で、スケーリングやパフォーマンスの課題に直面する可能性があるという問題点も指摘されています。Gitのデータモデルやプロトコル自体に固有の限界と、GitHubの具体的な実装が引き起こす問題が混在していることが示されました。最終的な結論としては、「動いているうちは簡単な方法を使い、問題が起きたら直す」という実用主義的なアプローチが多くのプロジェクトで採用され、成功を収めてきたものの、長期的な視点ではより堅牢なデータベースや分散型システムへの移行が不可欠であるという認識が共有されています。解決策としては、プロキシ、効率的なデータ転送プロトコル、SQLite、OCIアーティファクトなどが提案されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
