@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Ez FFmpeg – Video editing in plain English - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Ez FFmpeg – Video editing in plain English</h1>
+        <div class="meta">
+            投稿日: 2025年12月27日 | ランク: 7
+        </div>
+        <a href="http://npmjs.com/package/ezff" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この投稿は、FFmpegコマンドを覚えずに一般的な動画・音声操作を可能にするCLIツール「Ez FFmpeg」に関するものです。AIを使用せず、正規表現マッチングで動作するため、高速で無料でオフラインでも利用できる点が特徴です。</p>
+<h2>LLMベースのFFmpegツールとの比較</h2>
+<p>投稿者は、APIキーや費用、遅延が必要なAIベースのFFmpegツール（wtffmpeg、llmpeg、ai-ffmpeg-cliなど）との違いを強調しています。Ez FFmpegはAIを使わず、正規表現マッチングで機能するため、瞬時に無料でオフラインで動作します。これに対して、一部のユーザーはLLMがFFmpegコマンドの生成に非常に役立つと考えており、複雑なフィルタチェーンなど特定のユースケースではLLMが優れたツールであると述べています。しかし、LLMの出力の信頼性や、ユーザーがLLMに依存しすぎて基盤となるツールを学習しないことへの懸念も示されています。</p>
+<h2>FFmpegコマンドの複雑さと抽象化の必要性</h2>
+<p>多くのコメントは、FFmpegのコマンドライン引数が非常に複雑で覚えにくいという共通の認識を表明しています。ユーザーは、たまにしか使わないコマンドのためにFFmpegの構文を覚えるのは時間の無駄だと感じており、エイリアスやスクリプト、メモなどで対応していることが多いようです。この複雑さを解決するために、Ez FFmpegのような抽象化されたツールや、LLMのような自然言語インターフェースが求められています。「FFmpegはUXデザインの『Crysisが動くか？』になった」という意見もあり、その難しさが広く認識されています。</p>
+<h2>Ez FFmpegの実装と課題</h2>
+<p>Ez FFmpegは、約20の一般的な操作をカバーし、開発者がFFmpegで行うことの90%を網羅しているとされています。しかし、「convert video.mkv to mp4」のような一般的な操作が、無条件に再エンコードを行い、品質の低下や時間の無駄につながる可能性があるという批判もあります。また、「mb」が「ミリビット」と解釈される可能性があるなど、単位の曖昧さも指摘されています。さらに、Node.jsとnpmに依存している点も、セキュリティや効率性の観点から一部のユーザーに懸念されています。</p>
+<h2>その他のツールやアプローチ</h2>
+<p>FFmpegの複雑さを軽減するための他のアプローチも議論されています。
+*   <strong>GUIツール</strong>: Lossless CutやScreenFlowのようなグラフィカルインターフェースは、視覚的に操作できるため、コマンドラインに慣れていないユーザーにとって非常に有効です。
+*   <strong>他のCLIラッパー</strong>: OpenSSLやtar、ddなど、他の複雑なCLIツールに対しても同様の「人間フレンドリーな」ラッパーやTUI（テキストユーザーインターフェース）の需要があることが示されています。
+*   <strong>チートシートやドキュメント</strong>: コマンドを覚えるのではなく、必要なときにすぐに参照できるチートシートや、manページ、<code>apropos</code>などのドキュメントを効果的に活用する学習アプローチも提案されています。</p>
+<h2>まとめ</h2>
+<p>Ez FFmpegは、複雑なFFmpegコマンドを簡素化し、一般的な動画・音声操作を容易にするCLIツールとして歓迎されています。AIを使わないため、高速で無料でオフラインでも動作するという利点があります。しかし、その抽象化が再エンコードなどの潜在的な問題を隠蔽しているという批判や、Node.js依存への懸念も存在します。全体として、FFmpegの複雑さを軽減するツールへの強い需要があることが示されており、LLM、GUI、CLIラッパーなど、さまざまなアプローチがその課題に取り組んでいます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
