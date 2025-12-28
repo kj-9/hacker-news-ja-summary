@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replacing JavaScript with Just HTML - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Replacing JavaScript with Just HTML</h1>
+        <div class="meta">
+            投稿日: 2025年12月28日 | ランク: 6
+        </div>
+        <a href="https://www.htmhell.dev/adventcalendar/2025/27/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、JavaScriptを最小限に抑え、HTMLとCSSのネイティブ機能を活用してウェブサイトを構築することの利点と課題について議論しています。特に<code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>要素や<code>&lt;datalist&gt;</code>などの新旧のHTML機能に焦点が当てられています。</p>
+<h2>ネイティブHTML/CSS機能の可能性と利点</h2>
+<p>ユーザーは、多くの一般的なUIパターンがHTMLとCSSだけで実現できることを指摘しています。
+*   <strong><code>&lt;details&gt;</code> / <code>&lt;summary&gt;</code>:</strong> アコーディオン、コンテンツの展開/折りたたみ、プレビュー表示に非常に強力で、アクセシビリティ（ARIA属性なしで機能）や検索エンジンのクロール（Ctrl+Fで閉じたコンテンツも検索され、自動的に展開される）にも優れていると評価されています。GitHubのようなMarkdownベースのサイトで大きなログを隠すためにも使われています。最近のCSS機能（<code>@starting-style</code>、<code>transition-behavior: allow-discrete</code>）を使えばアニメーションも可能になりつつあります。
+*   <strong>ダーク/ライトモードスイッチ:</strong> チェックボックスと<code>:checked</code>、<code>body:has(#d:checked)</code>、メディアクエリを組み合わせることで、CSSだけで実装できます。ユーザーのシステム設定に依存せず、アプリごとにテーマを切り替えたいというニーズがあるため、このスイッチの提供は有用です。
+*   <strong><code>&lt;input&gt;</code>と<code>&lt;datalist&gt;</code>:</strong> 単純な自動補完や入力補助に利用できます。ただし、項目数が多い場合や複雑な要件には向かないという意見もあります。
+*   <strong>Popover API:</strong> ツールチップやライトボックスなど、多くのポップアップUIに利用できると期待されていますが、まだブラウザ間の互換性やポジショニングの問題が残っています。
+*   <strong>一般的なメリット:</strong>
+    *   <strong>軽量化:</strong> JavaScriptのダウンロード量を減らし、ページのパフォーマンスを向上させます。
+    *   <strong>アクセシビリティ:</strong> ネイティブ要素は多くの場合、標準でアクセシブルです。
+    *   <strong>堅牢性:</strong> JavaScriptが無効な環境でも機能します。
+    *   <strong>開発体験:</strong> シンプルなHTML/CSSは理解しやすく、保守が容易であると考える人もいます。</p>
+<h2>ネイティブ機能の課題と限界</h2>
+<p>一方で、ネイティブ機能にはいくつかの課題も指摘されています。
+*   <strong>カスタマイズとスタイリング:</strong> ネイティブ要素のデフォルトスタイルはブラウザによって異なり、凝ったデザインやアニメーションの実現には依然としてCSSの深い知識やJavaScriptが必要になることが多いです。特に<code>&lt;datalist&gt;</code>は、表示テキストと実際の値を分離できない、インタラクティブな結果のロードができない、スタイリングが難しいといった問題があります。
+*   <strong>複雑なインタラクション:</strong> タブ、高度なコンボボックス、ドラッグ＆ドロップのような複雑なUIパターンは、アクセシビリティを確保しつつ純粋なHTML/CSSだけで実装するのは困難であり、JavaScriptが必要になります。
+*   <strong>ブラウザの互換性と標準化の遅れ:</strong> 新しいHTML/CSS機能はまだブラウザサポートが不十分であったり、機能が完全に安定していなかったりする場合があります（例: Popover API、<code>&lt;details&gt;</code>要素のアニメーション）。
+*   <strong>開発者の慣習と教育:</strong> 多くの開発者は、以前のバージョンのHTML/CSSの制限からJavaScriptでUIを構築する習慣がついており、プラットフォームが提供する新しい機能を見落としがちです。現在の採用市場ではReactなどのJSフレームワークのスキルが重視されるため、ネイティブHTML/CSSの深い知識が評価されにくいという指摘もあります。
+*   <strong>Codepenへの依存:</strong> 記事のデモがCodepenへのリンクであり、ページ内に直接埋め込まれていないことに対する批判があります。これは「JavaScriptなしで」というメッセージと矛盾していると感じるユーザーもいます。</p>
+<h2>JavaScriptとの関係とWeb開発の未来</h2>
+<ul>
+<li><strong>HTMLとJSの役割:</strong> HTMLはコンテンツの構造を定義し、JavaScriptは複雑なインタラクションや動的なデータ処理を担当するという、それぞれの明確な役割があると多くの人が認識しています。HTMLのみで全てを賄うのは現実的ではない、という意見もあります。</li>
+<li><strong>プログレッシブエンハンスメント:</strong> まずHTML/CSSで基本的な機能を提供し、JavaScriptでユーザー体験を向上させるという「プログレッシブエンハンスメント」のアプローチが、技術的な卓越性とアクセシビリティの観点から推奨されています。</li>
+<li><strong>フレームワークの台頭:</strong> Reactなどのフレームワークは、UI開発を効率化するために広く採用されていますが、その結果、多くのWebサイトが過剰なJavaScriptに依存し、パフォーマンスやアクセシビリティの問題を引き起こしているという批判もあります。</li>
+<li><strong>HTMLの進化の必要性:</strong> HTMLがより多くのUIパターンをネイティブにサポートすることで、ウェブはさらに改善されるという意見が多く、現在のHTML標準化プロセスが遅いことを指摘する声もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>ウェブ開発におけるJavaScriptの利用は必須ですが、HTMLとCSSのネイティブ機能は進化しており、多くの一般的なUIパターンをJavaScriptなし、または最小限のJavaScriptで実現できます。<code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>要素は特にその多機能性とアクセシビリティが高く評価されています。しかし、高度なインタラクション、特定のスタイリング要件、ブラウザの互換性、開発者の慣習などの課題も存在します。HTMLとCSSの機能を最大限に活用し、JavaScriptを必要な場面でのみ使う「プログレッシブエンハンスメント」のアプローチが、パフォーマンス、アクセシビリティ、保守性の高いウェブサイトを構築するための鍵であると広く認識されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

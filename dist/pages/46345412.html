@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Never Use Pixelation to Hide Sensitive Text (2014) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Never Use Pixelation to Hide Sensitive Text (2014)</h1>
+        <div class="meta">
+            投稿日: 2025年12月28日 | ランク: 8
+        </div>
+        <a href="https://dheera.net/posts/20140725-why-you-should-never-use-pixelation/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にピクセル化やモザイク処理などの情報隠蔽技術のセキュリティ上の欠陥と、機密情報を効果的に隠すためのより良い方法について議論しています。</p>
+<h2>隠蔽技術の脆弱性</h2>
+<p>多くのコメントは、ピクセル化やモザイク処理のような固定アルゴリズムの隠蔽技術は、元の情報が何であるかという手がかり（文字の形、パターン、寸法など）を残すため、脆弱であると指摘しています。これにより、辞書攻撃や逆算によって元のテキストを復元される可能性があります。クレジットカード番号のような特定のパターンを持つ情報では、この脆弱性が特に顕著です。</p>
+<h2>情報の置き換えと破壊</h2>
+<p>最も効果的な情報隠蔽の方法として、「情報を変換するのではなく、削除する」という考えが繰り返し述べられています。つまり、ピクセル化やぼかしを適用するのではなく、元の情報を完全に覆い隠す、あるいは無意味な情報に置き換えるべきだという意見です。
+*   <strong>完全に塗りつぶす</strong>: 黒い四角で完全に覆い隠すのが最も安全な方法ですが、覆い隠された領域の寸法が漏れる可能性も指摘されています。
+*   <strong>ランダムな内容で置き換える</strong>: 元のテキストをランダムな文字、ノイズ、あるいはマルコフ連鎖で生成された無意味なテキストに置き換えてからピクセル化する方法が提案されています。これにより、元の情報から手がかりを得ることが不可能になります。
+*   <strong>[redacted]と置き換える</strong>: 完全にテキストを制御できる場合は、「[redacted]」という文字列に置き換えるのが最も単純で安全な方法です。</p>
+<h2>Flameshotの「擬似ピクセル化」</h2>
+<p>スクリーンショットツールFlameshotが採用している「擬似ピクセル化」が注目されています。これは、ピクセル化領域の「フリンジ（縁）」からのみ色を使用してピクセル化効果を生成し、内部のコンテンツをインプットとして使用しないため、元の情報を復元できないように設計されています。これは、美的要素を保ちつつセキュリティを向上させる試みとして評価されています。</p>
+<h2>その他の提案と議論</h2>
+<ul>
+<li><strong>複数のアルゴリズムの組み合わせ</strong>: モザイクと渦巻き効果を複数回、異なるサイズで、またはランダムな順序で適用するなど、ランダム性を加えることで検索空間を増やし、セキュリティを向上させる提案がありました。しかし、これらの操作がピクセルの合計などの情報を保持する可能性も指摘され、完全なセキュリティにはならないとされています。</li>
+<li><strong>悪用例</strong>: 性的虐待者が「渦巻き効果」を使って画像を隠蔽し、警察がそれを「逆渦巻き」した事例が共有され、このような技術の脆弱性の実例として挙げられました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、ピクセル化やモザイク処理といった一般的な情報隠蔽技術が、元の情報の手がかりを残すため安全ではないと強く主張しています。機密情報を確実に隠すためには、情報を変換するのではなく、完全に削除するか、元の情報とは無関係なランダムなデータで置き換えるべきだという意見が主流です。特にFlameshotの「擬似ピクセル化」は、セキュリティと見た目のバランスを取る興味深いアプローチとして注目されています。究極的には、元のコンテンツから一切の情報を漏らさないことが最も重要であると結論付けられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
