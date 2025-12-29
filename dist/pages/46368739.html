@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Superset – Terminal to run 10 parallel coding agents - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Superset – Terminal to run 10 parallel coding agents</h1>
+        <div class="meta">
+            投稿日: 2025年12月29日 | ランク: 7
+        </div>
+        <a href="https://superset.sh/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Git worktreesを活用して複数のAIコーディングエージェントや開発タスクを並行管理するオープンソースのターミナル「Superset」の発表と、それに対するコミュニティからのフィードバック、質問、議論を中心に展開しています。</p>
+<h2>開発環境の並行管理に関する課題とSupersetのアプローチ</h2>
+<p>人々は、Git worktreesを使った並行開発において、データベースやRedis、Celeryなどのマイクロサービスといったアプリケーションの状態をどのように管理するかに強い関心を示しています。あるユーザーは、これらの依存関係をモック化するアプローチを提案しましたが、別のユーザーは実際の環境との忠実性の問題点を指摘しました。
+Supersetの開発チームは、セットアップ/ティアダウンスクリプトを定義することで、Neon/SupabaseのようなDBブランチや、Dockerによる分離されたコンテナ（Redis/Postgres/Celeryなど）をworktreeごとに起動できると説明しています。将来的には、これらのスクリプトを自動生成する機能や、クラウドVM上でworktreesを実行する「クラウドワークスペース」機能によって、この問題の解決を目指しています。</p>
+<h2>多数の並行エージェントの生産性と人間のボトルネック</h2>
+<p>多くのエージェントを並行して実行することが本当に生産性向上につながるのか、人間による変更レビューがボトルネックにならないかという疑問が提起されました。一部のユーザーは、1つのエージェントでもレビューやバグ修正の時間が不足すると述べています。
+これに対し、レビューボット（CodeRabbit, Sourceryなど）の活用や、各worktreeに厳密な契約（スコープされたタスク、不変テスト、迅速に監査できる小さなdiff）を持たせる「構造化されたレビュー」の規律の重要性が提案されました。これにより、人間は「正しさ」ではなく「意図」の仲介に集中できると説明されています。</p>
+<h2>技術スタックと今後の展望</h2>
+<p>SupersetはTypescript、Electron、xterm.js、node-ptyで構築されており、VSCodeなどでも実績のある技術スタックを採用している点が評価されています。初期リリースではmacOSに注力し、コア体験を堅牢にすることに重点が置かれましたが、WindowsやLinuxビルドもロードマップにあり、強い関心が寄せられています。
+また、xterm.jsが大規模なターミナルを扱う際のパフォーマンス問題が指摘され、Ghosttyのようなネイティブなターミナルソリューションを代替として検討しているユーザーもいます。Superset開発チームは、クラウドVMでのworktrees実行、エージェント間のコンテキスト共有、複数のworktreesやプロジェクトを管理する上位オーケストレーションエージェントといった機能強化を計画しています。</p>
+<h2>まとめ</h2>
+<p>Supersetは、Git worktreesとAIコーディングエージェントを統合し、並行開発の生産性を向上させることを目指す、有望な新しいオープンソースターミナルです。コメントでは、特にデータベースやマイクロサービスを含む開発環境の分離・管理方法に関する課題と、多数の並行エージェントを扱う際の人間側のレビュー能力や作業の規律に関する活発な議論が展開されました。開発チームはこれらの課題に対応するための計画を提示しており、将来の機能拡張とクロスプラットフォームサポートに期待が寄せられています。また、この分野には多くの類似ツールが存在し、ターミナル技術の進化にも注目が集まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

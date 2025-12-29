@@ -1,0 +1,8 @@
+{
+  "comments_id": "46386878",
+  "rank": 9,
+  "title": "Show HN: Aroma: Every TCP Proxy Is Detectable with RTT Fingerprinting",
+  "link": "https://github.com/Sakura-sx/Aroma",
+  "created_date": "2025-12-29T20:14:57.555240",
+  "comments_summary": "このコメントは、Sakura-sx氏が開発した「Aroma」プロジェクトのTL;DR（要するに）説明で、TCP RTT（Round Trip Time）の測定を通じてTCPプロキシを検出する仕組みについて解説しています。\n\n## Aromaの目的とデータ取得方法\n\nAromaプロジェクトは、クライアントの最小TCP RTT (`tcpi_min_rtt`) と平滑化されたTCP RTT (`tcpi_rtt`) を測定することで、TCPプロキシの有無を判定します。このデータはFastly Custom VCLを通じて取得され、FastlyはLinuxカーネルの`struct tcp_info`からこの情報を受け取っています。Fastlyがデモに利用されるのは、世界中にPoP（Point of Presence）を持ち、TCPソケットデータを公開しているためです。\n\n## スコア計算とプロキシ検出基準\n\nプロキシ検出のスコアは、`tcpi_min_rtt`を`tcpi_rtt`で割るというシンプルな比率で計算されます。このスコアに基づいて、接続の状態が以下のように判断されます。\n\n*   **1.0 - 0.7**: 通常の接続。\n*   **0.7 - 0.3**: WiFi、モバイルデータ、衛星接続など、接続がやや不安定な状況では正常とみなされます。\n*   **0.3 - 0.1**: スコアが低く、TCPプロキシが関与している可能性を示唆します。\n*   **0.1未満**: 現在のコードではTCPプロキシとしてフラグ付けされます。\n\n## まとめ\n\nAromaプロジェクトは、Fastlyが提供するLinuxカーネルのTCP RTTデータを利用し、最小RTTと平滑化RTTの比率を算出することでTCPプロキシを検出するシステムです。このシンプルなスコア計算により、接続の安定性やプロキシの有無を判断することが可能になります。"
+}
