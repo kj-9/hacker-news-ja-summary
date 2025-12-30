@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loss32: Let&#x27;s Build a Win32/Linux - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Loss32: Let&#x27;s Build a Win32/Linux</h1>
+        <div class="meta">
+            投稿日: 2025年12月30日 | ランク: 5
+        </div>
+        <a href="https://loss32.org/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「Win32がLinux上で唯一安定したABIである」という考えに基づき、Win32アプリケーションをLinux上で動かす「Lindows」のような新しいLinuxディストリビューションのアイデアを中心に展開されています。特に、古いWindowsゲームの互換性、LinuxのABI安定性の問題、そしてMicrosoftのWindows UIの進化に対する不満が議論されています。</p>
+<h2>Win32の互換性とWine/Proton</h2>
+<p>多くのコメント投稿者は、WineとProtonがWindowsアプリケーション、特にゲームの互換性を向上させていることを強調しています。Wineが30年間開発され、優れた互換性を持っているという意見がある一方で、Wine AppDBの「ゴミ」評価の多さから、その互換性を「優れている」とは言えないという反論もあります。しかし、ProtonDBの検証済みタイトル数が急増していることや、Wine/ProtonがWindows自体よりも古いWindowsゲームとの互換性が高いという意見もあります。特に、DirectX 10以前のゲームは現代のWindowsでは動作が困難な場合が多いが、Wine/Protonでは問題なく動作することが指摘されています。</p>
+<h2>LinuxのABI安定性の問題</h2>
+<p>LinuxのABI（Application Binary Interface）の安定性の欠如は、議論の核心です。Linus Torvalds自身がLinuxディストリビューションのABI互換性が不十分であり、これがデスクトップでの普及を妨げていると指摘していることが引用されています。特に<code>glibc</code>のバージョン問題、GTKやQtなどのGUIツールキットの互換性の変更、X11からWaylandへの移行などが、開発者がアプリケーションをLinux全体で広く利用できるようにするのを困難にしている要因として挙げられています。この問題への解決策として、FlatpakやAppImageのようなコンテナ技術が提案されていますが、これらも完璧ではなく、システムの肥大化や制約を伴うとされています。</p>
+<h2>現代Windows UIへの不満と過去への郷愁</h2>
+<p>Windows 2000、XP、7といった過去のWindowsデスクトップ環境への郷愁が多く見られます。これらの時代のWindowsは「最も機能的で直感的かつ最適化されたデスクトップ環境」であったと評され、現代のWindows 10/11のUI、特にWebビューの多用、広告、リソース消費の多さ、パフォーマンスの低下に対する不満が表明されています。一部のユーザーは、Windows 2000 Server SP4を「史上最高のデスクトップOS」と称賛し、現代のWindowsのUIよりもXFCEなどのLinuxデスクトップ環境を好むと述べています。</p>
+<h2>まとめ</h2>
+<p>この議論は、Win32アプリケーションをLinux上でシームレスに動作させることの可能性と課題に焦点を当てています。Wine/Protonの進歩はWindowsアプリケーションの互換性を大幅に改善しましたが、LinuxのABIの安定性の欠如は依然として大きな課題です。多くのユーザーは、過去のWindowsのデスクトップ体験に郷愁を抱き、現代のWindowsの進化に不満を持っています。この背景から、Win32アプリを主要なデスクトップ環境として利用する「Lindows」のようなアイデアが、一部のユーザーにとっては魅力的な選択肢として浮上しています。このアイデアが実現可能であるかどうか、またLinuxデスクトップのABI問題を根本的に解決できるかどうかは、引き続き議論の対象となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
