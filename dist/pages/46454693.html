@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: OpenWorkers – Self-hosted Cloudflare workers in Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: OpenWorkers – Self-hosted Cloudflare workers in Rust</h1>
+        <div class="meta">
+            投稿日: 2026年01月01日 | ランク: 2
+        </div>
+        <a href="https://openworkers.com/introducing-openworkers" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>OpenWorkersは、V8アイソレート上で信頼できないJavaScriptコードを実行するためのセルフホスト可能なプラットフォームです。Cloudflare Workersと同じ開発体験（DX）を提供しつつ、ベンダーロックインを排除することを目指しています。現在のバージョンでは、fetch、KV、Postgres、S3/R2、cronスケジューリング、暗号化などの機能が利用可能です。</p>
+<h2>セキュリティとサンドボックス</h2>
+<p>多くのコメントで、サンドボックスのセキュリティ保証が議論されました。
+*   <strong>懸念点</strong>: ユーザーは、サンドボックスが攻撃に対して十分に堅牢であるという証拠や詳細なドキュメントを求めました。特にCloudflareのような大規模な企業が持つ専用のセキュリティチームと比べて、自己ホスト型ソリューションのセキュリティ保証は難しいという意見がありました。AI（Claude）の助けを借りて書き換えられたという言及も、一部のユーザーに懸念を与えました。
+*   <strong>作者の回答と調整</strong>: 作者は、OpenWorkersのサンドボックスは主に「リソース分離」を目的としており、真に信頼できないサードパーティコードにはコンテナやVMでの実行を推奨すると説明しました。これを受けて、プロジェクトのウェブサイトから「untrusted（信頼できない）」や「secure（安全な）」といった表現を削除し、脅威モデルを明確にするよう調整しました。
+*   <strong>V8とWASM</strong>: V8アイソレートはメモリ分離を提供し、CPUおよびメモリ制限を強制します。WASM（WebAssembly）とV8のサンドボックス能力についても議論があり、Cloudflare WorkersはWASMをサポートしていますが、ファーストクラスのサポートではないという指摘がありました。</p>
+<h2>Cloudflare Workersとの比較とベンダーロックイン</h2>
+<p>OpenWorkersの主な動機であるベンダーロックインの回避について多くの意見が寄せられました。
+*   <strong>DXの互換性</strong>: OpenWorkersはCloudflare WorkersのAPI互換性を目指しており、同じWorker構文（fetchハンドラ、Request/Responseなど）を使用することでコードの移行を容易にしています。
+*   <strong>workerdとの違い</strong>: Cloudflareのオープンソースランタイム「workerd」との違いも尋ねられました。作者は、workerdがランタイムのみであるのに対し、OpenWorkersはダッシュボード、API、スケジューラ、ログ、そして自己ホスト可能なバインディング（KV、S3/R2、Postgres）を含む完全なプラットフォームであると説明しました。また、workerdがC++ベースであるのに対し、OpenWorkersはRustとrusty_v8で構築されており、よりシンプルでハッキングしやすいと述べています。
+*   <strong>バインディングの重要性</strong>: Cloudflare Workersのバインディング（KV、R2、D1など）はプロプライエタリであるため、OpenWorkersがオープンソースのバインディングを提供することは、ベンダーロックインを避ける上で重要だと評価されました。</p>
+<h2>自己ホスティングとクラウドのコスト</h2>
+<p>クラウドサービスからの移行と自己ホスティングの経済性についても活発な議論がありました。
+*   <strong>コスト削減</strong>: 一部のユーザーは、自己ホスティングがクラウドサービスよりもはるかに安価になる可能性を主張しました（「100倍安い」という誇張表現も）。特に、安定した負荷を持つ小規模企業にとって、古いハードウェアや安価なVPSでも十分であるという意見がありました。
+*   <strong>クラウドの利便性</strong>: しかし、クラウドには物理的なセキュリティ、バックアップ、ダイナミックIPアドレスの心配がないなど、自己ホスティングにはない利便性があることも指摘されました。また、大規模な企業が自己ホスティングで大幅なコスト削減を達成できる一方で、小規模な企業ではインフラ管理にかかる人件費を考慮すると、それほど大きな節約にならない可能性も示唆されました。
+*   <strong>「クラウドの自己ホスティング」</strong>: 「クラウドを自分のコンピューターでホストする」という表現が、クラウドのメリット（弾力性、従量課金）と自己ホスティングのメリット（コスト、コントロール）の両方を求める現在のトレンドを象徴していると述べられました。</p>
+<h2>ロードマップと今後の機能</h2>
+<p>作者は、プロジェクトの今後の方向性についても触れました。
+*   <strong>不足している機能</strong>: Durable Objects、WebSockets、HTMLRewriter、キャッシュAPIが未実装であり、次の優先事項はデバッグのための実行記録/リプレイ機能であると述べました。
+*   <strong>開発体験の向上</strong>: CLI、GitHubとの自動デプロイ連携、YAML形式での設定管理が今後の大きな目標として挙げられました。特に、実行記録/リプレイ機能は、リクエストの決定論的なトレースをキャプチャし、GitHubイシューとしてプッシュしてローカルでリプレイできるようにすることを目的としています。
+*   <strong>Denoサポート</strong>: 現在V8ランタイムに注力しているが、Denoランタイムのサポートも再開する予定です。</p>
+<h2>まとめ</h2>
+<p>OpenWorkersは、Cloudflare Workersの優れた開発体験を保ちつつ、ベンダーロックインを排除し、自己ホスト可能なプラットフォームを提供するプロジェクトとして注目を集めています。セキュリティモデルの明確化（リソース分離が主目的）や、オープンソースのバインディング提供、そして将来的な開発体験向上へのロードマップが、コミュニティから高く評価されています。自己ホスティングとクラウドのコスト効率に関する議論は続いていますが、OpenWorkersは、企業が自身のインフラでモダンなJavaScriptワークロードを実行するための強力な代替手段となり得るでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

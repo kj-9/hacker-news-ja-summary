@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python numbers every programmer should know - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Python numbers every programmer should know</h1>
+        <div class="meta">
+            投稿日: 2026年01月01日 | ランク: 4
+        </div>
+        <a href="https://mkennedy.codes/posts/python-numbers-every-programmer-should-know/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、"Python Numbers Every Programmer Should Know"というタイトルの記事（Pythonの様々な操作のパフォーマンス数値とメモリ使用量をまとめたもの）について議論しています。コメントは、記事の有用性、Pythonのパフォーマンスに関する一般的な哲学、そしてPythonでパフォーマンスに懸念がある場合の対処法を中心に展開されています。</p>
+<h2>記事のタイトルと目的について</h2>
+<p>記事のタイトル「Python Numbers Every Programmer Should Know」は、多くのプログラマが知っておくべきJeff Deanの有名な「Latency Numbers Every Programmer Should Know」への言及であると指摘されています。しかし、多くのコメント投稿者はこの意図を理解しておらず、これらの数字を文字通り「すべてのプログラマが知るべき」ものとして受け止めています。著者は、マイクロ最適化を推奨するのではなく、さまざまな操作のコストを把握し、精神モデルを構築するための参考資料として提供したと説明しています。多くの人々は、低レベルのパフォーマンスの詳細はほとんどのPythonプログラマにとって不必要な「早すぎる最適化」であると考えています。</p>
+<h2>Pythonのパフォーマンスと最適化</h2>
+<p>多くのコメント投稿者は、もし記事にあるような特定のパフォーマンスの数値が重要になるのであれば、Pythonはそもそもその作業に適したツールではないと主張しています。Pythonは高レベルの言語であり、そのような低レベルの最適化は困難です。</p>
+<p>しかし、この意見には反論もあります。
+- <strong>ハイブリッドアプローチ</strong>: パフォーマンスが重要な部分には、CやRustなどの高速な言語で書かれた拡張機能（NumPy、Pandas、PyTorchのように）を使用し、それ以外はPythonの足場を維持するというアプローチが提案されています。
+- <strong>アルゴリズムの選択</strong>: リストのメンバーシップテストよりもセットのメンバーシップテストの方がはるかに速いなど、アルゴリズムやデータ構造の適切な選択がPythonのパフォーマンスを劇的に改善する可能性があると指摘されています。これはマイクロベンチマークではなく、アルゴリズムの改善の例として挙げられています。
+- <strong>プロファイリングの重要性</strong>: コードを最適化する前に、現実世界のデータで実際にどこが遅いのかを計測し、プロファイリングすることが重要であると強調されています。
+- <strong>JITライブラリなど</strong>: Numba、Jax、TritonのようなJITライブラリを使えば、新しい問題でもPythonで非常に高速なコードを書くことが可能であり、「高速なコードが必要ならPythonを使うな」という考えはもはや時代遅れだと主張されています。
+- <strong>スタートアップの選択</strong>: 小規模なシステムやスタートアップでは、開発速度が最優先されるため、Pythonが選ばれることが多いです。その後、規模が拡大してパフォーマンス問題に直面した場合でも、他の言語に移行するよりも、Python内で解決策（C拡張機能など）を探す方が現実的であると指摘されています。</p>
+<h2>記事の具体的な数値への疑問と批判</h2>
+<p>記事の具体的な数値やベンチマーク方法についても多くの疑問が呈されています。
+- <strong>メモリ使用量の不正確さ</strong>: 文字列のメモリ使用量が非ASCII文字列で異なること、オブジェクトヘッダーのオーバーヘッドが変わる可能性などが指摘されています。<code>int</code>が28バイトかかるのに、1000個の<code>int</code>のリストが7.87KBしかないのは、リスト自体（ポインタの配列）のサイズであり、中身のオブジェクトのサイズを含んでいないためではないかと推測されています。
+- <strong>ベンチマークの前提</strong>: リストや文字列の結合が定数時間で動作するのか、スレッド化されていないコードでマルチコアプラットフォームでのベンチマークを測定しているのか、などの疑問が挙げられています。
+- <strong>数値の変動性</strong>: ハードウェアアーキテクチャやPythonのビルド方法によって、これらの数値が大きく変動する可能性があることが指摘されています。
+- <strong>タイトルの言葉遣い</strong>: 「コレクションへのアクセスとイテレーション」のセクションで、リストのイテレーションがセットや辞書のイテレーションよりも遅いと誤解されるような記述があるとの指摘がありました（実際はメンバーシップテストの速度の違い）。
+- <strong>「スロット付きクラス」のパフォーマンス</strong>: スロット付きクラスの属性読み取りと通常の属性読み取りのレイテンシが同じであることに疑問が呈されています。
+- <strong>非現実的なベンチマーク</strong>: <code>asyncio.sleep(0)</code>を使ってイベントループの最小待機時間を測定するのは適切ではないという指摘がありました。
+- <strong>標準偏差の欠如</strong>: この種のベンチマークには標準偏差を含めるべきだという意見もあります。</p>
+<h2>まとめ</h2>
+<p>この議論は、「Python Numbers Every Programmer Should Know」という記事のタイトルが、Jeff Deanの有名な「Latency Numbers Every Programmer Should Know」へのオマージュであるにもかかわらず、多くの読者に誤解を与えたことから始まりました。コメント投稿者の多くは、Pythonを使用する上で、記事で示されたような低レベルのパフォーマンス数値を日常的に知る必要はないと主張しています。彼らは、もしこれらの数値が重要になるのであれば、それは通常、Pythonがそのタスクに適していないことを示唆するか、またはアルゴリズムやデータ構造の選択など、より高レベルの最適化が優先されるべきだと考えています。一方で、Pythonの作者は、マイクロ最適化を推奨するのではなく、様々な操作のコストを理解するための参考資料として提供したと説明しています。パフォーマンスが必要な場合は、CやRustの拡張機能の利用、プロファイリングによるホットスポットの特定、NumbaのようなJITライブラリの活用といった、Pythonエコシステム内での現実的なアプローチが推奨されています。最終的に、この記事はPythonのパフォーマンスに関する知識を深めることの価値と、それが実用上どこまで必要かという点について、活発な議論を巻き起こしました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

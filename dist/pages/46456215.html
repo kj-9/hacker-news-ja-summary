@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Subsystem Optimizations - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Memory Subsystem Optimizations</h1>
+        <div class="meta">
+            投稿日: 2026年01月01日 | ランク: 6
+        </div>
+        <a href="https://johnnysswlab.com/memory-subsystem-optimizations/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsユーザーは、あるサイトの記事がLLMによって生成された可能性を指摘し、特にLinuxのHuge Pagesに関する記事の詳細の不正確さについて議論しています。</p>
+<h2>記事の正確性とLLM生成の疑い</h2>
+<p>あるユーザーは、特定のサイトの記事が「トピック選択は良いが、詳細が不正確」だと感じており、この特徴から記事が大規模言語モデル（LLM）によって生成されたものだと推測しています。</p>
+<h2>Huge Pagesの現状と誤解</h2>
+<p>特に「huge pages」に関する記事は誤解を招くと指摘されています。現代のLinuxディストリビューションでは、Transparent Huge Pages (THP) がデフォルトで「madvise」に設定されており、GoやJVMプログラムなど、多くのアプリケーションがTHPを自動的に利用しています。手動で明示的なhuge pagesを管理することは煩わしいため、あまり使われていません。また、最新のLinuxカーネルには「folios」や「mTHP」といった新機能が導入され、THPの利用がさらにスムーズになっています。</p>
+<h2>適切なメモリアロケータの選択と利用</h2>
+<p>Ubuntuに付属するtcmalloc共有ライブラリは、huge pagesを体験する上での最悪な方法だとされています。ライブラリをプリロードする必要がある場合はmi-mallocが良い選択肢ですが、さらに良い方法として、実行時に<code>malloc</code>や<code>free</code>をオーバーライドするのではなく、プログラムのビルド時に<code>jemalloc</code>、<code>mi-malloc</code>、<code>TCMalloc</code>などのアロケータを直接リンクすることが推奨されています。この方法により、C++のサイズ指定deleteなど、より優れた機能を利用できます。Rustでは<code>use tcmalloc_better::TCMalloc</code>のように、このアプローチが比較的容易に実現可能です。</p>
+<h2>まとめ</h2>
+<p>このコメントスレッドでは、あるウェブサイトの記事がLLMによって生成された可能性と、その記事に含まれる技術的な不正確さ、特にLinuxにおけるHuge Pagesの実際の動作について議論が交わされました。現代のTHPの利用状況や、最適なメモリアロケータの選択・実装方法（ビルド時にアロケータをリンクするなど）が詳細に説明されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

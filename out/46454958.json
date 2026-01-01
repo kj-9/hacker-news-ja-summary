@@ -1,0 +1,8 @@
+{
+  "comments_id": "46454958",
+  "rank": 9,
+  "title": "Common Lisp SDK for the Datastar Hypermedia Framework",
+  "link": "https://github.com/fsmunoz/datastar-cl",
+  "created_date": "2026-01-01T20:14:51.236016",
+  "comments_summary": "[Common LispとDatastarを簡単に使えるようにするSDKと、NASA SPICEツールキットおよびJPL Horizons APIを使ったCassini-Huygensミッションシミュレーションのデモについて]\n\n## Datastar SDKとデモについて\n\nDatastarをCommon Lispで使いやすくするためのSDKが開発され、NASA SPICEツールキットとJPL Horizons APIを利用したCassini-Huygensミッションのシミュレーションデモが公開されました。SDK自体は非常にシンプルで、SSEストリームの維持、圧縮サポート (現時点ではzstdのみ)、CLOSをHunchentootとClackの両方に適合させる方法などに多くの時間が費やされました。開発者は、テストディレクトリに加えて、Horizons JPLデモのような短い完全なサンプルをexamplesディレクトリに追加することを検討しています。\n\n## SSE (Server-Sent Events) と非同期処理の課題\n\nSSE接続がワーカーをブロックするという指摘に対し、開発者はWookieを試していないと述べています。Clack+Wooの導入だけでもかなりの変更だったためです。WooとWookieの比較記事を読んでも、SSEにおける問題（単一スレッドで動作するため、一つのクライアントに応答中に他のクライアントのリクエストを読み取れない）はWooと同様である可能性があると見ています。この問題に対処するため、接続を維持せずにイベントを送信する `with-sse-response` マクロが追加されました。これは、非同期モデルがSSEストリームをオープンに保つことと相性が悪いという開発者自身の経験に基づいています。\n\n## SPICEデータの解析におけるFortranの利用\n\nSPICEアプリケーションがFortranを使用してSPICEデータを解析している理由について質問がありました。開発者は、使用しているCL-SPICEライブラリ（CFFIを介してSPICE Cライブラリをラップ）が、今回使用したかったタイプのSPICEカーネル（Commsモジュール用）をカバーしていなかったと説明しています。C SDKを使用するという選択肢もありましたが、以前のプロジェクトでFortran SDKを使用した経験があり、コードの大部分が既にあったため、Fortranを選択したとのことです。\n\n## まとめ\nこのHacker Newsのスレッドは、Common LispでDatastar SDKを開発した経験と、それを使ってNASA SPICEツールキットとJPL Horizons APIを利用したCassini-Huygensミッションのシミュレーションデモを作成したことについて議論しています。主な論点としては、SDK開発における課題（SSEストリームの維持、圧縮、CLOSの適合性）、SSE接続がワーカーをブロックするという非同期処理モデルとの相性の問題、そして特定のSPICEデータ解析にFortranを使用した理由が挙げられました。開発者は、既存のCL-SPICEライブラリの制限と過去のプロジェクトでの経験からFortranを選択したと説明しています。"
+}
