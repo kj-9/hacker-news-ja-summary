@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FracturedJson - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">FracturedJson</h1>
+        <div class="meta">
+            投稿日: 2026年01月02日 | ランク: 5
+        </div>
+        <a href="https://github.com/j-brooke/FracturedJson/wiki" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、人間が読めるJSONフォーマット「FracturedJson」に関するものです。このフォーマッタは、データ構造の複雑さに応じてJSONをよりコンパクトに、または拡張して表示することで、可読性を向上させることを目的としています。コメントでは、JSONのコメントの欠如、YAMLの問題点、およびさまざまな言語でのこのフォーマッタの実装に関する議論が展開されています。</p>
+<h2>JSONのコメントの欠如と代替案</h2>
+<p>多くのコメントが、JSONにコメント機能がないことについて言及しています。この欠如は、APIが解析ディレクティブとして利用されるのを防ぐという初期の設計決定に起因するとされており、これは「Hyrumの法則」の一例として挙げられています。しかし、設定ファイルや静的リソースとしてのJSONの用途を考えると、コメントは非常に必要とされており、コメントがないことはほとんどの人々を罰し、一部のユーザーが不正な使い方をするのを防ぐための「見下した」行為だと批判されています。</p>
+<p>一部のユーザーは、JSON内部に <code>_comment</code> や <code>comments</code> といったキーを持つオブジェクトとしてコメントをネストさせる代替策を提案していますが、これはフィールド名の衝突やコードの煩雑さを招く可能性があります。JSONCやJSON5といったコメントをサポートするJSONの派生形式も言及されていますが、広く普及しているわけではありません。</p>
+<h2>YAMLの欠点と批判</h2>
+<p>コメントはYAMLの人間可読性に関する激しい議論に発展しています。多くのユーザーがYAMLを「最悪」と呼び、インデントの複雑さ、パーサーの脆弱性、「Norway問題」（<code>no</code>がブール値のfalseとして解釈される問題）といった問題点を挙げています。YAMLの新しい仕様でこれらの問題が解決されたと主張する声もありますが、レガシーソフトウェアの普及により、依然として多くのユーザーが問題に直面していることが指摘されています。XMLと比較してYAMLの欠陥を強調する意見も多く、XMLを懐かしむ声さえ聞かれます。</p>
+<h2>FracturedJsonの実装と今後の展望</h2>
+<p>FracturedJsonは、C#とTypeScript/JavaScriptで実装されており、新しいPythonライブラリはC#コードをラップしています。ユーザーは、GoやRustなどの他の言語での実装を求めており、Rustの新しい実装がすでに公開されています。</p>
+<p>開発者は、複数の実装間での動作の一貫性を保証するために、言語に依存しない適合性テストスイートの重要性を強調しています。このツールが <code>jq</code> のような既存のJSON処理ツールと連携できることや、IDEの拡張機能やブラウザ拡張機能として視覚的なフォーマットに使用されることへの期待も表明されています。</p>
+<p>一部のユーザーは、FracturedJsonの特定のフォーマット、特にオブジェクトのプロパティを水平に展開する方法について批判的で、大規模なファイルでは横スクロールが必要になり、可読性が損なわれる可能性があると指摘しています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、JSONの人間可読性を向上させるFracturedJsonのようなツールの必要性を浮き彫りにしています。JSONにコメントがないという長年の問題と、設定ファイルとしてYAMLを使用することの複雑さが議論の中心となっています。FracturedJsonはJSONの可読性への新しいアプローチを提供しますが、フォーマットスタイルの好みや他の言語での実装の必要性など、課題も残っています。全体として、開発コミュニティはデータフォーマットの人間可読性、効率性、および堅牢性のバランスを見つけることに強い関心を持っていることが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
