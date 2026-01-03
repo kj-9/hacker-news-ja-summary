@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The C3 Programming Language - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The C3 Programming Language</h1>
+        <div class="meta">
+            投稿日: 2026年01月03日 | ランク: 2
+        </div>
+        <a href="https://c3-lang.org" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、C言語の後継を目指す新しいシステムプログラミング言語「C3」についての議論です。コメントはC3の設計哲学、機能、他の言語（Rust、Zig、Odinなど）との比較、LLMとの関連性、そしてコンパイラ設計に関する広範な話題に及んでいます。</p>
+<h2>LLMと低レベル言語</h2>
+<p>AI（LLM）がコードを生成する際の言語選択について活発な議論が交わされています。
+*   <strong>低レベル言語へのシフトの可能性</strong>: 一部のユーザーは、LLMがPythonのような高レベル言語ではなく、RustやC3のような低レベル言語でのコード生成において、より多くのメリットをもたらす可能性があると考えています。コンパイラがメモリバグなどの重い処理を肩代わりしてくれるため、AIがより高性能なコードを書けるようになるかもしれません。
+*   <strong>LLMの得意な言語</strong>: LLMはインターネット上に大量のデータがあるPythonやJavaScriptのような人気言語で特に優れているという意見がある一方で、Rustのような型情報が豊富で明示的な言語は、LLMがコードベースを段階的に成長させるための多くのコンテキストを提供するため、非常に適しているという意見もあります。
+*   <strong>LLMを活用した学習</strong>: LLMが生成したRustやGolangのコードをレビューすることで、新しい言語を学ぶ良い機会になっているという経験談も共有されています。</p>
+<h2>C3の設計と機能</h2>
+<p>C3の具体的な機能や設計思想に関するコメントが多く寄せられています。
+*   <strong>Cとの互換性</strong>: C3は既存のCビルドシステムにC3ファイルを混ぜて使用できる完全なABI互換性をキラー機能として挙げています。これは「進化であって革命ではない」というビジョンを反映していると評価されています。
+*   <strong>主要な機能</strong>: ヘッダーファイル不要、セマンティックマクロ、モジュールベースのネームスペース、スライス、演算子オーバーロード、コンパイル時リフレクション、強化されたコンパイル時実行、ジェネリクス、Resultベースのエラーハンドリング、Defer、値メソッド、関連enumデータ、プリプロセッサなし、未定義動作の削減（セーフモードでのランタイムチェック）、オプションの事前・事後条件などが挙げられています。
+*   <strong>「Excuse」</strong>: 例外機構が「Excuse」と名付けられている点がユニークだと述べられています。
+*   <strong><code>switch</code>文の動作</strong>: <code>switch</code>文のデフォルトのfall-through動作（ボディがない場合はfall-through、ある場合はbreak）は、「驚き最小の原則」に合致するという意見と、C言語の動作に慣れている人には驚きであり一貫性がないという意見で分かれています。
+*   <strong>コントラクト（事前・事後条件）</strong>: コンパイラがこれらを静的解析、ランタイムチェック、最適化に利用する可能性がある一方で、違反すると未定義動作となる点が議論を呼んでいます。セーフモードではランタイムアサートでチェックされますが、プロダクションビルドでは最適化のために真であると仮定される可能性があるというC/C++のアサートに似た性質が指摘されています。</p>
+<h2>他の言語との比較</h2>
+<p>C3は他のシステムプログラミング言語と比較されています。
+*   <strong>Zigとの比較</strong>: C3はZigとは異なる点を多く持ちます。例えば、C3は演算子オーバーロード、モジュールシステム、ファーストクラスラムダ、動的インターフェースを提供しますが、Zigはこれらを避ける傾向にあります。C3は「実用的なCの進化」を目指しており、ZigやOdin、Dの「Better C」モードに似ているとされています。
+*   <strong>Odin、Zig、D</strong>: これらの言語はCの後継または「より良いC」を目指しており、互いに競合するというよりは、トレードオフを議論し学び合っているという好意的な見方が示されています。
+*   <strong>Nimとの比較</strong>: Nimのデフォルトでヒープ確保データも値セマンティクスを持つアプローチ（スタック上のラッパーで管理）が、メモリ管理を簡素化する点で革新的だと評価されています。ただし、暗黙のコピーによるパフォーマンス上の懸念も指摘されています。
+*   <strong>Carbon</strong>: GoogleがC++の進化として開発しているCarbon言語との比較も挙がっています。</p>
+<h2>コンパイラと開発体験</h2>
+<p>コンパイラの複雑さや開発体験に関する広範な議論も含まれています。
+*   <strong>コンパイラの作成</strong>: コンパイラ開発の難しさについて語られつつも、LLVMを使えば比較的容易に小さな言語を立ち上げられるという意見があります。しかし、LLVMが必ずしも最適ではない（オーバーヘッドが大きい、機械語生成が遅いなど）という批判もあります。
+*   <strong>コンパイル速度</strong>: 「なぜ変更するたびにプログラム全体を再コンパイルする必要があるのか」という疑問が提示され、Zigのバイナリパッチングや、コンパイラの速度向上自体が解決策であるという議論があります。C3は分割コンパイルや動的リンクをサポートしています。
+*   <strong><code>goto</code>文</strong>: 新しい低レベル言語が<code>goto</code>を排除する傾向にあることに対し、一部のユーザーは特定のアルゴリズムにおいて<code>goto</code>が最もクリーンで読みやすい解決策となる場合があると指摘しています。</p>
+<h2>その他</h2>
+<ul>
+<li><strong>ウェブサイトの見た目</strong>: C3のウェブサイトのデザインについて、「プログラミング言語のウェブサイトかくあるべし」という意見と、「子供っぽくアマチュア的」という意見で対立が見られます。</li>
+<li><strong>WASMサポート</strong>: WASMへのコンパイル対応を重視する声があり、C3開発チームもWASMサポートに意欲を示しています。</li>
+<li><strong>構文の好み</strong>: <code>::</code>のようなスコープ演算子や演算子オーバーロードに対する好き嫌いの意見が表明されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>C3は、C言語の持つシンプルさやABI互換性を維持しつつ、モダンな機能と安全性を取り入れた「Cを好むプログラマーのためのCライクな言語」として注目されています。特に、既存のCエコシステムへの容易な統合や、強化されたコンパイル時機能が評価されています。LLMが低レベル言語でのコード生成にシフトする可能性が示唆される中で、C3のような言語が今後どのように進化し、システムプログラミングの現場で採用されていくのか、その動向が注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
