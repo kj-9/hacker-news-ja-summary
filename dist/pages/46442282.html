@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Address Spaces: Unsafe at any speed - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Linear Address Spaces: Unsafe at any speed</h1>
+        <div class="meta">
+            投稿日: 2026年01月04日 | ランク: 4
+        </div>
+        <a href="https://queue.acm.org/detail.cfm?id=3534854" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「なぜ今日のほとんどすべてがオブジェクト指向であるにもかかわらず、線形な物理・仮想アドレスが存在するのか」という問いに対する議論です。コメントは、主に後方互換性、パフォーマンス、柔軟性の観点から線形アドレスが依然として優位である理由を説明し、オブジェクト指向のメモリモデルへの移行に伴う課題や代替案について言及しています。</p>
+<h2>線形アドレスの継続理由</h2>
+<p>多くのコメントは、線形アドレスが現代のシステムで存続している主な理由として、<strong>後方互換性の価値</strong>、<strong>配列処理のパフォーマンスの重要性</strong>、そして<strong>設計の柔軟性</strong>を挙げています。線形メモリは、その上にいかなるオブジェクトモデルでも表現できる汎用性があり、これは特定のオブジェクトモデルを別のモデルで表現するよりもコストが低いとされています。また、V8エンジンの脆弱性修正のようにソフトウェアでの迅速な対応が可能である一方、ハードウェアレベルの脆弱性修正は困難であるため、下位層の安定性が重視されます。さらに、「メモリ安全性」の恩恵が現在のコストに見合わないという意見もあります。</p>
+<h2>オブジェクト指向と大規模メモリの課題</h2>
+<p>オブジェクト指向プログラミングが主流であるにもかかわらず、低レベルのメモリ管理が線形アドレスに依存していることには、根本的な課題が存在します。特に、オブジェクトのメモリ内サイズが非常に大きくなり（例：2^64バイトに近づく）、マルチレベルページテーブルなしでのマッピングが困難になる可能性が指摘されています。これに対する代替案として「Region（領域）」の利用が提案されており、マルチレベルページテーブルの複雑さを避けるアプローチとして挙げられています。また、そもそもどのようなオブジェクトモデルが最適であるかについて、関係者の間で合意が得られていないことも、オブジェクト指向のメモリモデルへの本格的な移行を阻む要因と見られています。</p>
+<h2>ハードウェアと代替案への疑問</h2>
+<p>線形アドレスの代替となるオブジェクト指向のメモリ管理システムが仮に存在した場合、それが実際のハードウェア（RAMやEPROM）とどのように連携し、アドレスを生成するのかという疑問が提起されています。また、オブジェクトストアハードウェアの動作原理、特にキャッシュの必要性や、現代のオブジェクトストアアーキテクチャに関する学術的な情報（論文など）を求める声もあります。ISA（命令セットアーキテクチャ）レベルでの型安全性への取り組み、例えばシャドースタックや制御フローインテグリティといった技術が、プログラム状態を対象としている点でオブジェクト指向のメモリモデルと類似している可能性も示唆されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsの議論は、線形アドレスモデルが現代のコンピューティングにおいて依然として広く採用されているのは、主に後方互換性、パフォーマンス、そして柔軟性という実用的な理由からであることを示しています。オブジェクト指向のメモリモデルへの移行には、技術的課題（特に大規模メモリの管理）と、最適なオブジェクトモデルに関する合意の欠如というハードルが存在します。一方で、ISAレベルでの型安全性への取り組みや「Region」のような概念は、将来的なメモリ管理の進化の方向性を示唆しており、ハードウェアレベルでの新たなアプローチへの関心も高く、この分野での探求が続いていることが伺えます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
