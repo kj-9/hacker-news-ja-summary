@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refactoring – Not on the backlog (2014) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Refactoring – Not on the backlog (2014)</h1>
+        <div class="meta">
+            投稿日: 2026年01月05日 | ランク: 4
+        </div>
+        <a href="https://ronjeffries.com/xprog/articles/refactoring-not-on-the-backlog/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、ソフトウェア開発におけるリファクタリングの重要性と、それを効果的に実践するための課題について議論しています。</p>
+<h2>リファクタリングの必要性と課題</h2>
+<p>多くのコメントは、リファクタリングが不可欠であるという点で一致しています。特に、「すべてのPRは、見つけた時よりもクリーンなコードベースを残すべきだ」という意見が支持されています。しかし、既存の機能を壊さずに、かつ再現性のある方法でリファクタリングを行うことの難しさも指摘されています。これには、明確なビジョンと献身を持つチーム、そして堅牢なテストが不可欠です。また、リファクタリングは時間がかかり、時間的プレッシャーや社内での評価といった「負け戦」になりがちであり、適切なサポートがなければ新しい「ごちゃつき」を生み出す可能性もあると述べられています。</p>
+<h2>リファクタリングの可視化と50/50ルール</h2>
+<p>リファクタリングをバックログに載せることの是非についても議論されています。リファクタリングをバックログに入れることで、コードベースのクリーンアップにかかるコストを上層部に可視化できるという意見があります。これは、新機能とリファクタリングの両方を各スプリントで同時に取り組む場合に特に有効です。一方で、上層部がリファクタリングを拒否する場合、記事で述べられているような「隠れた」アプローチ（つまり、日常的な開発の一部としてリファクタリングを行う）が有効であるとされています。あるコメントでは、新機能開発とバグ修正・改善活動（リファクタリングを含む）にそれぞれ50%ずつ時間を割り当てる「50/50ルール」を実践していたチームの成功例が挙げられています。</p>
+<h2>コード品質とエンジニアの役割</h2>
+<p>良いコード品質を確保するためには、エンジニアが自身の仕事に安心してコミットでき、反論する時間を与えられ、良い評価を受け、コードに対する強いオーナーシップを感じることが重要であると強調されています。AIはこれらの問題解決には役立たないと予測されており、「ひどいコードベースの第二の冬」が来るという懸念も表明されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、リファクタリングが開発プロセスに不可欠であるものの、実行には多大な課題が伴うことが議論されています。効果的なリファクタリングには、チームの献身、堅牢なテスト、そして上層部からのサポートが不可欠であり、リファクタリングを可視化する方法や、「50/50ルール」のような実践的なアプローチが提案されています。最終的には、エンジニアがコードにオーナーシップを持ち、安心して質の高い仕事をできる環境が、優れたコードベースを維持する鍵であることが強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

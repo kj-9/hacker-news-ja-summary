@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Y Combinator made it smart to trust founders - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How Y Combinator made it smart to trust founders</h1>
+        <div class="meta">
+            投稿日: 2026年01月05日 | ランク: 10
+        </div>
+        <a href="https://elbowgreasegames.substack.com/p/when-good-actors-can-trust-each-other" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Y Combinator（YC）が創設した「信頼性の高いエコシステム」をゲーム業界にも導入すべきだという提案から始まり、ゲーム業界のビジネスモデル、成功の難しさ、VC投資の課題、そしてAIがゲーム業界に与える影響について議論されています。</p>
+<h2>ゲーム業界の成功の難しさとビジネスモデル</h2>
+<p>多くのコメントが、ゲーム業界は他のテクノロジー分野、特にB2B SaaSと比較して、成功がはるかに難しいという認識を示しています。ゲームは「ヒット駆動型」であり、失敗作の多さが特徴です。VCの観点からは、失敗は織り込み済みであるものの、成功した際の「桁外れな成果」がVCのポートフォリオを支えるほど大きいかどうかが問われています。一部のユーザーは、高収益を上げるゲームは「ガチャ」や「ルートボックス」といったプレイヤーに不快な課金モデルに依存していると指摘し、VCがそのようなビジネスモデルを奨励することへの懸念を表明しています。一方で、MinecraftやAmong Us、初期のFortniteのように、搾取的なメカニズムに頼らず成功した例も挙げられ、持続可能なプラットフォーム構築の可能性が議論されています。</p>
+<h2>VC投資とYCモデルの課題</h2>
+<p>YCが築き上げた「高信頼性エコシステム」の有効性には同意があるものの、最近のYCがAI企業に投資を集中させていることに対し、多様性の欠如やその方向性への懸念が表明されています。VCが「AIを利活用するAIユーザー」に投資している現状は、かつてのYCの価値観とは異なると感じている元YC志望者もいます。また、ゼロ金利政策（ZIRP）時代にはVCが容易に資金を調達し、迅速な展開を求めたため、創業者がVCの望むことを言って資金を確保する傾向があったという指摘もあります。</p>
+<h2>AIとゲーム業界の未来</h2>
+<p>AIがゲーム業界に与える影響については、様々な意見があります。一部のコメントは、AIがゲーム業界全体の追い風になるのではなく、一部から奪い、一部に与えるだけだと懐疑的です。しかし、ゲーム業界は常に最先端技術を取り入れてきたため、AI技術を活用するのに最も適しているという意見もあります。特に、AIは迅速なプロトタイプ作成を可能にし、開発リスクを低減することで、小規模で clever なチームでも大規模で面白いゲームを開発できるようになると期待されています。長期的には、AIがマクロ経済的に人々の余暇時間を増やし、ゲームをプレイする時間が増える可能性も指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、ゲーム業界がYCのような高信頼性エコシステムを必要としているという提案に対し、その固有の課題（高い失敗率、ヒット駆動型、倫理的な課金モデルのジレンマ）が議論の中心となりました。成功したゲームのビジネスモデルや、VC投資の現状、そしてAIがゲーム開発と市場に与える潜在的な影響についても活発な意見交換が行われています。特に、AIがゲーム開発の効率を高め、新たな機会を創出する可能性が指摘される一方で、VCがAIに偏重していることや、ゲーム業界が直面する倫理的な課題への懸念も浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
