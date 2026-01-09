@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Demos in 140 Characters - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">JavaScript Demos in 140 Characters</h1>
+        <div class="meta">
+            投稿日: 2026年01月09日 | ランク: 2
+        </div>
+        <a href="https://www.dwitter.net/top" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、短尺JavaScriptデモの共有サイトであるDwitterに関するものです。特に、その文字数制限と、それを回避するためのテクニックや、その是非について議論されています。</p>
+<h2>Dwitterの文字数制限と「チート」</h2>
+<p>Dwitterは140文字という制限でJavaScriptデモを作成するプラットフォームですが、コメントでは<code>eval(unescape(escape</code>&gt;<code>.replace(/u../g,'')))</code>のようなテクニックを使って、実際には140文字以上のコードを実行していることについて言及されています。これは多バイトUnicode文字を利用してASCII文字を圧縮する手法であり、「チート」のように感じられるという意見があります。より高度な圧縮技術として、DEFLATE圧縮ペイロードをHTML/JSスタブで解凍・実行する方法や、PNG画像にペイロードを埋め込む方法も挙げられています。</p>
+<h2>圧縮技術の正当性</h2>
+<p>このような圧縮技術が「チート」と見なされるかどうかについて、議論があります。
+*   「バニラJSで可能であればチートではない」という意見がある一方で、特定の圧縮手法が常套化していることを指摘し、文字数制限の本質的な意味が薄れているという見方もあります。
+*   デモパーティーにおけるサイズ制限とCrinklerのような圧縮ツールの使用を例に出し、圧縮自体は努力の一部であるという意見もありますが、Dwitterの特定の圧縮手法は「一定の圧縮率」を持つため、文字数制限とは異なる文脈で捉えるべきだという意見も存在します。</p>
+<h2>改善提案</h2>
+<p>Dwitterの文字数制限に対する改善策として、以下の提案がありました。
+*   文字数ではなく、UTF-8エンコードされたテキストのバイト数で制限を設定する。
+*   Dwitterのベータ版フロントエンドには「compressed」トグルがあり、これによって圧縮後のサイズを確認できる機能が追加されていることが共有され、これはまさに求められていた機能だと歓迎されています。
+*   <code>eval</code>の使用を禁止し、より多くのグローバルショートカット（例: <code>globalCompositeOperation</code>など）を追加することで、コード量を削減できるようにすべきだという意見も出ています。</p>
+<h2>まとめ</h2>
+<p>Dwitterは、その厳格な140文字というJavaScriptデモの文字数制限によって、ユーザーが創造的な圧縮技術を編み出すきっかけを与えています。しかし、一部の圧縮手法、特にUnicode文字を利用したものは、文字数制限の意図を歪めているとして「チート」と見なされることもあります。この問題に対し、バイト数での制限や<code>eval</code>の禁止、さらにはDwitterベータ版での「compressed」表示機能の導入など、プラットフォーム側の改善やユーザーからの提案が活発に議論されています。DwitterがTwitterよりも長寿であることに触れつつ、そのコミュニティと技術的な探求心が高く評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

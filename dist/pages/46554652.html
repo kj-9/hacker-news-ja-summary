@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to store a chess position in 26 bytes (2022) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How to store a chess position in 26 bytes (2022)</h1>
+        <div class="meta">
+            投稿日: 2026年01月09日 | ランク: 7
+        </div>
+        <a href="https://ezzeriesa.notion.site/How-to-store-a-chess-position-in-26-bytes-using-bit-level-magic-df1fdb5364eb42fdac11eb23b25e9605" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、チェスの盤面状態を最小限のビット数でエンコードするという記事について議論しています。特に、その効率性、実用性、そして「完全な」盤面状態の定義について焦点が当てられています。</p>
+<h2>ビット数の正確性と「完全な」状態の定義</h2>
+<p>多くのコメントが、提示された26バイト（208ビット）というエンコードが、チェスのすべての合法的な盤面状態を表現するのに十分か、あるいは実際のゲームで観察される状態を表現するのに十分か、という点に疑問を呈しています。</p>
+<ul>
+<li><strong>合法的なチェス盤面状態の数:</strong> TrompとEulgroは、合法的なチェス盤面状態の数は約4.8 * 10^44 (2^148) から 7.7e45 (152.4ビット) であると指摘し、pklauslerの96ビットエンコードでは不十分であると述べています。</li>
+<li><strong>データベース内の状態 vs 全ての合法状態:</strong> Pklauslerは、自身のシステムが「観察されたチェス盤面」のみを対象としていたため、より少ないビット数で済んだと説明しています。Wongarsuは、データベース内の状態に限定することで、大幅な簡略化が可能になり、60ビット程度削減できると推測しています。</li>
+<li><strong>エンコード範囲の定義:</strong> Jmward01は、このエンコードが「ゲームの状態」ではなく「盤面の状態」を保存しているのかどうかという問いを提起しています。</li>
+<li><strong>引き分けルール:</strong> Btillyは、50手ルールや繰り返し引き分けルールなど、現在の盤面状態だけでなく過去の履歴（75手分の履歴や繰り返し回数）が必要となるルールがあるため、提示されたエンコードでは「完全な」ゲーム状態を捉えきれないと指摘しています。Trompは、FEN記法が半手数や総手数を考慮に入れることで、引き分けに必要な情報の一部を含んでいることを補足しています。</li>
+</ul>
+<h2>効率性と実用性</h2>
+<p>エンコードの効率性と、それが実際のアプリケーションでどのように機能するかについても議論されています。</p>
+<ul>
+<li><strong>開発時間 vs バイト数:</strong> Not_the_fdaは、提示された「賢い」エンコード方法は、理解しにくい複雑なコードにつながりやすく、バイトが安い現代においては開発者の時間の方が重要であると主張しています。</li>
+<li><strong>大規模なエンジンでの必要性:</strong> SkiFire13は、チェスエンジンが何億もの盤面状態を格納する必要がある場合、バイト単位の削減がパフォーマンスに大きく影響すると反論しています。しかし、jmward01は、それが「移動」を格納するのと「盤面状態」を格納するのとは異なる問題であると指摘し、KK7NILは、トランスポジション（異なる移動順序で同じ盤面状態に到達すること）を考慮すると盤面状態を保存することの価値を強調しています。</li>
+<li><strong>一般的な手法:</strong> AgingcoderとArnsholtは、ビットボードや可変長スキームなど、高性能なチェスプログラミングにおいて効率的なエンコードが標準的または一般的な手法であることを指摘し、Lichessの例を挙げています。</li>
+<li><strong>オーバーヘッド:</strong> Jcalvinowensは、密にパックされたデータ構造は、解析するための命令のオーバーヘッドが大きく、バイナリサイズが増加する可能性があるため、絶対的なミニマリズムが常に最善の選択ではないと警告しています。</li>
+</ul>
+<h2>特定のピースのエンコードに関する詳細</h2>
+<p>個々のピースのエンコード方法についても、詳細な改善案や疑問が提示されています。</p>
+<ul>
+<li><strong>ビショップのビット数:</strong> Bonziniは、ビショップは盤面の半分にしか移動できないため、6ビットではなく5ビットで済むと提案し、2ビット削減できると述べています。</li>
+<li><strong>キャスリングの判定:</strong> 4rtとEfitzは、キャスリング権限をピースの位置だけで判断することの誤りを指摘しています。ルークが初期位置にあっても、すでに移動して戻っている可能性があり、キャスリング権がない場合があるため、別途ビットが必要だと主張しています。Vntokは、キングとルークが両方とも動いていない場合にのみ機能すると補足しています。</li>
+<li><strong>アンパッサンの判定:</strong> EfitzとBobmcnamaraは、アンパッサンもピースの位置だけで判断するのは難しいとし、特定の状況で追加のビットが必要になる可能性について議論しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、チェスの盤面状態を最小限のビット数でエンコードするという挑戦が、単なる技術的なパズルではなく、多くの実用的な側面や理論的な深さを持つことを示しています。コメントは、エンコードの効率性、それがゲームの完全なルールセットをどの程度反映できるか、そして実際のチェスエンジンやデータベースでどのように機能するかについて、活発な意見交換を行っています。特に、「盤面状態」と「ゲームの状態」の区別、および引き分けルールに必要な履歴情報の取り扱いが、エンコードの「完全性」を決定する上で重要な論点となっています。また、効率性とコードの可読性の間のトレードオフも強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
