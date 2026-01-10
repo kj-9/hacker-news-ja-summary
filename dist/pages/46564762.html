@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New information extracted from Snowden PDFs through metadata version analysis - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">New information extracted from Snowden PDFs through metadata version analysis</h1>
+        <div class="meta">
+            投稿日: 2026年01月10日 | ランク: 6
+        </div>
+        <a href="https://libroot.org/posts/going-through-snowden-documents-part-4/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、PDF文書の変更履歴が保持されるメカニズムと、ジャーナリストによる機密文書の編集に関する議論に焦点を当てています。特に、スノーデン文書やエプスタイン文書のような機密性の高い情報源から公開されたPDFが、どのように以前のバージョンや隠された情報を含み得るかという技術的な側面が詳しく議論されています。</p>
+<h2>PDFのバージョン履歴と構造</h2>
+<p>PDFが以前の変更履歴を保持できるのは、その内部構造によるものです。PDFは、オブジェクトのテーブルとそれらのオブジェクトへの参照ツリーで構成されており、文書が編集される際に、古いオブジェクトを削除せずに新しいバージョンのオブジェクトをファイルに追記する「インクリメンタルアップデート」機能を使用します。これにより、以前のバージョンの文書データがファイル内に残されることになります。</p>
+<ul>
+<li><strong>オブジェクトベースの構造</strong>: PDFは様々な種類のオブジェクトの集まりで構成されており、各オブジェクトは番号付きIDを持ちます。変更がある場合、既存のオブジェクトを上書きするのではなく、新しい「世代」のオブジェクトを追記することで更新されます。</li>
+<li><strong>「インクリメンタルアップデート」</strong>: この機能は、特に遅いコンピューターやメモリ不足の環境で編集を迅速かつ容易に行うことを目的として導入されました。フォームのフィールド値の更新などがこれに該当します。また、PDF署名にも不可欠で、署名が追加される際に以前の署名を破損させずに新しい署名を追記するために使われます。</li>
+<li><strong>隠された情報の抽出</strong>: <code>pdfresurrect</code>のようなツールや、<code>mutool clean -d</code>でPDFを解凍することで、これらの以前のバージョンや参照されていないオブジェクトを抽出し、変更履歴や隠された情報を明らかにすることが可能です。</li>
+<li><strong>「ソフトデリート」</strong>: コメントでは、このメカニズムが「ソフトデリート」のように機能し、ビットを消去する代わりに参照を解除するようなものだと表現されています。</li>
+</ul>
+<h2>PDFの検査ツールと機密情報の保護</h2>
+<p>PDFの透明性を高めるためのツールや、機密情報を保護するための対策に関する議論も行われています。</p>
+<ul>
+<li><strong>既存の検査ツール</strong>: <code>qpdf</code>（QDF形式でエクスポート可能）や、悪意のあるPDFの解析に使われるREMNuxのツール群が紹介されています。これらはPDFの内部構造を検査し、理解するのに役立ちます。</li>
+<li><strong>情報保護の対策</strong>:<ul>
+<li><strong>印刷してスキャン</strong>: PDFを物理的に印刷し、それをスキャンして画像ベースの新しいPDFを作成する手法は、元のPDFに埋め込まれたメタデータやバージョン履歴などの非本質的な情報を除去するのに有効だと提案されています。</li>
+<li><strong>プリンターの追跡ドット</strong>: しかし、カラープリンターには目に見えない黄色のドットコードが印刷され、日付、時間、シリアル番号、場合によってはプリンターのIPアドレスなどの情報が含まれる可能性があるため、注意が必要です。これは主に偽造防止のために導入されたとされています。白黒レーザープリンターにはこの技術は存在しないとされていますが、レーザー変調によるデータ埋め込みの可能性も指摘されています。</li>
+<li><strong>スクリーンショット/画像変換</strong>: PDFページをスクリーンショットにしたり、PNG/TIFFなどのラスタ形式に変換してから新しいPDFを作成する方法も提案されています。「Print to PDF」機能も同様の効果が期待されます。</li>
+<li><strong>LLMによる再構成</strong>: テキストをLLMで読み取り、句読点や間隔を保持せずに再構成し、単純なエンコーディング（UTF-8）で保存した後、画像化するという高度な手法も検討されています。</li>
+<li><strong>オープンソースプリンターへの期待</strong>: 2Dプリンターの世界ではオープンソースの選択肢が不足していることに対する不満も表明されており、完全にコントロール可能なプリンターへの期待が示されています。</li>
+</ul>
+</li>
+</ul>
+<h2>ジャーナリストによる文書の編集と情報開示</h2>
+<p>ジャーナリストが公開する機密文書の編集や情報の扱いに関する倫理的・技術的な側面も議論されています。</p>
+<ul>
+<li><strong>ジャーナリストによる修正</strong>: スノーデン文書のようなケースでは、ジャーナリストが文書を修正（編集）することがあり、元の投稿では、意図しないメタデータ漏洩があったことが指摘されています。</li>
+<li><strong>修正の理由</strong>: ジャーナリストは、他者に危害を及ぼす可能性のある情報を修正する義務があると伝統的に考えられています。また、出版社は政府の意見とは独立した責任を負います。</li>
+<li><strong>透明性の欠如</strong>: コメントでは、ジャーナリストが修正箇所を「修正済み」と明記し、その理由を説明しなかったこと、また、オリジナルPDFではなくスクリーンショットを公開するなどの技術的知識が不足していたことへの失望が表明されています。</li>
+<li><strong>librootによる調査</strong>: <code>libroot</code>の投稿者は、スノーデン文書の数百のPDFを調査した結果、ジャーナリストの作業は全体的に優れており、今回のケースはわずかなメタデータ漏洩の失敗であったと述べています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、PDF文書の内部構造がどのようにして以前の変更履歴を保持するのかという技術的な側面に深く切り込んでいます。特に「インクリメンタルアップデート」機能が、本来の目的（効率的な編集）とは異なる結果（隠された情報の保持）をもたらしていることが明らかになりました。また、機密文書の公開における情報保護の難しさ、特にプリンターの追跡ドットのような隠れた識別子、そしてジャーナリストによる修正の倫理と透明性の重要性が議論の中心となっています。PDFの検査ツールの必要性と共に、真に安全な情報開示のための技術的・運用的な課題が浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
