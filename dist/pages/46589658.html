@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date is out, Temporal is in - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Date is out, Temporal is in</h1>
+        <div class="meta">
+            投稿日: 2026年01月12日 | ランク: 5
+        </div>
+        <a href="https://piccalil.li/blog/date-is-out-and-temporal-is-in/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、JavaScriptの新しいTemporal APIと、既存のDate APIが抱える問題点について議論しています。多くのコメントが、Date APIの使いにくさ、特にタイムゾーンに関する複雑さに言及し、Temporalへの期待を表明しています。</p>
+<h2>Date APIの欠点</h2>
+<p>現在のJavaScriptのDate APIは、長年にわたり開発者の間で不満の種でした。</p>
+<ul>
+<li><strong>タイムゾーンの扱いが不十分</strong>: 最も大きな問題点として、タイムゾーンのサポートが貧弱であることが挙げられます。タイムゾーンをまたぐスケジューリングシステムを構築する際に苦労した経験が語られています。Date APIはタイムゾーンをサポートしておらず、その結果Temporalを使用する主な理由となっています。</li>
+<li><strong>非直感的な挙動とバグ</strong>: 特定の文字列形式（例: "YYYY-MM-DD"）をパースする際に、タイムゾーンの解釈を巡る混乱から日付がずれるなどのバグが発生することが指摘されています。これは、ISO 8601の意図とES5、ES2015の仕様変更の歴史が複雑に絡み合った結果であり、過去のウェブサイトとの互換性のために修正が困難になっています。</li>
+<li><strong>可変性</strong>: Dateオブジェクトが可変であることも問題視されています。新しいTemporal APIのようなイミュータブルな値が望ましいとされています。</li>
+<li><strong>学習コストの高さ</strong>: Date APIの挙動は予測が難しく、開発者がその複雑さにうんざりしている様子がうかがえます。「二度と考える必要がないなら喜ばしいことだ」といったコメントもあります。ChatGPTがDate APIのドキュメントトラフィックを半減させたのではないかと推測する意見もあり、AIが複雑なAPIの利用を簡素化している可能性が示唆されています。</li>
+</ul>
+<h2>Temporal APIへの期待と課題</h2>
+<p>JavaScriptの新しいTemporal APIは、これらの問題の解決策として大きな期待を集めています。</p>
+<ul>
+<li><strong>改善された設計</strong>: Temporalは、日付、時刻、タイムゾーンを明確に区別し、より直感的で堅牢な方法で時間データを扱うことを目指しています。<code>Temporal.PlainDateTime</code>のように「プレーン」がタイムゾーンがないことを示すなど、セマンティクスが改善されていることが評価されています。</li>
+<li><strong>イミュータブルなオブジェクト</strong>: Temporalオブジェクトはイミュータブルであり、Date APIの可変性の問題を解決します。</li>
+<li><strong>採用状況と互換性</strong>: しかし、Temporal APIの導入はまだ始まったばかりであり、主要ブラウザでのネイティブサポートは限定的です。記事執筆時点（2023年12月頃）ではChromeの最新版とFirefoxでしか完全にサポートされておらず、SafariやEdgeではまだ利用できません。このため、実プロダクションでの利用にはポリフィル（<code>js-temporal/temporal-polyfill</code>や<code>fullcalendar/temporal-polyfill</code>など）が必要となります。ポリフィルのバンドルサイズを懸念する声や、ネイティブサポートが広がるまで「何年もかかるだろう」と悲観的な見方をする人もいます。</li>
+<li><strong>うるう秒のサポート</strong>: Temporal APIは、天文計算など特殊な用途で必要となる「うるう秒」の情報はサポートしていません。これは、APIがUTCに重点を置いているためであり、POSIXタイムスケールに基づいていることが原因とされています。</li>
+</ul>
+<h2>その他の関連事項</h2>
+<ul>
+<li><strong>JavaのDate APIとの比較</strong>: JavaのDate APIも初期には多くの問題がありましたが、JDK8で導入された<code>java.time</code>によって大きく改善され、「ゴールドスタンダード」と評価されています。JavaScriptのTemporalも同様の進化を遂げることを期待する声があります。</li>
+<li><strong>広告への不満</strong>: 記事自体の品質は評価されつつも、記事内の広告の多さに対する不満も述べられています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>JavaScriptの既存のDate APIは、特にタイムゾーンの扱いと非直感的な挙動において多くの問題と開発者の不満を抱えています。新しいTemporal APIは、より堅牢で直感的な時間処理を提供し、これらの問題の多くを解決することが期待されていますが、主要ブラウザでのネイティブサポートがまだ限定的であるため、広く採用されるまでには時間がかかります。開発者は、現在のところポリフィルを使用するか、ネイティブサポートの普及を待つ必要があります。また、うるう秒のような特殊な時間情報への対応はTemporalのスコープ外とされており、ニッチな用途では引き続き専門的なライブラリが必要となる可能性があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

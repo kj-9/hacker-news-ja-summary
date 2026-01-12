@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthenticated remote code execution in OpenCode - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Unauthenticated remote code execution in OpenCode</h1>
+        <div class="meta">
+            投稿日: 2026年01月12日 | ランク: 4
+        </div>
+        <a href="https://cy.md/opencode-rce/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドでは、OpenCodeの旧バージョンに見つかった重大なセキュリティ脆弱性（任意のコマンド実行）と、その後の開示プロセス、そしてメンテナーの対応について議論されています。メンテナーは対応の遅れを認めつつ、今後の改善策を提示しています。</p>
+<h2>セキュリティ脆弱性とその影響</h2>
+<p>OpenCodeの以前のバージョン（v1.1.10より前）には、Webブラウザを介して任意のウェブサイトがローカルマシン上で任意のコマンドを実行できる重大な脆弱性が存在しました。この問題を受けて、ユーザーは最新バージョン（v1.1.10以降）の使用が強く推奨されています。一部のコメントでは、この種の脆弱性が悪用される可能性や、将来的なRCE（リモートコード実行）のリスクに対する懸念が示されており、gvisorのような適切なサンドボックス環境でモデルを実行する必要性が指摘されています。</p>
+<h2>開示と対応のプロセス</h2>
+<p>脆弱性の報告が2025年11月17日に行われ、その後メンテナーへの連絡が複数回試みられたにもかかわらず「応答なし」の状態が続いたという開示のタイムラインについて、コミュニティから懸念が表明されました。メンテナーは、報告に使われたメールアドレスが監視されていない別のリポジトリのものであったこと、メインリポジトリに適切な<code>SECURITY.md</code>がなかったことが原因と説明しています。問題が認識されてからは迅速に修正し、CVEプロセスの学習や体制整備を進めているとのことです。メンテナーは、日々大量のissueが報告される中での管理の難しさや、自身の経験不足を認めています。</p>
+<h2>プロジェクトの成長と管理体制</h2>
+<p>OpenCodeプロジェクトは急速に成長しており、その結果としてissueの処理やセキュリティ報告への対応が追いついていない状況が明らかになりました。メンテナーは、今後専門家からアドバイスを受け、バグバウンティプログラムの資金調達、セキュリティ監査の実施などを計画していると述べています。一部のコメントでは、プロジェクトの焦点はコードベースの開発そのものよりも、作業の組織化と管理体制の構築にあるべきだと提案されており、開発速度を管理するための組織原則の検討が求められています。</p>
+<h2>コミュニティからの反応</h2>
+<p>メンテナーが状況を正直に認め、改善策を提示したことに対して、多くのユーザーから「オープンさに対する敬意」「良い仕事と幸運を」といった肯定的な反応が寄せられました。しかし、脆弱性報告への初期対応の遅れや、将来的なセキュリティリスクへの懸念は依然として残っており、今後の迅速な改善が強く期待されています。</p>
+<h2>まとめ</h2>
+<p>OpenCodeプロジェクトの旧バージョンに発覚したRCE脆弱性と、その後の開示プロセスにおける問題が議論の中心となりました。メンテナーは、プロジェクトの急速な成長と管理体制の不備からくる対応の遅れを認め、専門家のアドバイス導入、バグバウンティ、セキュリティ監査の実施といった抜本的な改善策を提示しました。コミュニティからはメンテナーの誠実な姿勢を評価する声がある一方で、今後のセキュリティ対策と組織運営の強化が強く求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
