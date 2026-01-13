@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Ayder – HTTP-native durable event log written in C (curl as client) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Ayder – HTTP-native durable event log written in C (curl as client)</h1>
+        <div class="meta">
+            投稿日: 2026年01月13日 | ランク: 7
+        </div>
+        <a href="https://github.com/A1darbek/ayder" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、C言語で書かれた単一バイナリ、HTTPネイティブの耐久性のあるイベントログ「Ayder」の発表と議論についてです。このプロジェクトは、シンプルさ、curlをクライアントとして使用できること、およびクラッシュリカバリの堅牢性を強調しています。</p>
+<h2>シンプルさと操作性</h2>
+<p>Ayderは、JVM、ZooKeeper、厚いクライアントライブラリを必要とせず、<code>curl</code>をクライアントとして使える点で、セットアップと操作のシンプルさを特に強調しています。これは、同様の哲学を持つとされる「nsq」プロジェクトと比較されており、両者ともに運用経験の容易さを重視しています。Ayderの作者は、nsqが軽量さを保つために耐久性を一部犠牲にしているのに対し、Ayderは「実行しやすい」という感覚を維持しつつ、クラッシュリカバリとレプリケーションに関するより強力な保証を提供することを目指していると説明しています。</p>
+<h2>耐久性とクラッシュリカバリ</h2>
+<p>プロジェクトの主な特徴の一つは、その耐久性とクラッシュリカバリ機能です。デモでは、意図的にSIGKILLを使用してクラッシュさせ、その後にシステムが再起動し、オフセットとデータが失われていないことを検証する様子が示されています。約800万オフセットの場合、SIGKILL後のクラッシュリカバリには約40〜50秒かかると報告されています。この堅牢なクラッシュリカバリは、Ayderが提供する主要な保証の一つです。</p>
+<h2>RaftとVSRの選択</h2>
+<p>コメントでは、AyderがコンセンサスアルゴリズムとしてRaftを選択した理由と、TigerBeetleがVSR（Viewstamped Replication）を選択したこととの比較が議論されています。作者は、TigerBeetleのVSRが固定スキーマ、決定論的ステートマシン、レプリケーションと実行順序に対する厳密な制御という彼らの問題空間に非常に適していることを認めています。しかし、Ayderは「ストリーミングセマンティクスを持つ追記専用ログ」「動的なトピック/パーティション」「HTTP経由で任意のペイロードを生成する外部クライアント」という異なる制約を持っており、Raftは「よく理解されており、オペレーターにとって推論しやすく、システムが『試しやすい、運用しやすい』という目標に合致する」ため、実用的な選択であると説明しています。</p>
+<h2>まとめ</h2>
+<p>Ayderは、シンプルさ、HTTPネイティブ、単一バイナリであることを特徴とするC言語製の耐久性のあるイベントログです。JVMや複雑なクライアントライブラリなしで<code>curl</code>をクライアントとして使用できる操作の容易さと、SIGKILL後のデータ永続性を実証する堅牢なクラッシュリカバリが強調されています。コンセンサスには、その理解しやすさと運用しやすさからRaftが採用されており、nsqのようなシンプル志向のシステムと比較しつつ、より強力な耐久性保証を提供することを目指しています。作者は、早期のデザインパートナーを募集中です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
