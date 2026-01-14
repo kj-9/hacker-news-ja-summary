@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: A 10KiB kernel for cloud apps - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: A 10KiB kernel for cloud apps</h1>
+        <div class="meta">
+            投稿日: 2026年01月14日 | ランク: 9
+        </div>
+        <a href="https://github.com/ReturnInfinity/BareMetal-Cloud" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>BareMetalという、アセンブラで書かれたベアメタル環境/オペレーティングシステムに関するHacker Newsのコメントは、その目的、既存ソフトウェアとの互換性、セキュリティ上の懸念、そしてプロジェクトの歴史について議論しています。</p>
+<h2>プロジェクトの目的とパフォーマンス</h2>
+<p>BareMetalは、ソフトウェアに高性能なハードウェアアクセスを提供し、単一のプログラムを効率的に実行することを目的としたエクソカーネル的なアプローチであると理解されています。コメントでは、このシステムがパフォーマンスを向上させる可能性について言及されています。</p>
+<h2>既存ソフトウェアの互換性と開発</h2>
+<p>多くのユーザーは、BareMetal上で既存のUnix/Linuxアプリケーションを直接実行できるのか、それとも専用のソフトウェアが必要なのかという疑問を抱いています。現状では、ほとんどのUnix/Linuxアプリケーションはポーティングなしでは実行できないと指摘されています。しかし、プロジェクトのメンテナは、既存のUnix系プログラムをポーティングするための互換性レイヤーやライブラリを開発する計画があることを表明しています。</p>
+<h2>セキュリティと堅牢性に関する懸念</h2>
+<p>BareMetalがアセンブラでゼロから書かれている点について、セキュリティや堅牢性の問題が生じる可能性が懸念されています。具体的には、信頼できないネットワークに公開すべきでないか、または内部サービスに限定すべきかという問いかけがありました。さらに、プロジェクトのコード（例: <code>libBareMetal.asm</code>）を直接ダウンロードしてブートすることのセキュリティリスク、すなわち仮想マシンの所有権を第三者に渡すことになりかねないという強い懸念も示されています。</p>
+<h2>プロジェクトの背景と継続性</h2>
+<p>コメントの中には、15年以上前にOSDev.orgフォーラムでBareMetalOSとそのブートローダーPure64を見たという懐古的な意見も見られます。プロジェクトが長期間にわたって開発が続けられていることに喜びの声が上がっており、その継続性がコミュニティから認識されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、BareMetalプロジェクトがハードウェアへの直接アクセスによる高性能な単一プログラム実行を目指していることを示しています。既存のUnix/Linuxアプリケーションを実行するにはポーティングや互換性レイヤーが必要であり、アセンブラでの実装や外部スクリプトの利用によるセキュリティと堅牢性への懸念も指摘されています。しかし、このプロジェクトは15年以上にわたり開発が続けられており、長期的な継続性がコミュニティから評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

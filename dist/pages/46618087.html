@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Unbearable Frustration of Figuring Out APIs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The Unbearable Frustration of Figuring Out APIs</h1>
+        <div class="meta">
+            投稿日: 2026年01月14日 | ランク: 6
+        </div>
+        <a href="https://blog.ar-ms.me/thoughts/translation-cli/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Swiftの翻訳APIを巡る著者の不満と、それに伴うAPIデザイン、ドキュメント、AIツールの役割、そして現代のプログラミング言語における開発者体験についての議論が中心となっています。</p>
+<h2>APIデザインと開発者体験</h2>
+<p>多くのコメントで、APIの使いやすさや設計の悪さについて言及されています。特にAppleのAPI（AndroidやWin32と比較して）やGoogle AIのAPIの複雑さ、予測不可能性が指摘されています。適切でない、あるいは不十分なエラーメッセージやフィードバックの欠如（特にSwiftで）が、開発者のフラストレーションの主な原因とされています。Rustと比較して、Swiftがモダンであるにもかかわらず、エラーハンドリングやフィードバックが不十分である点が強調されています。また、APIが「発見可能」であることの重要性、特に「右クリックメニュー」とAPIが異なるモデルを使用している場合の混乱が指摘されています。</p>
+<h2>ドキュメントと学習曲線</h2>
+<p>ドキュメントの質と有用性は重要なテーマです。多くの開発者が、コード例の欠如や、APIの奇妙な挙動を説明するドキュメントがないことに不満を表明しています。Apache POIやMicrosoftのAPI Browserのような、優れた例を含む「Busy Developers' Guide」の有用性が賞賛されています。一方、APIドキュメントを読むことはプログラミングの「仕事の一部」であるという意見もありますが、複雑なAPIや頻繁に変更されるAPIでは、その労力に見合わない場合があるとの反論もあります。</p>
+<h2>AIとLLMの役割</h2>
+<p>LLM（大規模言語モデル）の利用については、賛否両論があります。著者がAIに頼りすぎて、基本的なデバッグやドキュメントの読解能力が低下していると指摘する人もいます。しかし、LLMが新しいAPIの学習を助けたり、APIドキュメントの要約やチートシート作成に役立ったりするという肯定的な意見もあります。特に、低影響のツールや、短期間でAPIが変更される可能性が高い場合には、LLMが効率的な解決策を提供する可能性があります。LLMが「最低賃金がない」ことで、これまで費用対効果が悪かった作業を可能にするという視点も提示されています。</p>
+<h2>著者の文章スタイルと姿勢</h2>
+<p>著者のブログ記事のトーン、特にその「怒り」と「皮肉」については、様々な反応がありました。一部の読者は、校正されていない文章や不適切なトーンが、記事全体の信頼性を損ねると感じました。しかし、他の読者は、AIによって「消毒」されていない、フラストレーションを抱えた人間によって書かれたものであることを評価し、親近感を覚えました。また、「AI誘導性の脳腐敗」の兆候であり、学習に対する不公平な態度であると批判する意見もありました。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、Swiftの翻訳APIに対する開発者の不満を起点として、APIデザインの課題、質の高いドキュメントの重要性、そしてAI/LLMツールが現代のプログラミング実践に与える影響について多角的な議論を展開しています。特に、使いにくいAPI、不十分なドキュメント、そしてAIの利用による開発者の学習姿勢の変化が、現代の開発者体験を形成する主要な要素であることが浮き彫りになりました。多くのコメントが、エラーメッセージの改善、充実したコード例、そしてAPIの発見可能性の向上を求める声を上げています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
