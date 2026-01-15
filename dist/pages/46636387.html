@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVEs Affecting the Svelte Ecosystem - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">CVEs Affecting the Svelte Ecosystem</h1>
+        <div class="meta">
+            投稿日: 2026年01月15日 | ランク: 2
+        </div>
+        <a href="https://svelte.dev/blog/cves-affecting-the-svelte-ecosystem" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、SvelteKitで発見された複数の新しいCVE（脆弱性）に関するもので、その技術的な詳細、セキュリティ上の懸念、およびSvelteフレームワークの実際の普及状況が議論の焦点となっています。</p>
+<h2>CVEの詳細と影響</h2>
+<p>SvelteKitで発見された脆弱性は主にDoS（サービス拒否）攻撃とXSS（クロスサイトスクリプティング）攻撃に関するものです。
+*   <strong>DoS攻撃</strong>: <code>devalue.parse</code>に関連する複数のDoS脆弱性（CVE-2026-22775, CVE-2026-22774）は、悪意のあるペイロードがメモリやCPUを過度に消費させ、プロセスをクラッシュさせる可能性があります。これはリモート関数を使用するSvelteKitアプリケーションに影響します。
+*   <strong>メモリ増幅DoS</strong>: リモート関数のバイナリ形式デシリアライザにおけるメモリ増幅DoS（CVE-2026-22803）も報告されています。
+*   <strong>プリレンダリング時のDoSとSSRF</strong>: プリレンダリングを使用している場合、DoS（CVE-2025-67647）に加え、SSRF（サーバーサイドリクエストフォージェリ）により内部リソースへのアクセスが可能になる可能性があります。特定の条件下では、キャッシュ汚染を介してXSSを引き起こす可能性も示唆されています。
+*   <strong>XSS攻撃</strong>: <code>hydratable</code>を介したXSS（CVE-2025-15265）も発見されており、攻撃者が制御されたキーを<code>hydratable</code>に挿入し、それが他のユーザーに返されることでXSSが誘発される可能性があります。
+これらの脆弱性は、ReactのRCE（リモートコード実行）を可能にするCVEほど深刻ではないとの比較意見も出ています。</p>
+<h2><code>devalue</code>に対するセキュリティ上の懸念</h2>
+<p>あるユーザーは、<code>devalue</code>ライブラリのコードを以前に調査した際、ユーザー入力の扱いに「怪しさ」を感じていたため、今回のCVEリストに驚かないと述べています。彼は、<code>devalue</code>がセキュリティ研究者にとって注目すべきポイントだと感じていました。
+自身のSvelteアプリは内部ユーザー向けであるため、フレームワークを使用する決定に後悔はないものの、より公開された、またはセキュリティが重要なアプリケーションを開発する場合は、より詳細なセキュリティ評価が必要であると考えています。</p>
+<h2>Svelteの普及状況</h2>
+<p>「Svelteはデモアプリにしか使われていない」という皮肉なコメントに対して、多くのユーザーがSvelteが実際に広く採用されている具体的な例を挙げて反論しています。
+*   Appleの主要なウェブサイト（<code>apps.apple.com</code>）やアプリ（Apple TV、Apple Music）がSvelteを使用していること。
+*   New York Timesの多くのインタラクティブコンテンツがSvelteで構築されていること（Svelteの作者Rich Harrisが元々開発した目的の一つ）。
+*   エンタープライズアプリケーションでもSvelteが使用されていること。
+といった例が挙げられ、Svelteが一般的な認識よりもはるかに広範囲で利用されていることが示されています。</p>
+<h2>まとめ</h2>
+<p>SvelteKitで発見された複数のDoSおよびXSSの脆弱性に関する今回の議論は、技術的な詳細と特定のライブラリ（<code>devalue</code>）のセキュリティ設計に関する懸念を浮き彫りにしました。しかし、同時に、Svelteフレームワークが主要なデジタルプラットフォームやエンタープライズアプリケーションにおいて、いかに広く採用され、信頼されているかという認識を広げる機会にもなりました。ユーザーはフレームワークのセキュリティ対応を評価しつつも、その開発者体験と実用性を高く評価しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
