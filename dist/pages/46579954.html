@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elasticsearch Was Never a Database - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Elasticsearch Was Never a Database</h1>
+        <div class="meta">
+            投稿日: 2026年01月16日 | ランク: 8
+        </div>
+        <a href="https://www.paradedb.com/blog/elasticsearch-was-never-a-database" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、Elasticsearch（ES）がデータベースとして使われることの是非、特にその安定性、データ保全性、および適切なユースケースについて議論しています。多くのユーザーがESをデータベースとして使うことの危険性を指摘する一方で、特定の状況下での実用性やメリットを挙げる意見もあります。</p>
+<h2>Elasticsearchをデータベースとして使うことの危険性</h2>
+<p>複数のインフォセック専門家や経験者が、Elasticsearchを重要なデータの主要なストレージとして使うことに強く反対しています。彼らはESがデータの永続性や予測可能なオンライン状態を保証するのに十分安定していないと感じています。</p>
+<ul>
+<li><strong>不安定性とデータ保全性:</strong> 「infosecの仕事をしているが、Elasticsearchが常にオンラインでデータを取り込むほど安定しているとか、取り込んだデータを予測可能に保持するとか、絶対に自分の貯蓄を賭けることはない」とunethical_banは述べています。データ破損やデータ損失の問題が指摘されており、これはLuceneがDBエンジンや「DBグレード」のストレージエンジンではないことに起因するとされています。</li>
+<li><strong>リソースと管理の負担:</strong> ESを安定稼働させるためには、専用のチームによる継続的な監視と管理が必要になることが多いと指摘されています。「SOCの2人がインフラを維持するためにフルタイムで働いていた」というunethical_banの経験や、「複雑な大規模分散システムを動かすには、ちょっとした./applyだけでは済まない」というcyberpunkの意見がこれを裏付けています。特に、プロビジョニング不足のクラスターがログ転送によって圧倒されるケースが挙げられています。</li>
+<li><strong>イベントの最終的な整合性:</strong> ESは「最終的な整合性」を期待するように常に明確に文書化されている、とtoenailは指摘しており、これは従来のデータベースが提供する即時の一貫性とは異なります。一部の書き込みがすぐに表示されない可能性があり、即時の一貫性が必要な場合は特別なパラメータ（<code>refresh: "wait_for"</code>）を使用する必要があるとのことです。</li>
+<li><strong>トランザクションの欠如:</strong> kubi07は、ESをメインDBとして使用する際の課題として、トランザクションがないため、2回目の挿入が失敗した場合に最初の挿入を手動で削除する必要があることを挙げています。</li>
+</ul>
+<h2>Elasticsearchをデータベースとして使うことの実用性とメリット</h2>
+<p>批判がある一方で、ESをデータベースとして使用した経験から、その実用性やメリットを挙げるユーザーもいます。</p>
+<ul>
+<li><strong>特定のユースケースでの迅速な開発:</strong> kubi07は、「プロジェクトを非常に迅速に完了させるのに役立った」と述べ、検索機能とDB機能の両方をESが提供したことをメリットとして挙げています。特に「すべてのフィールドがインデックス化され、超高速な読み込み、迅速な開発、学習の容易さ」がメリットとして挙げられています。</li>
+<li><strong>安定運用された事例:</strong> toenailは「3ノードクラスターが何年も非常に安定して稼働している」と述べており、適切なプロビジョニングと管理があれば安定稼働は可能であるという見方もあります。WASDxも「100ノード以上のクラスターを何年も管理しているが、破損を見たことがない」と報告しています。</li>
+<li><strong>耐久性のあるバックアップと連携:</strong> kentmは、ESをS3のようなオブジェクトストレージのインデックスとして使用し、ESが破損した場合にS3データから再生成する耐久性のあるバックアップ戦略を提案しています。多くのESのデプロイでは、ESのデータは別の耐久性のあるストアから供給されているという意見もあります。</li>
+<li><strong>最近の機能改善:</strong> cluckindanは、<code>refresh: "wait_for"</code>パラメータの使用や、インデックスエイリアスを用いたスキーマ移行の容易さなど、ESの機能が進化していることを指摘しています。Andysは、ElasticがPostgresのように各書き込み後にディスクに同期するライトアヘッドログを獲得したことで、データストアとしての信頼性が向上した可能性を示唆しています。</li>
+</ul>
+<h2>議論の背景とマーケティング</h2>
+<p>ESがデータベースとして使われる背景には、そのマーケティングやユーザーの誤解があるという指摘もあります。</p>
+<ul>
+<li><strong>マーケティング戦略:</strong> vjerancrnjakは、「Elasticはそれを汎用ストアとして成功裏に宣伝している」と述べ、IoTのマーケティングが「バジリオンシャードなしに負荷を処理できる」かのように見せていると批判しています。これは、技術的な専門知識がないCスイートの意思決定者にESが魅力的に映るためと推測されています。</li>
+<li><strong>名称と機能:</strong> this_userは「ElasticSEARCHと呼ばれているのであって、Elasticdatabaseではない」と、その本来の目的を改めて指摘しています。</li>
+<li><strong>SQLと複雑なクエリ言語:</strong> roywigginsは、ES|QLやElastic SQLなど、複数のクエリ構文が混在し、それぞれが異なるユースケースに適している点を指摘し、「どんなに成功したデータストアも、最終的にはリレーショナルデータベースの半分をアドホックに、非公式に、矛盾を抱え、遅く実装することになる」という新たなルールが必要だと皮肉を言っています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、Elasticsearchがデータベースとして使われることについて、賛否両論が激しく交錯していることを示しています。多くの経験豊富なユーザーやインフォセック専門家は、ESをミッションクリティカルなデータの主要なストレージとして使うことに対して、データ保全性、安定性、管理の複雑さの観点から強く警鐘を鳴らしています。ESは検索インデックスであり、耐久性のあるストレージのレプリカとして使うべきであり、即時の一貫性やトランザクションが必要な従来のデータベースの代わりにはならないという意見が主流です。</p>
+<p>一方で、特定のユースケース、特に検索機能が重視される場合や、迅速な開発が求められるプロジェクトにおいては、ESをメインDBとして利用し、成功した事例も報告されています。しかし、これは専門知識を持つチームによる綿密な監視、適切なプロビジョニング、そしてESの特性（最終的な整合性、トランザクションの欠如など）を理解した上での慎重な設計が不可欠であるという条件付きです。ESのマーケティングが「汎用ストア」としてのイメージを植え付けていることが、誤った利用につながる一因であるという指摘もなされています。全体として、ESは強力なツールではあるものの、その限界と適切なユースケースを理解することが極めて重要であるという結論が示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
