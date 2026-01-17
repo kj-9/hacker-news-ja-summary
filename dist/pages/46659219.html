@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>There&#x27;s no single best way to store information - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">There&#x27;s no single best way to store information</h1>
+        <div class="meta">
+            投稿日: 2026年01月17日 | ランク: 5
+        </div>
+        <a href="https://www.quantamagazine.org/why-theres-no-single-best-way-to-store-information-20260116/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、「情報を保存する最適な方法」という記事に対して、様々な意見や考察が交わされています。多くのコメントは、最適な方法が利用目的や文脈に強く依存するという視点から議論を展開しています。</p>
+<h2>最適なストレージはユースケースに依存する</h2>
+<p>コメントの多くは、情報を保存する「最善の方法」は存在せず、その情報がどのように利用（クエリ）されるか、あるいは書込み速度、スケーラビリティといった要件に強く依存すると指摘しています。特定の目的のために優れた方法が、別の目的には適さないこともあります。</p>
+<h2>データベースとしてのPostgreSQLとSQLite</h2>
+<p>PostgreSQLが「適切でない」という議論に対して、一部のユーザーは、PostgreSQLは非常に優れており、パフォーマンスの問題は多くの場合、アルゴリズムやアプローチの問題に起因すると主張しています。特に、銀行取引のようなロックヘビーな原子性トランザクションを一つずつ処理するのではなく、トランザクションをまとめて処理するような設計変更を提案しています。</p>
+<p>一方で、SQLiteは「あらゆる電話、ブラウザ、サーバー」で見られ、2100年になっても読み込み可能であると予測され、その普及度と耐久性が強調されています。SQLiteの公式ページ「Most Deployed Database」も引用され、その利用が広く認知されています。</p>
+<h2>データ構造とフォーマット</h2>
+<ul>
+<li><strong>Markdown</strong>: 「常にMarkdownだ。Markdownは情報を保存する最善の方法だ。」という意見も出ており、特にテキスト、ドキュメント、簡単なフォーマットの情報に適しているとされています。</li>
+<li><strong>INI/TOML</strong>: 小規模な設定ファイルや人間が触れる可能性のあるデータ交換には、INIやTOMLのような形式も推奨されています。</li>
+<li><strong>JSON</strong>: 小規模なデータセット、BLOB、オブジェクトにはJSONが推奨されています。</li>
+<li><strong>圧縮</strong>: 汎用データにはgzipやzstdが、ビット列の圧縮には0と1を分けることで驚異的な圧縮が可能であるという冗談も交じっています。</li>
+<li><strong>標準</strong>: テキストにはUTF-8、日付にはISO8601形式（UTC）またはUnixタイムスタンプの使用が、「80%の時間を幸せに過ごす」ためのルールとして挙げられています。</li>
+</ul>
+<h2>記事への批判</h2>
+<p>一部のコメントは、元の記事が「クリックベイトのくだらないもの」であると批判しています。ドメイン名から「情報ストレージの物理学や興味深い自然法則」を期待していたが、実際には「データ構造への悪い入門」であったという意見があります。また、記事が「情報を整理する方法」について語っており、「保存（物理的な媒体）」とは異なるという指摘もされました。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、「情報を保存する最適な方法」は存在せず、その情報の利用目的、クエリパターン、スケーラビリティ、書込み要件などのコンテキストに強く依存するという合意が形成されています。PostgreSQLやSQLiteのようなデータベースから、Markdown、JSON、INI/TOMLのようなファイル形式、さらには圧縮技術まで、多岐にわたるソリューションがそれぞれのメリットと共に議論されました。また、記事の論点が物理的なストレージではなく情報構造にあることや、その内容の薄さへの批判も見られました。結局のところ、要件を明確に定義し、それに最も適したツールやアプローチを選択することが重要であるという結論に達しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
