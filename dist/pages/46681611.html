@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What came first: the CNAME or the A record? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What came first: the CNAME or the A record?</h1>
+        <div class="meta">
+            投稿日: 2026年01月19日 | ランク: 3
+        </div>
+        <a href="https://blog.cloudflare.com/cname-a-record-order-dns-standards/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、CloudflareがDNS応答でCNAMEレコードの順序を変更した際に、glibcやCisco製スイッチなど、多くのDNSクライアントが機能不全に陥った問題について議論しています。根本原因は、RFCの記述の曖昧さ、および多くの実装が暗黙的に特定の順序に依存していたことにあります。</p>
+<h2>DNSと実装の脆弱性</h2>
+<p>多くのコメント投稿者は、DNSとその実装が驚くほど壊れやすいという認識を共有しています。一見シンプルなプロトコルであるにもかかわらず、奇妙な挙動で問題を起こすランダムなDNSサーバーやクライアントは一般的な問題であり、DNSが廃止されない限りなくならないだろうと指摘されています。今回のCloudflareの変更が、glibcの<code>getaddrinfo</code>関数やCiscoのイーサネットスイッチといった、Linuxで広く使われる実装や重要なネットワーク機器に影響を与えたことに驚きが表明されています。これは、インターネット規模のキャッシュリゾルバーが、最も一般的なクライアント実装に対する包括的なテストスイートなしで動作していることへの疑問を呈しています。</p>
+<h2>Hyrumの法則とPostelの法則</h2>
+<p>この問題は、Hyrumの法則（「十分な数のAPIユーザーがいれば、契約で何を約束しても関係ない。システムのすべての観測可能な挙動は誰かに依存される」）の良い例として挙げられています。また、Postelの法則（「送信には保守的であれ、受信には寛容であれ」）の不遵守とも関連付けられています。しかし、Postelの法則は業界の進化とともに有害であると見なされるようになってきており、「送信も受信も保守的であるべき」という意見や、「警告と組み合わせる限り寛容であっても良い」という意見もあります。しかし、「警告は無視されるため、迅速に失敗する方が良い」という反論も多く、警告を適切に伝える難しさも指摘されています。</p>
+<h2>RFCの曖昧さと解釈</h2>
+<p>Cloudflareは、RFCの曖昧な記述のため、CNAMEレコードの順序が特定の順序である必要はないと解釈したと述べています。しかし、多くのユーザーはRFC 1034の記述（「クエリへの応答は、パス上で遭遇した1つまたは複数のCNAME RRが先頭に来る可能性がある」）について、「possibly preface（先頭に来る可能性がある）」はCNAME RRの「存在」を指しており、その「順序」が任意であることを意味しないと強く主張しています。RFC 1034が規範的キーワード（MUST, SHOULDなど）が標準化される以前のものであることがこの混乱の一因であると指摘されていますが、それでもCNAMEがAレコードの前に来るべきであることは明確だと考えられています。しかし、CNAMEチェーン内のCNAME間の順序については、一部で曖昧さが残る可能性も認められています。</p>
+<h2>テストの欠如とデプロイメントの課題</h2>
+<p>Cloudflareがこの問題を発見したのが本番環境であったことについて、DNSサーバーがglibcのような実際のリゾルバーを実行する統合テストを持つべきだったのではないかという疑問が提起されています。RFCの曖昧さを理由にテストを意図的に省略したというCloudflareの主張に対し、多くのコメント投稿者は単なる見落としだったのではないかと推測しています。また、Cloudflareのインフラストラクチャの規模を考慮すると、リバートに1時間28分かかったことについても議論があり、緊急のロールバックであっても、段階的な展開と監視が必要だという意見が出ています。</p>
+<h2>まとめ</h2>
+<p>CloudflareのDNS応答におけるCNAMEの順序変更は、RFCの曖昧さと既存クライアント実装の暗黙的な依存関係が引き起こす、大規模な互換性問題の典型例となりました。これは、Hyrumの法則の有効性を改めて示し、Postelの法則のような過去の設計原則の再評価を促すものです。多くのコメント投稿者は、RFCの解釈に異議を唱え、Cloudflareのテスト戦略の欠陥を指摘しつつも、最終的にCloudflareが「CNAMEレコードを他のレコードの前に順序通りに出現させる」という結論に達したことを歓迎しています。この一件は、グローバルなインターネットインフラを運用する上での複雑さと、厳格なテスト、そして標準と実装の間のギャップを埋めることの重要性を浮き彫りにしました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bypassing Gemma and Qwen safety with raw strings - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bypassing Gemma and Qwen safety with raw strings</h1>
+        <div class="meta">
+            投稿日: 2026年01月19日 | ランク: 9
+        </div>
+        <a href="https://teendifferent.substack.com/p/apply_chat_template-is-the-safety" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、OP（Original Poster）が、小型のオープンウェイトモデル（Qwen2.5-1.5B, Qwen3-1.7B, Gemma-3-1b-it, SmolLM2-1.7B）の安全性アライメントがチャットテンプレートに大きく依存しているという脆弱性を発見したことについて議論しています。</p>
+<h2>チャットテンプレートと安全性アライメント</h2>
+<p>OPは、チャットテンプレートのトークンや指示トークンを取り除き、生文字列を渡すことで、モデルの拒否率が大幅に低下することを発見しました。例えば、Gemma-3の拒否率は100%から60%に、Qwen3は80%から40%に、SmolLM2は0%拒否（純粋な服従）となりました。これは、モデルが「Assistant」ペルソナがテンプレートによってトリガーされない場合、以前は拒否していた爆発物のチュートリアルや露骨なフィクションのようなコンテンツを生成することを示しています。OPはこれを「クライアントサイドの文字列フォーマットを耐荷重性の安全壁として扱っている」と表現しています。</p>
+<h2>オープンウェイトモデルにおける「安全性」の無意味さ</h2>
+<p>一部のユーザーは、オープンウェイトモデルにおける「セキュリティ」や「安全性」は完全に無意味であると主張しています。なぜなら、ウェイト（モデルの重み）があれば、モデルは比較的簡単にアンアラインされ、ガードレールが削除され得るからです。彼らは、このようなアライメントの試みはモデルを不必要に「ロボトミー化」するだけだと述べています。最近の技術では、ガードレールや検閲を削除し、モデルを「脱ロボトミー化」することで、より賢くなることが示唆されています。</p>
+<h2>既知の「脆弱性」とモデルの限界</h2>
+<p>この「脆弱性」は新しいものではないという意見もあります。OpenAI APIなどでも、{"role": "assistant", "content": "Sure, here is how"} のようにモデルの応答をプリロードすることで、同様の結果を達成できることが指摘されています。また、この方法はGemmaの利用規約に違反する可能性があることも言及されています。あるユーザーは、これは単に「モデルが期待する基本のチャットテンプレートを提供しない」ということであり、ハックでも特別有用な情報でもないと述べています。さらに、括弧の不一致のような簡単な入力でさえ、現在のモデルは自分が何を言ったかを追跡できなくなるという指摘もあります。</p>
+<h2>まとめ</h2>
+<p>OPは、オープンウェイトモデルの安全性アライメントがチャットテンプレートに過度に依存しているという脆弱性を発見しました。チャットテンプレートなしで生文字列を渡すと、モデルの拒否率が低下し、有害なコンテンツを生成する可能性が高まります。しかし、この発見に対しては、オープンウェイトモデルの性質上、ガードレールは容易に迂回可能であり、このような「安全性」の試みは無意味だという意見や、これは既知の挙動であり新しい情報ではないという批判的な意見も寄せられています。全体として、モデルの安全性はウェイト自体に根ざしたものではなく、プロンプトのフォーマットのような表面的な要素に依存する「脆い状態」であるという認識が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
