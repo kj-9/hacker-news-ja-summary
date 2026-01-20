@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unconventional PostgreSQL Optimizations - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Unconventional PostgreSQL Optimizations</h1>
+        <div class="meta">
+            投稿日: 2026年01月20日 | ランク: 6
+        </div>
+        <a href="https://hakibenita.com/postgresql-unconventional-optimizations" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、PostgreSQLの最適化に関する記事について議論しており、特に仮想カラム、ハッシュインデックス、<code>MERGE</code>文、およびクエリプランのキャッシュについて掘り下げています。</p>
+<h2>仮想カラムとハッシュインデックス</h2>
+<p>多くのコメントは、記事が紹介しているPostgreSQLの仮想カラム（生成列）とハッシュインデックスに注目しています。
+*   <strong>仮想カラムとストレージ</strong>: <code>pksunkara</code>は、格納型生成列に直接インデックスを作成することができないか提案しますが、<code>rpsw</code>と<code>tczMUFlmoNk</code>は、記事がストレージ増加を避けるためにこのオプションを避けていることを指摘しています。<code>pksunkara</code>は、それでも追加されるストレージ量に興味を示しています。
+*   <strong>関数ベースのインデックス</strong>: <code>zenmac</code>は、式に対するインデックス（部分インデックス）の可能性について尋ね、<code>masklinn</code>はこれが記事で最初に提案された解決策である「関数ベースのインデックス」であり、クエリの些細な変更によってインデックスがマッチしなくなる脆さがあると説明しています。
+*   <strong>ハッシュインデックスの優位性</strong>: <code>pphysch</code>は、ハッシュインデックス方式が、アプリケーションやクエリで事前にハッシュを計算するユニークな「ハッシュ」カラムを作成する方法よりも厳密に優れているかどうか疑問を呈しています。</p>
+<h2>クエリプランのキャッシュと最適化</h2>
+<p>PostgreSQLのクエリプランのキャッシュに関する議論があります。
+*   <strong>計画キャッシュの不足</strong>: <code>SigmundA</code>は、PostgreSQLには他のDBにあるような計画キャッシュがないため、制約除外のような機能でオーバーヘッドが発生すると指摘しています。
+*   <strong>計画の再利用</strong>: <code>singron</code>は、PostgreSQLが計画を再利用するものの、それはプリペアードステートメントを同じ接続で5回以上実行した場合に限られると説明しています。ただし、汎用プランがパラメータ値を見ることができない場合にパフォーマンスが大幅に低下する可能性があるという注意点も挙げています。計画キャッシュが接続ごとであることも指摘されています。</p>
+<h2><code>MERGE</code>文</h2>
+<p>記事の最後で軽く触れられた<code>MERGE</code>文が注目を集めています。
+*   <strong><code>MERGE</code>の利点と認識</strong>: <code>msdrigg</code>は、<code>INSERT ... ON CONFLICT DO UPDATE ...</code>を頻繁に使用しているが、<code>MERGE</code>がより強力で、より多くのシナリオで機能する可能性があることに驚き、これまで知らなかったと述べています。
+*   <strong><code>MERGE</code>と<code>ON CONFLICT</code>の比較</strong>: <code>gshulegaard</code>は、<code>MERGE</code>が長らくSQLの一部であったものの、PostgreSQLのMVCCモデル内で本質的に非アトミックであるため、Postgresが長年追加を避けてきたことを指摘しています。彼は<code>INSERT ... ON CONFLICT</code>を使用し、データモデルをそれに合わせて設計することを個人的に好み、<code>MERGE</code>が必要な場合はエッジケースの処理に時間をかけることを提案しています。
+*   <strong>バッチ挿入</strong>: <code>philjohn</code>は、大量のバッチ挿入には<code>COPY INTO</code>が最速であり、バイナリデータ形式を使用すればPostgresサーバー側のオーバーヘッドがないと述べています。しかし、<code>sirfz</code>は、それが競合に対してはうまく機能しないことを指摘しています。</p>
+<h2>ツールとUX</h2>
+<p>PostgreSQLのインタラクションツールやユーザーエクスペリエンスに関するコメントもいくつか見られます。
+*   <strong>構文ハイライト</strong>: <code>themafia</code>は、記事のPostgreSQL出力が持つ構文ハイライトに注目し、それが組み込み機能なのか、それともラッパーなのかを尋ねています。<code>folli</code>はIntelliJのようなIDEで構文ハイライトが得られると提案し、<code>tuetuopay</code>は<code>pgcli</code>を使用すると述べています。<code>pgcli</code>は、トランザクション状態のクリアさ、再接続機能、構文ハイライト、および多くのケースで機能する優れたオートコンプリートなど、いくつかの利点を提供します。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、PostgreSQLの高度な最適化テクニック、特に仮想カラム、ハッシュインデックス、そして新しい<code>MERGE</code>文に大きな関心を示しています。ユーザーは、これらの機能のストレージコストやアトミック性、クエリプランのキャッシュの限界、そして従来の<code>INSERT ... ON CONFLICT</code>との比較について深く議論しています。また、<code>pgcli</code>のようなツールの使用によるPostgreSQLとのインタラクションの改善にも触れられており、記事がPostgreSQLの奥深い機能を掘り下げ、多くのベテランユーザーにとっても新たな発見があったことが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
