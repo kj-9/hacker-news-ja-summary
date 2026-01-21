@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: ChartGPU – WebGPU-powered charting library (1M points at 60fps) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: ChartGPU – WebGPU-powered charting library (1M points at 60fps)</h1>
+        <div class="meta">
+            投稿日: 2026年01月21日 | ランク: 2
+        </div>
+        <a href="https://github.com/ChartGPU/ChartGPU" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、WebGPUを利用して大量のデータポイント（100万点以上）を高速かつスムーズにレンダリングする新しいチャートライブラリ「ChartGPU」の発表に関するものです。作成者は、既存のライブラリが10万点以上のデータでパフォーマンスに問題を抱えていることに着目し、主要な計算をGPUに移すことでこの課題を解決したと述べています。</p>
+<h2>パフォーマンスとWebGPUの利点</h2>
+<p>コメントの多くは、ChartGPUの驚異的なパフォーマンスを賞賛しています。特に100万点のデータが60fpsでスムーズにズーム・パンできる点に感動する声が多数あります。作成者は、WebGPUを利用してLTTBダウンサンプリング、ツールチップのためのヒットテスト、レンダリング（インスタンスドロー）をGPUで実行していると説明しています。これにより、既存のCPUに依存するCanvas2Dや一部のWebGLライブラリの限界を超え、ブラウザ上でこれまでにないほど滑らかなグラフ体験を実現しています。高価なハードウェアでのテスト結果では165fpsを達成した例も報告されており、その性能が強調されています。</p>
+<h2>WebGPUの互換性と課題</h2>
+<p>ChartGPUはWebGPUに大きく依存しているため、WebGPUのブラウザサポートに関する議論が活発に行われています。Chromeの最新版や一部のFirefoxのバージョン（手動でのフラグ有効化が必要な場合あり）では動作するものの、古いOSバージョンのSafariやLinux版Firefoxでは問題が発生するケースが報告されています。また、Androidデバイスでのサポート状況も話題に上っています。作成者はバグ報告に感謝し、対応を約束しています。一部のユーザーは、WebGPUの普及にはまだ時間がかかると指摘し、WebGLフォールバックの欠如を懸念しています。</p>
+<h2>機能改善と将来の方向性</h2>
+<p>ユーザーからは、さまざまな機能改善や拡張のアイデアが寄せられています。特に、データズームスライダーの不具合（Mac M1、Windows、Firefoxなど複数の環境で報告されている、カーソルの動きとスライダーの動きがずれる問題）が優先度の高い修正点として挙げられています。その他、以下のような提案や議論がありました。</p>
+<ul>
+<li><strong>ベンチマーク機能:</strong> 読み込み時間、GPU/CPU時間、FPSなどを計測し、結果を共有できるベンチマークボタンの追加。</li>
+<li><strong>収益化と持続可能性:</strong> プロジェクトの持続可能性について、金融分野での活用（オーダーブックヒートマップ、3Dボラティリティサーフェスなど）やエンタープライズ向けプロティアの可能性が提案されています。</li>
+<li><strong>WebWorker/OffscreenCanvasサポート:</strong> 大量のデータ処理をメインスレッドから分離し、ワーカーで実行するニーズがあることが示唆されています。作成者もv0.2の優先機能として検討しています。</li>
+<li><strong>3Dチャードとアニメーション:</strong> 3Dドーナツチャートやスライスアニメーションなどの要望も上がっていますが、作成者はまず2Dチャートの性能を固めることに注力する姿勢を示しています。</li>
+<li><strong>密度マッピング（ヒートマップ）:</strong> 大量の点が重なり合う場合に、各ピクセルがカバーするデータ点の数を色/明るさにマッピングする「デジタルフォスファー」のような表示方法が提案されており、作成者もGPUの計算シェーダーでの実現可能性を肯定的に捉えています。</li>
+<li><strong>D3/Vegaとの統合:</strong> D3のような既存のライブラリをGPUレンダリングエンジンとして利用したり、Vega/Vega-Liteの表現力をGPUで加速することへの関心も示されています。</li>
+</ul>
+<h2>AI生成コードと新規プロジェクトへの疑問</h2>
+<p>スレッドの後半では、ChartGPUがAIによって生成された可能性について複数のユーザーが指摘しています。作成者のコメントのトーン、新規アカウント、短い開発期間、特定のファイル構造（<code>.cursor</code>や<code>.claude</code>フォルダ）などが根拠として挙げられています。これにより、プロジェクトの信頼性や作成者の貢献度について疑問を呈する声も出ています。</p>
+<h2>まとめ</h2>
+<p>ChartGPUは、WebGPUを活用して100万点以上のデータポイントをブラウザで高速かつスムーズにレンダリングする革新的なチャートライブラリとして注目を集めています。その圧倒的なパフォーマンスは高く評価されている一方、WebGPUのブラウザ互換性の課題や、データズームスライダーの不具合といった初期バグも指摘されています。ユーザーからは、ベンチマーク機能、WebWorkerサポート、密度マッピング、金融分野での応用など、多様な機能拡張の要望が寄せられており、今後の開発に期待が寄せられています。しかし、プロジェクトの短い開発期間や特定のコード構造から、AI生成の可能性が示唆され、一部で議論を呼んでいます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
