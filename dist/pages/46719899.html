@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree-sitter vs. Language Servers - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Tree-sitter vs. Language Servers</h1>
+        <div class="meta">
+            投稿日: 2026年01月22日 | ランク: 8
+        </div>
+        <a href="https://lambdaland.org/posts/2026-01-21_tree-sitter_vs_lsp/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、Tree-sitterとLanguage Server Protocol (LSP) の比較に関する記事への反応です。主に、Tree-sitterの機能、利用可能なパーサー、LSPとの連携、セマンティックハイライトの利点、そしてAI生成コンテンツに対する懸念について議論されています。</p>
+<h2>Tree-sitterパーサーの利用可能性とエコシステム</h2>
+<p>一部のユーザーは、Tree-sitterがサポートする言語のパーサーが不足していると感じていましたが、他のユーザーはArch Linuxのパッケージリストが必ずしもTree-sitterのエコシステムの全貌を反映しているわけではないと指摘しました。Tree-sitterにはR、YAML、Golangなどの多くの言語に対応するパーサーが存在し、Arch User Repository (AUR) やGitHubのリポジトリ（例: Goldziher/tree-sitter-language-pack）で利用可能です。また、Emacsユーザーは自身の環境で多数のTree-sitterパーサーをインストールして利用している例を挙げています。</p>
+<h2>Tree-sitterとAST/CSTの区別</h2>
+<p>Tree-sitterはConcrete Syntax Tree (CST) を生成し、Abstract Syntax Tree (AST) を得るには追加のステップが必要であるという点について議論されました。CSTはホワイトスペースやコメントなど、言語のセマンティクスに直接関係のない詳細も含む一方、ASTはより抽象化され、セマンティック分析に適しています。Tree-sitterは、訪問者パターンやクエリ言語（S式ベース）を使ってCSTを処理できますが、ASTへの変換は開発者が自身で行う必要があります。これは、複数の異なるシンタックスから共通のASTを生成する際に特に有用です。</p>
+<h2>LSPとの連携とセマンティックハイライト</h2>
+<p>Tree-sitterとLSPは補完的な関係にあることが強調されました。Tree-sitterは高速な構文解析とレキシカルなハイライトを同期的に提供し、LSPは非同期にセマンティックな情報（型情報、参照など）に基づいてハイライトを強化できます。この組み合わせにより、キーワードや基本構造は即座に色付けされ、変数や関数の種類に応じたより詳細なハイライトは後から適用されることで、エディタの応答性と視覚的な豊かさが両立します。特に、Rust言語の例では、変数の可変性や未使用のインポートなどを色分けできるセマンティックハイライトの利点が挙げられました。</p>
+<h2>AI生成コンテンツと執筆の価値</h2>
+<p>記事の著者による「AIを使っていない」という注意書きに対して、ユーザーから賞賛の声が寄せられました。AIが生成したテキストは、著者の思考の深さや情報の蒸留が欠けている場合があり、読者はその内容の信頼性や価値を判断しにくいという懸念が表明されました。手書きの文章には、著者が内容に意味のある労力を費やしたという「シグナル」があり、それが読者にとって記事を読む価値があるかどうかの指標になると述べられています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、Tree-sitterとLSPが現代のエディタやIDEの基盤技術としてどのように機能し、それぞれが異なる役割を果たすかを詳細に掘り下げています。Tree-sitterの高速な構文解析とCST生成能力、そしてLSPのセマンティックな理解と高度な機能提供が補完し合うことで、リッチで応答性の高い開発体験が実現されています。また、AI生成コンテンツの台頭により、人間の思考と意図が込められた文章の価値が再認識されているという興味深い側面も示されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

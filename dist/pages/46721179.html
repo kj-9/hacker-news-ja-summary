@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>It looks like the status/need-triage label was removed - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">It looks like the status/need-triage label was removed</h1>
+        <div class="meta">
+            投稿日: 2026年01月22日 | ランク: 4
+        </div>
+        <a href="https://github.com/google-gemini/gemini-cli/issues/16728" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、GitHub上の<code>gemini-cli[bot]</code>が、あるイシューにラベルを繰り返し追加・削除し、それについて自己矛盾したコメントを4600回以上繰り返すという無限ループについて議論しています。</p>
+<h2>無限ループのメカニズムと「古典的なCIバグ」</h2>
+<p>多くのコメントは、なぜこのような無限ループが発生するのか、そのメカニズムについて推測しています。</p>
+<ul>
+<li><strong>自己返信の欠如</strong>: 多くのユーザーは、チャットボットなどを作る際の初期段階で、ボットが自分自身に返信しないようにするロジックを組み込むべきだと指摘しています。これが欠けていたことが原因ではないかとされています。</li>
+<li><strong>サブコンポーネントの独立性</strong>: ボットが複数のサブ挙動を持つ場合、それぞれのサブ挙動が自己返信のチェックを行うべきだと考える誘惑があるが、それが上位レイヤーでの予防策がない場合に問題を引き起こすと指摘されています。</li>
+<li><strong>外部システムとの連携</strong>: ボットが外部システムを呼び出し、その外部システムが特定の結果（エラーなど）を検出した場合に、再びボット/システムに自動プロセスをキックバックし、ボットがループに陥る可能性が挙げられています。</li>
+<li><strong>シンプルなトリガー</strong>: PRの新しいコメントごとに実行されるボットが、PRにコメントを投稿する場合、自分自身からのコメントを無視する仕組みがなければ、簡単に無限ループに陥ると説明されています。</li>
+<li><strong>「古典的なCIバグ」ではない？</strong>: 一部のユーザーは、このような自己返信ループが「古典的なCIバグ」であるという意見に異議を唱え、CIを長年行ってきたが経験がないと述べています。彼らは、複数のボットがお互いに返信するシナリオの方が一般的だと考えています。</li>
+</ul>
+<h2>影響とコスト</h2>
+<p>この無限ループが引き起こす影響についても議論されています。</p>
+<ul>
+<li><strong>大量の通知メール</strong>: 4600回以上のコメントがあったため、多数の貢献者がメール通知を受け取った可能性が指摘されています。GitHubがメールをバッチ処理している可能性も考慮されていますが、それでも数万通のメールが数時間以内に送信されたと推測されています。過去には、類似の事件で6200万通のメールが送られた事例も引き合いに出されています。</li>
+<li><strong>LLM推論コスト</strong>: <code>gemini-cli</code>という名前から、これがLLMの推論にコストをかけているのではないかという懸念が表明されています。しかし、コメントの定型文から、実際のLLM推論ではなく、スクリプトによる自動化の可能性が高いと指摘されています。ただし、オーナーがGoogleの従業員であり、APIキーは各組織が自身のActions Secretsに設定するため、その組織が推論費用を支払っていると説明されています。</li>
+</ul>
+<h2>類似の事例と人間との比較</h2>
+<p>過去の類似の事例や、人間が陥る類似の罠についても言及されています。</p>
+<ul>
+<li><strong>他のbotとの無限ループ</strong>: 別のボットがデプロイされ、お互いに無限にやり取りする方が、単一のボットが自分自身とループするよりもよくある問題であるという意見があります。</li>
+<li><strong>Salesforceの悪夢</strong>: Salesforceの専門家が設定したサポートキューで、新しいメールが届くたびにチケットが作成され、サポートに割り当てられ、さらにSalesforceが通知メールを送るという無限ループを引き起こした事例が共有されています。</li>
+<li><strong>メールサーバーのダウン</strong>: 学生が設定した「不在通知」ルールが原因で、メールサーバー全体がダウンし、ITシステム全体に影響を与えた20年前の事例が詳細に語られています。</li>
+<li><strong>「全員返信」の罠</strong>: 人間が「全員返信」の罠に陥るのと同様に、ボットもこの罠に陥る可能性があると述べられています。</li>
+</ul>
+<h2>ボットの所有権と設計の問題</h2>
+<ul>
+<li><strong>非公式なプロジェクト</strong>: <code>gemini-cli</code>が公式のGoogleプロジェクトではなく、個人のGitHubユーザーによって開発されていることが指摘されています。安全のために、公式のGoogle組織が所有すべきだという意見があり、Googleの従業員が組織への移行を要請したとコメントしています。GitHubのアプリケーション作成フローに問題があることも示唆されています。</li>
+<li><strong>LLMの限界</strong>: 「ループに陥らないようにしろ」といったプロンプトをLLMに与えても、LLMには「ループ」という概念や「自己意識」がないため、効果がないだろうという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、GitHub上で<code>gemini-cli[bot]</code>が無限ループに陥り、数千回にわたってラベルの追加・削除と自己矛盾したコメントを繰り返したというインシデントについて深く掘り下げています。コメントでは、<strong>ボットが自分自身に反応しないようにする基本的な設計原則の欠如</strong>が原因であると広く認識されており、これが「古典的なCIバグ」であるかについては意見が分かれました。このループは、<strong>大量の通知メール</strong>を生成し、潜在的な<strong>LLM推論コスト</strong>（ただし、実際には定型文のスクリプトである可能性が高い）を引き起こしたと考えられています。また、Salesforceや過去のメールサーバーダウンなど、<strong>自動化システムや人間の設定ミスによる類似の無限ループ事例</strong>が多数共有され、技術的な複雑さや設計の落とし穴について活発な議論が展開されました。最終的に、ボットの適切な設計、所有権、およびシステムの堅牢性が、このような問題を防ぐ上でいかに重要であるかが強調されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
