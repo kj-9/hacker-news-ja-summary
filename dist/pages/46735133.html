@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes on the Intel 8086 processor&#x27;s arithmetic-logic unit - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Notes on the Intel 8086 processor&#x27;s arithmetic-logic unit</h1>
+        <div class="meta">
+            投稿日: 2026年01月23日 | ランク: 10
+        </div>
+        <a href="https://www.righto.com/2026/01/notes-on-intel-8086-processors.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>8086プロセッサの内部構造に関するブログ記事（著者も参加）に対するコメントで、記事の質の高さ、著者への質問、そして8086の設計に対する歴史的な視点からの考察が中心です。</p>
+<h2>記事への感謝と評価</h2>
+<p>コメントでは、記事の著者に対する感謝が多数寄せられています。読者からは、記事が啓発的で、1970年代から90年代にかけての半導体進化を理解する上で非常に興味深いという声があります。特に、当時のコンピューター全体を理解できると感じたが、詳細な情報にはアクセスできなかったという世代の読者にとっては、コンピューターがどのように「本当に」機能するのかを学ぶ良い機会となっています。また、記事がHacker Newsに掲載されることを常に楽しみにしているというコメントもあります。</p>
+<h2>著者の動機と背景</h2>
+<p>著者（kens）はコメント欄で質問に応じ、リバースエンジニアリング作業はあくまで趣味であり「楽しみのため」だと述べています。自身のバックグラウンドはソフトウェアであるため、このようなハードウェアレベルの作業については「全く適任ではない」と感じているとのこと。しかし、プログラマーとしてコンピューターがどのように「本当に」動作するのかを知るべきだという動機があるようです。</p>
+<h2>8086設計への遡及的な考察</h2>
+<p>あるコメントでは、8086の設計について、後から見て改善できた点があったかどうかに興味が示されています。具体的には、無駄な命令、非効率な命令、あるいは「足りない」命令はなかったか、また、トランジスタレベルから高レベルの設計思想に至るまで、何か改善の余地があったかを尋ねています。特に、2つの16ビットレジスタから20ビットアドレスを生成するセグメント/オフセットメカニズム（数千もの重複を生む）が挙げられ、フラットなメモリモデルを望む声があるものの、1979年当時の設計やトランジスタの制約を考慮すれば無理な要求だったろうと理解を示しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、8086プロセッサの内部構造に関する記事が、半導体の進化を深く理解できる貴重な情報源として高く評価されています。著者は、自身の専門外であるリバースエンジニアリングを「楽しみのため」の趣味として行い、プログラマーとしてコンピューターの真の動作原理を探求していると語っています。また、当時の技術的制約を考慮しつつも、8086の設計（特にセグメント/オフセット方式）について、もし可能であればどのような改善ができたかという歴史的な視点からの考察も提起されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
