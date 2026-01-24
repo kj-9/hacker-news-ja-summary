@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How I estimate work - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How I estimate work</h1>
+        <div class="meta">
+            投稿日: 2026年01月24日 | ランク: 5
+        </div>
+        <a href="https://www.seangoedecke.com/how-i-estimate-work/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、ソフトウェア開発における見積もりは不可能に近いという前提から始まり、それがどのように企業運営に不可欠な政治的ツールとなっているかについて深く掘り下げています。多くのエンジニアが正確な見積もりの難しさを認めつつも、ビジネス上の必要性からそれが避けられないことを認識しています。</p>
+<h2>見積もりは政治的ツールである</h2>
+<p>多くのコメントは、見積もりが技術的な正確さよりも政治的な文脈で使われることが多いという記事の主張に同意しています。エンジニアは、見積もりを求める側（マネージャーやセールスなど）が既に心の中に特定のタイムラインを持っていることを理解し、そのタイムラインに合うようにスコープを調整する傾向があります。</p>
+<ul>
+<li><strong>上から下への圧力</strong>: マネージャーやセールスは、顧客や上層部にコミットする日付が必要なため、エンジニアにタイムラインを要求します。彼らは、エンジニアが「いつできるか分かりません」と言うことを受け入れられません。</li>
+<li><strong>スコープの調整</strong>: エンジニアは、与えられた期限に合わせて、何がMVP（Minimum Viable Product）を構成するかについて「嘘をつく」ことさえある、と指摘されています。これは、スコープを調整して既定の期限に合わせるという現実的な対応です。</li>
+<li><strong>コミュニケーションの重要性</strong>: 見積もりを要求する人が誰で、その理由を理解することが重要です。エンジニアリングの観点からは、「これはどれくらいの時間がかかりますか？」ではなく、「いつまでに何ができますか？」という問いに答える方が建設的かもしれません。</li>
+</ul>
+<h2>見積もりの不確実性と課題</h2>
+<p>ソフトウェア開発の見積もりは、その性質上、非常に困難であり、不確実性が伴うという点が多くのコメントで強調されています。</p>
+<ul>
+<li><strong>未知の未知</strong>: プロジェクトには予測不可能な「未知の未知」が常に存在し、これが遅延の主な原因となります。初期の概念実証（PoC）や「トレーサー・バレット」アプローチを用いて、これらの不確実性を早期に特定しようとする意見もあります。</li>
+<li><strong>複雑性と新規性</strong>: ソフトウェアプロジェクトの多くは、完全に新しいものを作るため、過去の経験が直接適用しにくいという意見があります。既存のフレームワークや似たようなタスクであっても、独特の課題が生じることがあります。</li>
+<li><strong>要求の変化</strong>: 要件が常に変化するソフトウェアの世界では、一度出した見積もりがすぐに無意味になることがあります。これは、住宅建設のように仕様が明確なプロジェクトとの大きな違いとして挙げられます。</li>
+<li><strong>従来の業界との比較</strong>: 建設業や半導体産業では、見積もりが厳密に守られる傾向があるという意見もありますが、これらの業界でも遅延や予算超過は頻繁に発生しているという反論も多く見られます。ソフトウェアだけが特別に劣っているわけではない、という認識です。</li>
+</ul>
+<h2>見積もりを改善するためのアプローチ</h2>
+<p>不確実性がある中でも、見積もりをより実用的にするための様々なアプローチが議論されています。</p>
+<ul>
+<li><strong>時間単位の見積もり</strong>: Tシャツサイズやストーリーポイントといった抽象的な単位ではなく、作業時間（ワークアワー）での見積もりが最も合理的であるという意見が多数あります。これは、時間という普遍的な単位が共通認識を作りやすいからです。</li>
+<li><strong>見積もりと実績の追跡</strong>: 見積もりを出したら、実際の所要時間を記録し、それを振り返ることで精度を向上させることができます。このフィードバックループがなければ、見積もりは決して改善されません。</li>
+<li><strong>範囲と信頼度</strong>: 「1日か1週間か？」といった大まかなオーダーでの見積もりから始め、プロジェクトが進行するにつれて詳細化していくアプローチが有効です。また、「90%の確率で3ヶ月で終わる」といった信頼区間を提示することも、ステークホルダーとのコミュニケーションに役立つとされます。</li>
+<li><strong>スコープの柔軟性</strong>: 期限が固定されている場合、スコープを柔軟に調整することが重要です。「機能の削減」「期限の延長」「人員の追加」「残業」といったレバーを積極的に使い、目標達成を目指す必要があります。</li>
+<li><strong>AIによる見積もり</strong>: LLM（大規模言語モデル）にプロダクト要求書とコードベースを与えて見積もりを出させるという新しい試みも紹介されています。現状ではAIの出す見積もりは「膨大」で、人間がそれを現実的な範囲に収めるためにスコープを調整している段階のようです。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、ソフトウェア開発における見積もりの本質について多角的な視点を提供しています。多くのエンジニアは、正確な見積もりは不可能に近いという現実を認識しつつも、ビジネス上の必要性からそれが避けられないことを理解しています。見積もりは単なる技術的な予測ではなく、スコープ、時間、コスト、品質のバランスを取りながら、組織内外の政治的力学の中で調整される「政治的ツール」であるという認識が広く共有されています。不確実性の高いソフトウェア開発において、見積もりをより効果的に活用するためには、透明性の高いコミュニケーション、スコープの柔軟な管理、過去の実績に基づく学習、そして見積もりを出す側の政治的文脈の理解が不可欠であると結論付けられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

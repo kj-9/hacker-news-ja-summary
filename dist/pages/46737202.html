@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Algorithms (2017) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Maze Algorithms (2017)</h1>
+        <div class="meta">
+            投稿日: 2026年01月24日 | ランク: 6
+        </div>
+        <a href="http://www.jamisbuck.org/mazes/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、IOCCCに提出された4文字の単語「MAZE」を形成する迷路生成器についての投稿に焦点を当てています。コメントでは、このコードの技術的な詳細、迷路生成アルゴリズムの多様性、および迷路の設計と難易度に関する議論が展開されています。</p>
+<h2>オリジナルコードと互換性</h2>
+<p>最初のコメントでは、投稿者が1988年にIOCCCに提出した、Ellerのアルゴリズムを再発見して作成した迷路生成Cコードが紹介されています。このコードは、迷路の高さ（C）を入力すると、その場で迷路を生成し、その通路が「MAZE」という4文字の単語を形成するという、巧妙なワンライナーです。現代のCコンパイラでは定数文字列の書き換えが許可されないため、初期の行を修正する必要があるという互換性の問題が指摘されています。しかし、正しい入力（数字）を与えれば動作することが確認されています。</p>
+<h2>迷路生成アルゴリズムの多様性</h2>
+<p>多くのコメントが、さまざまな迷路生成アルゴリズムとその特性について言及しています。</p>
+<ul>
+<li><strong>Ellerのアルゴリズム:</strong> 投稿者が再発見したものとして言及されています。</li>
+<li><strong>再帰型バックトラッカー (Recursive Backtracker):</strong> 長く曲がりくねった通路を生成し、デッドエンドが少ないため、タワーディフェンスゲームに適していると評されています。</li>
+<li><strong>プリムのアルゴリズム (Prim's Algorithm):</strong> 短い行き止まりが多く、ローグライクゲームに適しているとされています。</li>
+<li><strong>Wilson's Algorithm:</strong> 最も視覚的に魅力的な結果を生み出すとして、特に好意的に評価されています。</li>
+<li><strong>成長木アルゴリズム (Growing Tree Algorithm):</strong> N個のリストを使用するバリアントが紹介されており、Nの値を変更することで迷路の「質感」に劇的な影響を与えることが指摘されています。</li>
+<li><strong>再帰分割 (Recursive Division):</strong> 過去の関連スレッドで言及されています。</li>
+<li><strong>Kruskal's Algorithm:</strong> 過去の関連スレッドで言及されています。</li>
+</ul>
+<p>これらのアルゴリズムは、それぞれ異なる視覚的特徴を持つ迷路を生成し、その特性がゲームデザイン（例：タワーディフェンス、ローグライク）に与える影響が議論されています。</p>
+<h2>迷路の難易度とデザイン</h2>
+<p>迷路の難易度を生成することに関する議論も活発です。</p>
+<ul>
+<li><strong>「難しい」迷路の定義:</strong> どのアルゴリズムが「難しい」迷路を生成するのかという疑問が提起されています。解決アルゴリズムと生成アルゴリズムを組み合わせ、ナッシュ均衡を計算するというアイデアも提案されています。</li>
+<li><strong>人間向けとアルゴリズム向けの違い:</strong> 迷路を「人間にとって」難しくすることと、「一般的な迷路解決アルゴリズムにとって」難しくすることの間には違いがあることが指摘されています。人間を対象とした難易度向上には、特定の心理的要素を考慮したデザインが必要とされています。</li>
+<li><strong>アルゴリズムのバイアス:</strong> アルゴリズムのバイアスが、グラフィックよりもゲームの「感触」を決定すると述べられています。</li>
+<li><strong>複雑なアルゴリズムの問題点:</strong> 一部のより複雑なアルゴリズムは、長くて直線的な壁や、1〜2マス程度の多くのデッドエンドを生成し、基本的な再帰型バックトラッキングよりも「悪い」迷路を作るように感じられるという意見もあります。</li>
+</ul>
+<h2>関連リソースと書籍</h2>
+<p>迷路生成に興味のある人向けの多くのリソースが共有されています。</p>
+<ul>
+<li><strong>Jamis Buckの「Mazes for Programmers」:</strong> 迷路生成に関する「傑作」として強く推奨されており、多くのコメントでその分かりやすい説明と視覚化が称賛されています。</li>
+<li><strong>Mike BostockのD3.jsサイト/ブログ:</strong> 迷路生成の美しい視覚化とアルゴリズムに関するブログ記事が紹介されています。</li>
+<li><strong>Think Labyrinth (astrolog.org/labyrnth):</strong> 迷路に関する歴史あるサイトとして言及され、特に「難しい迷路を作るヒント」のページが紹介されています。</li>
+<li><strong>kamens.com/blog/generating-custom-mazes-with-ai:</strong> AIツールを使ってカスタム形状の迷路を生成するブログ記事が共有されています。このツールは、通常の迷路ジェネレーターとは異なり、不規則なセルと外形に沿った内壁を持つ「人間が描いたような」迷路を生成できる点が特徴です。</li>
+<li><strong>Hacker Newsの過去スレッド:</strong> <code>dang</code>が迷路生成アルゴリズムに関する多数の過去スレッドをリストアップし、コミュニティの継続的な関心を示しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、巧妙なC言語の迷路生成コードを起点に、迷路生成アルゴリズムの多様性、それぞれのアルゴリズムが生成する迷路の特性と応用（特にゲームデザイン）、迷路の難易度設計における人間とアルゴリズムの違い、そして関連する豊富なリソースや書籍について活発な議論が展開されています。特にJamis Buckの「Mazes for Programmers」が強く推奨され、迷路生成というニッチな分野における深い探求と創造性が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
