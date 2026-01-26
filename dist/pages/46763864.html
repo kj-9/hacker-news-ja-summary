@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MapLibre Tile: a modern and efficient vector tile format - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">MapLibre Tile: a modern and efficient vector tile format</h1>
+        <div class="meta">
+            投稿日: 2026年01月26日 | ランク: 7
+        </div>
+        <a href="https://maplibre.org/news/2026-01-23-mlt-release/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、新しいベクタータイル形式であるMapLibre Tile (MLT) の発表に焦点を当てています。MLTはMapLibre GL JSのパフォーマンスを向上させることを目的としており、既存のVector Tile (MVT) 形式の代替として提案されています。コメントでは、MLTの利点、関連技術、コミュニティの課題、そしてWeb Mercator投影法に関する活発な議論が展開されています。</p>
+<h2>MLT (MapLibre Tile) の利点と評価</h2>
+<p>コメントの多くは、新しいMLT形式の利点に注目しています。MapLibreはブラウザで地図を表示するための優れたプロジェクトであり、MLT形式への移行を期待する声が多く聞かれました。</p>
+<ul>
+<li><strong>優れたパフォーマンス:</strong> MapLibre JSライブラリはブラウザで地図を表示するのに最適だと評価されています。MLTは既存の形式と比較して約10%の圧縮率向上をもたらし、より高速なデコードを可能にします。</li>
+<li><strong>軽量エンコーディングと最適化:</strong> MLTは、列指向のレイアウト、FSSTやFastPFORなどの軽量エンコーディングのサポート、プリテッセレーション、そしてGPUでの計算を可能にする現代的なグラフィックAPI（VulkanやMetal）の活用といった新しいアイデアを取り入れています。これにより、タイルサイズとデコードパフォーマンスの間のトレードオフを最適化する多くの可能性が生まれています。</li>
+<li><strong>AWSからの支援:</strong> AWSが今年もMLTへの資金援助を行っており、最適化に焦点を当てていることが言及されています。</li>
+<li><strong>Planetilerによる生成サポート:</strong> Planetilerは、<code>--tile-format=mlt</code>というCLI引数でMLTの生成をサポートしており、OpenMapTilesアーカイブサイズを約10%削減できることがテストで示されています。</li>
+</ul>
+<h2>PMTilesとの連携と関連技術</h2>
+<p>MLTは、PMTilesという単一ファイルでタイルをホストする形式との連携が期待されています。</p>
+<ul>
+<li><strong>PMTilesの評価:</strong> PMTilesは「シンプルで革新的なソリューション」として高く評価されており、レンジリクエストによるタイルロードはアプリケーションを劇的に高速化させることが示されています。</li>
+<li><strong>MLTのPMTilesへの組み込み:</strong> PMTilesの仕様はタイルタイプに比較的依存しないため、MLTを組み込むためのPMTilesへのプルリクエストが既に存在し、MLTへの移行を容易にする可能性があります。</li>
+<li><strong>セルフホスティングの容易さ:</strong> PMTilesは、静的ファイルを提供しレンジリクエストをサポートするWebサーバー（CaddyやNginxなど）があれば簡単にセルフホストできることが説明されています。都市や道路名もタイルに含まれ、アドレス情報も表示可能です。</li>
+<li><strong>課題:</strong> TilemakerのようなツールがMLTをすぐにサポートできない可能性があり、これは一部のコミュニティにとって移行の障害となることが懸念されています。また、PMTilesの更新にはマップ全体をリビルドする必要があるかという疑問も投げかけられました。</li>
+</ul>
+<h2>Web Mercator投影法に関する議論</h2>
+<p>Web Mercator投影法に対する批判と擁護が活発に議論されました。</p>
+<ul>
+<li><strong>批判:</strong> MapLibreのマーケティング資料やドキュメントでグリーンランドやアフリカのサイズが不正確に表示されていること（Mercator投影法による）に対し、信頼性を損なうとの指摘がありました。Web Mercatorは角度も面積も保存せず、測位エラーを引き起こす可能性があるため、航海にも不向きであると主張されています。</li>
+<li><strong>擁護:</strong> Web MercatorはWeb上で標準的な投影法であり、多くの人々が慣れ親しんでいるため、UIとして使いやすいという意見があります。また、街路などの角度が保存されるため、ズームインした際に「上は北」「直角の道路は直角に見える」といった利点も挙げられています。</li>
+<li><strong>MapLibreの対応:</strong> MapLibreは代替投影法のサポートをロードマップに含めていますが、資金が必要な大きなプロジェクトであると説明されています。しかし、既存の「Globe Mode」を使えばWeb Mercatorを回避でき、非常にパフォーマンスが良いと評価されています。プラグインを使用することでEqual Earth投影法も利用可能です。</li>
+</ul>
+<h2>その他のポイント</h2>
+<ul>
+<li><strong>MapLibreの起源:</strong> MapLibreは、かつてオープンソースだったMapboxのコードのライセンス継続フォークであり、OpenStreetMapとは直接関係なく、あくまで地図データの表示ライブラリであることが説明されました。</li>
+<li><strong>3Dタイルの進展:</strong> 全ての3Dタイルにも同様の進展を望む声がありました。</li>
+<li><strong>ドキュメントのリンク切れ:</strong> 一時的にナビゲーションリンクが壊れていたことが報告され、修正されたことが述べられています。</li>
+<li><strong>FOSDEMでの講演:</strong> FOSDEMでMapLibreの講演が予定されていることが告知されました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>MapLibre Tile (MLT) は、MapLibre GL JSのパフォーマンスを向上させる新しいベクタータイル形式として注目を集めています。約10%の圧縮率向上や高速なデコード、現代的なグラフィックAPIの活用など、多くの技術的利点が挙げられ、PMTilesとの連携によるセルフホスティングの容易さも評価されています。一方で、Tilemakerのような既存ツールのMLTサポートの遅れがコミュニティの課題として認識されています。また、MapLibreがWeb Mercator投影法を使用していることについて、その正確性と実用性に関する激しい議論が交わされましたが、MapLibreは代替投影法や「Globe Mode」による対応を進めていることを示しました。全体として、MLTは地図表示技術の進化に貢献する有望なプロジェクトとして期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
