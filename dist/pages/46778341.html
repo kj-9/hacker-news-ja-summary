@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I made my own Git - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">I made my own Git</h1>
+        <div class="meta">
+            投稿日: 2026年01月27日 | ランク: 8
+        </div>
+        <a href="https://tonystr.net/blog/git_immitation" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、投稿者がRustでGitのようなバージョン管理システム「tvc」を自作した記事について議論しています。特に、Gitの内部構造、他のバージョン管理システム（VCS）との比較、そしてLLMがオープンソースコードをトレーニングデータとして利用することに対する懸念に焦点を当てています。</p>
+<h2>Fossil VCSとの比較</h2>
+<p>「tvc」の作者は、SQLiteをストレージとして使うアイデアに興味を示し、それがFossil SCMプロジェクトに似ていると指摘されました。Fossilユーザーからは、そのユニークな設計思想について肯定的な意見が多く寄せられました。</p>
+<ul>
+<li><strong>Fossilの利点</strong>: Fossilは、コードだけでなく、課題管理、Wiki、ドキュメント、メモなど、プロジェクトに関するあらゆるデータをリポジトリに統合しています。これにより、Gitのように複数のプラットフォームに分散させることなく、全てをローカルで管理できる「ローカルファースト」なアプローチが強調されています。単一の静的バイナリとして実行でき、外部依存なしにHTTP経由で通信できるため、ロックダウンされた環境での構成管理やデプロイツールとしても利用された例が挙げられています。</li>
+<li><strong>Gitとの違い</strong>: Gitもローカルファーストであるという意見に対し、Fossilはプロジェクトのメタデータをリポジトリに含める点がGitと異なると説明されました。Fossilにはリベースがないなど、特定の設計上の制約もあります。</li>
+<li><strong>普及の課題</strong>: Fossilは個人的なプロジェクトや小規模チームに適していると評価される一方で、Gitの普及度や既存のツールとの統合のしやすさから、他のチームに採用を納得させるのが難しいという声もあります。</li>
+<li><strong>ステージングエリア</strong>: FossilにはGitのようなステージングエリアがなく、最初は戸惑うものの慣れればうまく機能するとされています。個別のファイルをコミットすることは可能ですが、特定の行だけをコミットすることはできないようです。</li>
+<li><strong>内部構造</strong>: FossilもSQLiteをストレージに利用していますが、その実際のフォーマットはSQLiteに基づいているわけではなく、長期的な可読性と拡張性を考慮したプレーンテキストベースであると説明されています。</li>
+</ul>
+<h2>Gitの内部構造と代替案</h2>
+<p>コメントでは、Gitの効率性とスマートさ、そしてその内部構造が他の分野でも応用可能であるという見解が示されました。</p>
+<ul>
+<li><strong>Gitの理解を深めるリソース</strong>: Gitの内部構造を理解するのに役立つ「Git from the Bottom Up」や「The Git Parable」、「ugit: DIY Git in Python」、「Write yourself a Git」といった記事が推薦されています。</li>
+<li><strong>ハッシュアルゴリズム</strong>: GitがSHA-1を使用していることについて、投稿者はコンテンツ識別のためであり暗号的安全性は重視しないと述べたものの、SHA-1の脆弱性やGitがSHA-256への移行を検討していることが指摘されました。SHA-256が遅いという意見もあり、BLAKE3のようなより高速なアルゴリズムの利用が提案されています。</li>
+<li><strong>マージ戦略</strong>: Gitの「recursive merge」戦略が、以前に解決された競合を記憶する優れた機能であると紹介され、再ベースよりも評価されています。PijulやJujutsuのような新しいVCSは、競合を第一級オブジェクトとして扱うことで、より原則的かつ自動的な競合解決を提供しているとのことです。</li>
+<li><strong>空のフォルダの追跡</strong>: 「tvc」はGitとは異なり、空のフォルダを追跡できることが示されました。Gitのデータモデル自体は空のディレクトリをサポートしているものの、インデックスがファイルにのみマッピングされるため、通常の運用では追跡されないという説明がされています。</li>
+<li><strong>ストレージの課題</strong>: Gitがファイルをストレージの単位としているため、多数の小さなファイルや大きなファイルには不向きであり、Xethubが使用するコンテンツベースのチャンク分割（rsyncのように）がデフォルトになるべきだという意見もあります。</li>
+</ul>
+<h2>LLMのトレーニングデータとしてのコード利用</h2>
+<p>投稿者がGitHubリポジトリへの予期せぬクローン数を指摘し、LLMが自身のコードをトレーニングしている可能性に懸念を表明したことで、関連する議論が活発になりました。</p>
+<ul>
+<li><strong>LLMによるスクレイピング</strong>: 多くのユーザーが、LLMのトレーニングのためにボットがGitHubなどの公開リポジトリからコードをスクレイピングしているという経験を共有しました。クローンだけでなく、Web UIを直接閲覧してデータを取得しているケースも報告されています。</li>
+<li><strong>コードの質とLLMの出力</strong>: 投稿者が自身のコードの「手抜き」を意識しているにもかかわらず、それがLLMのトレーニングに使われていることへの複雑な感情が語られました。LLMのコード生成の質は、このような多様なトレーニングデータに依存しているため、品質のばらつきがあるという意見も出ています。</li>
+<li><strong>LLMの「毒入れ」</strong>: トレーニングデータに意図的にバグを含ませることで、LLMを「毒入れ」するアイデアが冗談交じりに提案されました。しかし、そのような行為が将来的に法的な問題を引き起こす可能性についての議論も展開されました。</li>
+<li><strong>LLMの出力の信頼性</strong>: LLMの出力が事実として盲信されることへの懸念が表明され、「GPSによる死」になぞらえて「AIによる死」という表現が使われるほど、人間の批判的思考能力の低下が危惧されています。一方で、LLMが生成する内容が、人間がもともと持っていた一般的な知識や表現を反映しているだけだという見方も示されました。</li>
+<li><strong>言語モデルの「癖」</strong>: あるユーザーは、Geminiが特定の状況で「インド英語」のような表現を使うことに気づき、インドの人々がトレーニングデータを大量に生成している可能性を指摘しました。これに対し、「ChatGPTが自分のように書く」という、LLMの言語スタイルがトレーニングセットの文化的背景を反映しているという興味深い記事が共有されました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、Rustで自作されたGitクローン「tvc」を巡り、バージョン管理システムの技術的詳細から、より広範な技術コミュニティの課題まで多岐にわたる議論が展開されました。Gitの内部構造や、Fossilのような代替VCSの設計思想、ハッシュアルゴリズムの選択、マージ戦略といった技術的な側面が深く掘り下げられています。特にFossilは、コードとプロジェクトのメタデータを統合する「ローカルファースト」なアプローチで注目を集めました。</p>
+<p>しかし、最も活発な議論は、LLMがGitHubなどの公開リポジトリからコードをスクレイピングしてトレーニングデータに利用しているという現実に関するものでした。多くのユーザーがこの状況への懸念を表明し、LLMの出力の信頼性、意図的なトレーニングデータ汚染の是非、そしてLLMが人間の批判的思考能力に与える影響について深い議論が交わされました。このスレッドは、単なる技術的なプロジェクトの紹介にとどまらず、今日の技術環境におけるオープンソース、AI、そして情報倫理といった重要なテーマを浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
