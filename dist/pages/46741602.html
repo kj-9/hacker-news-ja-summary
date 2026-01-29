@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Modules Are Here to Stay - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">C++ Modules Are Here to Stay</h1>
+        <div class="meta">
+            投稿日: 2026年01月29日 | ランク: 7
+        </div>
+        <a href="https://faresbakhit.github.io/e/cpp-modules/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、C++のモジュール機能に対する様々な意見、特にそのメリット（ビルド時間の改善、マクロ衛生など）と課題（既存ツールとの互換性、サブモジュール構造の欠如、テンプレートとの相性など）について議論しています。</p>
+<h2><code>auto main() -&gt; int</code>構文について</h2>
+<p>多くのコメントが、<code>auto main() -&gt; int</code>という現代的なC++の関数宣言構文に注目しています。
+*   あるユーザーは、この構文が15年前から一般的なものだと主張していますが、別のユーザーはプロジェクトで見たことがなく、オンラインの例でしか見ないという意見を述べています。
+*   この構文が戻り値の型を二重に宣言しているように見えるという混乱や、コード例で実際に値が返されていないという指摘もあります（ただし、<code>main</code>関数の場合は標準で許可されており、<code>return 0</code>と同じとされています）。
+*   この新しい構文を、古い技術を現代風に改名した「Model T++」になぞらえる意見もあります。</p>
+<h2>ビルド時間の改善</h2>
+<p>C++モジュールの主な利点の一つとして、ビルド時間の改善が挙げられています。
+*   <code>import std;</code>を使用すると、個々のSTLヘッダーを使用するよりも桁違いに速いという経験談があります。ある情報源によれば、標準ライブラリを含むビルド時間が25%から45%改善されたとのことです。
+*   しかし、プリコンパイル済みヘッダー（PCH）と比較して、モジュールのビルド時間の改善がそれほど劇的ではないという疑問も提示されています。
+*   モジュールは、マクロの衛生、静的初期化順序の制御、シンボルエクスポートの制御などの利点をもたらすとされています。また、PCHがコンパイラごとに異なる動作をするのに対し、モジュールは標準化された未来の形だと評価する声もあります。</p>
+<h2>モジュールパーティションとカプセル化</h2>
+<p>C++モジュールのカプセル化の仕組み、特にモジュールパーティションについて懸念が示されています。
+*   ユーザーは、モジュールパーティションが一層のカプセル化しか許さないように見え、Rustのような多層的な抽象化レベルをサポートするモジュールシステムとは異なると指摘しています。
+*   標準委員会が「サブモジュールなし」という決定を下し、それが問題を引き起こしているという批判的な意見もあります。これは、C++開発者がクリーンなコードレイヤーを維持するために、規律とドキュメンテーションに頼らざるを得ない状況を生んでいると見られています。</p>
+<h2>C++モジュールの採用と将来性</h2>
+<p>C++モジュールの採用状況と将来性についても議論されています。
+*   <code>arewemodulesyet.org</code>というサイトが、どのライブラリがすでにモジュール版を提供しているかの概要を示していますが、そのデータ表示（ログスケールと2195年の完了予定日）はユーモラスに受け止められています。
+*   既存のハードウェアや古いツールチェーンを使用している環境では、C++モジュールをデプロイできないという問題が提起されています。ベンダーが新しいツールを提供しない限り、C++が自分から離れていくように感じるとの意見もあります。
+*   一部のユーザーは、PCHが少ない投資でモジュールとほぼ同等の効果を発揮するという事実が、モジュールの必要性について多くを物語っていると考えています。
+*   C++のテンプレートとメタプログラミングが、モジュールのアイデアと根本的に相容れないという指摘もあります。コンパイラは現在、テンプレートの特殊化が必要な依存関係ごとにコードをコピーするという解決策を採用しており、これはテンプレートが多用されるコードでは「組み合わせ的爆発」を引き起こす可能性があるとされています。
+*   全体として、C++モジュールが「遅すぎ、少なすぎ」と感じられ、Rustのような新しい言語がインフラプロジェクトで主流になる中、C++はレガシー言語として存続するのではないかという懸念も表明されています。</p>
+<h2>まとめ</h2>
+<p>C++のモジュール機能は、ビルド時間の改善やマクロの衛生といった具体的なメリットをもたらす一方で、その構文、PCHとの比較における優位性、カプセル化の設計、既存のエコシステムとの互換性、そして特にテンプレートとの相性において、活発な議論と課題を抱えています。新しい機能への移行は、開発者やベンダーのツールチェーンの更新状況に大きく左右され、一部からは「遅すぎる」との声も上がっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
