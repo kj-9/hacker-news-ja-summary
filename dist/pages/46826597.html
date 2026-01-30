@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kimi K2.5 Technical Report [pdf] - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Kimi K2.5 Technical Report [pdf]</h1>
+        <div class="meta">
+            投稿日: 2026年01月30日 | ランク: 1
+        </div>
+        <a href="https://github.com/MoonshotAI/Kimi-K2.5/blob/master/tech_report.pdf" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Kimi K2.5モデルに関するHacker Newsのコメントは、主にその性能、特にコーディングエージェントとしての能力、および実行方法に焦点を当てています。多くのユーザーがその品質に感銘を受け、オープンソースモデルとして大手ラボのモデルに匹敵すると感じています。</p>
+<h2>性能とOpenAI/Anthropicモデルとの比較</h2>
+<p>複数のユーザーがKimi K2.5の性能に非常に感銘を受けており、特にコーディングエージェントとして利用した場合、他の大手ラボのモデルと競合できるレベルにあると評価しています。</p>
+<ul>
+<li>あるユーザーは、Kimi K2.5をコーディングエージェントとして数日間使用し、「オープンソースモデルが大手ラボと本当に競争できると感じたのは初めて」だと述べています。彼らは、ほとんどのタスクを処理でき、Opusに匹敵するほど良いと感じているようです。</li>
+<li>別のユーザーは、Kimi K2.5とOpenCodeを組み合わせてコード評価/修正に使用し、Opus 4.5とClaude Codeでその結果をチェックしていますが、「非常に感銘を受けている」と述べています。しかし、まだClaudeのサブスクリプションをキャンセルするほどではないと感じています。</li>
+<li>全体として、Kimi K2.5は非常に強力で、特にコーディングのタスクにおいて、Opusなどのモデルに匹敵するパフォーマンスを発揮するという見方がされています。</li>
+</ul>
+<h2>Kimi K2.5の実行方法</h2>
+<p>多くのユーザーがKimi K2.5の実行方法、特にローカルでの実行要件やAPI経由での利用方法に関心を示しています。</p>
+<ul>
+<li><strong>ローカル実行の要件:</strong><ul>
+<li>モデルのサイズが非常に大きく、フルモデルは630GBで、通常4つのH200 GPUを必要とすると説明されています。</li>
+<li>量子化されたバージョン（1.8ビット）でも、単一の24GB GPUと大量のシステムRAM（〜256GB RAM）または高速SSDが必要で、それでも速度は10トークン/秒程度とされています。</li>
+<li>強力なパフォーマンスのためには、240GB以上の統合メモリ（RAM+VRAM）が推奨されます。</li>
+</ul>
+</li>
+<li><strong>API経由の利用:</strong><ul>
+<li>多くのユーザーは、ローカルで実行するのではなく、Moonshot.aiのプラットフォームAPIを通じて利用していると述べています。</li>
+<li>OpenCodeというツールを介して、KimiのAPIキー、Moonshot.aiのAPIキー、またはOpenRouterを通じてKimi K2.5にアクセスできることが示されています。</li>
+<li>OpenCodeはKimi K2.5と「見事に機能する」と評価されており、Claude Codeと同等の品質であると感じているユーザーもいます。</li>
+</ul>
+</li>
+</ul>
+<h2>OpenCodeとエージェント機能</h2>
+<p>OpenCodeというツールとKimi K2.5のエージェント機能に関する議論もあります。</p>
+<ul>
+<li>あるユーザーは、Kimi K2.5のエージェントスウォーム（複数のエージェントが連携する機能）に興味を示し、OpenCodeでこの機能が使えるか疑問を呈しています。</li>
+<li>別のユーザー（zeroxfe）は、OpenCodeでエージェント機能が機能しているように見え、異なるサブエージェント間のビューを切り替えるUIに「非常に感銘を受けた」と述べています。これがOpenCodeがエージェント機能を認識しているためなのか、モデル自体がサブエージェントを生成する方法を知っているためなのかは不明とのことです。</li>
+</ul>
+<h2>その他のコメント</h2>
+<ul>
+<li>あるユーザーは、Kimi K2.5がKimi CLIと最も良く機能し、Claude Codeやその他のツールとは異なる意見を示しています。</li>
+<li>Moonshot AI（Kimiの開発元）の評価額がOpenAIに比べて非常に低いことについて、モデルの品質が近いにもかかわらず、その差に疑問を呈するコメントがあります。</li>
+<li>ベンチマークの数値が「意味がない」という懐疑的なコメントも一つあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Kimi K2.5は、特にコーディングエージェントとしての性能が高く評価されており、多くのユーザーが大手モデルに匹敵すると感じています。その巨大なモデルサイズからローカルでの実行には高いハードルがあるため、Moonshot.aiのAPIやOpenCodeのようなツールを介した利用が一般的です。OpenCodeとの組み合わせは良好で、エージェント機能も注目されています。全体として、オープンソースモデルとして大きな可能性を秘めていると見られています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
