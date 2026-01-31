@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guix System First Impressions as a Nix User - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Guix System First Impressions as a Nix User</h1>
+        <div class="meta">
+            投稿日: 2026年01月31日 | ランク: 9
+        </div>
+        <a href="https://nemin.hu/guix.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、筆者が様々なLinuxディストリビューションを試した末にGuix Systemに落ち着いた経緯について議論しています。特に、NixOSと比較しながら、その利点と欠点が語られています。</p>
+<h2>ディストリビューションの選択における揺れ動き</h2>
+<p>筆者が様々なディストリビューション（Arch、Fedora、Ubuntu、NixOSなど）を試してきたことに対し、一部のユーザーは「優柔不断だ」と指摘しています。しかし、別の意見としては、これは「好みを洗練させている」のであり、10年以上にわたって複数のディストリビューションを試すことは一般的であると反論されています。</p>
+<h2>GPUドライバーとハードウェアのオープンソース対応</h2>
+<p>現代のGPUドライバー、特にNVIDIAのドライバーはオープンソース環境にとっての「悪夢」であるという意見が挙がっています。AMDとIntelはオープンソースドライバーに注力しており、特にAMDは多くの努力を払っていると評価されています。しかし、NVIDIAは依然としてクローズドソースのカーネルモジュールやファームウェアを使用しており、これが問題視されています。</p>
+<p>AMDのファームウェアもプロプライエタリである点は指摘されていますが、これは「ファームウェアは以前から存在しており、妥協点として受け入れられる」という意見もあります。一方、機械学習用途ではNVIDIA一強の時代が長く続いたため、AMDのROCmが現状では不十分であるという不満も聞かれ、ユーザーは「ゲームと計算の両方に優れた互換性が欲しい」と訴えています。</p>
+<h2>GuixとNixOSの比較：サーバー利用とパッケージ管理</h2>
+<p>Guixをサーバーで利用することに興味を示すユーザーが多く、NixOSとの比較がなされています。Guixはホームラボでの利用は可能であるものの、NixOSほど多くのサービスが利用できないという意見があります。パッケージの可用性についても、NixOSの広範なパッケージ群と最新性に比べて、Guixは劣るのではないかという懸念が示されています。</p>
+<p>また、NixOSのサーバー展開方法や、特に秘密情報の管理（nix-sops, nix-ageなど）に関する議論も行われています。</p>
+<h2>GuixとNixOSの言語：Nix言語とScheme</h2>
+<p>筆者はNixOSの「Nix言語」の代わりに、Guixが採用する「Scheme」（Lispの一種）を好意的に評価しています。Nix言語は「醜い」「理解しにくい」と感じるユーザーがいる一方で、Schemeもまた「古い」「一般的ではない」といった批判があります。</p>
+<p>Nix言語を擁護する意見としては、そのシンプルさ、遅延評価、関数型プログラミングの特性が、NixOSの強力なパッケージ管理モデル（オーバーレイ、固定点など）を可能にしている点が挙げられます。また、デバッグのしやすさではSchemeに分があるという期待もありますが、Lispの自動フォーマットはEmacsによって古くから実現されているという反論も出ています。</p>
+<h2>Guixのデスクトップ利用とファイルシステム</h2>
+<p>Guixがデスクトップパワーユーザー向けであり、HPC向けではないという意見が提示されています。特に、NixOSが提供するZFSのrootファイルシステムサポートや、RustDeskなどの一般的なサービスの欠如がGuixの課題として挙げられています。多くのGNU/Linuxユーザーは「プレーンなext4」を使用しているという意見に対し、宣言型ディストリビューションを選ぶユーザーは「操作知識があり、データの価値を理解しているため、ZFSのような先進的なファイルシステムを求める」という意見が衝突しています。</p>
+<p>ZFSは、スナップショットによるバックアップとリカバリの容易さ、プーリングによるRAID機能など、データの管理において大きなメリットをもたらす革新的なファイルシステムであると主張されています。宣言型ディストリビューションを利用するユーザーは、単なるext4では不十分であり、ZFSのような堅牢なデータ管理を求めているという見解が示されています。</p>
+<h2>Nixpkgsリポジトリのサイズとクローン</h2>
+<p>Nixpkgsリポジトリの巨大さ（約2GBのディスク容量）が課題として挙げられていますが、一部のユーザーは<code>git clone --shallow-since</code>などのコマンドを使用して、日常的に浅いクローンを行うことで負担を軽減していると述べています。しかし、浅いクローンの利用には注意が必要であることも指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、筆者がGuix Systemに移行したことについて、宣言型ディストリビューションの利点や、NixOSとの比較が活発に議論されました。特に、モダンなGPUドライバーのオープンソース対応の難しさ、GuixとNixOSそれぞれのサーバー利用やパッケージ管理の状況、そしてNix言語とSchemeという異なる設定言語への評価が分かれました。また、Guixがデスクトップパワーユーザーのニーズ、特にZFSのような先進的なファイルシステムへの対応が十分ではないという課題も浮上しました。全体として、宣言型ディストリビューションの持つ可能性と、それが直面する現実的な問題点（特にハードウェア対応や言語の習熟度、特定の機能サポート）が浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
