@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What I learned building an opinionated and minimal coding agent - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What I learned building an opinionated and minimal coding agent</h1>
+        <div class="meta">
+            投稿日: 2026年02月01日 | ランク: 7
+        </div>
+        <a href="https://mariozechner.at/posts/2025-11-30-pi-coding-agent/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、OpenClawの基盤であるPiと呼ばれるエージェント開発キットに関する記事への反応です。多くのユーザーは、このツールが提供するミニマリズム、カスタマイズ性、セキュリティに関する議論を高く評価しています。</p>
+<h2>ミニマリズムとカスタマイズ性</h2>
+<p>Piのミニマルな設計は、多くのユーザーから好評を博しており、複雑なエージェントのセットアップを容易にし、学習体験としても優れていると評価されています。ユーザーは、命令やツールの作成において最も高い投資対効果（ROI）を見出しています。
+Piは、コンテキスト管理の面で高い評価を得ており、ユーザーがシステムプロンプトを含むコンテキスト全体を微調整できるため、LLMのパフォーマンスにおけるコンテキストの制限（コンテキストの劣化、コンテキストのドリフトなど）を克服できると指摘されています。サブエージェントは、タスクをより小さなモデルにオフロードすることでパフォーマンス向上に役立ち、Piでは組み込み機能としては提供されませんが、拡張機能として簡単に実装できる柔軟性があります。
+一部のユーザーは、Piの「バッテリーなし」という設計哲学（特定の機能は組み込まれておらず、ユーザーが拡張機能として追加する）を称賛し、これがカスタマイズ性と柔軟性を高めていると見ています。</p>
+<h2>セキュリティとサンドボックス化</h2>
+<p>エージェントのセキュリティは、コメントスレッドの中心的なテーマです。多くのユーザーは、コード実行能力を持つエージェントのセキュリティ対策が「セキュリティシアター」に過ぎないと指摘しています。エージェントがコードを書き、実行できる限り、データ漏洩のリスクは常に存在すると考えられています。
+サンドボックス化は、エージェントを保護するための重要な手段として議論されています。<code>chroot</code>、コンテナ（Docker）、VM、Unixパーミッションシステムなどの使用が推奨されており、これによりエージェントがアクセスできるリソースを制限し、被害範囲を最小限に抑えることができます。しかし、インターネットアクセスが必要な場合、エージェントがサンドボックスから機密情報（APIキー、コードなど）を流出させる可能性が残るとの懸念も表明されています。
+一部のユーザーは、サンドボックス化はボットネットへの参加やデータ偶発的削除を防ぐのに役立つが、LLMによるコード流出を防ぐには不十分であると指摘しています。また、ユーザーがエージェントの各コマンドを承認する「承認モード」についても議論があり、多くのユーザーはそれが煩わしく、盲目的な承認につながる可能性があると懐疑的です。
+「YOLOモード」（すべてのコマンドを無制限に実行させる）は、サンドボックス内で使用する場合に最も合理的なシステムであると考えられています。</p>
+<h2>エージェントツールの比較と競争</h2>
+<p>Claude Code、Codex、Cursor、Piなどの様々なコーディングエージェントツールが比較検討されています。
+<strong>Claude Code</strong>は、その強力な機能と、Anthropicが持つツール（プランモード、ToDoリスト、askUserQuestionツール、フックなど）による優位性が指摘されています。しかし、ユーザーインターフェース（特に「ちらつき」の問題）やパフォーマンスの遅さに関する不満も寄せられています。
+<strong>Cursor</strong>は、より速いフィードバックループと、モデルを簡単に切り替えられる機能が評価されています。しかし、AIの変更履歴をGitに統合する点での改善が求められています。
+<strong>Codex</strong>は、OSレベルのサンドボックス（macOSのSeatbeltなど）を実装していることが言及されていますが、それでもサンドボックス外へのファイル書き込みのような問題が報告されており、「セキュリティシアター」の議論に拍車をかけています。
+LLM開発企業が収集するデータが、彼らのモデルを継続的に改善するための「堀」であるという意見もあります。また、OpenClawがPiをエージェントハーネスとして使用していることから、Piは基礎技術として注目されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、エージェントベースのAI開発におけるPiのミニマリズム、カスタマイズ性、そしてサンドボックス化と権限管理に関するセキュリティの議論が中心でした。ユーザーは、Piのコンテキスト管理の柔軟性を高く評価しつつ、様々な既存エージェント（Claude Code, Cursor, Codexなど）の長所と短所を比較しました。特に、エージェントがコード実行能力を持つ場合のセキュリティ確保の難しさ、および「承認モード」の現実的な課題が浮き彫りになりました。最終的には、エージェントを安全かつ効果的に活用するためには、サンドボックス化、VM、コンテナなどの技術を組み合わせた多層的なアプローチが不可欠であり、ツールのミニマリズムと実用的なカバー範囲のバランスが重要であるという共通認識が見られました。Piのようなカスタマイズ可能なフレームワークは、将来のエージェント開発において重要な役割を果たすと期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
