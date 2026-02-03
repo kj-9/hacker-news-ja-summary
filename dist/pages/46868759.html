@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What&#x27;s up with all those equals signs anyway? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What&#x27;s up with all those equals signs anyway?</h1>
+        <div class="meta">
+            投稿日: 2026年02月03日 | ランク: 8
+        </div>
+        <a href="https://lars.ingebrigtsen.no/2026/02/02/whats-up-with-all-those-equals-signs-anyway/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、エプスタイン関連文書で繰り返し現れる「=」記号の背後にある技術的な理由について深く掘り下げています。この現象は、Quoted-Printableエンコーディングと改行コードの処理ミスに起因しています。</p>
+<h2>エプスタイン文書の「=」記号の背景</h2>
+<p>多くのコメント投稿者は、エプスタイン関連文書で目にする「=」記号が何を意味するのか疑問に思っていたと述べています。これは、メールのQuoted-Printableエンコーディングと改行コードの処理方法の誤りに起因するもので、具体的には「=\r\n」が「=\n」に変換されたことによるものです。これにより、通常は復元されるはずのソフトな改行（本来の改行マーク）が、単なる「=」記号として表示されてしまっています。</p>
+<h2>メールプロトコルと改行コードの歴史的背景</h2>
+<h3>固定行長と古いシステムへの対応</h3>
+<p>メールサーバーがなぜ行の長さに制限を設けるのかという疑問に対し、多くのユーザーが歴史的背景を説明しています。</p>
+<ul>
+<li><strong>固定長バッファ:</strong> かつてのコンピュータ（1970年代のPDP-11や1980年代のVAX-11など）はメモリが非常に限られていたため、メールサーバーは固定サイズのバッファを使って行を処理し、動的なメモリ割り当てを避けていました。これにより、無限の行長がシステムリソースを消費するのを防ぎます。</li>
+<li><strong>7ビットASCIIの制約:</strong> SMTP（Simple Mail Transfer Protocol）が設計された当初、インターネットは主に7ビットASCII文字を使用しており、文字コードの互換性の問題がありました。Quoted-Printableエンコーディングは、7ビットシステム上で非ASCII文字や長い行を安全に送信するための手段でした。</li>
+<li><strong>視認性と互換性:</strong> 80年代から90年代にかけては、多くのユーザーが80カラムの端末やプリンタでメールを読んでいたため、72〜78文字程度の短い行に自動的に折り返すことが、古いメールソフトウェアとの互換性を保ち、人間が読みやすくするための「良い習慣」とされていました。RFC 821（SMTP）では最大1000文字の行長を規定していますが、実際にはもっと短い長さで折り返すのが一般的でした。</li>
+<li><strong>パンチカードの影響:</strong> 80カラムのパンチカードの影響が、現代のシステムの多くに残っていると指摘するコメントもあります。</li>
+</ul>
+<h3>CRLFとLFの複雑さ</h3>
+<p>CRLF（Carriage Return + Line Feed）とLF（Line Feed）という異なる改行コードが混在することで問題が発生します。</p>
+<ul>
+<li><strong>タイプライターの仮想化:</strong> CRとLFの分離は、昔のタイプライターの動き（改行とキャリッジリターンは別々の動作）を仮想化したものです。物理デバイスでは、改行中にキャリッジが戻る時間を稼ぐために、LFをCRの後に送る必要がありました。</li>
+<li><strong>現代の課題:</strong> この2バイトの改行コードは、現代のシステムでは不要な複雑さやスペースの無駄と見なされることもあります。Visual StudioなどのIDEが、異なる改行コードとエンコーディングの整合性をとるのに苦労しているという経験談も語られています。</li>
+</ul>
+<h2>データ処理の誤り</h2>
+<h3>「十分な知識が危険」の典型例</h3>
+<p>多くのユーザーが、今回の問題は「中途半端な知識が危険」である典型的な例だと指摘しています。メールが単なるプレーンテキストではないことを理解しつつも、Quoted-Printableのデコードを適切に行う知識がなかったために、手動で文字置換のような処理を行ってしまった結果、データの破損が生じたと考えられます。これは、HTMLを正規表現でパースしようとするような誤りと同じレベルのバグだと例えられています。</p>
+<h3>複数のシステムによる累積的な影響</h3>
+<p>この問題がGmailからの直接のダンプではなく、複数のメールサーバーやシステムを経由して処理される過程で、時間とともに「傷跡」が累積された結果である可能性も指摘されています。エプスタインのメールがサードパーティのメールサーバーに同期されていた、あるいはAppleのMail.appやMicrosoft OutlookのPSTファイル形式など、様々なシステムで処理されたことが原因かもしれないという推測も出ています。</p>
+<h2>その他の議論</h2>
+<ul>
+<li><strong>「ロックドット（rock döts）」の誤解:</strong> 記事中で使われた「rock döts」（ウムラウトなどのダイアクリティカルマークを揶揄するスラング）という表現について、一部のユーザーは文脈を誤解し、ダイアクリティカルマークの重要性を指摘するコメントもありましたが、これはメタルバンド名などで装飾的に使われるウムラウトを指していると説明されています。</li>
+<li><strong>POP3とIMAP:</strong> メールサーバーのプロトコルに関する議論の中で、POP3とIMAPの比較も行われました。POP3がサーバーからメールを削除するという誤解がありましたが、実際には削除せずにローカルに保存することも可能です。IMAPはサーバーとの同期を重視し、POP3は主に単一の場所でメールをダウンロード・処理することに適しているという違いが語られています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>エプスタイン文書に見られる「=」記号の謎は、メールのQuoted-Printableエンコーディングの不適切なデコードと、CRLFからLFへの改行コード変換の失敗に起因しています。これは、限られたリソースと古いプロトコルが支配的だった時代からのメールの技術的遺産であり、データを扱う人々が「十分な知識が危険」という罠に陥った結果でもあります。現代の「透過的な」ライブラリに慣れた開発者にとっては、過去のプロトコルの詳細な知識が失われつつある「抽象化リーク」の良い例であり、インターネットの基盤が今なお1980年代の制約の上に成り立っていることを示すものでした。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deno Sandbox - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Deno Sandbox</h1>
+        <div class="meta">
+            投稿日: 2026年02月03日 | ランク: 2
+        </div>
+        <a href="https://deno.com/blog/introducing-deno-sandbox" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Denoが発表した新しいサンドボックス実行環境「Deno Sandbox」に関するものです。特に、LLMによって生成された信頼できないコードを実行する際のセキュリティ上の課題、APIキーの保護、およびDeno Sandboxの機能と利点について議論されています。</p>
+<h2>LLM生成コードとサンドボックスの必要性</h2>
+<p>Deno Sandboxは、LLMが生成したコードをレビューなしで即座に実行するプラットフォームを構築する顧客のニーズに応えるために開発されました。この種のコードはしばしばLLM自身を呼び出し、APIキーやネットワークアクセスを必要とします。通常の「信頼できないプラグイン」の問題とは異なり、Deno Sandboxは、人間によるレビューなしに、実際の認証情報で外部APIを呼び出すLLM生成コードの問題に対処するため、計算のサンドボックス化だけでなく、ネットワークからのデータ流出制御とシークレットの保護を提供します。</p>
+<h2>シークレットの保護と外部連携</h2>
+<p>Deno Sandboxの最も注目すべき機能の一つは、シークレット（APIキーなど）の取り扱い方です。シークレットはサンドボックス環境に直接渡されず、コードはプレースホルダーのみを認識します。実際のキーは、サンドボックスが承認されたホストへのアウトバウンドリクエストを行う際にのみ具現化されます。これにより、プロンプトインジェクションされた悪意のあるコードがシークレットを外部に持ち出そうとしても、プレースホルダーは無効であり、恒久的なシークレットの窃盗は不可能になります。この技術は、FlyのTokenizerやDagger、Envoyなどの既存の概念と比較され、その巧妙さが評価されています。しかし、悪意のあるコードがそのシークレットを使用して不正な操作を行うことは防げないという点も指摘されており、よりきめ細かいデータアクセス制御やポリシー適用が必要であるという議論も行われています。</p>
+<h2>LLMによって書かれた記事の兆候</h2>
+<p>記事の執筆スタイルについて、一部のユーザーは、特定の句読点の使い方（特に「これはXではない。Yだ」という構文やemダッシュの多用、文頭の"And"）や文章構造から、LLMが記事の大部分を生成したのではないかと推測しています。これに対し、Denoのエンジニアは執筆者が人間であることを確認していますが、この議論はLLMが生成したテキストを識別する現代の課題を示しています。</p>
+<h2>サンドボックスの用途と課題</h2>
+<p>Deno Sandboxは、LLMエージェントのコード実行という特定のユースケースに焦点を当てていますが、他の用途（開発サーバーなど）での可能性も言及されています。しかし、マイクロVMやコンテナベースのサンドボックスソリューションが多数登場している中で、Deno Sandboxの提供する具体的な差別化価値や、クラウドベンダーによるロックインへの懸念も議論されています。また、サンドボックスのライフタイム制限（30分）や、費用（ egressデータなど）に関する懸念も示されています。</p>
+<h2>まとめ</h2>
+<p>Deno Sandboxは、LLMによって生成された信頼できないコードを安全に実行するための新しいソリューションであり、特にシークレットの保護において革新的なアプローチを提供しています。シークレットが環境に直接入らず、承認されたホストへのリクエスト時にのみ具現化されるという方法は、シークレットの永続的な窃盗を防ぐ上で有効です。しかし、この技術が悪意のあるコードによるシークレットの誤用まで防ぐわけではないため、より高度なアクセス制御やポリシー適用が今後の課題として挙げられています。また、AIエージェントのコード実行環境として多くの類似サービスが登場している中で、Deno Sandboxの差別化と長期的な価値提供が注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

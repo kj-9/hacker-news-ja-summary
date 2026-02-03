@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen3-Coder-Next - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Qwen3-Coder-Next</h1>
+        <div class="meta">
+            投稿日: 2026年02月03日 | ランク: 1
+        </div>
+        <a href="https://qwen.ai/blog?id=qwen3-coder-next" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、UnslothがQwen3-Coder-Nextモデルの動的GGUF（UD-Q4_K_XLなど）を公開し、ローカルでのデプロイメントを可能にしたことが話題になっています。特に、コード生成モデルとしての性能、ローカルでの実行可能性、そして既存の商用モデルとの比較に焦点が当てられています。</p>
+<h2>UnslothのQwen3-Coder-Next GGUF</h2>
+<p>Unslothが公開したQwen3-Coder-NextのGGUFファイルと、それをローカルで利用するためのガイドが紹介されています。特に「Unsloth-Dynamic（UD）」バージョンは、重要なレイヤーを高ビットにアップキャストすることで、標準のllama.cpp量子化よりも性能を向上させています。ほとんどのハードウェアでUD-Q4_K_XLが推奨されており、迅速な公開はUnslothがQwenチームの早期アクセスパートナーであることによるものです。</p>
+<h2>ローカル実行とハードウェア要件</h2>
+<p>多くのユーザーが、このモデルをローカルで実行できるか、またその際のパフォーマンスについて議論しています。Qwen3-Coder-Nextは48.4GBのGGUFファイルであり、高性能なラップトップでも利用可能であるとされています。MoE（Mixture of Experts）モデルの特性上、密なウェイトをGPUで、スパースなウェイトをCPU RAMにオフロードすることで、比較的低いVRAMのGPUでも実行できる可能性があります。しかし、特にApple Siliconユーザーからは、最適化が不十分であるとの指摘や、MLXとllama.cppの間のパフォーマンスとKVキャッシュの一貫性のトレードオフに関する懸念も挙がっています。</p>
+<h2>コーディングエージェントとしての性能と商用モデルとの比較</h2>
+<p>コメントでは、Qwen3-Coder-Nextが既存のClaude CodeやCodex CLIといった商用モデルにどれだけ近づいているか、またそれらを代替できるかについて活発に議論されています。</p>
+<ul>
+<li><strong>性能評価</strong>: ベンチマークではGLM 4.7にわずかに劣るものの、3Bのアクティブパラメータ数でこれだけの性能を達成していることは驚異的と評価されています。一部のユーザーは、小規模なモデルがシンプルなタスクで高速に動作し、より賢いオーケストレーターと組み合わせることで全体的な効率を向上させる可能性を指摘しています。</li>
+<li><strong>実用性</strong>: 「使える」という評価がある一方で、Claude CodeやCodex CLIのようなシームレスな体験には及ばないという意見も多くあります。特に、タスクを細分化したり、長時間の推論を許容したりする必要がある点が指摘されています。</li>
+<li><strong>モデルの大きさ</strong>: 大規模モデルと小規模モデルのトレードオフも議論されています。大規模モデルはより広範な問題に対応できますが、小規模モデルは特定のユースケースに特化してトレーニングすることで効率と速度を向上させることができます。しかし、プログラミングにおいては、単なる構文補完だけでなく、幅広い知識がより良い製品開発につながるという意見もあります。</li>
+</ul>
+<h2>Anthropic社の「反競争的」行為に関する議論</h2>
+<p>Anthropic社がClaude Codeのサブスクリプションを自社ツール以外での使用を制限したことについて、活発な議論が展開されています。</p>
+<ul>
+<li><strong>利用制限</strong>: Anthropicは、サブスクリプションプランが自社アプリ専用であり、API経由で他のツールと連携する場合は別途API料金を支払うべきだと主張しています。</li>
+<li><strong>ユーザーの反応</strong>: 多くのユーザーは、Anthropicのこの措置を「反競争的」であると非難し、サブスクリプションをキャンセルしたり、ローカルモデルへの移行を検討したりしています。特に、ユーザーが支払ったリソースをどのように利用するかを企業が制限することへの不満が表明されています。</li>
+<li><strong>ビジネスモデルの議論</strong>: Anthropicのビジネスモデルは、サブスクリプションが過剰に販売され、特定の利用パターンを前提としているため、他のツールで予期せぬ利用をされると経済的に成り立たなくなるとの説明もあります。一方で、これはユーザーに不利な「敵対的」ビジネスモデルであるとの批判もあります。</li>
+<li><strong>代替モデルへの期待</strong>: この状況は、オープンソースツールやローカルモデルを支援し、中央集権的な企業に依存しない必要性を浮き彫りにしています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>UnslothによるQwen3-Coder-NextのGGUF公開は、ローカルでの高性能コード生成モデルの実現に向けた大きな一歩として注目されています。MoEアーキテクチャとUnsloth-Dynamic量子化により、限られたハードウェアでも比較的高速な推論が可能となり、特にシンプルなコーディングタスクでの活用が期待されています。しかし、Claude CodeやCodex CLIといった商用モデルの使い勝手にはまだ及ばないとの声も多く、さらなる最適化とモデル能力の向上が望まれています。</p>
+<p>同時に、Anthropic社がClaude Codeのサブスクリプション利用を制限したことは、ローカルおよびオープンソースモデルへの関心を高める要因となっています。ユーザーは、中央集権的なプロバイダーへの依存を減らし、より自由でコントロール可能なAIツールの必要性を強く感じています。今後のAI業界では、オープンソースモデルが商用モデルにどれだけ追いつき、開発者がどのようなツール選択をするかが重要な焦点となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

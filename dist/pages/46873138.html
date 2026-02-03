@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prek: A better, faster, drop-in pre-commit replacement, engineered in Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Prek: A better, faster, drop-in pre-commit replacement, engineered in Rust</h1>
+        <div class="meta">
+            投稿日: 2026年02月03日 | ランク: 6
+        </div>
+        <a href="https://github.com/j178/prek" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、<code>prek</code>という新しいGitフックマネージャーが議論されています。これは、既存の<code>pre-commit</code>ツールと互換性があり、主にRustで書かれているためパフォーマンスが向上するとされていますが、Gitフック自体の価値や実装方法、既存の代替ツールとの比較について様々な意見が交わされています。</p>
+<h2>Gitフックの価値と用途</h2>
+<p>多くのコメントは、Gitフックの主な価値は、CI/CDパイプラインでの失敗を避けるために、ローカルで問題を早期に発見できる点にあると指摘しています。これにより、開発者は時間を節約し、CIのコストを削減できます。<code>pre-commit</code>や<code>prek</code>は、ローカルで実行するフックとCIで実行するフックを同期させることで、DRY（Don't Repeat Yourself）原則を保ち、開発者が早期にフィードバックを得ることを促します。特定の組織では、開発者エクスペリエンスの一部としてフックの使用を義務付けることも可能です。<code>pre-receive</code>フックのようなサーバーサイドのフックを好む意見や、フォーマットは<code>pre-commit</code>フックで実行すべきだという意見もあります。</p>
+<h2><code>prek</code>の利点と<code>pre-commit</code>への批判</h2>
+<p><code>prek</code>の支持者は、<code>prek</code>が<code>pre-commit</code>よりも高速であり、完全に互換性があることを強調しています。特に、モノレポやワークスペースのサポートが強化されており、複数の<code>.pre-commit-config.yaml</code>ファイルを扱うことができる点が評価されています。また、<code>uv</code>をパッケージマネージャーとして使用することで、Pythonフックの更新が高速化されるという声もあります。</p>
+<p>一方で、<code>pre-commit</code>プラットフォーム自体に対する批判も多く見られます。ツールとリンティングのインストールが混在している点、並列処理が考慮されていない設計、多数のランダムなオープンソースリポジトリを使用することによるサプライチェーンのリスクなどが挙げられています。あるコメントでは、<code>pre-commit</code>は「有害」であるとまで評されています。</p>
+<h2>Gitフックへの異論と代替案</h2>
+<p>一部のユーザーは、Gitフックに価値を見いだせず、特にコミット時に遅延が発生することや、簡単にバイパスできる点を問題視しています。彼らは、リベースやGit履歴の操作を頻繁に行うため、フックの遅延が作業の妨げになると感じています。また、コミット時に「驚きのエラー」に遭遇するUXを嫌い、明示的なツールを好む人もいます。</p>
+<p>代替案としては、以下のようなものが提案されています。
+*   <strong>シェルスクリプトの直接呼び出し</strong>: CI/CDで直接シェルスクリプトを呼び出すことで、フックマネージャーのオーバーヘッドを避ける。
+*   <strong>サーバーサイドの強制</strong>: クライアントサイドのフックではなく、サーバーサイドでプッシュ時にチェックを強制する。
+*   <strong>バックグラウンドチェッカー</strong>: <code>JJ</code>のようなツールで、コミット時にフックを実行するのではなく、バックグラウンドで変更ごとにチェックを実行する「デーモン」のようなアプローチ。
+*   <strong>ファイルウォッチャー</strong>: <code>watchexec</code>のようなツールを使って、ファイル変更時に自動的にリンティングやテストをトリガーする。
+*   <strong>WASIプログラムとしてのフック</strong>: Rustで書かれたフックをWASI（WebAssembly System Interface）プログラムとして実行することで、セキュリティを強化し、並列実行を可能にし、信頼性を向上させるアプローチも提案されています。</p>
+<h2>競合ツールとの比較</h2>
+<p><code>prek</code>の他にも、<code>hk.jdx.dev</code>（<code>pkl-lang.org</code>とRustベース）、<code>lefthook</code>、<code>husky</code>などのGitフックマネージャーが言及されています。<code>lefthook</code>については、ステージングされた変更のみでなくすべてのファイルに対してフックを実行する点が問題視されていましたが、これは改善されている可能性も指摘されています。<code>hk</code>は、ステージングされた変更だけでなく、同じファイル内のステージングされたチャンクも処理できるとされています。</p>
+<h2>まとめ</h2>
+<p><code>prek</code>は、<code>pre-commit</code>との互換性を保ちつつ、Rustによるパフォーマンス向上とモノレポサポートなどの機能強化を提供するGitフックマネージャーとして登場しました。しかし、Gitフックの導入自体への是非、既存の<code>pre-commit</code>プラットフォームの設計に対する根強い批判、そしてコミット時の遅延やUXへの不満など、開発者コミュニティ内には様々な意見が存在します。多くのユーザーはローカルでの早期フィードバックとCIとの統合に価値を見いだしていますが、フックをバイパスしたり、バックグラウンドでの自動チェックやファイルウォッチャーといった代替アプローチを好んだりする開発者もいます。最終的に、どのツールやアプローチを選択するかは、プロジェクトの規模、開発チームの文化、および個々の開発者のワークフローに大きく依存すると言えるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
