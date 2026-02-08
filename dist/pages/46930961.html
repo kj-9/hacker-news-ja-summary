@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vouch - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Vouch</h1>
+        <div class="meta">
+            投稿日: 2026年02月08日 | ランク: 1
+        </div>
+        <a href="https://github.com/mitchellh/vouch" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、GitHubリポジトリのコントリビューションを管理するための「Vouch」という新しいシステムについて議論しています。Vouchは、信頼できるコントリビューターを「保証（vouch）」し、信頼できないコントリビューターを「非難（denounce）」することで、オープンソースプロジェクトにおけるAIによる低品質なコード（「AI slop」）の流入や悪質な活動に対処しようとするものです。コメントは、このアプローチの潜在的な利点と欠点、そして過去の信頼システムとの比較について意見が交わされています。</p>
+<h2>AIスロップと信頼の必要性</h2>
+<p>多くのコメント投稿者は、AIが生成した低品質なコードがオープンソースプロジェクト、特にGitHub上で急増している問題に懸念を表明しています。この「AIスロップ」は、メンテナーの時間を浪費させ、プロジェクトの品質を低下させる脅威と見なされています。Vouchは、このような問題に対処するための、信頼に基づくシステムとして提案されています。</p>
+<p>例えば、<code>cedws</code>は、AIが参入障壁を下げることでオープンソースが「slop fest」に陥ることを懸念しており、Vouchがその懸念を解決する動機になっていると指摘しています。<code>sanufar</code>は、これがOSSの暗黙の標準を成文化するものであり、「slopを大量生産することの容易さ」と「コードの所有権/プロジェクトメンテナーへの配慮の責任」との間の緊張に対処すると述べています。</p>
+<h2>Web of Trustの課題と批判</h2>
+<p>Vouchの概念は、PGP（Pretty Good Privacy）でかつて失敗したと見なされている「Web of Trust（信頼の網）」の再来として多くの批判を受けています。</p>
+<p><code>alexjurkiewicz</code>は、PGPでWeb of Trustが30年前に失敗したことを挙げ、その主な問題点として「信頼のレベルはネットワーク内で最も緩い人と同じ」「新規ユーザーの審査への関心のなさ」「信頼の更新が滅多にない」を指摘しています。<code>Animats</code>は、SEOスパムがリンクベースの評判システムを破壊した例を挙げ、LLMがあればもっと容易に偽のアイデンティティを作成できるため、Vouchのようなシステムは匿名性がある場合には機能しないと主張しています。</p>
+<p>これに対し、<code>chickensong</code>は、30年前に機能しなかったからといって再検討する価値がないわけではないと反論し、完璧な解決策はなく、多層的なアプローチが必要だと提案しています。</p>
+<h2>信頼とリスクのシステム</h2>
+<p>Vouchのようなシステムが機能するためには、信頼がリスクを伴うべきだという意見も多く聞かれました。</p>
+<p><code>stephantul</code>は、保証（vouch）がリスクを伴うべきであり、保証した人が問題を起こした場合、保証者の評判も損なわれるべきだと主張しています。これにより、安易な保証を防ぎ、システムを悪用されにくくすると考えています。</p>
+<p><code>__turbobrew</code>と<code>ashton314</code>は、保証した人が良い仕事をした場合に、保証者のスコアや評判も向上するというインセンティブを提案しています。</p>
+<h2>Denounce（非難）機能の賛否</h2>
+<p>Vouchの「denounce（非難）」機能については、特に意見が分かれています。</p>
+<p><code>bmitch3020</code>は、悪質なユーザーやLLMスロップを投稿するユーザーを非難する分散型ブロックリストとして有用であると見ていますが、誤った非難やアカウントの侵害のリスクも指摘しています。</p>
+<p>一方、<code>1a527dd5</code>は、Denounce機能が非常に悪いアイデアであると主張し、特に初心者コントリビューターが不器用な最初の貢献で非難され、将来の参加機会を奪われる可能性を懸念しています。また、人気リポジトリでの非難が広範囲に影響し、「ブラックリスト」として機能する可能性も指摘されています。</p>
+<h2>その他の課題と提案</h2>
+<ul>
+<li><strong>接続のない人の問題:</strong> <code>moogly</code>や<code>Halan</code>は、コネクションのない新人や専門家が、どのようにしてVouchシステムを突破し、貢献できるようになるのかという懸念を表明しています。</li>
+<li><strong>Linuxカーネル開発モデルとの比較:</strong> <code>pyrolistical</code>や<code>arjie</code>は、Linuxカーネル開発のツリー構造（下位ブランチがパッチを審査し、上位に送る）と比較し、Vouchがコードではなく「人」を検証する点で異なると指摘しています。</li>
+<li><strong>GitHubネイティブ統合への期待:</strong> <code>someone_jain_</code>は、GitHubがこの種の機能をネイティブに統合することを望んでいます。</li>
+<li><strong>社会的問題の技術的解決:</strong> <code>skeeter2020</code>は、Vouchが社会的な問題を技術的な解決策で解決しようとしていると指摘しています。<code>mjr00</code>はこれに対し、オープンソースが「企業の予行練習」文化になり、悪質な行為に対して厳しく対処しにくい現状への反応だと述べています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Vouchは、AI生成コードの急増によって引き起こされるオープンソースプロジェクトの品質低下に対処するために提案された、信頼に基づくシステムです。信頼できるコントリビューターを保証し、悪質な行為者を非難するメカニズムを通じて、プロジェクトの健全性を維持しようとします。しかし、過去の「Web of Trust」の失敗、システムの悪用リスク（特に「denounce」機能）、そして新しいコントリビューターが参加しにくくなる障壁などの課題が指摘されています。多くのコメント投稿者は、このアイデアの方向性を評価しつつも、その実装と社会的な側面における懸念や改善点を提示しています。究極的には、このシステムがオープンソースコミュニティの多様性とアクセシビリティを損なわずに、スロップ問題を効果的に解決できるかどうかが問われています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

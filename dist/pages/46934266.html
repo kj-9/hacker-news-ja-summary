@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Your Own As: BGP on FreeBSD with FRR, GRE Tunnels, and Policy Routing - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Running Your Own As: BGP on FreeBSD with FRR, GRE Tunnels, and Policy Routing</h1>
+        <div class="meta">
+            投稿日: 2026年02月08日 | ランク: 8
+        </div>
+        <a href="https://blog.hofstede.it/running-your-own-as-bgp-on-freebsd-with-frr-gre-tunnels-and-policy-routing/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、<strong>個人が自身の自律システム（AS）番号とIPアドレス空間（IPv4/IPv6）を取得・運用すること</strong>について議論しています。特に、そのコスト、メリット、課題、そして代替案に焦点が当てられています。</p>
+<h2>タイトルの表記に関する指摘</h2>
+<p>元の記事のタイトルが "AS" を大文字で表記すべきであるという指摘が複数ありました。現在の表記では "AS" が acronym として認識されにくく、混乱を招くという意見です。Hacker Newsが自動的にタイトルを小文字にする傾向があることも指摘されています。</p>
+<h2>IPアドレス空間とASの取得コストと複雑性</h2>
+<p>個人が自身のIPv4アドレス空間（例：Cクラス /24）を購入しようとすると、約10,000ドルに加え、RIPEなどのRIRへのLIR年間費用が数百ユーロ/月かかるという話がありました。これは、個人が単独で運用するには非常に高価で複雑だと感じられています。</p>
+<ul>
+<li><strong>IPv6の代替案</strong>: IPv6では、年間約200〜400ドルで/48アドレスとAS番号を取得できる可能性があり、個人にとってはより現実的な選択肢と見られています。</li>
+<li><strong>LIRの役割</strong>: LIRになるには年間約2000ドルの費用がかかりますが、他者のリソースを管理するためであり、個人が自分のリソースを他LIRに管理してもらう場合は年間約60ドルで済むという情報もありました。</li>
+<li><strong>費用比較（ARIN vs RIPE）</strong>: ARIN（北米）の基本料金は年間約275ドルでASとPA（Provider Aggregatable）アドレスを取得できるのに対し、RIPE（欧州）では年間1800ユーロとASを含まず、個々のリソースが別途課金されるため、RIPEの方が個人や小規模組織にとって高額であるという指摘がありました。ただし、特定のLIR（例：Lagrange.cloud）を経由することで、RIPE地域でもホビイスト向けにARINより安価になるケースもあるとされています。</li>
+<li><strong>IPv4価格への疑問</strong>: 現在のIPv4の価格設定は「ぼったくり」であり、ブローカーやオークションサイトが価格をつり上げているのではないかという意見もありました。透明性の欠如も批判されています。</li>
+<li><strong>無料のIPv4取得方法</strong>: アマチュア無線免許を持つ人には、AMPRから非商用目的で無料の/24 IPv4アドレスが提供される可能性がありますが、バックログがあるとのことです。</li>
+</ul>
+<h2>個人がASを持つことのメリットと課題</h2>
+<p>なぜ個人がASを持つことにこだわるのか、そのメリットと課題についても議論されています。</p>
+<ul>
+<li><strong>メリット</strong>:<ul>
+<li><strong>自身のIPアドレス空間の所有</strong>: プロバイダに依存しない（PI: Provider Independent）アドレスを持つことで、ISPを変更してもIPアドレスを維持できる。</li>
+<li><strong>独自のabuseメール連絡先</strong>: サーバーホストの厳格なポリシーや誤った苦情によるサービス停止から身を守る手段として有効。</li>
+<li><strong>学習目的</strong>: BGPやネットワークルーティング技術を深く理解するための実践的な手段。</li>
+</ul>
+</li>
+<li><strong>課題</strong>:<ul>
+<li><strong>IPv6での複雑性</strong>: IPv6の登場で個人がアドレス空間を持ちやすくなるという期待に反し、依然としてマルチホーム接続や大量の利用が求められるなど、敷居が高いと感じられています。これは、インターネットのルーティングテーブルを肥大化させないというRIR（地域インターネットレジストリ）の目的が背景にあると説明されています。</li>
+<li><strong>MTU問題</strong>: トンネルを使用する場合、MSSクランプが不可避であり、MTU（Maximum Transmission Unit）の問題が発生しやすい点が懸念されています。これは、BGPが基本的に物理的な直接接続を前提としているため、インターネット経由でBGPをピアリングするためにトンネルが必要になるためです。</li>
+</ul>
+</li>
+</ul>
+<h2>代替案と学習リソース</h2>
+<p>個人がASを持つコストや複雑性を回避しつつ、BGPやネットワークルーティングを学ぶための代替案が提案されています。</p>
+<ul>
+<li><strong>DN42</strong>: WireGuardトンネルを介してGeekのネットワークに接続し、プライベートアドレス空間で独自のASを運用・実験できる「グローバルネットワークラボ」です。リアルなIPアドレスの取得費用をかけずに、本物のインターネットと同じプロトコルでルーティング技術を探求するのに最適な方法とされています。</li>
+<li><strong>ホームラボでのBGP学習</strong>: 公開ASを運用せず、WireGuardで自宅のネットワークにIPv4サブネットをトンネリングし、VPS上でBGPルーター（例：Bird）を動かしてルートをアナウンスする「ライト」な方法も紹介されています。また、自宅のラボ内で複数のASを構築し、異なるプラットフォーム（FreeBSD上のFRRとMikrotikなど）でBGPピアリングを行うことで、プロトコル自体を学ぶことができます。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li><strong>オフロード機能の無効化</strong>: 記事中で<code>-rxcsum -txcsum -rxcsum6 -txcsum6 -lro -tso</code>といったオフロード機能を無効にする設定が見られたが、その理由が不明であるというコメントがありました。ドライバーサポートの欠如などが原因である可能性が示唆されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのスレッドは、<strong>個人が自身のASとIPアドレス空間を所有する夢と現実</strong>のギャップを浮き彫りにしています。IPv4ではコストと複雑性が非常に高く、IPv6ではいくらか敷居が下がるものの、RIRのポリシー（ルーティングテーブルの汚染回避）により、必ずしも簡単に取得できるわけではないことが示唆されました。一方で、サーバーホストのポリシー回避や学習目的といった具体的なメリットも挙げられています。費用を抑えつつBGPやネットワーク技術を学ぶための<strong>DN42のような代替コミュニティ</strong>や、ホームラボでの実験が推奨されており、現実的な選択肢として注目されています。全体として、個人のネットワーク自律性への欲求と、インターネットの運用・管理上の制約との間の対話が展開されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
