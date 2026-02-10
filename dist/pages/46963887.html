@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Showboat and Rodney, so agents can demo what they&#x27;ve built - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Showboat and Rodney, so agents can demo what they&#x27;ve built</h1>
+        <div class="meta">
+            投稿日: 2026年02月10日 | ランク: 5
+        </div>
+        <a href="https://simonwillison.net/2026/Feb/10/showboat-and-rodney/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、エージェントがブラウザ内のUIを操作してデモを作成するのを支援する二つの新しいCLIツール「Showboat」と「Rodney」について議論しています。</p>
+<h2>新しいCLIツールの意図とGo言語の採用</h2>
+<p>ユーザーは、これらのツールがエージェントによるブラウザ内ツールの作成時に直面する問題を解決することに興味を示しています。特に、Webインターフェースのループを閉じるのはCLIツールほど単純ではないという点が挙げられています。Simonw氏（ツール作成者）は、Go言語を小さなツールに採用している理由として、新しい言語を学ぶことと、単一のスタンドアロンバイナリが配布に便利である点を挙げています。ただし、Pythonの優れたパッケージングインフラストラクチャ（<code>uvx</code>）のおかげで、Pythonツールとして実行することも多いと述べています。他のユーザーもGoがCLIツールに適していることに同意しています。</p>
+<h2>エージェントとスキルの統合</h2>
+<p>一部のユーザーは、これらのツールがClaudeやCodexのようなエージェントによって「ワンショット」で生成できるのではないか、あるいは単なる「スキル」として扱えるのではないかと提案しています。Simonw氏は、これらのツールはClaudeによってワンショットで生成されたと述べつつ、その価値は一貫したデザインと、エージェントが<code>--help</code>テキストを「スキル」として利用してデモを構築できる点にあると説明しています。ただし、多様なリポジトリで作業し、グローバルスキルをインストールできないClaude Code for webの環境では、<code>uvx tool --help</code>パターンが好ましいという課題も共有されています。</p>
+<h2>既存ツールとの比較とMarkdown形式の議論</h2>
+<p>Playwright-CLIやGoogleのAntigravityなど、同様の機能を持つ既存ツールが比較対象として挙げられています。特にPlaywrightとの比較では、Showboatがよりクリーンなドキュメント生成や画像埋め込みの特殊機能を提供している点がRodneyの利点として挙げられています。また、LLMが生成するドキュメントのフォーマットとしてMarkdownが使われていることについて、その普及度を評価する声と、reStructuredTextやLaTeXのようなよりリッチなフォーマットがなぜ使われないのかという批判的な意見が交わされています。Simonw氏は、Markdownの幅広いツール互換性をその理由として挙げています。</p>
+<h2>デモと検証の自動化</h2>
+<p>Hansenq氏は、生成されたMarkdownドキュメントが、CLI呼び出しの出力を確認し、期待通りであることを手動で検証するための「自動化されたテスト」として機能すると指摘しており、ツールの本質をよく捉えていると評価しています。また、ユーザーはこれらのツールを自分のワークフローにおける「ゲート」（特定のタスクが完了したと見なされる前に通過する必要があるチェックポイント）として使用することに興味を示しています。</p>
+<h2>Jupyter Notebooksとの比較</h2>
+<p>このアプローチはJupyter Notebooksに似ているという意見も出ています。Simonw氏は、ShowboatがJupyter Notebooksよりも薄く、機能が少ない代替手段であると認めつつ、Claude Code for webでJupyter Notebooksを構築する可能性を探るアイデアにも関心を示しています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsスレッドは、エージェントがWebブラウザを操作してデモを生成するプロセスを効率化するための新しいCLIツール「Showboat」と「Rodney」を中心に議論を展開しています。特に、これらのツールがエージェントの能力を拡張し、一貫性のあるデザインと<code>--help</code>テキストを介して「スキル」として機能する点が評価されています。Go言語の採用理由、既存の同様のツール（Playwright-CLIなど）との比較、Markdownフォーマットの妥当性に関する議論、そして生成されたデモが自動化されたテストと手動検証の架け橋となる可能性などが主要なテーマとなっています。全体として、エージェントによる複雑なUI操作の自動化と、その結果を人間が理解しやすい形で記録・検証する手法への関心が高いことが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
