@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improving 15 LLMs at Coding in One Afternoon. Only the Harness Changed - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Improving 15 LLMs at Coding in One Afternoon. Only the Harness Changed</h1>
+        <div class="meta">
+            投稿日: 2026年02月12日 | ランク: 8
+        </div>
+        <a href="http://blog.can.ac/2026/02/12/the-harness-problem/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、LLM（大規模言語モデル）を活用した開発において、「ハーネス」（LLMとユーザー間のインターフェースやツールセット）がいかに重要であるかについて論じています。特に、コード編集における効率的なハーネス設計の重要性と、既存の商用ハーネス（Claude Codeなど）の問題点、そしてオープンソースのハーネスへの期待がコメントの中心となっています。</p>
+<h2>ハーネスの重要性</h2>
+<p>多くのコメントは、LLM自体の性能向上だけでなく、ハーネスの設計がモデルの効果に大きく影響するという記事の主張に同意しています。</p>
+<ul>
+<li><strong>モデルの能力を引き出す「体」</strong>: ハーネスはLLMの「体」であり、モデル（脳）がどれほど優れていても、体が非効率的ではその能力を最大限に発揮できないという見解が多く見られます。</li>
+<li><strong>性能の大幅な向上</strong>: Claude Codeが自身のハーネスから切り替えることでOpusのスコアがほぼ倍増した事例や、ブラウザエージェントでハーネスを微調整するだけでモデルの賢さが劇的に向上した経験が共有されています。</li>
+<li><strong>トークン効率とコスト削減</strong>: 非効率なハーネス、特にClaude CodeのようにJSONLを漏洩させて大量のトークンを無駄に消費する問題が指摘されています。新しい編集形式（ハッシュラインアプローチ）は、トークンを最大50%削減し、性能を向上させることが示唆されています。</li>
+<li><strong>開発者の役割の変化</strong>: 将来的にプログラミングは、LLMのためのハーネス設計が主になるとの意見もあります。LLMは特定の問題解決に非常に優れており、ハーネスがその問題をLLMの得意なニッチに合わせる役割を果たすと考えられています。</li>
+</ul>
+<h2>コード編集のアプローチ</h2>
+<p>記事で提案されているハッシュラインアプローチと、それに関連する既存の編集方法について議論されています。</p>
+<ul>
+<li><strong>ハッシュラインアプローチ</strong>: 各行にハッシュを付与し、LLMが変更したい行をハッシュで指定する編集方法です。これにより、ファイルの変更があっても行番号のずれによる問題を防ぎ、LLMが正確に編集を行うことができるとされています。<ul>
+<li>既存の行番号のみのアプローチが編集時にファイルが変更されると問題を起こす点が指摘されており、ハッシュはその解決策となります。</li>
+<li>小さなモデルでも目次を渡すことで、ハッシュラインアプローチと同様の効果が得られる可能性が示唆されています。</li>
+</ul>
+</li>
+<li><strong>従来の「検索と置換」の問題点</strong>: 従来の「検索と置換」方式は、LLMがファイルを変更する際に全内容を提供する必要があるため、並行性が失われ、トークン消費が増えるという懸念が表明されています。</li>
+<li><strong>構造化された編集</strong>: Tree-sitterを使用してASTノードを操作する編集ツールをEmacsに実装した事例が共有されており、モデルが変更を表現するためのより良いインターフェースがエラー率を低下させることが示されています。</li>
+<li><strong>モデルによる編集方法の調整</strong>: LLMに編集方法（例：grepではなくripgrepを使用するなど）を指示することで、パフォーマンスが向上するという経験談もあります。</li>
+</ul>
+<h2>プロプライエタリなハーネスとオープンソースの可能性</h2>
+<p>AnthropicやGoogleといった大手プロバイダーが提供するプロプライエタリなハーネスの課題と、オープンソースハーネスへの期待が議論されています。</p>
+<ul>
+<li><strong>ロックインとデータ収集</strong>: Claude Codeのような商用ハーネスは、ユーザーを特定のツールにロックインし、テレメトリーデータを収集する目的があるという指摘があります。これにより、ユーザーは非効率なハーネスに縛られることになります。</li>
+<li><strong>APIアクセス制限</strong>: ユーザーが、割引価格の月額プランで提供されている非公開APIを介して独自のハーネスを使用しようとすると、アカウントが停止される問題が発生しています。これは、プロバイダーが収益モデル（高額な従量課金APIへの誘導）と市場シェア獲得を優先しているためだと考えられています。</li>
+<li><strong>オープンソースハーネスへの期待</strong>: ハーネスは高額な計算資源を必要としないため、オープンソースコミュニティがその進化を加速させる大きな可能性を秘めていると期待されています。PiやOpenCodeのようなオープンソースのハーネスが注目されており、カスタマイズ性が高く、効率的なハーネスが求められています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、LLMの能力を最大限に引き出すためには、LLM自体の改善だけでなく、ハーネス（インターフェースとツールセット）の設計が極めて重要であるという共通認識を示しています。特にコード編集において、ハッシュラインのような構造化された編集アプローチは、トークン効率を高め、より正確な変更を可能にします。しかし、現状の商用ハーネスは、ユーザーをロックインし、非効率な設計であるという批判もあり、オープンソースコミュニティがより柔軟で効率的なハーネスを開発することへの期待が高まっています。この議論は、AI開発における「モデル」と「ツール」の共進化、そして開発者の役割の変化を示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
