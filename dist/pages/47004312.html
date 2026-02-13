@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronClaw: a Rust-based clawd that runs tools in isolated WASM sandboxes - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">IronClaw: a Rust-based clawd that runs tools in isolated WASM sandboxes</h1>
+        <div class="meta">
+            投稿日: 2026年02月13日 | ランク: 7
+        </div>
+        <a href="https://github.com/nearai/ironclaw" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にOpenClawのAIエージェントのセキュリティとサンドボックス機能について議論しています。特に、WASMの利用、プロンプトインジェクションへの対応、そしてエージェントの行動を制御するためのより広範な課題に焦点が当てられています。</p>
+<h2>WASMとサンドボックスの利用</h2>
+<p>OpenClawがツールサンドボックスのためにWASMランタイムを採用していることについて、セキュリティ強化のための選択肢として評価する声がある一方で、WASMが特定の言語で問題を抱えていることや、OCI（Open Container Initiative）と比較してエコシステムが小さいことについて疑問が呈されています。Dockerのようなコンテナがセキュリティ境界ではないという指摘も上がっており、セキュリティはトレードオフを伴うスペクトラムであるという意見があります。</p>
+<h2>プロンプトインジェクションとエージェントの制御</h2>
+<p>プロジェクトがプロンプトインジェクションに対応している点や、WASMを利用してツールが権限ベースのパーミッションに従うことを保証するアプローチは「賢い」と評価されています。HTTPコールでシークレットキーを扱う際に、プロキシサービスを利用して特定のドメインのみでキーが使用されるように強制する仕組みが説明されています。これによりシークレットが外部に漏れるのを防ぎますが、この設計はまだ開発途上であり、多くの課題を抱えているとのことです。</p>
+<h2>エージェントの自律性とセキュリティの未来</h2>
+<p>一部のコメントでは、サンドボックスは2026年には時代遅れになるとの見解や、すでに存在する分離環境を再発明する必要はないという意見があります。その代わりに、エージェントが私の代理でメールを送信したり、取引を行ったりすることが意図されているかどうかを事前に知る必要があるという、より高レベルな制御の必要性が強調されています。これに対し、秘密が送信されてから対処しても手遅れであるため、実行されるべきアクションが要求される前にそれを知るという課題があり、サンドボックスがそのレベルの可観測性を提供しうるとの反論があります。また、悪意のある意図をより良く区別するためにモデル自体を強化すべきだという意見や、サンドボックスはパズルのピースの一つに過ぎず、LLMが信頼できない入力を処理する際の信頼できない出力や、偶発的な異常行動に対するガードレールが必要だという指摘もあります。</p>
+<h2>プロジェクトの背景と評価</h2>
+<p>OpenClawの開発者の一人が「Attention is all you need」の共著者であるという事実が何度か言及され、そのAIに関するスキルが評価されています。しかし、このツールがNEAR AIアカウントを必要とし、NEAR AIがブロックチェーンプラットフォームであるNear.orgのクリエイターによって開発されていることに関連付けて、その意図やプライバシー保証について疑問を呈するコメントも見られます。また、一部のユーザーは、プロジェクトの設計が「vibe-coded」（雰囲気に合わせてコーディングされた）ように見え、脅威モデルや保護される対象、保護できない対象などが明確でないと批判しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、OpenClawがAIエージェントのセキュリティとサンドボックス化に取り組む上でWASMを採用していることを評価しつつも、その実装の有効性、WASMの限界、そしてより広範なエージェントの制御と自律性に関する課題について深く議論しています。特に、プロンプトインジェクションへの対応やシークレットキーの管理メカニズムは注目されていますが、セキュリティの「vibe-coded」な性質や、エージェントの行動を事前に予測・制御する根本的な課題に対しては様々な意見が交わされています。プロジェクトの背景にある著名なAI研究者の存在は評価される一方で、NEAR AIとの関連性やプライバシーへの懸念も指摘されており、今後の進展が注目される領域であることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
