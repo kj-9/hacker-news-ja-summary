@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My smart sleep mask broadcasts users&#x27; brainwaves to an open MQTT broker - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">My smart sleep mask broadcasts users&#x27; brainwaves to an open MQTT broker</h1>
+        <div class="meta">
+            投稿日: 2026年02月14日 | ランク: 4
+        </div>
+        <a href="https://aimilios.bearblog.dev/reverse-engineering-sleep-mask/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントは、Hacker Newsの記事で紹介されたスマート睡眠マスクのセキュリティ脆弱性とその広範な影響について議論しています。特に、デバイスがユーザーの脳波データを暗号化なしで公開のMQTTブローカーにブロードキャストしていること、そしてAI（Claude）がそのリバースエンジニアリングに利用されたことに焦点が当てられています。</p>
+<h2>プライバシーとセキュリティの懸念</h2>
+<p>スマート睡眠マスクがユーザーの脳波データをオープンなMQTTブローカーに共有認証情報を使ってブロードキャストしていることが、最大の懸念として挙げられています。これは「ガバナンスの失敗」であり、セキュリティ上のバグであると指摘されています。多くのコメント者は、IoTデバイスのセキュリティが全体的に脆弱であることに言及し、特に個人情報や健康データに関わるデバイスでは、その影響が大きいと警告しています。脳波データが公開されることで、睡眠状況が他人に知られるリスクや、さらには悪用される可能性も指摘されています。</p>
+<h2>IoTデバイスの現状と市場の課題</h2>
+<p>IoT市場はベンダーによって支配されており、オープンなエコシステムが阻害されている現状が批判されています。これは、ベンダーがサブスクリプションで収益を上げようとするため、セキュリティやプライバシーよりもタイム・トゥ・マーケットを優先する傾向があるためです。一部のユーザーは、セキュリティが確保されていないIoTデバイスをそもそも購入すべきではないと主張していますが、現実的には選択肢が少ないという反論もあります。また、新しい自動車、スマートフォン、テレビなども同様のセキュリティリスクを抱えているとの指摘もあります。</p>
+<h2>AI（LLM）によるリバースエンジニアリング</h2>
+<p>記事でClaudeがリバースエンジニアリングに利用されたことに対し、その有効性と限界について様々な意見が交わされています。一部のユーザーは、LLMが安価なエンジニアリングファームよりも堅牢なコードを書く可能性があると評価する一方で、AIが「重労働」をこなしているという主張には懐疑的な見方もあります。AIは特定のタスクを効率化するが、その結果の解釈やセキュリティの実装には人間の専門知識が不可欠であるという意見が多く見られます。また、LLMは「動いているように見える」状態までは持っていくが、根本的なセキュリティ問題を見過ごす可能性があるとも指摘されています。</p>
+<h2>解決策と規制の必要性</h2>
+<p>IoTデバイスのセキュリティ問題を解決するためには、デバイスごとの認証（クライアント証明書、トピックACLなど）の導入や、ファームウェアの改変、ローカルネットワークでのDNSリダイレクトなどが提案されています。しかし、これらの対策にはコストや手間がかかるため、企業がv1製品のセキュリティアーキテクチャに予算を割かない傾向が問題視されています。プライバシーを重視した製品ラインと、そうでない製品ラインを分けるべきだという提案や、規制によって消費者を保護する必要性も議論されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、スマート睡眠マスクのセキュリティ脆弱性をきっかけに、IoTデバイス全般にわたるプライバシー、セキュリティ、そしてベンダーの責任に関する深刻な問題を浮き彫りにしています。脳波データのような機密情報が安易に共有される現状は「ガバナンスの失敗」と厳しく批判されており、AIによるリバースエンジニアリングは有効なツールとなり得るものの、セキュリティの確保には依然として人間の専門知識と倫理観が不可欠であることが示唆されています。安易な市場投入を優先し、セキュリティ対策を怠る企業体質への批判とともに、より厳格な規制や、ユーザー自身によるデバイス選択の重要性が繰り返し強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
