@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-day CSS: CVE-2026-2441 exists in the wild - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zero-day CSS: CVE-2026-2441 exists in the wild</h1>
+        <div class="meta">
+            投稿日: 2026年02月18日 | ランク: 3
+        </div>
+        <a href="https://chromereleases.googleblog.com/2026/02/stable-channel-update-for-desktop_13.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>今回のHacker Newsのコメントは、Google ChromeのCSSコンポーネントにおけるUse-After-Freeの脆弱性（CVE-2026-2441）に関するものです。この脆弱性は、細工されたHTMLページを介してヒープ破損を引き起こし、複数のChromiumベースのウェブブラウザに影響を与える可能性があります。</p>
+<h2>脆弱性の性質と名称</h2>
+<p>多くのコメント投稿者は、「CSSにおけるUse-After-Free」という表現に興味を示しています。CSSは通常、マークアップ言語と見なされるため、この種のメモリ関連の脆弱性が発生するとは直感的に考えにくいからです。しかし、これはCSSパーサーやCSSオブジェクトモデル（CSSOM）に関連する脆弱性であり、特に<code>@font-feature-values</code>機能に関係している可能性が指摘されています。</p>
+<h2>影響範囲と対策</h2>
+<p>この脆弱性は、Google Chrome、Microsoft Edge、Operaなど、Chromiumを基盤とする多数のウェブブラウザに影響を与えます。Braveブラウザも言及されましたが、NISTからの引用では上位3つのブラウザが挙げられており、市場シェアの低いブラウザをすべてリストアップするのは現実的ではないという意見もあります。
+一方、FirefoxやSafariはChromiumベースではないため、この脆弱性の影響を受けません。FirefoxのCSSエンジンはRustで書き換えられているため、Use-After-Freeのようなメモリ安全性の問題が発生しにくいという点が強調されています。</p>
+<h2>バグバウンティと報奨金</h2>
+<p>コメントでは、この種の重大な脆弱性に対するバグバウンティの報奨金が「法外に低い」という議論が活発に行われました。2万ドル程度が一般的という意見がある一方で、Googleが以前に25万ドルの報奨金を支払った例も挙げられ、その金額がマーケティング目的ではないかという疑念も示されました。報奨金が低い場合、研究者が脆弱性をブラックマーケットで売却する動機になる可能性も指摘されています。</p>
+<h2>メモリ安全性とRust</h2>
+<p>C/C++のようなシステム言語におけるUse-After-Freeのようなメモリ破損バグの根絶が重要であると改めて認識されています。メモリ安全性の高い言語であるRustへの移行が、このようなバグを減らす解決策として度々提案されています。
+しかし、Rustの採用にはサプライチェーン攻撃のリスクが高まるという懸念も示されています。Rustの依存関係管理システム（Cargo）が非常に使いやすい反面、多数の小さなライブラリに依存する傾向があり、それぞれの依存関係が攻撃ベクトルとなる可能性があるためです。これに対し、Googleが<code>cargo-vet</code>を使用していることや、C/C++もサプライチェーン攻撃に無縁ではないこと（例: xzの脆弱性）が指摘され、メモリ安全性の問題とサプライチェーンの懸念は異なるタイプのセキュリティ課題であることが議論されました。</p>
+<h2>その他の論点</h2>
+<ul>
+<li>この脆弱性がElectronアプリにも影響する可能性が指摘されましたが、ほとんどのElectronアプリは信頼できないHTMLをレンダリングしたり、信頼できないウェブサイトを訪問させたりしないため、問題になるケースは限定的です。</li>
+<li>脆弱性の発見にLLM（大規模言語モデル）が使用されたかどうかについて憶測が飛び交いましたが、公表された情報からはそのような兆候はありません。</li>
+<li>記事のタイトルにある「0-day（ゼロデイ）」という言葉の定義についても議論がありました。本来はソフトウェアリリース日からの日数を示す用語であったものが、セキュリティ文脈では「緩和策がリリースされるまでの日数」または「悪意のある攻撃者がパッチリリース前に脆弱性を悪用している状態」を指すように変化したという見解が示されました。</li>
+<li>レンダラープロセス内でコード実行が可能になるこの脆弱性は、それ自体がサンドボックスエスケープではないものの、完全なブラウザ侵害チェーンの「半分」を構成し、さらにサンドボックスエスケープの脆弱性と組み合わせることで、深刻な影響（認証情報の窃盗、セッションハイジャック、キーロギングなど）をもたらす可能性があると説明されました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Google ChromeのCSSにおけるUse-After-Freeの脆弱性は、Chromiumエコシステム全体のセキュリティに影響を与える重大な問題です。この議論は、現代のソフトウェア開発におけるメモリ安全性の重要性、メモリ安全な言語（特にRust）の採用、バグバウンティプログラムの設計、そして増加するサプライチェーン攻撃のリスクという、いくつかの主要なテーマを浮き彫りにしました。特に、FirefoxがRustへの移行によりこの種の脆弱性から保護されている点が注目され、メモリ安全性が将来のウェブブラウザ開発における重要な方向性であることを示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

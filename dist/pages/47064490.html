@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmologically Unique IDs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Cosmologically Unique IDs</h1>
+        <div class="meta">
+            投稿日: 2026年02月18日 | ランク: 1
+        </div>
+        <a href="https://jasonfantl.com/posts/Universal-Unique-IDs/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、銀河系スケールでのIDの設計、特に一意性、衝突の可能性、そして物理的な制約がどう影響するかという記事について議論しています。</p>
+<h2>銀河系規模のIDと通信</h2>
+<p>ユーザーは、Becky ChambersのSF小説「銀河系の片隅で」（The Galaxy, and the Ground Within）に触発され、銀河系規模での通信におけるパスアドレッシングシステムや、Vernor Vingeの「遠き神々の炎」（A Fire Upon The Deep）で描かれる銀河間通信の例に言及しています。これらは、広大な宇宙での識別子の必要性を示唆しています。</p>
+<h2>UUIDの限界と代替案</h2>
+<p>多くのコメントがUUID（Universally Unique Identifier）の限界とその代替案に焦点を当てています。
+*   <strong>UUIDの過剰使用と誤用</strong>: UUIDが「話し言葉のID」や「多カラムインデックス」として誤用されていると指摘されています。
+*   <strong>衝突確率と局所性</strong>: 記事が誕生日問題による衝突確率を計算する際に、局所性（光速の制限）を考慮していないため、必要なIDサイズが過大に見積もられているという意見があります。現実の衝突は、IDが因果的に接触する場合にのみ問題となります。
+*   <strong>決定論的IDと来歴</strong>: 決定論的なIDスキームは来歴（provenance）を含み、元IDへのトレーサビリティがある利点が挙げられています。ATProto（BlueSkyの基盤）のコンテンツアドレス型DAG（Directed Acyclic Graph）が、データの所有権と検証を可能にする例として挙げられています。
+*   <strong>ID設計の最適化</strong>: 最小の妥当なランダム識別子を使用するアイデアや、Smallest Plausible Random Identifiers (SPRID) を提唱するTriblespaceのプロジェクトが紹介されています。また、Snowflake ID（タイムスタンプ＋ランダム）のようなアプローチが、IDサイズと特性のバランスを取る良い方法として挙げられています。</p>
+<h2>宇宙規模の物理的制約とID設計</h2>
+<p>銀河系スケールでのID設計には、物理的な制約が深く関わってきます。
+*   <strong>時間と局所性</strong>: 陽子崩壊までの時間スケール（10^56ナノ秒）が考慮されるべきだと冗談交じりに言及され、時間と局所性の両方をID設計に組み込む必要性が議論されています。
+*   <strong>宇宙的座標のエンコード</strong>: IDにバージョン/エポック、宇宙領域、銀河ID、恒星/惑星アドレス、ローカルタイムスタンプなどの座標情報をエンコードする提案があります。これにより、経路の長いチェーンを避け、座標をIDに含めることができます。
+*   <strong>物理的実体とID</strong>: 銀河が動き続ける星の雲であるため、座標が固定ではないという現実的な問題も指摘されています。</p>
+<h2>分散システムにおける「十分な近さ」の重要性</h2>
+<p>分散システムでは、「十分な近さ」がユニークさにとって「十分良い」という仮定に依存していることが強調されています。UUIDからULIDやSnowflake IDへの移行は、調整コストと衝突リスクのトレードオフであり、中央集権的な機関なしでローカル生成を可能にする「わずかなエントロピー」が分散システムの機能維持に不可欠であると結論付けられています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、銀河系スケールという壮大な文脈でID設計の複雑さを掘り下げています。単なる技術的なユニーク性だけでなく、物理的な距離（光速）、時間、宇宙の動的な性質、そして衝突が意味を持つ文脈（因果的接触）など、様々な要素を考慮する必要があることが示されています。UUIDのような既存の技術の限界が議論され、来歴を含む決定論的なIDや、タイムスタンプとランダム性を組み合わせたIDなど、より洗練された代替案が提案されています。最終的には、分散システムが機能するために、宇宙の広大さの中で「十分な近さ」と「わずかなエントロピー」がいかに重要であるかを認識させられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
