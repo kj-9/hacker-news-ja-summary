@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Super Mario Using a Behavior Model Autonomously - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Testing Super Mario Using a Behavior Model Autonomously</h1>
+        <div class="meta">
+            投稿日: 2026年02月20日 | ランク: 8
+        </div>
+        <a href="https://testflows.com/blog/testing-super-mario-using-a-behavior-model-autonomously-part1/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Super Mario Bros.を自動でプレイしてテストするツール「Autonomous Testing for Super Mario Bros.」について議論しています。これは、手動でのテストケース作成の代わりに、挙動モデルと組み合わせてゲームの広大な状態空間を探索し、リアルタイムで正しさを検証するアプローチです。</p>
+<h2>強化学習（RL）との関連性</h2>
+<p>複数のユーザーが、この自動テスト手法と強化学習（RL）との類似性について言及しています。特に、エピソードを保存し、有望なものからサンプリングする点が共通しているという意見があります。開発者Naulius氏は、このアプローチが元々はAntithesisによって提案されたものであり、変異ベースの遺伝的アルゴリズムに直接マッピングされると説明しています。つまり、保存された経路が個体群、x位置のスコアリングが適合度関数、入力生成が突然変異演算子として機能します。</p>
+<h2>RLとの主な違いと目的</h2>
+<p>開発者は、この手法とRLの主な違いは「目的」にあると強調しています。RLがゲームをプレイするための最適なポリシーを学習することを目指すのに対し、この自動テストは「バグを見つけるために、できるだけ多くの状態空間を探索すること」を目的としています。Part 2では、速度制約や衝突不変量などの挙動モデルを導入し、探索中にゲームが自身のルールに違反した際に検出します。この組み合わせにより、自動探索が状態を発見し、挙動モデルがゲームのルール違反を捕捉します。</p>
+<h2>RLのコールドスタート問題への応用可能性</h2>
+<p>ユーザーからは、この手法がRLの悪名高いコールドスタート問題の解決に役立つ可能性が示唆されています。開発者もこれに同意し、進化的探索を通じて最初に見つかった経路をRLエージェントの初期経験にシードすることで、初期の無駄な探索段階をスキップできるかもしれないと述べています。</p>
+<h2>AIとクローズドフィールド</h2>
+<p>あるユーザーは、ゲームや防衛のようなクローズドな分野において、AIが人間よりもはるかに強力であることを指摘し、AlphaGoがその証拠を最初に示したと述べています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、Super Mario Bros.の自動テストシステムが、手動テストに代わる探索的なアプローチとして、RLとの類似性や遺伝的アルゴリズムの要素を持つことを示しています。その主な目的はバグ発見のための状態空間探索であり、挙動モデルとの組み合わせによって効果的にルール違反を検出します。また、RLの初期学習段階の効率化に貢献する可能性も示唆されており、AIの特定の分野における強力な応用例として捉えられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
