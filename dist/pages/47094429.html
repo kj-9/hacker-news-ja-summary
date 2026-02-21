@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loon: A functional lang with invisible types, safe ownership, and alg. effects - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Loon: A functional lang with invisible types, safe ownership, and alg. effects</h1>
+        <div class="meta">
+            投稿日: 2026年02月21日 | ランク: 10
+        </div>
+        <a href="https://loonlang.com" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、新しいプログラミング言語（おそらく「Unison」またはそれに類するもの）に関するもので、特にその型システム、構文、および一般的な設計思想についての議論が展開されています。</p>
+<h2>型システムと型推論</h2>
+<p>多くのコメントが、この言語の型システムのアプローチに注目しています。
+ユーザーは、変数の型を明示的に記述する必要がない（<code>x : Nat; x = 5</code>ではなく<code>x = 5</code>と書く）Hindley-Milner型推論システムに言及し、これは変数の型ではなく、型そのものを定義する能力とは矛盾しないと説明しています。
+しかし、一部のユーザーは、関数のシグネチャなどにおいて明示的な型記述ができないことに不満を表明しており、特にプロトタイピング時にスタブを作成する際に、型定義を提供しつつ実装を「todo」とマークするような使い方ができない点を指摘しています。
+また、言語の設計思想が「型はコンパイラが間違いを検出するために存在し、主に意図を表現するためではない」としていることに対し、ユーザーは、明示的な型がコードの可読性や自己文書化に大きく貢献すると反論しています。特に、関数シグネチャの型は、実装を読む前に作者の意図を理解する上で非常に有用だと述べています。これは、コードを書くことよりも読むこと、保守することに価値を置く視点から来ています。</p>
+<h2>構文と記法</h2>
+<p>特定の構文要素、特に角括弧（<code>[]</code>）の使用について疑問が呈されています。あるユーザーは、記法がこのような言語設計において厄介な部分であると感じており、ファイルシステムに多くの構造を押し付ける方向に傾倒していると述べています。
+別のユーザーは、<code>[op val1 val2]</code>のような前置記法（例：<code>[* x x]</code>）があまり好みではないと述べていますが、明確さと一貫性を追求する試みは評価しており、これらは決定的な欠点ではないと付け加えています。</p>
+<h2>言語の全体的な印象と可能性</h2>
+<p>全体として、この言語は多くのユーザーに好意的に受け止められています。
+「Clojure + Rust」の組み合わせに似ていると表現され、すべてが型付けされているがアノテーションは不要である点、そしてOcamlで試したかった代数的効果がより簡単な構文で実現できる点に魅力を感じているユーザーがいます。これは、動的な性質を持つClojureの良さと、Rustのような厳密な型付けの利点を組み合わせたものと見なされています。
+また、このプロジェクトのアイデアやロードマップは非常に有望視されており、将来的な展開に期待が寄せられています。</p>
+<h2>ウェブサイトのパフォーマンス</h2>
+<p>一方で、プロジェクトのウェブサイトのパフォーマンスについて懸念が表明されています。
+ウェブサイトの読み込みが非常に遅く、数秒かかり、リファレンスを開こうとするとブラウザがフリーズする、といった問題が指摘されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドでは、新しいプログラミング言語の型システム、構文、そしてその哲学について活発な議論が展開されています。特に、明示的な型付けの必要性に関する議論は意見が分かれ、コンパイラのための型と、人間がコードを理解するための型という2つの視点が提示されています。構文には一部のユーザーから疑問が呈されているものの、全体としては多くの革新的なアイデアが盛り込まれた有望な言語として受け入れられており、今後の発展に期待が寄せられています。ただし、ウェブサイトのパフォーマンス改善は、プロジェクトの普及に向けて重要な課題として挙げられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
