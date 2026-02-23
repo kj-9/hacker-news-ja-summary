@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladybird adopts Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ladybird adopts Rust</h1>
+        <div class="meta">
+            投稿日: 2026年02月23日 | ランク: 3
+        </div>
+        <a href="https://ladybird.org/posts/adopting-rust/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、LadybirdブラウザのJavaScriptエンジン(LibJS)をC++からRustに、AIを活用して2週間で移植したという発表に関するものです。</p>
+<h2>Ladybirdの言語選択の変遷</h2>
+<p>Ladybirdプロジェクトは、これまでC++を主要言語としてきましたが、記憶安全性への関心から代替言語を模索していました。以前はSwiftを検討しましたが、C++との相互運用性やAppleエコシステム外でのサポート不足が問題となり断念されました。そして今回、AIの助けを借りてRustへの移植が行われました。この一連の言語選択の変更について、「一貫性がない」「気まぐれに見える」という懸念の声が上がる一方で、「プロジェクトの初期段階で試行錯誤するのは自然なこと」「Swiftの欠点を認識し、より適切なRustに移行したのは賢明な判断」という意見もあります。</p>
+<h2>C++とRustの相互運用性およびメモリ安全性</h2>
+<p>多くのコメントで、RustとC++の相互運用性やそれぞれの言語のメモリ安全性について議論されています。
+*   <strong>RustのC++相互運用性:</strong> C ABIを介した相互運用が可能であり、Firefoxのような大規模プロジェクトで実績があることが指摘されています。また、<code>cxx.rs</code>のようなツールも存在しますが、<code>std</code>タイプとのやり取りには課題があるとの意見もあります。
+*   <strong>メモリ安全性:</strong> ブラウザのようなセキュリティが極めて重要なプロジェクトにおいて、メモリ安全性の高いRustへの移行は大きな利点であると認識されています。GoogleがAndroidでRustを採用し、メモリ関連の脆弱性を大幅に削減した事例も挙げられています。
+*   <strong>「モダンC++」の安全性:</strong> 「モダンC++はメモリ安全性の問題をほぼ解決している」という主張に対しては、「統計データがそれを否定している」「ChromeでもCVEが多発している」といった反論が多数寄せられています。C++は「正しいことをする<strong>ことができる</strong>言語」であるのに対し、Rustは「プログラマーに正しいことを<strong>強制する</strong>言語」という意見もあり、安全なコードを記述するためのアプローチの違いが強調されています。
+*   <strong>Rustの課題:</strong> コンパイル時間の長さや、多くのプロジェクトで依存関係の肥大化が見られる点がRustの課題として挙げられています。</p>
+<h2>AI活用によるコード移植の是非</h2>
+<p>今回のプロジェクトでAIがコード移植に活用されたことについて、様々な意見が交わされています。
+*   <strong>AI活用の有効性:</strong> 筆者は「人間が指示し、自律的なコード生成ではない」「数百の小さなプロンプトでエージェントを誘導した」「初期翻訳後、複数のモデルにコードの誤りや悪いパターンを分析させる敵対的レビューを行った」と説明しています。このアプローチにより、25,000行のコードを2週間で移植でき、手作業なら数ヶ月かかった作業が大幅に短縮されたとされています。既存の充実したテストスイートがあったことが成功の鍵として何度も言及されており、「テスト駆動開発」とAIの相性の良さが示唆されています。
+*   <strong>「AIスロップ」への懸念:</strong> 一方で、「AIが生成したコードは質が低い」「非イディオムなコードは将来の技術的負債となる」「AIへの依存が強まる」といった批判的な意見もあります。特に、非イディオムなRustコードは、後でイディオムなRustに修正するのに、最初から書き直すのと同じくらいの労力がかかる可能性があるとの指摘もあります。
+*   <strong>プログラマーの役割の変化:</strong> AIの活用がプログラマーの仕事や「プログラミングへの情熱」に与える影響についても議論されています。「AIが退屈な部分を自動化してくれることで、より創造的な作業に集中できる」という肯定的な意見がある一方で、「AIが自分より速く、うまくコードを書くようになり、プログラミングへの情熱が失われる」「並のプログラマーは無関係になる」といった悲観的な見方も見られます。</p>
+<h2>リライトプロジェクトに関する考察</h2>
+<p>一般的に「プロジェクトの全面的書き換え（リライト）は避けるべき」というJoel on Softwareの有名な提言に言及しつつ、今回のケースでのリライトの妥当性が議論されています。
+*   <strong>リライトの成功事例:</strong> FirefoxやOpera、初期のEdgeなど、成功したリライト事例も存在することが指摘されています。また、Ladybirdのような初期段階のプロジェクトであれば、後からよりも今リライトする方が良いという意見もあります。
+*   <strong>AIが変えるリライトの費用対効果:</strong> LLMの登場により、リライトにかかる期間が大幅に短縮される可能性があり、「数ヶ月や数年かかる作業」から「数週間で終わる作業」へと変化することで、リライトの費用対効果の計算が変わるという見方もあります。
+*   <strong>Ladybirdの戦略:</strong> Ladybirdプロジェクトは、Rustへの移植を「プロジェクトの主要な焦点ではなく、C++での開発を続けながら、サブシステムをRustに移植していくサイドトラック」と位置付けています。これは、「リライトと新規機能開発の競争」というJoelの指摘を避けるための賢明なアプローチと評価されています。</p>
+<h2>まとめ</h2>
+<p>LadybirdブラウザのLibJSエンジンをC++からRustへAIを活用して移植したことは、そのスピードと「バイト単位で同一の出力」という厳密な検証方法から、AIコード生成の強力なユースケースとして注目を集めています。</p>
+<p>一方で、メモリ安全性向上の恩恵は期待されるものの、移植されたコードの非イディオム性による将来の技術的負債や、言語選択の頻繁な変更によるプロジェクトの方向性への懸念も示されています。AIの活用はプログラミングの生産性を高める可能性を秘めていますが、同時にプログラマーの役割の変化や、AIが生成するコードの品質・知的財産権に関する新たな課題も提起しています。</p>
+<p>全体として、このプロジェクトはAI時代のソフトウェア開発における可能性と課題の両方を示唆しており、Hacker Newsのコミュニティでは、言語選定の哲学、メモリ安全性の議論、AIツールの実用性と倫理、そしてリライト戦略の是非といった多岐にわたる観点から活発な議論が展開されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

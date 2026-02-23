@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: PgDog – Scale Postgres without changing the app - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: PgDog – Scale Postgres without changing the app</h1>
+        <div class="meta">
+            投稿日: 2026年02月23日 | ランク: 5
+        </div>
+        <a href="https://github.com/pgdogdev/pgdog" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>PgDogの最新状況と機能更新について議論されており、特にPostgreSQLのコネクションプーリング、ロードバランシング、シャーディングの高度な機能、プロダクション導入、パフォーマンス、導入に関する質問が中心です。</p>
+<h2>コア機能とプロダクションの成熟度</h2>
+<p>PgDogはPostgreSQL用のコネクションプーラー、ロードバランサー、データベースシャーダーとして開発されています。主な目標は、アプリケーションコードの変更やデータベース移行なしで、高トラフィック環境におけるデータベースのスケーリング課題を解決することです。現在、PgDogはプロダクション環境で稼働しており、直接シャードへのクエリは安定して動作しています。クロスシャードクエリは現在も開発中ですが、進展が見られます。</p>
+<p>コネクションプーリング機能は、アプリケーションのクラッシュなどによる「コネクションストーム」でPostgresがCPUを100%使用するような問題を解決するために設計されています。未完了のトランザクションを自動的にロールバックしたり、部分的に送信されたクエリをドレイン・再同期したりすることで、データベース接続を保護します。</p>
+<p>PgDogはオープンソースであり、すべての機能は設定を通じてオン/オフを切り替えることができ、段階的な導入が可能です。</p>
+<h2>シャーディング機能の進化</h2>
+<p>PgDogのシャーディング機能は大きく進化しています。</p>
+<ul>
+<li><strong>集計関数とソート/グルーピング</strong>: <code>count()</code>, <code>min()</code>, <code>max()</code>, <code>avg()</code>などの集計関数は、アプリケーションのリファクタリングなしで動作します。PgDogはクエリを透過的に書き換え、不足している情報（例：平均計算のための合計カウント）を途中で計算します。ソート、グルーピング、<code>DISTINCT</code>もサポートされています。</li>
+<li><strong>クロスシャード書き込みとDDL</strong>: スキーマ変更（<code>CREATE</code>/<code>DROP</code>/<code>ALTER</code>）を含むクロスシャード書き込みは、2フェーズコミット（2PC）によってアトミックかつ同期的に処理されます。ORMの変更は不要です。ただし、PgDog自体のクラッシュ時に進行中の2PCトランザクションを復元するクラッシュ保護は今後の課題です。</li>
+<li><strong>オムニシャードテーブル</strong>: 全てのシャードに複製される「オムニシャードテーブル」（レプリカまたはミラー）は、アトミックな読み書きをサポートし、共通データの同期を保証します。</li>
+<li><strong>複数タプル挿入</strong>: <code>INSERT INTO ... VALUES (...)</code>のような複数タプル挿入は、PgDogのクエリリライターによって自動的に分割され、それぞれのシャードに分散されます。これにより、PrismaやSequelizeなどのORMもコード変更なしで動作します。</li>
+<li><strong>シャーディングキーの変更</strong>: シャーディングキーの変更も可能で、PgDogは更新ステートメントをSELECT、INSERT、DELETEの3つのクエリに書き換え、行をシャード間で移動させます。</li>
+<li><strong>クロスシャードユニークシーケンス</strong>: PgDog内にクロスシャードで一意なシーケンスが組み込まれており、システムクロックなどを用いてモノトニック増加するユニークIDを生成します。これもORMに透過的に注入され、既存のアプリケーションがそのまま動作します。</li>
+<li><strong>リシャーディング</strong>: リシャーディング機能が組み込まれ、Postgres 16の論理レプリケーションストリームを活用して、数ギガバイトのテーブルを秒速で移動できます。これは以前は数週間かかった作業を数時間に短縮できる画期的な改善です。</li>
+<li><strong>自動シャーディング</strong>: スキーマ同期、並行テーブルデータ移動、論理レプリケーション設定、アプリケーションのトラフィック切り替えまで、自動でシャーディングを設定する機能も開発中です。</li>
+</ul>
+<h2>パフォーマンスとロードバランシング</h2>
+<p>PgDog経由の直接シャード読み込みのレイテンシは通常サブミリ秒です。同じAWSアベイラビリティゾーン内のノード間では平均1ミリ秒未満のレイテンシが測定されています。ただし、コネクションプーラーを初めて導入する場合、特に多数のクエリを送信する「おしゃべりな」アプリケーションでは、若干のレイテンシ増加を感じる可能性があります。これはスケール時には許容されるトレードオフと見なされています。</p>
+<p>PgDogのロードバランサーはレプリカを監視し、フェイルオーバー時に書き込みトラフィックを昇格されたプライマリに移動させることができます。これはRDS、Aurora、Azure Pg、GCP Cloud SQLなどのマネージドPostgresサービスで動作します。ただし、プライマリ選出機能はまだサポートされていません。
+レプリケーションラグは一般的に許容されるトレードオフであり、同期レプリケーションはコミット性能を約30%低下させ、単一障害点を増やすため、ほとんどの場合推奨されません。PgDogは将来的にラグに基づいたルーティング（ラグが少ないレプリカを優先し、遅延しすぎたレプリカはロードバランサーから除外する）を追加する予定です。</p>
+<p>レプリケーションラグによって発生する「漏洩する抽象化」（データ書き込み直後にレプリカから最新データを読み取れない問題）は認識されており、これはパフォーマンスと正確性のトレードオフです。多くのソリューションはパフォーマンスを優先し、アプリケーション側で整合性の不足を処理することが求められます。</p>
+<h2>導入の目安とユースケース</h2>
+<p>PgDogは特定のセクターに限定されず、Postgresを使用するあらゆるアプリケーションを対象としています。一般的なスケーリングの目安として、データベース接続が100以上になったらコネクションプーラーを、プライマリのCPU利用率が30%を超えたらリードレプリカを、そしてクラウドプロバイダが提供する最大インスタンスタイプから数段階下になったらシャーディングを検討することが推奨されています。一方で、非常に大規模なデータベースでも単一のPostgresインスタンスで対応できるケースも多いという意見もあります。</p>
+<h2>まとめ</h2>
+<p>PgDogは、PostgreSQLのコネクションプーリング、ロードバランシング、シャーディング機能を透過的に提供する強力なオープンソースソリューションです。アプリケーションコードの変更なしで導入できる点が大きな特徴であり、クロスシャード集計、アトミックな書き込み（2PC）、キー変更、自動リシャーディングといった高度なシャーディング機能を開発しています。プロダクション環境での実績を持ち、サブミリ秒のレイテンシを維持しつつ、レプリケーションラグによる整合性の課題にも対策を講じています。Postgresを高トラフィック環境で運用する際の課題解決に貢献し、今後の展望として2PCのクラッシュ保護やDB接続エラー時のリトライ機能などが挙げられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
