@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: I ported Tree-sitter to Go - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: I ported Tree-sitter to Go</h1>
+        <div class="meta">
+            投稿日: 2026年02月25日 | ランク: 1
+        </div>
+        <a href="https://github.com/odvcencio/gotreesitter" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>投稿者は、セマンティックなコードエンティティを扱うツールスイート「gts-suite」と、次世代のバージョン管理システム「Got」について発表しました。これらは、特にレガシーアーキテクチャを持つアプリケーションに大きな可能性をもたらすと考えており、次の投稿ではこれらを組み合わせた「GotHub」というプロジェクトについて紹介する予定です。</p>
+<h2>Bazel/CGOの課題解決への期待</h2>
+<p>Go言語で書かれたBazelのGazelle拡張機能がtree-sitterに依存する場合、CGOが必要となり問題となることが指摘されました。このプロジェクトは、CGOへの依存を取り除き、純粋なGoで実装できる可能性を秘めているため、Bazelコミュニティから大きな期待が寄せられています。</p>
+<h2>「Got」の名前の衝突と代替案</h2>
+<p>「Got」という名前がOpenBSDの「Got」と衝突することが指摘され、投稿者は新しい名前の提案を募集しました。コメント欄では、「Goty McGotface」「YAGOT (Yet Another GOT)」「YAGOT-NG (Next Generation)」「YAGOT2」「uGOT / uGOTme?」「gt」といった様々なユニークな名前が提案されました。</p>
+<h2>Gitに対するGotの主な改善点</h2>
+<p>投稿者は、GotがGitと比較して主に以下の点で改善されていると説明しました。
+*   <strong>構造的なVCS:</strong> 同じファイルの同時編集を意図した構造的なバージョン管理システムである。
+*   <strong>エンティティ認識型差分:</strong> 行ごとではなく、関数ごとの差分を認識する。
+*   <strong>構造的blame:</strong> エンティティのライフタイムにわたる属性解決を提供する。
+*   <strong>構造からのSemver:</strong> 構造からセマンティックバージョニング（破壊的変更、マイナー変更、パッチ）を推奨できる。
+*   <strong>エンティティ履歴:</strong> エンティティが独立して追跡されるため、ファイル名の変更や移動がエンティティの履歴に影響しない。</p>
+<p>Gotreesitterが言語をパースできない場合は、3wayテキストマージがフォールバックとして機能します。構造的なマージにより、同じエンティティに競合する変更がない限り、コンフリクトが発生しないようになっています。</p>
+<h2>Gitリポジトリとの互換性</h2>
+<p>GotはGitと相互運用可能であり、ローカルでGotの利点を活用しつつ、Gitリモートフォージにプッシュできることが説明されました。Gitからプルする場合、Gotはエンティティ履歴をGitリポジトリにロードし、ローカルでエンティティ履歴の検査などのGot機能を利用できるようにします。</p>
+<h2>Go言語の慣習とバイナリサイズ</h2>
+<p>Go言語の慣習として、実装コードとテストコードがリポジトリのルートに同居すること（Goの流儀）や、<code>main</code>パッケージが小さいプロジェクトやライブラリでよく使われることが言及されました。
+バイナリサイズについては、206個のバイナリブロブで合計15MBとされており、言語のレジストリを宣言して必要な文法バイナリだけをロードすることで、全ての文法をデフォルトで持つ必要がないように設計されています。これにより、多数の言語をサポートしつつ、CLIツールが比較的小さな（50MB以下）ダウンロードサイズに収まる可能性があり、大きな利点と評価されました。</p>
+<h2>Tree-sitter Goポートの技術的課題</h2>
+<p>カスタムCレキサーの移植が主要な技術的課題であり、エンジニアリングの約70%が外部スキャナーの移植とオリジナルの（C）tree-sitterとの同等性の確保に費やされたことが述べられました。文法については、オリジナルのtree-sitterライブラリで使用されている公式の文法が使用されています。</p>
+<h2>まとめ</h2>
+<p>本プロジェクトは、既存のGitの限界を超える次世代のバージョン管理システム「Got」と、セマンティックなコード分析ツール「gts-suite」を発表しました。特にGo言語環境におけるCGO依存の課題解決や、構造的なマージによるコンフリクトの削減、エンティティベースの履歴管理といった点で大きな可能性を秘めています。多数の言語をサポートしつつバイナリサイズを抑える工夫も評価されており、今後の発展が期待されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
