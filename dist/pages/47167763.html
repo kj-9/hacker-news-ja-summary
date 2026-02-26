@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirSnitch: Demystifying and breaking client isolation in Wi-Fi networks [pdf] - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">AirSnitch: Demystifying and breaking client isolation in Wi-Fi networks [pdf]</h1>
+        <div class="meta">
+            投稿日: 2026年02月26日 | ランク: 1
+        </div>
+        <a href="https://www.ndss-symposium.org/wp-content/uploads/2026-f1282-paper.pdf" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「AirSnitch」と呼ばれるWi-Fiクライアント分離の新たなバイパス攻撃に関するものです。この記事は、Dan Goodinによって書かれたオリジナルのArs Technicaの記事を要約しており、Wi-Fiの暗号化を破るというセンセーショナルな見出しを巡って議論が繰り広げられています。この脆弱性は、特に企業や公共のWi-Fiネットワークのセキュリティ保証に影響を与えます。</p>
+<h2>見出しと誤解</h2>
+<p>元の記事の見出し「AirSnitchがWi-Fiの暗号化を破り、デバイスの分離を無効にする」は、多くのコメントで誤解を招くとして批判されました。論文の共著者も、「暗号化を破る」という言葉は誤解を招く可能性があり、「バイパスする」という言葉の方が適切だと指摘しています。この攻撃はWi-Fiの暗号化そのものを破るわけではなく、同じネットワーク上のクライアント間の分離（クライアントアイソレーション）をバイパスするものです。多くの人が、「Wi-Fi暗号化を破る」という表現が、攻撃者がキーをクラックせずに近くからネットワークにアクセスできると誤解すると感じています。</p>
+<h2>AirSnitch攻撃の詳細と影響</h2>
+<p>この攻撃は、攻撃者がすでに被害者のネットワークに接続している必要があるため、典型的なウォードライビング攻撃とは異なります。しかし、それは企業や大学などでよく見られる、ゲストネットワークとセキュアなネットワークが同じアクセスポイント（AP）上で動作しているシナリオに大きな影響を与えます。攻撃者は、ゲストネットワークに接続するだけで、同じAP上の他のセキュアなネットワークのクライアントを攻撃し、中間者攻撃（MitM）を実行できます。これは、APがPHY-MAC層でトラフィックを適切に分離していないことに起因します。</p>
+<p><strong>脆弱性の根本原因:</strong>
+*   ブロードキャストフレームを保護するWi-Fiキーの不適切な管理。
+*   分離がMAC層またはIP層でのみ強制され、両方では行われていない。
+*   ネットワークスタック全体でクライアントのIDの同期が不十分。</p>
+<p>論文の要旨によれば、テストされたすべてのルーターとネットワークが少なくとも1つの攻撃に対して脆弱であり、ベンダー間での分離の実装の一貫性のなさ、アドホックさ、不完全さが問題の根底にあります。</p>
+<h2>緩和策と推奨事項</h2>
+<ul>
+<li><strong>ハードウェア分離:</strong> 真のインバウンド/アウトバウンド保護のためには、分離されたハードウェアが推奨されます。</li>
+<li><strong>ゲストネットワークの無効化:</strong> 自宅ネットワークのユーザーは、特にISPが提供するルーターでデフォルトで有効になっているゲストネットワークを無効にすることが推奨されています。</li>
+<li><strong>有線接続の利用:</strong> 可能な限り有線接続を使用することが、潜在的なWi-Fi攻撃のリスクを軽減する上で有効です。</li>
+<li><strong>802.1X / EAP-TLSとVLANs:</strong> 企業ネットワークでは、802.1X（特にEAP-TLS）とVLANを組み合わせて、クライアントごとに強力な認証とネットワーク分離を行うことが最善の対策とされています。</li>
+<li><strong>デバイスごとのPSKとVLAN:</strong> デバイスごとのPSK（Pre-Shared Key）とVLANの展開も、これらの脆弱性に対する解決策として提案されています。</li>
+<li><strong>クライアント隔離への過度な依存の回避:</strong> 本来、認証や暗号化を使用しないサービスを保護するためにクライアント隔離に依存すること自体が問題であり、根本的なセキュリティ対策を見直すべきだという意見もあります。</li>
+</ul>
+<h2>macOSファイアウォールに関する議論</h2>
+<p>コメントの中で、macOSのファイアウォールに関する質問があり、多くのユーザーが「Little Snitch」や「LuLu」を推奨しています。しかし、「Little Snitch」はDNS解決を事前に実行するというセキュリティ上の懸念も指摘されています。</p>
+<h2>まとめ</h2>
+<p>AirSnitch攻撃は、Wi-Fiの暗号化を直接破るものではなく、クライアント分離の機能不全を突いたものです。特に企業や公共の場所で、複数のネットワーク（ゲストとセキュアなど）が同じアクセスポイントを共有している場合に、深刻な中間者攻撃を可能にします。この問題の根源は、クライアント分離が標準化されておらず、ベンダーによる実装が不十分であることにあります。対策としては、有線接続の利用、ゲストネットワークの無効化、そして802.1X/EAP-TLSとVLANによる厳格なネットワーク分離が推奨されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

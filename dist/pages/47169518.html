@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Deff – side-by-side Git diff review in your terminal - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Deff – side-by-side Git diff review in your terminal</h1>
+        <div class="meta">
+            投稿日: 2026年02月26日 | ランク: 9
+        </div>
+        <a href="https://github.com/flamestro/deff" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p><code>deff</code>は、Gitの差分をサイドバイサイドで確認できるインタラクティブなRust製TUIツールです。構文ハイライトや、追加・削除行の着色、キーボード/マウスナビゲーション、Vimスタイル操作、インファイル検索などの機能を持ち、未コミット・未追跡ファイルもレビューできます。開発者はフィードバックを求めています。</p>
+<h2>既存ツールとの比較と提案</h2>
+<p>多くのユーザーは、既に<code>icdiff</code>、<code>delta</code>、<code>vimdiff</code>、<code>tig</code>、<code>difftastic</code>、<code>ediff</code>といったさまざまな差分ツールを使用しており、それぞれの利点や課題を指摘しています。
+- <strong><code>icdiff</code></strong>: 長く使われているサイドバイサイド差分ツールですが、<code>delta</code>の方が高速であるという意見もあります。
+- <strong><code>delta</code></strong>: <code>git</code>の外部ページャーとして利用され、高速で評判が良いですが、デフォルトではユニファイド形式であり、サイドバイサイド表示には設定が必要です。
+- <strong><code>vimdiff</code></strong>: 多くのLinuxシステムにプリインストールされており、高速で便利です。
+- <strong><code>difftastic</code></strong>: 構文ツリーベースのアプローチを採ることで、インデントや括弧の変更をノイズとして扱わない点が評価されています。
+- <strong><code>tig</code></strong>: ファイル数が多い場合の速度と、サイドバイサイド差分表示の統合が望まれています。</p>
+<h2>新しいツールの導入に関する課題</h2>
+<p>新しいツール、特に独自の操作体系を持つものをユーザーに導入させるのは難しいという意見があります。<code>git</code>の外部ページャーとして既存のフロントエンドと連携できる<code>delta</code>のようなアプローチが、採用の障壁を下げると考えられています。</p>
+<h2>ワークフローの改善点</h2>
+<p>一部のユーザーは、現在の差分ツールが視覚化に特化しすぎていると感じています。彼らは、VSCodeやGitHubのようなツールで可能な、差分内の特定の行や範囲にコメントを付けてエージェントにフィードバックするような、よりインタラクティブなレビュー・反復ワークフローを求めています。これに対し、Neovim向けの<code>Octo</code>と<code>gh-dash</code>を組み合わせることで、TUIでのレビューワークフローが実現可能であるとの提案がありました。</p>
+<h2>大規模ファイルへの対応</h2>
+<p>大容量ファイル（5000行以上の差分）に対するパフォーマンスと可読性は、多くの差分ツールにとって重要なテストポイントであり、<code>deff</code>の評価においてもこの点が注目されています。</p>
+<h2>まとめ</h2>
+<p><code>deff</code>は、既存の多様な差分ツールが提供する機能の一部を補完し、よりリッチなTUI体験を提供する可能性を秘めています。しかし、ユーザーの獲得には、既存ツールとの明確な差別化、特に大規模ファイルへの対応や、既存のGitワークフローへのシームレスな統合が鍵となります。また、単なる視覚化に留まらない、より高度なレビュー・反復ワークフローへの対応も、今後の進化の方向性として期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
