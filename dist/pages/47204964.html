@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision trees – the unreasonable power of nested decision rules - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Decision trees – the unreasonable power of nested decision rules</h1>
+        <div class="meta">
+            投稿日: 2026年03月01日 | ランク: 6
+        </div>
+        <a href="https://mlu-explain.github.io/decision-tree/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、ディシジョンツリーの仕組みを解説するウェブサイトに対するもので、そのプレゼンテーションを称賛しつつ、技術的な議論、特にディシジョンツリーとニューラルネットワークの比較、実装、そしてその「説明可能性」について活発な意見交換がされています。</p>
+<h2>ウェブサイトのユーザーエクスペリエンスと批評</h2>
+<p>多くのコメントは、ウェブサイトの美しいプレゼンテーションを称賛しています。しかし、一部のユーザーからは、テキストのコントラストが低く読みにくいという指摘があり、Firefoxのリーダービューを使ったり、CSSを無効にしたりして対応したという声もありました。また、記事のタイトルが「不合理な」というクリックベイト的な表現を使っていることに対して批判的な意見も寄せられました。</p>
+<h2>ディシジョンツリーの基本的な評価とMLモデルとしての位置づけ</h2>
+<p>ディシジョンツリー（DT）は「素晴らしい」「お気に入りの古典的MLアルゴリズム」と高く評価されています。専門家の複雑な意思決定でさえ、単純なディシジョンツリーで効果的にモデル化できるという指摘があり、専門家自身が提示するルールよりもDTの方が実際の意思決定をよく捉えることが示唆されました。また、DTはk-dツリーよりも歴史が古く、再帰的な空間分割という共通の原理を持つことが言及されています。多くの人が回帰モデルばかり使う中で、DTのような手法が個人的なプロジェクトで活用されていないのは驚きだという意見もありました。</p>
+<h2>ディシジョンツリーとニューラルネットワークの比較、および説明可能性の議論</h2>
+<p>「1ビットニューラルネットワークはディシジョンツリーである」という興味深い指摘があり、理論的には多くのニューラルネットワークをif-else文のチェーンにコンパイルできる可能性が示されました。ただし、これには「Neural Networks are Decision Trees」といった論文も存在するものの、その結果として得られるツリーは非常に巨大になることや、1ビットNNの学習自体が未解決の問題であることが議論されました。</p>
+<p>2010年頃のCERNでは、説明可能性と表現力のためBoosted Decision Treesが最も人気のある分類器であり、当時はニューラルネットワークへの「文化的嫌悪感」があったことが共有されました。しかし、「時代は変わった」とあり、不透明なモデルが物理学で使われることへの懸念（プトレマイオス系とコペルニクス系の例を挙げながら、単なるカーブフィッティング以上のものを求めるべきという主張）も提起されています。</p>
+<p>Boosted Decision TreesとBoosted Random Forestsの違いについても説明があり、前者が各分類器が残差を学習するシーケンシャルな訓練を行うのに対し、後者は相関を減らすために複数のツリーの平均を使用すると解説されました。</p>
+<p>しかし、ディシジョンツリーの「説明可能性」は過大評価されているという懐疑的な意見も多く、数レベルの深さを超えると「解釈不可能なジャングル」となり、15深度のツリーでは何も解釈できなかったという経験談が共有されました。これはニューラルネットワークでも同様で、意思決定プロセスを完全に理解するのは難しいという点が強調されています。</p>
+<h2>ディシジョンツリーの実装上の考慮事項とパフォーマンス</h2>
+<p>あるユーザーは、GNU Guileで純粋関数型の並列ディシジョンツリーを実装した経験を語り、NumPyやデータフレームのようなエコシステムがないため、データ表現が非効率的であった可能性を指摘しました。データフレームはメモリ効率が高く、操作が高速化されており、異種データ型や前処理機能（ワンホットエンコーディングなど）に対応している点で優位性があると考えられています。Guileの任意精度整数を使用していることも、効率性低下の要因として挙げられました。</p>
+<p>一方で、ディシジョンツリーはツリー操作にLisp系の言語が適しており、適切に実装すれば高い並列性とリニアな高速化が期待できると反論されました。線形代数変換ではデータフレームが優位だが、一度に1行を処理するディシジョンツリーでは、その利点は線形分類器ほど劇的ではないとの意見もありました。</p>
+<p>ディシジョンツリーの大きな強みの一つは、その実行速度の速さ、すなわち「低レイテンシ」であると強調されました。NNに比べて推論レイテンシが2桁低いという経験談もあり、DTが低レイテンシアプリケーションにおける「キラー機能」を持つことが示唆されています。しかし、データ（特に特徴量）エンジニアリングがDTの「アキレス腱」であり、適切な前処理がなされないとNNよりも結果が悪くなる可能性があるという意見や、高スループットの実行時パフォーマンス達成にはコンパイルが必要になるという指摘もありました。</p>
+<h2>ディシジョンツリーの応用と実践的なヒント</h2>
+<p>ディシジョンツリーの強力な活用方法として、「秘密兵器」と称される手法が紹介されました。これは、まず良い線形分類器を学習させ、その出力（非閾値化バージョン）を新しい特徴量としてディシジョンツリーの学習に加えるというものです。この手法は、線形関数をフィットさせるのが苦手なDTと、再帰的に分割された構造を持つ領域の分類が苦手な線形関数の、それぞれの弱点を補い合う形で機能すると説明されました。</p>
+<p>また、強化学習の文脈で「生の状態」に追加の計算を加えて「観測された状態」を作り出すことが、特徴量エンジニアリングと類似しているという意見もありました。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、ディシジョンツリーのメカニズムを解説するウェブサイトを巡り、その視覚的な美しさを称賛しつつも、一部のアクセシビリティ問題やクリックベイト的なタイトルへの懸念が表明されました。技術的な議論では、ディシジョンツリーが古典的かつ強力なMLアルゴリズムであるという評価が再確認され、特に専門家の意思決定のモデリングや高速な推論能力に注目が集まりました。</p>
+<p>一方で、ニューラルネットワークとの関係（1ビットNNとDTの類似性）や、Boosted Decision Treesが物理学の分野で果たした役割が語られる中で、「説明可能なAI」としてのディシジョンツリーの実際の限界についても活発な議論が交わされました。多くのコメントが、大規模なディシジョンツリーはNNと同様に解釈が困難であり、「説明可能性」が過大評価されていると指摘しています。</p>
+<p>実装面では、適切なデータ構造と特徴量エンジニアリングの重要性、そして線形分類器とディシジョンツリーを組み合わせる実用的な手法が提案され、その効果が強調されました。全体として、ディシジョンツリーは依然として関連性の高い強力なツールであり、その特性を理解し、他の手法と組み合わせて賢く活用することが重要であるという認識が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

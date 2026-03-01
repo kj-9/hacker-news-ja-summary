@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghostty – Terminal Emulator - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ghostty – Terminal Emulator</h1>
+        <div class="meta">
+            投稿日: 2026年03月01日 | ランク: 1
+        </div>
+        <a href="https://ghostty.org/docs" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Ghosttyは、macOSとLinux向けの最新の高性能ターミナルエミュレータであり、その性能、機能、そして最近の組織的変化についてHacker Newsで議論されています。特に、その背後にある<code>libghostty</code>プロジェクトは、他の多くのターミナルプロジェクトの基盤として注目を集めています。</p>
+<h2>パフォーマンスとレイテンシー</h2>
+<p>多くのユーザーがGhosttyのパフォーマンスを賞賛しており、特に大規模なファイルを<code>cat</code>する際の高いスループットを挙げています。これはAlacrittyやPtyxisと同レベルだとのことです。しかし、一部のユーザーはキー入力から画面表示までのエンドツーエンドのレイテンシーに気づくと指摘しており、特に240Hzモニターのユーザーは、xtermの方が応答性が高いと感じています。ベンチマークでは、Ghosttyの入力レイテンシーが競合他社と比較して最悪であるという古い結果も引用されていますが、 throughput（スループット）は優れています。KittyやWezTermと比較して、Ghosttyのパフォーマンスの体感には個人差があるようです。</p>
+<h2>機能とユーザビリティ</h2>
+<p>Ghosttyの機能については賛否両論があります。</p>
+<ul>
+<li><strong>スクロールバック検索 (Cmd+F)</strong>: 多くのユーザーがこの機能の欠如を指摘し、Ghosttyから離れる理由として挙げていましたが、開発者（Mitchell Hashimoto氏）によると、バージョン1.3（数週間以内にリリース予定）でこの機能が追加されるとのことです。すでにnightlyビルドでは利用可能です。</li>
+<li><strong>SSHとの互換性</strong>: GhosttyがSSH経由で<code>top</code>や<code>ncdu</code>などのプログラムを正しく表示しないという問題が複数報告されています。これは<code>$TERM</code>変数の設定やリモートサーバーへのterminfoファイルのインストールが必要となるためで、iTerm2が「ただ動作する」のとは対照的だという意見もあります。開発者はこれが意図的な設計であると説明し、解決策を提供していますが、ユーザーからは「バグ」と見なされています。</li>
+<li><strong>タブと分割</strong>: iTerm2のような豊富なタブ管理機能（サイドバータブ、セッション復元など）を求める声があります。Ghosttyは分割画面のズーム機能（<code>toggle_split_zoom</code>）を提供していますが、iTerm2のようなダブルクリックでのズーム機能は今後のロードマップに含まれる可能性があります。WezTermはスクリプト可能なLua設定と組み込みのマルチプレクサにより、より柔軟なタブ/分割管理を提供すると評価されています。</li>
+<li><strong>クイックターミナル</strong>: Ghosttyの「クイックターミナル」（Guake/Yakuakeのようなドロップダウン式ターミナル）はキラー機能として評価されていますが、タブ機能の追加を望む声もあります（Kittyも同様の機能を提供）。</li>
+<li><strong>設定とカスタマイズ性</strong>: iTerm2と比較して、Ghosttyのカラー設定やルック＆フィール、メニュー、タブなどのカスタマイズ性が劣ると感じるユーザーもいます。Ghosttyはネイティブのウィンドウ装飾を目指しており、これが一部のユーザーには魅力的です。</li>
+<li><strong>リガチャ</strong>: 一部のユーザーは、<code>!=</code>などが単一の文字になるリガチャ機能を好まず、無効にする設定を共有しています。バージョン1.3ではデフォルトで一部のリガチャが変更される予定です。</li>
+</ul>
+<h2>競合ターミナルとの比較</h2>
+<p>Ghosttyは、iTerm2、Kitty、WezTerm、Alacritty、Foot、GNOME Terminal、Terminology、SecureCRTなど、多くのターミナルエミュレータと比較されています。</p>
+<ul>
+<li><strong>iTerm2</strong>: macOSユーザーにとってのデファクトスタンダードであり、多くのユーザーがGhosttyを試した後もiTerm2に戻っています。iTerm2の豊富な機能、安定性、そして「ただ動作する」点が評価されています。</li>
+<li><strong>Kitty</strong>: 高速でカスタマイズ性が高く、多くのユーザーがGhosttyから切り替える理由がないと述べています。しかし、一部のユーザーはF3キーの問題やフォントレンダリングの違い、SSHとの相性、Pythonの混在などを理由にKittyを避けています。</li>
+<li><strong>WezTerm</strong>: Luaによる高度な設定とスクリプト機能が特徴で、開発環境としての柔軟性を求めるユーザーに支持されています。</li>
+<li><strong>Alacritty</strong>: 高速性が評価されていますが、タブ機能がないため、tmuxを使わないユーザーには不向きです。</li>
+<li><strong>tmux</strong>: タブや分割の管理、リモートセッションからのデタッチなど、多くの人がターミナルを跨いで一貫した環境を提供するために利用しています。ただし、多くのキー入力が必要だと感じるユーザーもいます。</li>
+</ul>
+<h2><code>libghostty</code>の台頭</h2>
+<p>Ghosttyのオリジナル開発者であるMitchell Hashimoto氏は、Ghosttyの本当の未来は<code>libghostty</code>にあると強調しています。<code>libghostty</code>は、現在すでに10以上の商用およびオープンソースのターミナルプロジェクトのバックエンドとして利用されており、Ghostty GUI自体も<code>libghostty</code>のコンシューマーです。これにより、多様なターミナルエミュレータが共通の安定した高性能コアに基づいて構築されるエコシステムが生まれており、<code>libghostty</code>の利用が増えることでGhostty GUIの安定性も向上すると考えられています。</p>
+<h2>プロジェクトの状況と展望</h2>
+<p>Ghosttyは活発に開発が続けられています。Mitchell Hashimoto氏によると、macOS版Ghosttyアプリは週に約100万回ダウンロードされており、多くのユーザーに利用されていることが示唆されています（Linux版のデータはなし）。
+また、Ghosttyは非営利団体によって支援されるようになり、貢献者に報酬を支払う契約も結ばれました。これにより、プロジェクトがMitchell氏個人に依存せず、長期的に持続可能になることが期待されています。バージョン1.3は間もなくリリースされ、スクロールバック検索やスクロールバーなど、重要な新機能が追加される予定です。</p>
+<h2>まとめ</h2>
+<p>Ghosttyは高性能で見た目も良いターミナルエミュレータとして注目されていますが、SSH互換性の問題やスクロールバック検索機能の欠如（v1.3で解決予定）など、一部の基本的な機能について課題がありました。多くのユーザーがiTerm2やKitty、WezTermといった競合と比較し、それぞれの強みと弱みを指摘しています。しかし、その根幹となる<code>libghostty</code>プロジェクトは他の多くのターミナル開発を支える重要な存在となりつつあり、Ghostty自体の将来性も期待されています。非営利団体による運営や貢献者への報酬支払いといった組織的な変化も、プロジェクトの持続可能性を高める要因としてポジティブに受け止められています。特にAIエージェントの利用が増える中で、ターミナルエミュレータの重要性が再認識されており、Ghosttyはその波に乗って進化を続けています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

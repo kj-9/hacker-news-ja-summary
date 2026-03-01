@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operational issue – Multiple services (UAE) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Operational issue – Multiple services (UAE)</h1>
+        <div class="meta">
+            投稿日: 2026年03月01日 | ランク: 3
+        </div>
+        <a href="https://health.aws.amazon.com/health/status" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、中東にあるAWSデータセンターがミサイル攻撃または類似の物体によって被弾し、サービスが停止したというニュースに関するものです。コメントは、この出来事の異常性、AWSの冗長性設計、そして情報の透明性について議論しています。</p>
+<h2>出来事の特異性と表現</h2>
+<p>一部のコメント投稿者は、AWSデータセンターがミサイルによって被弾するという状況を「奇妙な時代」と表現し、その異常性を指摘しています。しかし、データセンターが被弾したという事実に驚きつつも、「ミサイル攻撃や戦争行為によるものであったと明言することを避ける」AWSの表現（「物体がデータセンターに衝突し、火花と火災が発生した」）に皮肉を感じる声もあります。一方で、工場がミサイルで停止するのは古典的な出来事だと指摘する意見もあり、必ずしも特異な事態とは見ていない人もいます。</p>
+<h2>AWSの冗長性と障害対応</h2>
+<p>多くのコメントがAWSの冗長性設計に注目しています。AWSは通常、リージョン内に複数のアベイラビリティゾーン（AZ）を持つことで、単一障害点のリスクを軽減しています。今回のケースでは、1つのAZ（mec1-az2）のみが影響を受け、他のAZは正常に機能していることが報告されています。このため、複数のAZにわたってアプリケーションを冗長に実行していた顧客は影響を受けなかったとされています。しかし、「システムが正常に切り替わらなかった」可能性や、EC2とその依存サービスのみが影響を受けたため、そのAZにトラフィックがルーティングされ続けるサービスは機能しなかった、といった推測もなされています。これは、AWSが常に複数のAZにインスタンスを配置することを推奨する理由を改めて示すものだと考えられています。</p>
+<h2>情報の透明性と顧客への影響</h2>
+<p>AWSのステータスアップデートにおける透明性と迅速な情報開示を評価する声があります。今回の件はバーレーンではなくアラブ首長国連邦（アブダビ）のデータセンターで発生したことが明かされています。南ヨーロッパでの一部の小規模ウェブサーバーの断続的な不具合との関連性については否定的な見方が示されています。</p>
+<h2>まとめ</h2>
+<p>今回のHacker Newsのコメントは、中東のAWSデータセンターが「物体」の衝突（ミサイル攻撃と推測される）により一部停止した事象について、その異例さ、AWSの冗長性設計と障害対応、そして情報開示のあり方を巡る議論が中心でした。AWSが複数のアベイラビリティゾーンを持つことの重要性が改めて強調され、冗長性を確保していた顧客は影響を受けなかった一方で、今回の事態が「ミサイル攻撃」であると明言しないAWSの表現には皮肉が込められていました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
