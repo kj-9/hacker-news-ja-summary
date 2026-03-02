@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallel coding agents with tmux and Markdown specs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Parallel coding agents with tmux and Markdown specs</h1>
+        <div class="meta">
+            投稿日: 2026年03月02日 | ランク: 10
+        </div>
+        <a href="https://schipper.ai/posts/parallel-coding-agents/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、AnthropicのClaude Codeや類似のAIエージェントツールを使って並列にソフトウェアを開発する手法について議論しています。多くの人が個人的なプロジェクトや社内ツールに利用しており、その生産性向上に期待を寄せていますが、同時に課題も認識しています。</p>
+<h2>AIエージェントによるソフトウェア開発の生産性</h2>
+<p>コメントでは、AIエージェント、特にClaude CodeやOpus 4.5/4.6といった最新モデルを使って、個人開発者や企業が生産性を向上させている事例が共有されています。
+- 多くの開発者が、以前は手が出せなかったようなプロジェクト（例：Wayland向けウィンドウコンポジタ、キャッシュフロー追跡アプリ、Erlangチャットサーバー、ZFSバックエンド追加、Ansibleツールなど）をAIエージェントの助けを借りて実現していると述べています。
+- これらのツールは「Vibe-coded」（感覚的にコードを書く）という新しいスタイルの開発を可能にし、数週間で完了するような「グリーンフィールドプロジェクト」で特に効果を発揮すると感じられています。
+- 特にClaude Codeのチーム機能が主流になってきたのは最近のことであり、エージェントオーケストレーションはまだ初期段階にあると指摘されています。</p>
+<h2>AIエージェントが生成するソフトウェアの性質と公開への躊躇</h2>
+<p>AIエージェントを使って作られたソフトウェアの多くは、個人の使用や社内ツールにとどまっているという意見が多数ありました。
+- 多くの開発者が「自分自身のために」ソフトウェアを構築しており、必ずしも外部に公開したり収益化したりすることを第一に考えていないことが指摘されています。
+- また、AIツールで構築されたものに対して、人間が作成したものよりも厳しい批判や低評価がつきやすい風潮があるため、公開を躊躇する開発者もいることが示唆されています。
+- このため、「素晴らしいソフトウェア」がAIエージェントによってどれだけ構築されているかが見えにくいという声も上がっています。</p>
+<h2>並列エージェントの課題と解決策</h2>
+<p>並列に複数のAIエージェントを動かすことには、いくつかの具体的な課題が挙げられています。
+- <strong>コンテキストの同期とドリフト:</strong> 複数のエージェントがそれぞれ異なる「現実のバージョン」を持つようになり、同じ問題を非互換な方法で解決してしまう問題。共有の「グランドトゥルース」ファイルや、各エージェントが独立したドキュメントを持つことでこの問題に対処しようとする試みが紹介されています。
+- <strong>マージの衝突と認知的負荷:</strong> 複数のエージェントがコードベースに変更を加えることで発生するマージの衝突や、開発者自身のレビューとオーケストレーションにかかる認知的負荷が高い点が指摘されています。一部のシステムでは、スーパーバイザーエージェントがマージを処理する試みもありますが、その信頼性には疑問の声もあります。
+- <strong>高額な利用料:</strong> 並列エージェントの利用には、Claude Maxプランのような最上位のサブスクリプションが必要であり、トークン消費が非常に速いためコストがかかるという現実的な問題も挙げられています。</p>
+<h2>将来性と展望</h2>
+<p>AIエージェントによる開発の未来についても議論されています。
+- 現在のエージェントは中規模タスクで自己ループを回せるレベルに達したばかりであり、より多くのエージェントを人間が管理するには、全く異なるツールが必要になると考えられています。
+- 複数のエージェントを高い信頼性で動かせるようになるのは、早くても2026年半ば以降と予測されています。
+- より良いモデルの登場や、「エージェントがエージェントを管理する」といった新しい連鎖思考データの生成が、今後の進歩に不可欠だとされています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、AIエージェントを用いた並列ソフトウェア開発が、個人の生産性を劇的に向上させる可能性を秘めていることを示しています。多くの開発者が、これまで手付かずだったアイデアを実現し、社内ツールの改善に活用しているようです。しかし、同時にコンテキストの同期、マージの衝突、高い運用コストといった技術的・実用的な課題も浮上しています。これらの課題に対する解決策が模索されており、特にエージェント間の協調やオーケストレーションのための新しいツールやアプローチが、この分野の今後の発展の鍵となると考えられます。AIエージェントの技術はまだ初期段階にあり、その真のポテンシャルを引き出すには、モデル自体の改善と、人間とAIが協調するためのツールの進化が不可欠であることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
