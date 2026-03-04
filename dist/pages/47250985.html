@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Writes the Bugs? A Deeper Look at 125,000 Kernel Vulnerabilities - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Who Writes the Bugs? A Deeper Look at 125,000 Kernel Vulnerabilities</h1>
+        <div class="meta">
+            投稿日: 2026年03月04日 | ランク: 10
+        </div>
+        <a href="https://pebblebed.com/blog/kernel-bugs-part2" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Linuxカーネルのバグに関する分析記事について議論しています。多くのコメントは、記事の提示する指標やデータ解釈、そしてその行動への転換可能性について疑問を呈しています。</p>
+<h2>指標の妥当性と誤解を招く可能性</h2>
+<p>データドリブンな意思決定は、誤った解釈につながりかねないという懸念が示されています。特に「バグ導入上位5人を解雇する」といった単純な解決策は、 Linus Torvalds のような主要貢献者が含まれる可能性を例に挙げられ、滑稽なまでに極端な結論だとされています。また、LLMのようなトーンが、データの信頼性を損ねているという意見や、統計的なテストの欠如に対する不満も表明されています。</p>
+<h2>バグの種類と原因の複雑性</h2>
+<p>サブシステムごとのバグの性質や原因は多岐にわたり、一概に「バグ」として捉えることの限界が指摘されています。例えば、CANバスドライバーのバグライフタイムが長いことについて、品質の高い初期提出物だからこそ巧妙なバグが残るのか、あるいはシステムの多様性が低いゆえにバグが発現しにくいのかなど、複数の要因が考えられるとされています。</p>
+<h2>企業と独立開発者のバグ導入率</h2>
+<p>とあるユーザーは、記事のデータに基づいて、企業が独立した開発者よりもはるかに多くのバグを導入している可能性を指摘しています。これは、企業の「意図的なバグ導入」といった陰謀論めいた憶測まで生んでいます。ただし、この分析には統計的テストが行われておらず、さらなる検証が必要であるとされています。</p>
+<h2>まとめ</h2>
+<p>コメント全体を通して、Linuxカーネルのバグ分析記事に対して、その指標の表面性、データ解釈の複雑さ、そして行動への転換可能性について強い懐疑的な意見が表明されています。特に、単純なデータに飛びついて誤った意思決定をすることへの警鐘が鳴らされており、バグの根本原因や貢献者の役割をより深く理解することの重要性が強調されています。また、企業が独立開発者よりも多くのバグを導入している可能性を指摘する意見は、今後の議論の火種となるかもしれません。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
