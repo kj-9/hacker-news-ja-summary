@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Jido 2.0, Elixir Agent Framework - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Jido 2.0, Elixir Agent Framework</h1>
+        <div class="meta">
+            投稿日: 2026年03月05日 | ランク: 9
+        </div>
+        <a href="https://jido.run/blog/jido-2-0-is-here" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Elixirで構築されたエージェントフレームワーク「Jido」のバージョン2.0リリースに関するものです。作者であるmikehostetlerが発表し、BEAMアーキテクチャがエージェントワークロードに適しているという考えのもと、その機能と可能性について議論が交わされました。</p>
+<h2>BEAMとエージェントフレームワークの適合性</h2>
+<p>多くのコメントで、BEAM（Elixir/Erlangが動作するVM）がエージェントフレームワークに非常に適しているという意見が述べられています。BEAMの軽量性、並行処理能力、分散システム、そしてSupervisorによる耐障害性が、多数のエージェントを実行し、それらのライフサイクルを管理する上で理想的だとされています。JidoはBEAMの特性を活かし、ツール呼び出し、マルチエージェントサポート、複数の推論戦略、永続性、エージェントメモリなどの機能を提供しています。</p>
+<h2>LangChainとの関係性</h2>
+<p>Jidoと既存のLLMフレームワークであるLangChain（特にElixir版LangChain）との関係について質問がありました。Jidoの作者によると、当初Jido 1.0はElixir版LangChainをLLM呼び出しに使用していましたが、LLM APIの進化に対応するため、現在は専用のLLMクライアントパッケージ「ReqLLM」をJidoに深く組み込んでいるとのことです。これにより、JidoはLLMインタラクションからエージェントのライフサイクル管理まで、一貫した機能を提供しています。</p>
+<h2>Jidoの機能と運用上の課題</h2>
+<p>Jido 2.0は、ツール呼び出し、マルチエージェントサポート、ReActやTree of Thoughtなどの推論戦略、高度なワークフロー、永続性、エージェントメモリ、外部サービス連携のためのMCPとセンサー、そしてオブザーバビリティとデバッグ機能など、多岐にわたるエージェント機能を提供しています。また、エージェントフレームワークにおける運用上の課題（ツールの分離、時間/予算制限の強制、部分的な障害からの回復など）についても言及されており、BEAMのSupervisionモデルがこれらの解決に強力な適合性を持つと評価されています。</p>
+<h2>ウェブサイトのアクセス集中とコミュニティの反応</h2>
+<p>発表直後、Hacker NewsからのトラフィックによりJidoのウェブサイトがアクセス集中でダウンする事態が発生しました。作者はこれを「永遠の恥」と表現しつつも、予期せぬ成功として受け止めています。この一件は、JidoとBEAMベースのエージェントフレームワークへの関心の高さを示しています。多くのユーザーがJidoのリリースを歓迎し、既存のプロジェクトへの導入や、今後の開発への期待を表明しています。</p>
+<h2>まとめ</h2>
+<p>Elixirのエージェントフレームワーク「Jido」の2.0リリースは、BEAMアーキテクチャが持つ並行処理、耐障害性、分散システムの特性がエージェントワークロードに非常に適しているという認識を背景に、コミュニティから大きな注目を集めています。Jidoはツール呼び出し、マルチエージェント管理、多様な推論戦略、永続性といった豊富な機能を提供し、LangChainとは独立したLLMクライアント（ReqLLM）を統合することで、包括的なエージェント開発環境を構築しています。ウェブサイトへのアクセス集中は、JidoとElixirエコシステムにおけるエージェント技術への高い期待と関心を浮き彫りにしました。今後、JidoがBEAM上でどのような革新的なエージェントアプリケーションを生み出すか、大いに期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
