@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Moongate – Ultima Online server emulator in .NET 10 with Lua scripting - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Moongate – Ultima Online server emulator in .NET 10 with Lua scripting</h1>
+        <div class="meta">
+            投稿日: 2026年03月06日 | ランク: 2
+        </div>
+        <a href="https://github.com/moongate-community/moongatev2" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsの投稿は、ユーザーsquidleonがゼロから構築しているモダンなUltima Onlineサーバーエミュレータ「MoongateV2」についてのものです。現在は戦闘やスキルが未実装ながらも、強固な基盤が構築されており、早期の共有を目指しています。</p>
+<h2>MoongateV2の技術と特徴</h2>
+<p>投稿者squidleonは、ModernUO/RunUOといった既存のプロジェクトとは異なり、厳格なネットワーク/ドメイン分離、イベント駆動型ゲームループ、継承に依存しないアイテム階層、そしてゲームロジックの迅速なイテレーションのためのLuaスクリプティングを採用することで、アーキテクチャを一から再考したと述べています。現在の主な機能は以下の通りです。</p>
+<ul>
+<li><strong>クラシックUOクライアントの完全なパケットレイヤー:</strong> ログイン、移動、アイテム、モバイルに対応。</li>
+<li><strong>Luaスクリプティング:</strong> アイテムの挙動（ポーションの使用、ドアの開閉など）をC#の再コンパイルなしでLuaで定義可能。</li>
+<li><strong>セクター分割されたワールドとデルタ同期:</strong> 境界を越える際に新しいセクターのパケットのみを送信。</li>
+<li><strong>スナップショットベースの永続化:</strong> MessagePackを使用。</li>
+<li><strong>ソースジェネレータ:</strong> 自動DIワイヤリング、パケットハンドラ登録、Luaモジュール公開。</li>
+<li><strong>NativeAOTサポート:</strong> サーバーは単一のネイティブバイナリにコンパイル。</li>
+<li><strong>組み込みHTTP管理APIとReact管理UI。</strong></li>
+<li><strong>マップ静的データからの自動ドア生成。</strong></li>
+<li><strong>技術スタック:</strong> .NET 10, NativeAOT, NLua, MessagePack, DryIoc, Kestrel。</li>
+</ul>
+<p>今後の課題として、戦闘、スキル、天候統合、NPC AIが挙げられていますが、アーキテクチャの基盤が確立されているため、これらのシステムを追加する際に大規模な変更は不要であると強調されています。</p>
+<h2>UOの思い出とコミュニティ</h2>
+<p>多くのコメントがUltima Onlineへの深い郷愁と、プライベートサーバーでの経験を語っています。</p>
+<ul>
+<li><strong>ノスタルジーと永続性:</strong> 多くの「古参プレイヤー」が10代の頃の懐かしさを追いかけており、UOコミュニティが小さいながらも生き残っていることに喜びを感じています。公式のUOが今も稼働していること自体が「美しいと同時に狂気的」と表現されています。</li>
+<li><strong>家族でのプレイ:</strong> UOを子供と一緒にプレイするアイデアが提案されており、クラフト、ハウジング、ダンジョン探索などが家族向けとして最適だと述べられています。</li>
+<li><strong>プライベートサーバーと開発:</strong> UOや他のゲームのプライベートサーバーの tinkering（いじくりまわすこと）が、多くのコメント投稿者がプログラミングを始めるきっかけになったことが共有されています。</li>
+<li><strong>ModernUOとOutlands:</strong> 既存の成熟したエミュレータや、UO Outlandsのような大規模なカスタムサーバーの存在が言及されています。Outlandsは技術的に非常に印象的であるものの、一部のプレイヤーは「UOグラフィックのWoWのよう」と感じ、オリジナルのシンプルな魅力が失われていると意見を述べています。</li>
+</ul>
+<h2>「サーバーエミュレータ」という用語に関する議論</h2>
+<p>コメントの中で、「サーバーエミュレータ」という用語の適切性について興味深い議論が展開されています。</p>
+<ul>
+<li><strong>CS的な厳密な定義:</strong> 一部のユーザーは、伝統的なコンピュータサイエンスの定義では、これらのプロジェクトは「プロプライエタリなネットワークプロトコルの再実装」であり、「エミュレーション」とは異なるとしています。Sambaが「サーバーエミュレータ」と呼ばれないのに、なぜゲームではこの用語が使われるのかという疑問が呈されています。</li>
+<li><strong>コミュニティでの定着:</strong> 投稿者は、UO/MMOコミュニティではRunUOなどのプロジェクトが20年前にこの用語を使ったため、標準的な呼称として定着してしまったと説明しています。</li>
+<li><strong>投稿者の対応:</strong> この議論を受け、投稿者はGitHubのリポジトリとREADMEの記述を「サーバーエミュレータ」から「モダンなUltima Onlineサーバー」に更新しました。</li>
+</ul>
+<h2>UOのユニークなゲームデザインと現代MMOとの比較</h2>
+<p>Ultima Onlineのゲームデザインが現代のMMOといかに異なり、それが魅力であったかについて、深い考察が交わされています。</p>
+<ul>
+<li><strong>「一般人プレイヤー」の存在:</strong> UOでは、多くのプレイヤーがトップレベルの装備やスキルを持たなくても、漁師や仕立て屋として何ヶ月も有意義な体験をすることができました。強力なプレイヤーは有名人であり、そうでないプレイヤーも楽しんでいました。</li>
+<li><strong>「生きている世界」:</strong> 現代のMMOが「テーマパーク」で、誰もが同じ体験をするのに対し、UOは「生きている世界」であり、プレイヤーの役割はクエストマーカーではなく、自らの選択から生まれていました。</li>
+<li><strong>経済と社会構造:</strong> 採掘、鍛冶、釣りなどの非戦闘スキルでもお金を稼ぎ、プレイヤー経済に貢献できる真の経済が存在し、スキルキャップの概念がないことがその要因とされています。</li>
+<li><strong>プレイヤー間の摩擦とリスク:</strong> UOは平和なプレイヤーとPK（プレイヤーキラー）、盗賊などが共存する世界であり、家から一歩出ると常に危険が伴いました。この摩擦が、真の対立と高い緊張感を生み出し、ゲームに深みを与えていました。Trammelの導入（PvPのない安全地帯）は、多くのプレイヤーにとって「残念な日」とされています。</li>
+<li><strong>バグとコミュニティ:</strong> サーバー再起動後のレアアイテム争奪戦や、特定のバグが「機能」としてコミュニティに受け入れられた歴史も語られています。</li>
+<li><strong>非ゲーム化の魅力:</strong> 戦闘がゲームの主要な焦点である必要はなく、他の側面（農業、狩猟、動物の飼育など）も同様に魅力的なメカニクスであるべきだという意見も出ています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsの投稿とコメントは、squidleon氏による意欲的なUltima Onlineサーバー「MoongateV2」の発表を巡り、技術的な革新、UOというゲームへの深い愛情とノスタルジー、MMOにおけるゲームデザイン哲学の考察、そして「サーバーエミュレータ」という用語の定義に関する興味深い議論が繰り広げられた。特に、UOのユニークなプレイヤーエコノミー、PvPを含むプレイヤー間の摩擦、そして「生きている世界」としての魅力が、現代のMMOとは一線を画す体験として熱く語られている。プロジェクトはまだ初期段階ながら、そのクリーンなアーキテクチャとモダンな技術スタックがコミュニティから高く評価されており、今後の発展が期待されている。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
