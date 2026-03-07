@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compiling Prolog to Forth [pdf] - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Compiling Prolog to Forth [pdf]</h1>
+        <div class="meta">
+            投稿日: 2026年03月07日 | ランク: 6
+        </div>
+        <a href="https://vfxforth.com/flag/jfar/vol4/no4/article4.pdf" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーは、ForthでPrologを実装するという記事に対して、1980年代の技術的偉業、Forth言語の独特な特性、そしてPrologのWarren Machineとその実装に関連する「スレッド化されたコード」の概念について議論しています。</p>
+<h2>1980年代の技術的偉業と歴史的背景</h2>
+<p>コメントでは、1987年というインターネットやAIが未発達な時代に、ForthでPrologのような複雑なシステムが実装されたことに対し、大きな賞賛が寄せられています。特に、1986年の書籍「Designing and Programming Personal Expert Systems」（Feucht and Townsend著）が話題に挙がっています。この本は、Forthの上にLispを構築し、そのLispの上にPrologを、さらにPrologの上にエキスパートシステムを構築するという、多層的で意欲的なアプローチをとっていたことが特筆され、当時の技術者たちの知的な深さと工夫に感嘆する声が見られます。</p>
+<h2>Forth言語の特性とプログラマの思考への影響</h2>
+<p>Forthは非常にユニークな言語であり、他の多くの言語とは異なる思考様式をプログラマに促すと述べられています。低レベルのコードを簡単に「リフトアップ」して高レベルの概念にすることができる柔軟性が評価されています。あるユーザーは、NES（ファミリーコンピュータ）向けにForthを開発した経験を共有し、その構築の容易さとパフォーマンスに驚いたと述べています。現代のハードウェアで積極的にForthを使う機会は少ないかもしれないが、「Forthで考える」というスキルは、多くの開発者にとって価値のある学習体験であるという意見が提示されています。</p>
+<h2>PrologのWarren Machine (WAM) と「スレッド化されたコード」</h2>
+<p>PrologコンパイラであるWarren Machine (WAM) の実装が、本質的に「スレッド化されたインタープリター」であったという経験談が共有されました。この文脈での「スレッド化」は、今日のマルチスレッドとは異なる概念であり、命令ポインタの呼び出しチェーンを通じて制御を渡す「スレッド化されたコード」を指すことが説明され、関連する参考文献も提示されています。また、WAMの設計はシングルスレッド環境に強く依存しており、並列化は困難であるという詳細な考察も展開されています。Prologのカット（副作用を伴う操作）が存在する状況での並列処理の複雑さや、純粋性の概念を維持することの難しさ、そしてそれがもたらすオーバーヘッドについて議論されています。</p>
+<h2>まとめ</h2>
+<p>本コメントスレッドは、ForthでPrologを実装する記事から派生し、初期のコンピューティングにおける技術的創造性と知的挑戦に焦点を当てています。特に、ForthがLispやPrologといった複雑なシステムを構築するための強力な基盤となったこと、そして「Designing and Programming Personal Expert Systems」のような書籍が当時の技術的偉業を象徴していることが強調されています。Forthのユニークな特性、思考様式への影響、および学習価値が語られる一方で、PrologのWarren Machineと「スレッド化されたコード」に関する技術的な議論も深められ、その洗練された設計と並列化における課題が示されています。全体として、過去のプログラミングアプローチへの深い敬意と、その技術的洞察から現代が得るべき教訓が示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
