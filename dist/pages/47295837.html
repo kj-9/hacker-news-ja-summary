@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes on writing Rust-based Wasm - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Notes on writing Rust-based Wasm</h1>
+        <div class="meta">
+            投稿日: 2026年03月08日 | ランク: 9
+        </div>
+        <a href="https://notes.brooklynzelenka.com/Blog/Notes-on-Writing-Wasm" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、WebAssembly (WASM) をRustで記述する際の課題とベストプラクティスに関するコメントをまとめたものです。コメント欄では、WASMの現状、用途、将来性、そしてRustとの連携における特定の課題について活発な議論が展開されています。</p>
+<h2>タイトルと期待のミスマッチ</h2>
+<p>記事のタイトルが当初「Notes on Writing WASM」であり、多くの読者がWASMそのものについて、あるいはC/C++などの言語でのWASM記述について期待しましたが、実際の内容はRustと<code>wasm-bindgen</code>に特化していました。これにより、一部の読者は誤解を招いたと感じました。Hacker Newsのモデレーターチームが「with Rust bindgen」をタイトルに追加することで、この問題は解決されました。</p>
+<h2>WASMの現状と用途</h2>
+<p>WASMが当初想定されていた「ウェブ上での計算量の多いアルゴリズムの高速化」という役割から、「サンドボックス化されたコンポーネントの実行環境」へとマーケティングが変化していることに対する不満が表明されました。文字列のUTF-16（JS）とUTF-8（WASM/Rust）間の変換など、型システムの違いによる相互運用性の問題も指摘されています。</p>
+<p>一方で、WASMがブラウザ内でFigmaやMiroのようなクリエイティブ/生産性向上ツール、バックエンドではIstioやHelmなどのサンドボックス/プラグインシステムとして広く利用されていると指摘する声もあり、一部の意見が「WASMはニッチ」と過小評価している可能性も示唆されました。</p>
+<h2>WASMの歴史</h2>
+<p>WASMの起源は、Cコードをブラウザで実行するためのJavaScriptのサブセットである<code>asm.js</code>に遡り、さらにGoogleのNaCL/PNaCLまで遡ることが指摘されました。ブラウザメーカーがJSの制約から解放された専用のコンパイルターゲットを求めた結果、WASMが誕生したという経緯が説明されています。</p>
+<h2>RustとWASMの課題</h2>
+<p>RustでWASMを開発する際の具体的な課題がいくつか挙げられています。特に、<code>wasm-bindgen</code>のツールリングに関する不満や、Rustの厳格なコンパイラがゲームジャムのような開発速度が重視される場面で足かせになるという経験談が共有されました。また、C/C++プロジェクトでEmscriptenの<code>embind</code>を使うのと同様に、RustとJS間の自動バインディング（<code>wasm-bindgen</code>）は、単純なセッター/ゲッターのような細かい操作でJS/WASM境界を越えるたびに複雑さとオーバーヘッドを増やす可能性があるため、適切なバランスを見つけることが重要だとアドバイスされています。</p>
+<h2>WASM Component ModelとDOMアクセス</h2>
+<p>WASMから直接DOMにアクセスするための「WASM Component Model」の提案が議論されています。JSのグルーコードなしでDOMにアクセスできることは、開発体験の向上やパフォーマンスの改善につながると期待されています。特に、文字列変換におけるパフォーマンス向上がベンチマークで示されていますが、一部のコメントでは、WebGPUのようなWeb APIでは同様の改善が見込めない可能性や、WASM Component Modelがブラウザの複雑性を増すことへの懸念も表明されています。</p>
+<h2>WASMとGC言語</h2>
+<p>WASMがGC言語をサポートするようになったことについても言及されています。これにより、ブラウザのGCがDOM、JS、WASM間で連携できるようになり、より自然なメモリ管理が可能になると期待されています。しかし、データ転送時のコピーや、マルチスレッドの未サポートなど、まだ課題があることも指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、WASMの技術的側面と実用的な適用について多角的な議論が展開されました。記事のタイトルが誤解を招いたことから始まった議論は、WASMの進化、現状の利用状況、特にRustとの連携における課題、そして将来の展望へと広がりました。WASMは、当初の「ウェブ高速化」から「サンドボックス化された実行環境」へと役割が広がりつつありますが、文字列変換やDOMアクセス、GC言語のサポートといった相互運用性の課題が依然として存在します。WASM Component Modelのような新しい提案は、これらの課題を解決し、WASMの可能性をさらに広げるものとして期待されていますが、その複雑性や現実的なパフォーマンス向上については、慎重な意見も寄せられています。全体として、WASMは進化を続けているものの、開発者体験や特定のユースケースにおける成熟度にはまだ改善の余地があることが示されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
