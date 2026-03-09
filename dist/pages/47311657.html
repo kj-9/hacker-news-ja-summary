@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Terminal Use (YC W26) – Vercel for filesystem-based agents - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Terminal Use (YC W26) – Vercel for filesystem-based agents</h1>
+        <div class="meta">
+            投稿日: 2026年03月09日 | ランク: 5
+        </div>
+        <a href="https://news.ycombinator.com/item?id=47311657" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、エージェントをサンドボックス環境でデプロイし、ファイルシステムを必要とする作業（コーディングエージェント、研究エージェント、文書処理エージェントなど）を容易にするためのプラットフォーム「Terminal Use」に関するものです。特に、ファイルシステムの永続性とエージェントのライフサイクル管理に焦点を当てています。</p>
+<h2>既存インフラとの比較（Kubernetesなど）</h2>
+<p>多くのコメントで、既存のKubernetesインフラストラクチャを使ってエージェントをデプロイするのと比較し、Terminal Useのような新しいツールが必要なのかという疑問が提起されています。</p>
+<ul>
+<li><strong>Kubernetesの利点:</strong> Kubernetesは、プロセスやネットワークの分離、権限管理（SA/WIF、ADKフレームワーク）、ノードグループ管理、Podセキュリティポリシーなどを提供し、サンドボックス環境の実行に適しているという意見があります。また、CRDやオペレーターで拡張することも可能です。</li>
+<li><strong>Kubernetesの課題:</strong> 一方で、Kubernetesでユーザーごとのファイルシステムをバックアップするエージェントを運用するには、多くの「接着コード」（glue code）や複雑な設定（Helmチャート、CSIなど）が必要になると指摘されています。また、Kubernetesはコンテナの稼働を維持するのには優れているが、エージェントのロジックが正しく機能しているか、または「微妙に間違っている」かを推論するようには構築されていないという意見もあります。特に、モデルが誤った出力を返し、それに続くステップが「ゴミ」の上で実行されるようなケースでは、コンテナレベルではなくロジックレベルでのロールバックが必要になります。</li>
+<li><strong>エージェント特有の要件:</strong> エージェントは非決定論的なマイクロサービスのようなものであり、その行動の「爆発半径」が非常に広いため、管理やセキュリティの観点から抽象化が必要という意見があります。特に、タスクごとの認可スコープ、監視可能性、実行されたアクションの不変の記録といった「ポリシー」層の欠如が、既存のインフラでは解決されていない真のギャップであると指摘されています。</li>
+</ul>
+<h2>ファイルシステムと永続性</h2>
+<p>Terminal Useの主要な差別化要因の一つは、ファイルシステムをタスクのライフサイクルとは独立したファーストクラスのプリミティブとして扱っている点です。</p>
+<ul>
+<li><strong>永続的なワークスペース:</strong> ワークスペースはタスク間で永続化され、異なるエージェント間で共有したり、サンドボックスがアクティブでなくてもファイルをアップロード/ダウンロードしたりできます。</li>
+<li><strong>開発の容易さ:</strong> エージェントのロジックとファイルストレージが分離されているため、サンドボックス内のファイルを心配することなくエージェントのイテレーションが容易になります。バグがあった場合でも、既存のタスクを新しいデプロイメントに自動移行したり、破壊的変更があった場合は既存のタスクを古いバージョンに留めたりできます。</li>
+<li><strong>既存ツールとの比較:</strong> NFSツール（Archil、Daytona volumesなど）の利用について質問がありましたが、Terminal Useは現在のところ独自の実装を進めているものの、他のツールも検討する意向です。ArchilはNFSではなく独自のプロトコルで高いパフォーマンスを目指しており、ブランチ機能も計画しているとのことです。</li>
+</ul>
+<h2>エージェント管理とデプロイメント</h2>
+<p>Terminal Useは、エージェントのデプロイ、バージョン管理、タスク管理、メッセージの永続化、ワークスペースの永続化といった上位レイヤーに焦点を当てています。</p>
+<ul>
+<li><strong>CLIとCI/CD:</strong> シンプルなCLIデプロイメント、プレビュー/プロダクション環境、Gitベースの環境ターゲティング、ログ、ロールバックといった現代の開発者プラットフォームの影響を受けています。config.yamlファイルに必要な設定を格納することで、CI/CDパイプラインでの構築とデプロイを容易にします。</li>
+<li><strong>既存SDKのサポート:</strong> Claude Agent SDKやCodex SDKエージェントをサポートしており、独自のカスタムハーネスを使用することも可能です。フロントエンド向けにはVercel AI SDKプロバイダーがあります。</li>
+<li><strong>欠けている機能:</strong> 現時点では、一般的なサンドボックスプロバイダーとの完全な機能パリティはなく、プレビューURLや低レベルのsandbox.exec(...)スタイルのAPIはロードマップ上にあるとのことです。</li>
+</ul>
+<h2>エージェント利用とテスト</h2>
+<p>Terminal Useは、CLIコーディングエージェントの構築、テスト、イテレーションを支援するように設計されています。</p>
+<ul>
+<li><strong>テスト方法:</strong> ユーザーシナリオを記述したMarkdownファイルを作成し、Claude Codeにユーザーを模倣させてデプロイされたエージェントとチャットさせることで、エージェントのテストを行っています。</li>
+<li><strong>Docker-in-Docker:</strong> Docker-in-Docker環境のサポートはまだですが、短期的なロードマップにあり、当面は別のサービスを呼び出すことで対応しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Terminal Useは、サンドボックス環境で動作するAIエージェントのデプロイと管理に特化したプラットフォームです。ファイルシステムをタスクから独立した永続的なプリミティブとして扱い、エージェントのデプロイ、バージョン管理、メッセージ永続性、ワークスペース管理といった上位レイヤーの課題を解決しようとしています。多くの既存ユーザーがKubernetesのような汎用インフラとの比較で必要性を疑問視する一方で、Terminal Useの支持者は、エージェント特有の非決定性、タスクごとの認可スコープ、ロジックレベルでのロールバックの必要性など、Kubernetesが直接解決しない課題に焦点を当てています。特に、複雑な接着コードなしにエージェントのロジック開発に集中できる点や、永続的なワークスペース管理が提供する柔軟性が差別化要因として強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

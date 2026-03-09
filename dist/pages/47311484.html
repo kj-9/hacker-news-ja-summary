@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSLinux Now Supports x86_64 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">JSLinux Now Supports x86_64</h1>
+        <div class="meta">
+            投稿日: 2026年03月09日 | ランク: 2
+        </div>
+        <a href="https://bellard.org/jslinux/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、JSLinuxのようなブラウザベースのエミュレータの具体的なユースケース、オープンソースの代替技術やその比較、およびネットワークアクセスとセキュリティ上の懸念について活発な議論が交わされています。</p>
+<h2>JSLinuxおよびブラウザ内エミュレータの多様なユースケース</h2>
+<p>コメントでは、JSLinuxなどのブラウザ内エミュレータが様々な実用的な目的に利用できる可能性が挙げられています。
+*   <strong>教育目的:</strong> 大学の授業でLinuxコマンドラインを教えるために使用されたり、C/C++やシェルの学習環境として、インストール不要で手軽に利用できる点が指摘されています。
+*   <strong>開発・テスト:</strong> ローカルにインストールされているものとは異なるバージョンのコンパイラでコードのコンパイルテストを行ったり、VMを起動するよりも手軽に環境をテストする用途が示されています。また、IPレベルでのインターネット関連のテスト（nmap, sshなど）にも安価な方法として利用可能ですが、速度は制限されます。
+*   <strong>レガシーシステム・デモ:</strong> ソースコードのない古いソフトウェアをWeb上で提供し続けたり、個人の趣味で開発したOSをデモとして手軽に共有するのに役立つと述べられています。実際のハードウェアでのブートは難しい場合でも、ブラウザ環境なら容易に体験させることができます。
+*   <strong>エージェント・ワークロード:</strong> Agentic workloads（コードを生成して実行するAIエージェントなど）の実行環境として、通常のコンテナやVMよりも安全なサンドボックスとして適しているという意見があります。ブラウザが「最高のサンドボックス」であり、WebAssembly Linux上でエージェントループを動かすことが非常にクールなトリックになると考えられています。</p>
+<h2>オープンソースの代替と技術的側面</h2>
+<p>JSLinuxの技術的な側面や代替案についても議論されています。
+*   <strong>ソースコードの提供状況:</strong> オリジナルのJSLinuxについては、64-bit x86エミュレーション層のソースコードや、ホストされているイメージをコンパイルするための設定が公開されていない点が指摘されています。
+*   <strong>代替プロジェクト:</strong>
+    *   <code>container2wasm</code> はx86_64、riscv64、AArch64をサポートする、よりオープンソースなバージョンとして提案されています。
+    *   <code>v86</code> も完全にオープンソースの代替として言及されていますが、x86_64はまだサポートされていないことが指摘されています。
+*   <strong>比較と技術的課題:</strong> <code>TinyEmu</code>、<code>JSLinux</code>、<code>linux-wasm</code> などの比較について疑問が呈されており、WASMにはMMU（メモリ管理ユニット）が不足しているため、LinuxはNOMMU構成でビルドする必要があるという技術的な制約が述べられています。
+*   <strong>TempleOSの実行:</strong> ユーザーによって、x86_64 JSLinux上でTempleOSを動作させた事例も共有されています。</p>
+<h2>ネットワークアクセスとセキュリティ上の考慮事項</h2>
+<p>エミュレータのネットワーク機能とそれに伴うセキュリティ上の懸念も議論の対象となっています。
+*   <strong>インターネットアクセス:</strong> エミュレータ内からインターネットへのアクセスが可能であり、ポート25への任意のアウトバウンド接続を行うことができる点が注目されています。しかし、提供されている「Technical notes」ページには、WebSocket VPNを利用し、帯域幅が40kB/sに制限され、パブリックIPアドレスあたり最大2接続までという利用制限が明記されており、サービスの乱用を避けるよう呼びかけられています。
+*   <strong>サンドボックスとしての安全性:</strong> Agentic workloadsの実行に関して、通常の環境よりも安全なサンドボックスとしてブラウザエミュレータの利用が検討されています。その理由として、比較的まれな環境であるため既存の攻撃者が少ない、という点が挙げられていますが、一部では「誰も使っていない」ことがセキュリティの売りになることへの疑問も呈されています。</p>
+<h2>まとめ</h2>
+<p>JSLinuxや類似のブラウザ内エミュレータは、教育、ソフトウェア開発とテスト、レガシーシステムのホスティング、趣味のOSのデモ、そして特にAIエージェントの安全なサンドボックス環境といった多様な実用的なユースケースを提供しています。一方で、JSLinuxの一部のコンポーネントのソースコードの非公開性や、<code>container2wasm</code>や<code>v86</code>といったオープンソースの代替技術との比較、WASM環境におけるMMUの欠如といった技術的課題も議論されています。インターネットアクセスは可能ですが、帯域幅と接続数に制限があり、セキュリティ面では「攻撃者が少ない珍しい環境」という点が利点として挙げられる一方で、その真の安全性については継続的な議論が示唆されています。全体として、ブラウザ上で完全なOS環境をシミュレートする技術の可能性と課題が深く掘り下げられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
