@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg-over-IP – Connect to remote FFmpeg servers - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">FFmpeg-over-IP – Connect to remote FFmpeg servers</h1>
+        <div class="meta">
+            投稿日: 2026年03月10日 | ランク: 10
+        </div>
+        <a href="https://github.com/steelbrain/ffmpeg-over-ip" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p><code>ffmpeg-over-ip</code> は、GPUを持つマシン（サーバー）とGPUを持たないマシン（クライアント）の間でGPUアクセラレーション付きの動画変換を可能にするプロジェクトです。クライアントはローカルファイルシステムを提供し、サーバー上のパッチ適用済み<code>ffmpeg</code>がリモートのGPUを利用して変換を行います。これにより、ファイルシステムを共有する複雑な設定が不要になります。</p>
+<h2>プロジェクトの仕組みと利点</h2>
+<p><code>ffmpeg-over-ip</code>は、GPUを持つサーバーとGPUを持たないクライアントの2つのコンポーネントで構成されます。サーバー側で動作するパッチ適用済みの<code>ffmpeg</code>は、クライアントが確立したソケットを介してファイルI/Oリクエストを送信します。クライアントはそのリクエストをローカルで処理し、結果をサーバーに送り返します。この仕組みにより、<code>ffmpeg</code>はローカルファイルシステムとやり取りしていると認識するため、HLSなどの複数の入出力にも対応可能です。Plex、Jellyfin、Embyなどのホームメディアサーバーに最適で、GPUを必要とする動画変換タスクにおいて非常に有用です。以前のバージョンで課題となっていたファイルシステムの共有は不要になりました。</p>
+<h2>将来の展望と機能拡張</h2>
+<p>開発者は、プロジェクトの今後のロードマップとして、Windows向けにインストーラーとトレイアイコンを備えたアプリケーションの追加、およびLinux向けに<code>systemd</code>サービスインストールのためのヘルパー機能の追加を検討しています。これにより、ポートやパスワードの変更、自動起動の切り替えなどの基本的な設定が容易になることを目指しています。また、PeerTubeの「リモートランナー」機能からインスピレーションを得る可能性についても言及しており、分散コンピューティングにおけるメディア処理モデルに関心を示しています。</p>
+<h2>競合プロジェクトとの比較とベンチマークの要望</h2>
+<p>類似のプロジェクトとして<code>rffmpeg</code>が挙げられますが、<code>ffmpeg-over-ip</code>は、macOS、Windows、Linuxといった異なるOSを組み合わせることができ、<code>sudo</code>権限が不要であり、最も重要な点として共有ファイルシステムの設定が不要である点で異なります。<code>ffmpeg-over-ip</code>は<code>ffmpeg</code>にパッチを適用し、サーバー側で1つのポートを開くだけで動作します。ユーザーからは、プロジェクトの採用を促進するために、どのような場合に<code>ffmpeg-over-ip</code>が優れており、どのような場合にそうでないかを示すベンチマークセクションをREADMEに追加する要望が挙がっています。</p>
+<h2>その他の関連コメント</h2>
+<p>開発者は、<code>LemurCam</code>というmacOSアプリも紹介しています。これは市販のWi-FiカメラをZoomなどのWebカメラとして利用できるようにするもので、低遅延で軽量であると述べています。また、本プロジェクトの概念は、Plan 9の「cpu」コマンドが提供する機能、つまりリモートマシンにローカルファイルシステムを保ちながらCPUとハードウェアを利用する仕組みに類似しているという意見も出ています。</p>
+<h2>まとめ</h2>
+<p><code>ffmpeg-over-ip</code>は、GPUをリモートで活用してGPUアクセラレーション付きの動画変換を行うための革新的なソリューションです。パッチ適用済みの<code>ffmpeg</code>とクライアントによるファイルI/O処理のオフロードにより、複雑なファイルシステム共有を不要にし、PlexやJellyfinのようなホームメディアサーバーに特に有用です。今後はWindowsやLinux向けの利便性向上機能の追加が検討されており、ユーザーからは性能ベンチマークの提示や競合との明確な比較が求められています。このプロジェクトは、分散コンピューティングとメディア処理の分野で大きな可能性を秘めています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
