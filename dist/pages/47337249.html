@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Klaus – OpenClaw on a VM, batteries included - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Klaus – OpenClaw on a VM, batteries included</h1>
+        <div class="meta">
+            投稿日: 2026年03月11日 | ランク: 10
+        </div>
+        <a href="https://klausai.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Klaus AIは、複雑でセキュリティリスクが高いOpenClawのセットアップと運用を簡素化し、より安全に提供するホスト型サービスです。ユーザーは、その利便性、運用コスト、セキュリティ、そして特定の機能の動作について活発に議論しています。</p>
+<h2>Klausの価値提案と運用のメリット</h2>
+<p>Klausは、OpenClawの導入における障壁（クラウドVMやコンテナの設定、rootアクセスによるセキュリティリスク、OAuthアプリの作成）を解決するために開発されました。各ユーザーに専用のEC2インスタンスを提供し、OpenRouter、AgentMail、Orthogonalといった主要な連携サービスを事前設定しています。セキュリティ対策として、プライベートサブネットでの運用、OpenClawの自動アップデート、デフォルトでのキー漏洩リスクのKlaus側での管理などを行っています。ローンチ初期には、AIモデルが設定ファイルを破壊するといった問題に直面しましたが、SSMによる遠隔復旧、ホットフィックスと移行を容易にするコマンド＆コントロールサーバー、DiscordでのFAQ対応AIボットなどのインフラ改善を行いました。さらに、AI SRE「ClawBert」を開発。これはユーザーのインスタンスごとにデプロイされるClaude Codeインスタンスで、ヘルスチェックの失敗時やユーザーからの指示で自動的に修復やコマンド実行を行い、その実行ログはユーザーに公開されます。</p>
+<h2>コストとトークン消費の懸念</h2>
+<p>OpenClawの運用コスト、特にトークン消費は、多くのユーザーにとって予測が難しい大きな懸念です。コメントでは、数時間で$20,000相当のトークンを消費する可能性もあれば、ほとんど使わなければ$1以下に抑えられる可能性もあると述べられています。Klausの料金プランは月額$19からで、初回に$15分のトークンと$20分のOrthogonalクレジットが付与されますが、これらのクレジットがどれくらいの期間持つのか不明瞭であるとの意見がありました。Klausチームは、平均的なユーザーの月額総費用は約$50と見積もっており、安価または無料のモデルを利用することでコストを削減できると説明しています。ただし、OP自身は高機能なClaude Opusを多用し、月$500程度のトークン費用がかかると明かしています。</p>
+<h2>セキュリティとデータプライバシー</h2>
+<p>KlausのようなAIエージェントサービスにおけるセキュリティとデータプライバシーは、中心的な議論のテーマです。ユーザーは、OpenClawがVMのrootアクセス権を持つことよりも、Google、AWS、GitHubなどの重要なクレデンシャルへのアクセスがより大きなリスクであると指摘しています。Klausは多層防御の考え方を取り入れ、デフォルトで個人データへのアクセスを最小限に抑えています。例えば、個人データにアクセスしない「AgentMail」を通じたメール機能を提供し、ユーザーがGoogle Workspaceなどのサービスを接続する場合でも、リスクをユーザーがコントロールできるよう配慮しています。AI SRE「ClawBert」についても、各ユーザーインスタンスに専用のClawBertが割り当てられ、スコープされたクレデンシャルで実行されるため、クロスコンタミネーションやデータ漏洩のリスクは低いと説明されていますが、プロンプトインジェクションによる悪用の可能性は引き続き議論されています。</p>
+<h2>OpenClaw/Klausの機能とユースケース</h2>
+<p>Klausは、OpenClawのセットアップを困難と感じる非技術者層を主なターゲットとしています。OpenClawとClaude Codeとの比較では、Claude Codeが主にコード生成に特化しているのに対し、OpenClawはTelegram/メッセージでの対話、スケジュールタスクの実行、豊富なオープンソースコミュニティが提供するスキル、自己構築・自己修正能力といった汎用的なAIエージェント機能を提供すると説明されています。具体的なユースケースとしては、営業活動でのリード情報取得、顧客やビジネスのリサーチ、ウェブサイト構築などが挙げられています。しかし、一部のユーザーからは、KlausのUIで有効化したにもかかわらずBrowser機能が動作しない、Canvasへの出力が空になるなど、「ただ動く」ことが期待される機能が期待通りに動作しなかったという初期の不具合も報告されています。</p>
+<h2>ユーザーからのフィードバックと改善点</h2>
+<p>初期ユーザーからは、Klausの「ワンクリックセットアップ」という目標は達成されているものの、サービス全体の使いやすさに関して改善点が挙げられています。特に、期待通りに機能が動作しない場合のデバッグの難しさ（SSHでの確認が必要になるなど）、そしてOpenClawのトークン消費の高さによる予期せぬ出費が問題視されました。説明資料がOpenClawに詳しい人向けに書かれているとの指摘を受け、Klausチームは非技術者層向けに、より明確なユースケースの提示や総所有コスト（TCO）の推定、そしてメモリ効率の良いエージェント設定や具体的な使用ガイダンスの提供に取り組む必要性を認識しています。</p>
+<h2>まとめ</h2>
+<p>Klaus AIは、OpenClawの導入と運用をシンプルにし、セキュリティを強化することで、より多くのユーザーがAIエージェントの力を活用できるようにすることを目指しています。専用のホスト型VM、事前設定されたツール、そしてAIを活用した運用自動化（ClawBert）は、OpenClawの複雑さを解消する有望なアプローチです。しかし、高額なトークン消費、未解決のセキュリティリスク（特にクレデンシャル管理）、そして機能が期待通りに動作しない場合のユーザー体験の課題が指摘されています。Klausチームはこれらのフィードバックに基づき、非技術者層への情報提供の改善、安定した「すぐに使える」体験の提供、そしてコストとセキュリティリスクの透明性向上に注力していくことが、今後の成功にとって不可欠となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

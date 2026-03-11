@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Making WebAssembly a first-class language on the Web - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Making WebAssembly a first-class language on the Web</h1>
+        <div class="meta">
+            投稿日: 2026年03月11日 | ランク: 3
+        </div>
+        <a href="https://hacks.mozilla.org/2026/02/making-webassembly-a-first-class-language-on-the-web/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、WebAssembly (Wasm) とそのコンポーネントモデルがウェブ開発において抱える課題と可能性について議論しています。特に、WasmがJavaScript (JS) と同等の「ファーストクラス市民」になるためにDOM（Document Object Model）への直接アクセスが必要であるという点が焦点となっています。</p>
+<h2>WasmとDOMアクセスの課題</h2>
+<p>多くのコメントは、WasmがDOMに直接アクセスできない現状の課題を指摘しています。現在はJSのグルーコード（JavaScript Shim）を介してDOMにアクセスする必要があり、これがパフォーマンスオーバーヘッドや開発体験の複雑さ（「Wasmの崖」）を引き起こしています。
+*   <strong>パフォーマンスの向上</strong>: 文字列マーシャリングを2倍速くするなど、パフォーマンス向上の可能性が言及されていますが、WebGPUやWebGL2のようなAPIでは、API実装内の時間と比較してJSシムの時間はすでに無視できるレベルであるため、劇的なスピードアップは期待できないとの意見もあります。しかし、DOMアクセスは多くのアプリケーションで大きなボトルネックであるため、DOMアクセスが速くなるだけでも「絶大な恩恵」だという意見も存在します。
+*   <strong>開発体験の改善</strong>: Wasmの現状の開発体験は「始めるのが非常に難しい」とされており、DOMへの直接アクセスやネイティブコンポーネントのサポートが改善されることで、より多くの開発者がWasmを利用しやすくなることが期待されています。グルーコードが不要になることで、言語が共通のJSグルーに合意する必要がなくなり、DOMと直接対話できるようになることが最大のメリットだと考えられています。
+*   <strong>複雑性の懸念</strong>: コンポーネントモデルの導入が新たな複雑性を引き起こす可能性も懸念されています。特に、様々な言語での実装例を見ると、ツールチェインや出力の煩雑さが指摘されており、この複雑性が解消されなければ、単に複雑性を別の場所にシフトするだけになってしまうという意見もあります。</p>
+<h2>Wasmの適性と将来性</h2>
+<p>Wasmがウェブにおける「ファーストクラス市民」になるべきかどうか、そしてその適性について議論が分かれています。
+*   <strong>Wasmを批判する意見</strong>:
+    *   <strong>抽象化の不適合</strong>: JavaScriptは動的型付けであり、オブジェクト指向であるため、ブラウザ内のオブジェクトを扱うのに適しているのに対し、Wasmは静的型付けで線形メモリを基本とするため、ウェブには不向きであるという意見があります。Wasmがガベージコレクション（GC）を持つオブジェクトをサポートしても、それはネイティブコンパイラのターゲットとしてのWasmの主要な特徴を損なうと主張されています。
+    *   <strong>既存のウェブとの乖離</strong>: ウェブの大部分はJavaScriptで構築されており、Wasmエンジンを無効にしてもほとんどのウェブサイトの体験が損なわれない現実が指摘され、Wasmはウェブ上で「二級市民」のままだと予測されています。
+*   <strong>Wasmを擁護する意見</strong>:
+    *   <strong>サンドボックス化された環境としての優位性</strong>: Wasmはサンドボックス化されており、信頼できないコードを実行するために設計されているため、JSよりも適していると反論されています。
+    *   <strong>言語移植性</strong>: JS以外の多くのコード資産をウェブに持ち込むことができ、JSは多くの言語にとって優れたコンパイルターゲットではないため、Wasmは言語の移植性において大きな利点を持つとされています。GoogleがJavaをWasm-GCにコンパイルすることでメモリと速度の改善を得た例が挙げられています。
+    *   <strong>特定の用途での成功</strong>: FigmaやUnity Player、Google Earthなどの重いアプリケーションではWasmがすでに広く使われており、計算パフォーマンスがJSでは不十分な場合に唯一の実行可能なパスとなっています。Wasmは「ウェブ上の役立たず」ではなく、多くの主要なアプリケーションやライブラリで使用されており、ウェブページの約6%がWasmを使用しているというデータも提示されています。
+    *   <strong>ツールの成熟と普及</strong>: Wasmはまだ発展途上であり、開発者体験が改善されれば、より幅広い採用が進むと期待されています。</p>
+<h2>セキュリティと懸念事項</h2>
+<p>WasmがDOMに直接アクセスできるようになることのセキュリティ上の影響についても議論があります。
+*   <strong>新たなリスクの導入</strong>: 一部のコメントでは、JSエンジンでのセキュリティバグが減少している中で、WasmにDOMアクセスを許可することで新たな、よりリスクの高い実行パラダイムを導入することへの懸念が表明されています。WasmがJSと同じくらい徹底的に検証されておらず、新しい攻撃ベクトルが生じる可能性があるという意見です。
+*   <strong>既存のセキュリティ基盤との共有</strong>: WasmはJSと多くのサンドボックス化インフラストラクチャを共有しており、JSよりも表面積が小さいと主張する意見もあります。したがって、WasmがDOMに直接アクセスできるようになっても、JSと同程度かそれ以下のリスクであるという見方です。また、過去のJavaやFlashとは異なり、Wasmは危険なコンポーネントを持たず、JSのサンドボックス内に留まるため、同等の危険性はないと説明されています。
+*   <strong>悪用と難読化</strong>: Wasmが難読化やマルウェアに利用される可能性も指摘されていますが、JSの難読化と比べてWasmの難読化はリバースエンジニアリングが容易であるという反論もあります。</p>
+<h2>まとめ</h2>
+<p>WebAssemblyのコンポーネントモデルとDOMへの直接アクセスは、ウェブ開発の大きな一歩として期待されています。これにより、既存のJavaScriptグルーコードによるパフォーマンスのオーバーヘッドや開発の複雑さが解消され、Wasmがウェブ上で真の「ファーストクラス市民」となる可能性を秘めています。特に、重い計算処理やクロスプラットフォームなコードベースを持つアプリケーションにおいて、Wasmの利点がさらに活かされるでしょう。</p>
+<p>しかし、その実現には、ツールチェインの複雑性、既存のJavaScriptエコシステムとの整合性、そして新たなセキュリティリスクへの対処など、まだ多くの課題が残されています。WasmはJavaScriptと競合するものではなく、それぞれの得意分野で共存し、ウェブプラットフォーム全体の可能性を広げるものとして期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
