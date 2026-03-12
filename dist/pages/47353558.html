@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: OneCLI – Vault for AI Agents in Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: OneCLI – Vault for AI Agents in Rust</h1>
+        <div class="meta">
+            投稿日: 2026年03月12日 | ランク: 9
+        </div>
+        <a href="https://github.com/onecli/onecli" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、AIエージェントにAPIキーを安全に提供するためのOneCLIというオープンソースゲートウェイに関するものです。OneCLIは、エージェントとサービス間のプロキシとして機能し、実際の資格情報をエージェントから隠蔽し、プレースホルダーキーを使用します。</p>
+<h2>OneCLIの目的と仕組み</h2>
+<p>OneCLIは、AIエージェントに直接APIキーを与えることによるセキュリティリスクを解決するために開発されました。エージェントはプレースホルダーキーを使用し、OneCLIがリクエストを傍受し、適切な資格情報に置き換えて転送します。これにより、エージェントが実際のシークレットに触れることがなくなります。Rustで書かれたプロキシとNext.jsのダッシュボードで構成され、AES-256-GCMで暗号化されたシークレットが使用されます。</p>
+<h2>課題と議論</h2>
+<h3>プレースホルダーキーの誤検知</h3>
+<p>プレースホルダーキーが企業のスキャンツールで偽陽性を引き起こす可能性があるという懸念が示されました。開発者は、現在のプレースホルダーはシークレットスキャナーをトリガーしないと考えていますが、問題があれば調整可能だとしています。</p>
+<h3>TLS暗号化とプロキシの機能</h3>
+<p>TLS暗号化されたトラフィックをプロキシがどのように処理するのか、という質問に対して、MITM（中間者攻撃）プロキシとして機能することが示唆されました。この場合、プロキシの証明書をトラストストアに追加する必要があるとの指摘がありました。</p>
+<h3>既存のシークレットストアとの連携</h3>
+<p>1Passwordのような既存のシークレットストアとのアダプターの有無について質問がありましたが、現状ではサポートされていません。</p>
+<h3>HTTP_PROXYのサポートと透明プロキシ</h3>
+<p>一部のシステム（特にNode）は<code>HTTP_PROXY</code>環境変数を尊重しないため、透明（MITM）プロキシを導入し、エージェントコンテナの証明書ストアにプロキシ証明書を注入するアプローチが共有されました。これにより、すべてのリクエストをプロキシ経由にリダイレクトし、SSL通信も傍受できるようになります。</p>
+<h3>既存のソリューションとの比較</h3>
+<p>Hashicorp VaultやAWS Secrets Managerのような既存のシークレット管理ツールとの比較が何度も行われました。Vaultを利用すればエージェントに直接キーを渡さずに済むという意見に対し、OneCLIはエージェントがキーを「見る」ことなく、リクエスト時にリアルタイムでキーを注入する点でより安全であるという反論がありました。また、代理処理領域における多くの問題と解決策は、エージェント特有のものではなく、認証プロキシとして以前から存在していたという指摘もあります。</p>
+<h2>セキュリティに関する懸念と改善提案</h2>
+<h3>実際のAPIキーへのアクセス防止</h3>
+<p>OneCLIはキーの漏洩を防ぐ一方で、エージェントが依然として任意のAPIコールを行えるため、コスト発生やセキュリティ問題、プロダクションデータの削除などのリスクが残るという懸念が示されました。</p>
+<h3>短期間トークンとスコープの重要性</h3>
+<p>一部のコメントでは、エージェントごとに短期間の派生トークンを使用し、タスクの完了時に失効させる「短期間トークンモデル」が推奨されています。OneCLIのようなプロキシは、AWS IAMのようなきめ細かい権限管理をサポートしないSaaS APIにおいて、リクエストごとのスコープ強制を可能にする点で有用だと指摘されています。</p>
+<h3>チームでの利用とアクセス制御</h3>
+<p>OneCLIは単一マシンではうまく機能するが、チーム環境、CI/CDパイプライン、複数の開発者、および監査証跡の点で課題があるという意見がありました。これには、Vaultをバックエンドとし、グループベースのアクセス制御とリクエストごとのHMAC署名コールを使用する「ファントムトークンパターン」が提案されています。</p>
+<h2>まとめ</h2>
+<p>OneCLIは、AIエージェントにAPIキーを安全に提供するためのオープンソースゲートウェイであり、エージェントが実際のシークレットに直接アクセスできないようにすることで、資格情報の漏洩リスクを軽減します。このアプローチは、特にきめ細かいアクセス制御をネイティブでサポートしないSaaS APIに対して、リクエストごとのスコープ強制を可能にする点で評価されています。しかし、透明プロキシの実装、既存のシークレット管理システムとの競合、そしてエージェントが依然として不正なAPIコールを行うリスクへの対応など、いくつかの課題や議論点があります。コメントスレッドでは、短期間トークンの使用、既存のツールとの連携、チーム環境でのアクセス制御と監査機能の必要性など、さらなるセキュリティ強化のための様々なアプローチや改善点が提案されており、AIエージェントの安全な利用における認証・認可の複雑さと重要性が浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
