@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUI Studio – visual terminal UI design tool - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">TUI Studio – visual terminal UI design tool</h1>
+        <div class="meta">
+            投稿日: 2026年03月13日 | ランク: 7
+        </div>
+        <a href="https://tui.studio/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このプロジェクトは、テキストベースのユーザーインターフェース（TUI）を設計するためのツールです。Hacker Newsのコメントでは、その斬新さ、TUIとGUIの境界線、AIによる生成、ツールの実用性について活発な議論が交わされています。</p>
+<h2>プロジェクトの評価と期待</h2>
+<p>多くのコメントは、このツールのアイデアを「驚くほどクール」「非常に独創的」と評価しています。特に、FigmaのようなビジュアルツールでTUIをデザインできるというコンセプトに感銘を受けている人が多く、GitHubの星の少なさに驚きを示す声もあります。ウェブサイトのUIデザインも高く評価されています。</p>
+<h2>TUIとGUIの境界線</h2>
+<p>最も活発な議論の一つは、このツールが生成するUIが「TUI」と呼べるのかどうかという点です。
+*   <strong>「GUIを模倣したTUI」という批判</strong>: 一部のユーザーは、マウスでクリック可能なタブ、ボタン、チェックボックスなどのGUI要素を取り入れることで、TUI本来のUX（キーボード中心の操作、効率性、シンプルさ）が失われ、「低解像度のGUI」になっていると批判しています。彼らは、<code>top</code>や<code>elm</code>のような初期のTUIや、Borland Turbo Visionのようなキーボード操作に最適化された古いDOSアプリケーションを例に挙げ、マウス操作が前提のUIはTUIの目指すところではないと主張しています。
+*   <strong>「TUIの進化形」という擁護</strong>: 他のユーザーは、TUIとGUIの区別は恣意的であり、最終的にはすべて画面上のピクセルであると反論しています。現代のTUIはマウスイベントをサポートすることがあり、このツールが複数のTUIフレームワークへのエクスポートを目指していることが、これらがTUIであることを証明していると述べています。SSH経由でのリモートアクセスやリソース消費の低減といったTUIの利点を挙げつつ、マウスサポートはTUIのUXを向上させる可能性があると主張しています。</p>
+<h2>AIによる生成と実装の懸念</h2>
+<p>このプロジェクトはAIによって「vibe-coded」されたものであるとされており、これに対して賛否両論があります。
+*   <strong>批判的な意見</strong>: コードのエクスポート機能がまだ動作しないことが指摘されており、「実用性がない」「単なる粗雑なモックアップ」という批判があります。AI生成のウェブサイトによく見られる過度なアニメーションやCPU負荷の高さ、一部のUI要素のクリック不能なども問題視されています。一部のユーザーは、AI生成による低品質なプロジェクトがHacker Newsのフロントページに載ることを懸念しています。
+*   <strong>擁護的な意見</strong>: AIがソフトウェア開発において今後一般的になるという見方や、AIがアイデア出しやプロトタイピングの段階で有用であるという意見もあります。また、たとえ現時点では機能が限定的でも、デザインのレイアウト作成自体は価値があるという声もあります。</p>
+<h2>TUIの必要性と代替案</h2>
+<p>TUIの必要性自体についても議論されています。
+*   <strong>TUIの利点</strong>: SSH経由でのリモートアクセス、tmux内での作業継続、CPU/メモリ負荷の低減、WebブラウザやGUIツールよりも「メンタルロードを軽減する」点がTUIのメリットとして挙げられています。また、TUIはWebブラウザとは異なりアクセシビリティ、レイテンシー、肥大化の問題を回避できるという意見もあります。
+*   <strong>代替案と批判</strong>: TUIの複雑さが増すのであれば、WebベースのUIや、SSH経由でポートフォワーディングしてWeb UIをローカルで表示する方が良いという意見もあります。また、TUIのアクセシビリティの低さを指摘し、ターミナルエミュレータがWebviewを直接提供するか、CLIがミニWebサーバーを提供することを提案する声もあります。一部のユーザーは、近年のTUIブームを「COBOLメインフレームアプリへのノスタルジー」や「セカンドハンドのサイバーパンクのロールプレイ」と批判しています。</p>
+<h2>まとめ</h2>
+<p>このTUIデザインツールは、「ターミナル版Figma」という独創的なアイデアでHacker Newsの注目を集めました。しかし、TUIとGUIの境界線に関する根本的な議論や、AIによって「vibe-coded」されたプロジェクトの実用性、そして一部の機能（コードエクスポートなど）が未実装である点について、賛否両論が巻き起こっています。多くのユーザーはアイデアの可能性を評価しつつも、現在の実装の未熟さやTUIに対するUXの考え方の違いから、様々な懸念を表明しています。将来的にこれらの課題が解決され、実際にTUI開発の効率を大幅に向上させるツールとなるかどうかに注目が集まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
