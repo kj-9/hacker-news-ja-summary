@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassworm Is Back: A New Wave of Invisible Unicode Attacks Hits Repositories - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Glassworm Is Back: A New Wave of Invisible Unicode Attacks Hits Repositories</h1>
+        <div class="meta">
+            投稿日: 2026年03月15日 | ランク: 8
+        </div>
+        <a href="https://www.aikido.dev/blog/glassworm-returns-unicode-attack-github-npm-vscode" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にGitHubのリポジトリで発見された、目に見えないUnicode文字と<code>eval()</code>関数を利用したJavaScriptコードの難読化攻撃について議論しています。</p>
+<h2>攻撃と検出</h2>
+<p>難読化されたJavaScriptコードは、ゼロ幅文字と<code>eval()</code>関数を組み合わせて悪意のあるペイロードを隠していました。多くのコメント投稿者は、<code>eval()</code>の使用自体が大きな危険信号であり、コードレビューで捕捉されるべきだと指摘しています。しかし、目に見えない文字が使われているため、人間によるコードレビューでは見落とされやすいという問題も提起されています。検出ツールやLintルールの導入が提案されており、特にGitHubのようなプラットフォームが、このような不可視文字のスキャンと警告を行うべきだという意見が多く見られました。</p>
+<h2><code>eval()</code>の使用</h2>
+<p><code>eval()</code>はJavaScriptでコードを実行するために使われる機能で、その使用はセキュリティ上の大きなリスクを伴うため、強く非推奨とされています。過去にはJSONの読み込みに使われていた時期もありましたが、現在では<code>JSON.parse()</code>のような安全な代替手段が存在します。コメントでは、<code>eval()</code>を使うこと自体が「レッドフラグ」であり、その使用が正当化されるケースは極めてまれであるという点で広く合意されています。一部のコメントでは、<code>eval()</code>の使用が常識では考えられないことだと指摘されています。</p>
+<h2>Unicodeと不可視文字</h2>
+<p>多くのコメントが、コードベースにおける不可視Unicode文字の使用について議論しています。一部のユーザーは、コードには目に見えるASCII文字のみを許可すべきだと主張し、不可視文字（特にゼロ幅文字）はUnicodeから排除されるべき「忌まわしいもの」だとさえ述べています。これは、これらの文字が難読化攻撃に悪用される可能性があるためです。しかし、他のユーザーは、アラビア語やヘブライ語のような多くの言語の正しい表示や高度な組版のために、Unicodeの不可視文字が必要であると反論しています。また、Unicodeは見た目ではなくセマンティックな意味を重視しており、異なる言語の似たような文字を区別するために必要であるという意見も出ています。</p>
+<h2>GitHubの責任</h2>
+<p>コメントの多くは、GitHubのようなコードホスティングプラットフォームが、このような目に見えない文字による攻撃を防ぐために何らかの対策を講じるべきだと強く主張しています。GitHubの「シークレットスキャン」機能のように、不可視文字の使用を検出し、開発者に警告する機能を提供すべきだという意見です。これは、単に「お金とコストと価値」の問題としてではなく、「プロダクトをより良くする」という開発者の本質的な責任として語られています。GitHubが「ダムパイプ」であると主張するだけでは不十分であり、ユーザーを保護する責任があると指摘されています。</p>
+<h2>まとめ</h2>
+<p>今回のHacker Newsのコメントは、不可視Unicode文字と<code>eval()</code>関数を悪用したJavaScriptの難読化攻撃に焦点を当て、その検出の難しさ、<code>eval()</code>の危険性、Unicode文字の適切な使用法、そしてコードホスティングプラットフォームのセキュリティに対する責任について活発な議論が展開されました。特に、<code>eval()</code>の使用が常に警戒すべきレッドフラグであること、そしてGitHubのようなプラットフォームが、人間の目には見えない脅威から開発者を保護するためのツールを導入すべきだという意見で多くの人が一致しています。一方で、Unicodeの設計哲学（セマンティクス重視）と、多言語サポートにおける不可視文字の必要性についても重要な議論が提起されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

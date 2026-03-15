@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Separating the Wayland compositor and window manager - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Separating the Wayland compositor and window manager</h1>
+        <div class="meta">
+            投稿日: 2026年03月15日 | ランク: 3
+        </div>
+        <a href="https://isaacfreund.com/blog/river-window-management/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Waylandのアーキテクチャ、特にウィンドウマネージャー（WM）とコンポジターの分離に関する記事について議論しています。多くのユーザーが、Waylandの設計がX11に比べてWMの作成を難しくしていると感じており、この問題に取り組む「River」のようなプロジェクトの重要性を強調しています。</p>
+<h2>WaylandのアーキテクチャとX11との比較</h2>
+<p>Waylandの設計がX11とどのように異なるかについて、いくつかの議論があります。</p>
+<ul>
+<li><strong>カーネルへの依存</strong>: Waylandのコンポジターは、X11がかつてGPUドライバーとして機能していた時代とは異なり、カーネルの機能を大幅に利用しています。これにより、コンポジターの記述はX11時代よりも「はるかに単純」になったという意見があります。しかし、X11も現代ではDRM（Direct Rendering Manager）を利用しており、この比較は90年代のX11について話しているという批判もあります。</li>
+<li><strong>WMとコンポジターの結合</strong>: Waylandの主要な設計特徴の一つは、ウィンドウマネージャーとコンポジターが密接に結合されている点です。これにより、X11で発生する可能性のある「フレームのずれ」による視覚的なアーティファクトを防ぐことができます。しかし、これはX11のように独立したプラグイン可能なWMを作成することを難しくしているという意見が多いです。</li>
+<li><strong>抽象化レイヤー</strong>: X11はカーネルのドライバーの上に独自の抽象化レイヤーを持っていましたが、Waylandはカーネルのビルトイン抽象化を利用しているため、よりシンプルで革新的なシステムを可能にしていると評価されています。</li>
+</ul>
+<h2>ウィンドウマネージャーの分離の困難さ</h2>
+<p>Waylandでは、X11のように簡単にプラグイン可能なWMを作成できないことが大きな課題として挙げられています。</p>
+<ul>
+<li><strong>WM開発の複雑さ</strong>: WaylandでWMを開発するには、wlrootsのようなライブラリを使っても、X11のWMを開発するよりもはるかに難しいと感じられています。これは、WaylandではWMがクライアントと同じプロトコルを話すことができず、独立したプロセスとして実行できないためです。EmacsのEXWMのような例は、X11では可能でしたが、Waylandでは独立したコンポジターの再実装が必要になります。</li>
+<li><strong>モノリシックな設計</strong>: Waylandの主要なコンポジター（Gnome、KDEなど）はwlrootsベースではないため、WMの分離がさらに困難になっています。ユーザーは、望む機能を有効にするために、コンポジターがその機能を「配線」している必要があると感じています。</li>
+<li><strong>開発の障壁</strong>: 新しいWMやDEの開発者にとって、Waylandの設計は初期の学習コストやイテレーションの障壁となっているという意見があります。</li>
+</ul>
+<h2>Riverのようなプロジェクトへの期待</h2>
+<p>記事で取り上げられている「River」のようなプロジェクトは、WaylandのWMとコンポジターの分離に関する問題に取り組んでおり、これに大きな期待が寄せられています。</p>
+<ul>
+<li><strong>モジュール性の改善</strong>: Riverのようなプロジェクトが、WaylandのコンポジターとWMの分離を可能にすることで、よりモジュール的でプラグイン可能なデスクトップ環境への道を開く可能性があります。</li>
+<li><strong>イノベーションの促進</strong>: コンポジターの複雑さをWMから分離することで、ユーザーはより簡単に独自のWMを作成し、新しいアーキテクチャやプラグインシステムを実験できるようになります。これはWaylandのエコシステムにおけるイノベーションを促進すると考えられています。</li>
+<li><strong>ユーザー体験の向上</strong>: ユーザーが自分の望むWMをより自由に選択・カスタマイズできるようになることで、現在のWaylandが抱える「柔軟性の欠如」という問題を解決し、ユーザー体験を向上させることが期待されています。</li>
+</ul>
+<h2>Waylandのその他の課題と利点</h2>
+<p>Waylandの議論では、WMの分離以外にも様々な側面が取り上げられています。</p>
+<ul>
+<li><strong>特定の機能の欠如</strong>: X11では当たり前だったスクリーンショットやグローバルなホットキーなどの機能が、Waylandでは当初欠けており、後から実装されました。これにより、初期の採用者にはフラストレーションが生じました。</li>
+<li><strong>マルチモニターとHiDPI</strong>: Waylandは、異なるスケーリング要件を持つマルチモニター環境や、分数スケーリングによるHiDPIサポートにおいて、X11よりも優れた体験を提供できるという利点が挙げられています。</li>
+<li><strong>セキュリティと安定性</strong>: Waylandの設計は、X11よりもセキュリティが高く、視覚的なアーティファクトが少ないという利点があります。スクリーンショットなどのシステムは、コンポジターに直接組み込まれ、承認されたプログラムのみが画面の一部にアクセスできるようにすることで、より安全なモデルを提供します。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、WaylandがX11に比べて現代的なメリット（セキュリティ、HiDPI、VRR、HDRサポートなど）を持つ一方で、ウィンドウマネージャーの柔軟性という点で大きな課題を抱えていることを浮き彫りにしています。特に、WMとコンポジターが密接に結合されているWaylandの設計は、X11のように簡単にプラグイン可能なWMを開発することを難しくしており、多くのユーザーがこの点を「Waylandの設計における致命的な弱点」と見ています。</p>
+<p>記事で言及されているRiverのようなプロジェクトは、この課題を解決し、WaylandエコシステムにおけるWMのモジュール化とイノベーションを促進する可能性を秘めているとして、大きな期待が寄せられています。ユーザーは、WaylandがWMの分離問題を解決できなければ、X11を使い続けるという強い意志も示しており、この問題がWaylandの広範な採用にとって重要な分岐点となっていることがわかります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
