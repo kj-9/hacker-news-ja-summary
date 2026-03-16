@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Voygr (YC W26) – A better maps API for agents and AI apps - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Voygr (YC W26) – A better maps API for agents and AI apps</h1>
+        <div class="meta">
+            投稿日: 2026年03月16日 | ランク: 6
+        </div>
+        <a href="https://news.ycombinator.com/item?id=47401042" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、VOYGRが開発した、現実世界の場所に関する最新情報を提供するAPIについて議論しています。このAPIは、Google Mapsのような既存のサービスでは得られない、場所の現状（閉店、移転、評判の変化など）をリアルタイムで把握することを目的としています。</p>
+<h2>問題提起</h2>
+<p>投稿者は、現在の地図API（Google Mapsなど）が場所の固定されたスナップショットしか提供せず、シェフの交代や待ち時間の増加といった動的な変化を捉えられない点を指摘しています。毎年25-30%の場所が変動し、Google検索の約40%、LLMプロンプトの最大20%がローカルな情報を必要とする中で、この鮮度に関する問題は非常に大きいと強調しています。特にAIエージェントが現実世界で検索、予約、買い物を行うようになるにつれて、この問題はさらに深刻化すると予測しています。</p>
+<h2>VOYGRのアプローチ</h2>
+<p>VOYGRは、「無限にクエリ可能な場所プロファイル」を構築しており、正確な場所データとニュース、記事、イベントなどのWebコンテキストを組み合わせています。彼らはまず、「場所が実在するかどうか」という最も困難な部分から着手し、「Business Validation API」を提供しています。これは、複数のデータソースを集約し、矛盾する信号を検出し、ビジネスが実際に運営されているか、閉鎖されているか、ブランド変更されたか、または無効であるかについての構造化された判断を返します。これを「物理世界の継続的インテグレーション」と表現しています。</p>
+<h2>顧客と用途</h2>
+<p>現在の主要顧客はエンタープライズ企業で、大手マッピング企業やテクノロジー企業が含まれています。今後は開発者コミュニティにもAPIアクセスを開放しています。このAPIは、最終的にはAIエージェントやLLMが信頼できる場所データを必要とするケースのために設計されており、エンタープライズから個人のエージェントまで幅広い用途が想定されています。</p>
+<h2>APIの機能と今後の展望</h2>
+<p>現在、APIはPOI/ビジネス名と住所を提供することで、その場所が存在するかどうかをチェックする機能を提供しています。住所が多少不正確でも動作するように設計されています。Google Maps APIと比較して、提供されるデータ量は少ないものの、サービスの利用規約はより柔軟であると説明しています。今後は、実験的なエンリッチメントAPIを通じて、営業時間などの詳細な情報も提供する予定です。データ品質の評価には、LLMとWeb情報による判定、および手動でのグレーディングを組み合わせています。</p>
+<h2>まとめ</h2>
+<p>VOYGRは、既存の地図サービスでは解決できない「現実世界の場所情報の鮮度」という大きな課題に取り組んでいます。AIエージェント時代を見据え、物理世界の変化をリアルタイムで捉えるインフラストラクチャを構築することで、開発者や企業に大きな価値を提供しようとしています。特に、ビジネスの存在確認に焦点を当てたAPIは、不正確なローカル情報に悩むLLMやエージェントにとって重要な基盤となる可能性を秘めています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
