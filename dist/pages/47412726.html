@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenSUSE Kalpa - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">OpenSUSE Kalpa</h1>
+        <div class="meta">
+            投稿日: 2026年03月17日 | ランク: 9
+        </div>
+        <a href="https://kalpadesktop.org/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、openSUSEのAtomic LinuxディストリビューションであるKalpa OSに関するものです。特に、その技術的な特徴、メリット・デメリット、そして他のAtomicディストリビューションとの比較について議論されています。</p>
+<h2>Atomic/Immutable Linuxとは何か</h2>
+<p>コメントでは「Atomic/Transactional Linux」という概念について、その仕組みと利点が詳しく説明されています。
+*   <strong>仕組み</strong>: Androidのように、パッケージ単位ではなくシステム全体の更新をスナップショットとして行い、再起動時に切り替える方式です。多くのシステムパーティション（<code>/</code>）は読み取り専用でマウントされ、ディストリビューションが提供する更新によってのみ変更されます。これにより、常に「既知の動作する設定」が保証されます。
+*   <strong>利点</strong>:
+    *   <strong>安定性</strong>: システムが常にサポートされた構成で動作するため、安定性が高いです。
+    *   <strong>容易なロールバック</strong>: 問題が発生した場合、以前の更新に簡単に戻せます。
+    *   <strong>一貫性</strong>: 複数のマシンでシステムを同期させる場合に、常に同じものが実行されていることを保証できます。
+    *   <strong>セキュリティ</strong>: ルートファイルシステムが不変であるため、セキュリティが向上します。</p>
+<h2>Kalpa OSの具体的な特徴と他のAtomicディストリビューションとの比較</h2>
+<p>Kalpa OSはopenSUSE MicroOSをベースにしたAtomicディストリビューションで、KDEデスクトップ環境を提供します。
+*   <strong>Kalpa OSの技術</strong>:
+    *   <strong>Btrfsスナップショットベース</strong>: アップグレード前にルートパーティションのBtrfsスナップショットを作成し、失敗した場合は以前のスナップショットにブートできます。これはopenSUSE MicroOSの「Transactional-Update」技術を使用しています。
+    *   <strong>KDEに特化</strong>: AeonOSがGNOMEに特化しているのに対し、KalpaはKDEデスクトップを提供します。
+    *   <strong>カスタマイズの容易さ</strong>: 不変性にもかかわらず、<code>transactional-update shell</code>を使ってドライバーやカーネルモジュールなどのシステムカスタマイズが可能です。
+    *   <strong>Tumbleweedベース</strong>: openSUSE Tumbleweedのローリングリリースに基づいているため、常に最新のパッケージが利用できますが、更新頻度は高めです。
+*   <strong>Atomicディストリビューションの種類</strong>:
+    *   <strong>宣言型設定</strong>: NixOS、BlendOSのように、すべてのシステム設定を構成ファイルで管理します。
+    *   <strong>OSTreeベース</strong>: Fedora Atomic variants（Silverblue、Kinoite）、VanillaOS、EndlessOSのように、OCI技術（Dockerファイルなど）を使用して既存のレイヤーに重ねてシステムイメージを構築します。
+    *   <strong>Btrfsスナップショットベース</strong>: openSUSE MicroOSファミリー（Kalpa、ChimeraOS）のように、Btrfsスナップショットを利用してロールバックを可能にします。
+    *   <strong>systemd-mkosiベース</strong>: systemdのメンテナが提唱するビジョンで、mkosiを使ってOSファイルシステム全体をディレクトリに「キュレーション」し、不変のディスクイメージとしてデプロイします。
+*   <strong>一般的な課題と解決策</strong>:
+    *   <strong>パッケージ管理の制限</strong>: ホストシステムでのパッケージインストールが推奨されないため、GUIアプリにはFlatpakを、その他のユーティリティにはHomebrewや言語固有のツール（cargo、pip/npmなど）を使用します。
+    *   <strong>Distrobox</strong>: 開発環境など、システムレベルのサービスや依存関係が必要な場合は、ユーザー空間でコンテナ（Distrobox）を実行し、その中で開発作業を行います。汚れた場合はコンテナを削除して再作成できます。</p>
+<h2>ユーザーエクスペリエンスと懸念</h2>
+<p>Atomicディストリビューションは、安定性とメンテナンスの容易さから注目されていますが、従来のLinuxディストリビューションとは異なるトレードオフも存在します。
+*   <strong>メリット</strong>:
+    *   <strong>安心な更新</strong>: 更新プロセスでのシステム破損のリスクが低く、常に動作するシステムが保証されます。
+    *   <strong>開発者の利便性</strong>: Distroboxなどのツールにより、クリーンなホストシステムを維持しつつ、多様な開発環境を柔軟に構築できます。
+    *   <strong>初心者向け</strong>: システムを壊しにくい設計のため、Linux初心者にも適しています。
+*   <strong>デメリット/課題</strong>:
+    *   <strong>学習曲線</strong>: 不変性という新しい概念とツールの使い方に慣れる必要があります。
+    *   <strong>情報不足/ドキュメント</strong>: Kalpaのウェブサイトはまだ改善の余地があり、Atomic Linuxの概念や利点を十分に説明しきれていません。
+    *   <strong>エコシステムの未熟さ</strong>: Flatpakがまだ完璧ではないなど、不変性を前提としたエコシステムにはまだ粗削りな部分があります。
+    *   <strong>GPUドライバーなどの問題</strong>: 容器内でGPUドライバーを扱うなどの特定のケースで、通常のインストールよりも複雑になる場合があります。
+    *   <strong>人気と開発リソース</strong>: Kalpaはまだシングルメンテナーであり、FedoraベースのAtomicディストリビューションに比べて人気が低い点が挙げられています。</p>
+<h2>まとめ</h2>
+<p>Kalpa OSは、openSUSE TumbleweedをベースにBtrfsスナップショットとAtomicな更新メカニズムを採用したKDEデスクトップ環境を提供するディストリビューションです。システム全体の安定性と容易なロールバック、セキュリティの向上といったメリットがある一方で、従来のLinuxとは異なるアプローチ（FlatpakやDistroboxの活用）が求められます。ウェブサイトの改善やコミュニティの成長といった課題はあるものの、Atomic Linuxディストリビューションのメリットを享受したいユーザー、特に安定したKDE環境を求めるユーザーにとって有望な選択肢となる可能性を秘めています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

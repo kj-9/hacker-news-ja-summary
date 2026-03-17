@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java 26 is here, and with it a solid foundation for the future - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Java 26 is here, and with it a solid foundation for the future</h1>
+        <div class="meta">
+            投稿日: 2026年03月17日 | ランク: 10
+        </div>
+        <a href="https://hanno.codes/2026/03/17/java-26-is-here/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にAndroidにおけるJavaの現状と、OpenJDKとAndroidランタイムの乖離について議論しています。その他、Javaの進化、特にProject Valhallaの進捗や「Colored Functions」の概念についても言及があります。</p>
+<h2>AndroidとJavaの乖離</h2>
+<p>多くのコメントが、AndroidにおけるJavaのサポートがOpenJDKの最新バージョンに比べて著しく遅れている点を指摘しています。Androidは独自のランタイム（ART）を使用しており、Javaバイトコードではなく独自のバイナリ形式にコンパイルされるため、OpenJDKのJavaバージョンとの互換性に常に遅れが生じます。この遅れがKotlinがAndroidの主要言語となった一因とも言われています。GoogleとOracleの訴訟がこの乖離に影響を与えた可能性も指摘されていますが、Googleが当初から独自のAndroid Javaを使用していたとの意見もあります。また、AndroidがOpenJDKをフォークしているという情報（Android 7以降）がある一方で、実際には部分的にしか取り込んでおらず、完全な互換性はないとの反論もあります。</p>
+<h2>Javaの進化とProject Valhalla</h2>
+<p>Javaの言語とJVMは近年急速に進化しており、仮想スレッド（Project Loom）や、シールされたインターフェースと網羅的なswitch文によるユニオン型の実現などが評価されています。特に、仮想スレッドはasync/awaitのような「Colored Functions」に陥らずに非同期処理を実現する優れたソリューションとして歓迎されています。しかし、最も重要な変更とされるProject Valhalla（値型、プリミティブクラスなど）は2014年から進捗中であり、その完了が非常に長くかかっている点が繰り返し言及されています（「宇宙の年齢をnano-Valhallaで測れる」といった比喩も）。Vector APIもValhallaがプレビューになるまでインキュベーションを続けるとされており、その実現もValhallaの進捗にかかっています。</p>
+<h2>「Colored Functions」とGreen Threads</h2>
+<p>Javaの仮想スレッド（Project Loom）が「Colored Functions」を使用しないという点に注目が集まり、この概念について多くの説明がなされました。Colored Functionsとは、JavaScriptやPythonのasync/awaitのように、関数に「async」などのタグ（色）を付けることで、その呼び出しに制約が生じ（例：async関数はasync関数しか呼べない）、結果的にAPIの重複やコードベースの複雑化を招くというものです。Javaの仮想スレッドは、この問題なしに非同期のようなパフォーマンスを提供できるため、高く評価されています。</p>
+<h2>Javaコミュニティと文化</h2>
+<p>Javaの言語とJVMの開発者は非常に優秀であり、Go言語よりも産業用途に適しているという意見もあります。しかし、Javaの「文化」が最大の欠点であると指摘するコメントもあります。特にSpring BootがJava開発の主流となり、それが「Java」に対するネガティブなイメージを形成しているという声もあります。また、Applet APIの削除のように、古い技術が整理されることについては歓迎の声があがっています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AndroidにおけるJavaのバージョンの遅れとその原因、そしてこれがKotlinの台頭にどう影響したかについて詳しく議論しています。また、Javaの言語とJVMの革新的な進化、特にProject Valhallaの長期にわたる開発と、仮想スレッドが「Colored Functions」問題を回避する点で高く評価されていることが示されています。Javaの技術的な優位性を認めつつも、その文化やエコシステム（特にSpring Boot）が抱える課題についても言及が見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
