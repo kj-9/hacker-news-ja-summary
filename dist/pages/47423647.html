@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rob Pike&#x27;s Rules of Programming (1989) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Rob Pike&#x27;s Rules of Programming (1989)</h1>
+        <div class="meta">
+            投稿日: 2026年03月18日 | ランク: 2
+        </div>
+        <a href="https://www.cs.unc.edu/~stotts/COMP590-059-f24/robsrules.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Rob Pikeの「プログラミングの5つのルール」に関する議論で、特にデータ構造の重要性、時期尚早な最適化の是非、およびAI開発への影響に焦点を当てています。多くのコメントは、ルール5「データが支配する」の重要性を強調し、Fred BrooksやLinus Torvaldsの同様の引用に言及しています。</p>
+<h2>データ構造の優位性 (ルール5)</h2>
+<p>多くのコメント投稿者は、ルール5「データが支配する。適切なデータ構造を選択し、うまく整理されていれば、アルゴリズムはほとんど常に自明となる。プログラミングの中心はアルゴリズムではなくデータ構造である。」が最も重要であり、時を超えて通用する原則であると強く同意しています。
+*   <strong>本質的な重要性:</strong> ユーザーは、データ構造がプログラミングの中心であり、適切に設計されたデータ構造は、アルゴリズムを自明にし、プログラム全体の簡素化につながると主張しています。Fred Brooksの「フローチャートを見せてテーブルを隠されても、私は困惑し続けるだろう。テーブルを見せてくれれば、フローチャートは通常必要ないだろう。明らかになるからだ。」やLinus Torvaldsの「悪いプログラマーはコードについて心配する。良いプログラマーはデータ構造とその関係について心配する。」といった引用も、この考えを補強しています。
+*   <strong>実世界の経験:</strong> データ構造を第一に考えるアプローチは、Haskell、ReScript/OCaml、Clojureなどの言語で非常に効果的であると指摘されています。特にCRUDアプリケーションでは、データと型に焦点を当てることで、明確な変換関数につながるとされています。
+*   <strong>AI開発への影響:</strong> AIが生成するコードのデータ構造が「素朴」であるという懸念が表明されています。AIはコード生成は得意だが、最適なデータ構造設計にはまだ不十分であり、プログラマーがデータ構造の設計を主導し、AIにコードの骨格を埋めさせるアプローチが推奨されています。</p>
+<h2>時期尚早な最適化 (ルール1と2)</h2>
+<p>「時期尚早な最適化は諸悪の根源である」という格言に関する議論は、その誤解と実用性について深く掘り下げられています。
+*   <strong>誤解の根源:</strong> この引用はDonald Knuthによるもので、文脈が失われると、「最適化を全く行わない」という意味に誤って解釈されがちだと指摘されています。Knuthの元の意図は、プログラムの「非重要部分の速度」について心配する時間を浪費すべきではないというものであり、クリティカルな3%の機会を逃すべきではないとされています。
+*   <strong>実用性:</strong> プログラマーは、ボトルネックがどこで発生するかを予測することはできないため、測定するまでは最適化すべきではないというルール1の教訓が強調されています。多くのユーザーは、経験から特定のボトルネックを予測できると感じていますが、測定によって初めて真のボトルネックが明らかになるとも認識しています。
+*   <strong>AI開発への影響:</strong> AIがコードの最適化を試みる際、多くの場合、盲目的なコード最適化に走り、測定を怠る傾向があるとの指摘があります。これは、AI開発においても測定と適切なタイミングでの最適化の重要性を示唆しています。</p>
+<h2>シンプルなアルゴリズムとコード (ルール3と4)</h2>
+<p>シンプルさ、明確さ、メンテナンス性は、常に価値のある原則として広く受け入れられています。
+*   <strong>シンプルさの利点:</strong> 「派手なアルゴリズムはnが小さい場合は遅く、nは通常小さい。派手なアルゴリズムは大きな定数を持つ。」というルール3は、多くの場合、単純なアルゴリズムで十分であり、複雑さは余計なオーバーヘッドをもたらす可能性があることを示唆しています。ただし、nが大きくなるシナリオでは、より効率的なアルゴリズムが必要になることも認識されています。
+*   <strong>コードのメンテナンス性:</strong> ルール4「スマートなコードを書くな。明確なコードを書け。」は、将来の変更を考慮して、シンプルで理解しやすいアルゴリズムと構造を作成することの重要性を強調しています。これは、特に「DRY（Don't Repeat Yourself）」原則の誤用に関する議論と関連しており、時期尚早な抽象化はかえって複雑性を増し、メンテナンス性を損なう可能性があるとされています。</p>
+<h2>まとめ</h2>
+<p>Rob Pikeのプログラミングルールは、データ構造の優位性、時期尚早な最適化への慎重さ、そしてコードのシンプルさと明確さという、プログラミングにおける基本的な原則を強調しています。特にルール5「データが支配する」は、多くのプログラマーにとって最も重要な教訓であり、システム設計の基盤として広く支持されています。AI駆動型開発の台頭は、これらの原則の新たな側面を浮き彫りにしています。AIはコード生成を加速しますが、最適なデータ構造の設計や、測定に基づいた最適化の決定といった、より高レベルの思考プロセスでは依然として人間の専門知識が不可欠であると見られています。また、「時期尚早な最適化は諸悪の根源である」という格言は、その真の意図がしばしば誤解され、非効率なソフトウェアを正当化するために悪用される可能性があるという、重要な反省点も示されています。全体として、これらのルールは今日のソフトウェア開発環境においても依然として強力な指針として機能しており、その原則はツールの進化を超えて永続的な価値を持つことが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
