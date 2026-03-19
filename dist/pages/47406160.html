@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return of the Obra Dinn: spherical mapped dithering for a 1bpp first-person game - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Return of the Obra Dinn: spherical mapped dithering for a 1bpp first-person game</h1>
+        <div class="meta">
+            投稿日: 2026年03月19日 | ランク: 5
+        </div>
+        <a href="https://forums.tigsource.com/index.php?topic=40832.msg1363742#msg1363742" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドでは、ゲーム『Return of the Obra Dinn』のユニークな1ビットディザリングアートスタイルとその開発プロセスについて議論されています。多くの人がその技術的な工夫と美学を評価する一方で、ゲームプレイ体験における課題も指摘されています。</p>
+<h2>アートスタイルとゲームプレイの体験</h2>
+<p>多くのコメントが、Obra Dinnの革新的な1ビットアートスタイルに言及しています。このスタイルは、そのユニークさや開発に費やされた努力に対して賞賛されていますが、同時に様々なゲームプレイ上の課題も引き起こしているようです。</p>
+<ul>
+<li><strong>視覚的疲労とモーションシックネス:</strong> 一部のプレイヤーは、このアートスタイルが原因で目に負担がかかったり、モーションシックネスを感じたりしたと報告しています。特に大画面のテレビでプレイした際に顕著だったようです。</li>
+<li><strong>ゲームプレイの妨げ:</strong> 独特な視覚効果がゲームプレイの邪魔になったと感じる人もいます。そのため、ゲームの内容について読むのは楽しいが、実際にプレイし続けるのは難しいという意見も見られます。</li>
+<li><strong>慣れと適応:</strong> 最初はアートスタイルに圧倒されたものの、ストーリーやゲームプレイに没頭するうちに気にならなくなったというプレイヤーもいます。</li>
+<li><strong>未来のディスプレイへの期待:</strong> この効果を目の負担なく再現できるような、e-inkディスプレイなどの新しい技術が登場すれば、ゲームの評価がさらに高まる可能性が示唆されています。</li>
+<li><strong>懐かしさを感じる層:</strong> 6インチのモノクロMac SEディスプレイで育った世代にとっては、このアートスタイルが特別な感情を呼び起こすようです。</li>
+</ul>
+<h2>技術的な側面と開発への賞賛</h2>
+<p>コメントの多くは、Obra Dinnのディザリングプロセスに隠された技術的な深さと、開発者のデューコープが注いだ努力に対して強い関心と賞賛を示しています。</p>
+<ul>
+<li><strong>技術的な魅力:</strong> 多くのユーザーが、ディザリングを安定させるための技術的な工夫や「2x with sphere mapping」のような特定の描画手法に魅力を感じています。これによって、オブジェクトに点描画のような質感や立体感が生まれると評価されています。</li>
+<li><strong>開発ログへの注目:</strong> 開発ブログをフォローしていた人からは、その優れた記述内容が記憶に残っているという声や、ゲームジャムでエッジ検出の再現を試みたというエピソードも語られています。</li>
+<li><strong>関連リソースの共有:</strong> ディザリングプロセスをさらに深く掘り下げたYouTube動画や、過去のHacker Newsでの議論へのリンクが共有されており、技術的な探究心がうかがえます。</li>
+</ul>
+<h2>ゲームとしての評価</h2>
+<p>アートスタイルに関する議論が活発な一方で、ゲーム自体のストーリー、キャラクター、ゲームプレイについても言及されています。</p>
+<ul>
+<li><strong>物語とキャラクターへの没入:</strong> ゲームのアートスタイルに慣れると、ストーリーやキャラクターに深く没頭できるという意見があります。</li>
+<li><strong>探偵パズルとしての評価:</strong> 細部への注意力を要する探偵スタイルのパズルとして高く評価されていますが、それゆえに一部のプレイヤーにとっては難しく感じることもあるようです。</li>
+<li><strong>ユニークな体験の要望:</strong> ゲームのストーリーとキャラクターは非常に印象深く、似たようなゲームの登場を望む声もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>『Return of the Obra Dinn』の1ビットディザリングアートスタイルは、その革新的な技術と開発者の努力に対して広く賞賛されています。しかし、一部のプレイヤーにとっては目の疲れやモーションシックネスといった視覚的な課題、あるいはゲームプレイの妨げとなる可能性も指摘されています。一方で、ストーリーや探偵パズルとしてのゲーム自体の評価は高く、アートスタイルに慣れたプレイヤーからは没入感のある体験として愛されています。このユニークなスタイルは、技術的な深掘りの対象としても、また今後のディスプレイ技術の可能性を議論する上でも興味深いトピックとなっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
