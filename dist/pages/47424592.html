@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallel Perl – autoparallelizing interpreter with JIT - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Parallel Perl – autoparallelizing interpreter with JIT</h1>
+        <div class="meta">
+            投稿日: 2026年03月20日 | ランク: 6
+        </div>
+        <a href="https://perl.petamem.com/gpw2026/perl-mit-ai-gpw2026.html#/4/1/1" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、Perlの新しいJITコンパイラプロジェクト「PetaPerl」に関するものです。特に、そのウェブサイト（スライド形式のプレゼンテーション）のユーザビリティ、プロジェクトの背景にある壮大な個人プロジェクト、LLMによるPerlコード生成の可能性、そしてPetaPerlの技術的な特徴について議論されています。</p>
+<h2>ウェブサイトのユーザビリティとスライド形式</h2>
+<p>多くのコメントが、PetaPerlのプレゼンテーションウェブサイトのナビゲーションの難しさに言及しています。特に、意図されたディープリンクが機能しない、下矢印がクリックできない、またはオーバーレイで隠れるといった問題が指摘されています。Reveal.jsというスライド形式が使われていることが説明され、その2次元ナビゲーション（左右で章、上下で詳細）の意図が解説されていますが、この形式が現代の共有文化（SlideShareなど）には合わず、敬遠されがちであるという意見もあります。多くのユーザーはキーボードの矢印キーを使うことでナビゲートできることを発見しています。</p>
+<h2>プロジェクトの背景：壮大な個人プロジェクト</h2>
+<p>コメントの一つが、プレゼンテーションの冒頭スライドに注目し、作者が地熱・太陽光発電の家を自動化するためにPerlでホームオートメーションシステムを構築しようとし、最終的にPerlをAIで再実装するに至ったという壮大な個人プロジェクトの背景を明らかにしています。掘削された巨大な穴の写真やCAD図面が印象的であると述べられています。これは「ヤクの毛を剃るようなもの（yak shaving）」という比喩で表現されています。</p>
+<h2>LLMによるPerlコード生成とPerlの現代性</h2>
+<p>LLM（大規模言語モデル）がPerlコードを生成する能力について、肯定的な意見が述べられています。適切な指示（「現代的なPerl」「漸進的型付け」「関数シグネチャ」など）を与えれば、非常に良い結果が得られるとされています。Perl 5でもモジュールによって関数シグネチャや型制約が利用可能であり、LLMがこれらを活用できるとのことです。Perlが、短いスクリプトにおいてはBashよりも優れ、Pythonよりも外部コマンド呼び出しが容易であるという評価もされています。また、Perl 6がRakuに改名されたため、Perl 5が引き続き「Perl」として改良されていることも説明されています。</p>
+<h2>PetaPerlの技術的特徴</h2>
+<p>PetaPerlは、並列タスクのスケジューリングにRayonを、ホットループのJITコンパイルにCraneliftを利用していることが指摘されています。その他にも、Auto-FFI（自動外部関数インターフェース）、バイトコードキャッシュ（Pythonの.pycファイルに類似）、デーモンモード（mod_perlやFastCGIに類似）といった興味深い機能があることが挙げられています。特にAuto-FFIやバイトコードキャッシュ（.plcファイル）に注目しているユーザーもいます。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、Perlの新しいJITコンパイラプロジェクト「PetaPerl」に対するコミュニティの反応を多角的に示しています。ユーザーは、そのプレゼンテーションのウェブサイトのユーザビリティに苦戦しつつも、キーボード操作で解決策を見出しています。プロジェクトの背景にある、地熱・太陽光発電の家を自動化するという作者の壮大な個人的動機が明らかになり、それが「AIでPerlを再実装する」という結果につながったことに驚きの声が上がっています。また、LLMが現代的なPerlコードを生成する能力についても議論され、Perl 5の進化と現代的な使用例が紹介されました。技術的には、RayonやCraneliftの採用、Auto-FFIやバイトコードキャッシュといったPetaPerlの革新的な機能が注目されており、Perlコミュニティにとってエキサイティングな発展として受け止められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
