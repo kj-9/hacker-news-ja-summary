@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash-MoE: Running a 397B Parameter Model on a Laptop - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Flash-MoE: Running a 397B Parameter Model on a Laptop</h1>
+        <div class="meta">
+            投稿日: 2026年03月22日 | ランク: 6
+        </div>
+        <a href="https://github.com/danveloper/flash-moe" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドでは、Apple Silicon Macで大規模なMixture-of-Experts (MoE) モデルをローカルで実行するための新しい技術（特にQwen3.5-397B-A17Bモデル）とその実現可能性、パフォーマンス、品質のトレードオフについて議論されています。</p>
+<h2>パフォーマンスとベンチマーク</h2>
+<p>Apple Silicon MacでのMoEモデルの実行パフォーマンスについて、様々な意見やベンチマークが共有されています。</p>
+<ul>
+<li><strong>MacBook Pro M5 Pro (64GB RAM)での実測値:</strong> あるユーザーは、Qwen3.5-397B-A17B-4bitモデルで6.55トークン/秒（t/s）を達成したと報告しています。この数値は、特に大規模モデルであることを考えると印象的であると評価されています。</li>
+<li><strong>SSDストリーミングのボトルネック:</strong> 技術解説では、モデル全体（209GB）がSSDからMetalコンピュートパイプラインにストリーミングされることが示されています。このアーキテクチャではSSDがボトルネックとなる可能性が指摘されており、MacBook Pro M5 Pro/Maxの高速SSD（8GB/s～15GB/s）がこの速度を実現していると考えられています。</li>
+<li><strong>トークン生成速度への評価:</strong> 4～6 t/sという速度は、大規模モデルをローカルで実行できるという点では「有望」と評価される一方で、「利用できないほど遅い」と感じるユーザーもいます。ただし、忍耐力があれば十分に使えるという意見もあります。</li>
+<li><strong>他の最適化との比較:</strong> Neovimの作者であるtarruda氏は、llama.cppと2.46 BPW（bit per weight）の量子化を使用したQwen3.5-397B-A17Bモデルで、M1 Ultra上で20 t/sの高速なパフォーマンスを達成したと報告しており、最大250kのコンテキストサイズでも約8 t/sを維持できるとしています。これは、本記事で紹介されているSSDストリーミング技術とは異なる最適化手法です。</li>
+</ul>
+<h2>SSDの寿命と利用に関する議論</h2>
+<p>モデルをSSDからストリーミングするアプローチについて、SSDの寿命への影響が活発に議論されています。</p>
+<ul>
+<li><strong>SSDの劣化懸念:</strong> モデルを24時間体制でSSDからストリーミングすると、SSDの寿命が大幅に短くなる可能性があるという懸念が示されました。</li>
+<li><strong>読み込み負荷の性質:</strong> これに対し、多くのユーザーはSSDの読み込み負荷は書き込み負荷と異なり、SSDの寿命に大きな影響を与えないと指摘しています。読み込みが摩耗を引き起こすことはないとされていますが、NAND技術の進歩に伴い、リードディスターブ（read disturb、時折の書き換えが必要になる現象）の問題が指摘されています。</li>
+<li><strong>専門家モデルの特性:</strong> MoEモデルでは、同じトピックに留まる限り、フラッシュディスクからの繰り返し読み込みが主であり、書き込みは稀であるという意見もあります。</li>
+</ul>
+<h2>量子化とモデル品質</h2>
+<p>モデルの品質に与える量子化と専門家（expert）数の削減の影響が重要な論点となっています。</p>
+<ul>
+<li><strong>2ビット量子化の課題:</strong> 本記事で紹介されている方法は、2ビット量子化とアクティブな専門家数を10から4に削減することで速度を達成していますが、これによりモデルの品質が著しく低下するという批判があります。特に、JSON出力で「"name"」の代わりに「\name\」が生成されるなど、ツール呼び出しが信頼できないことが指摘されています。</li>
+<li><strong>品質とパフォーマンスのトレードオフ:</strong> 2ビット量子化は短時間のプロンプトには有望に見えるものの、長時間のセッションや実際の作業では「完全に役に立たない」と感じるユーザーが多いようです。より小さい密なモデル（例：27Bモデル）を4ビット量子化で実行する方が、大規模モデルの2ビット量子化よりも良い結果をもたらすという経験談も共有されています。</li>
+<li><strong>4ビット量子化の優位性:</strong> 多くのユーザーは、4ビット量子化がリソースに制約がある場合のスイートスポットであり、それ以下では品質が大幅に低下するという見解で一致しています。</li>
+<li><strong>異なる量子化手法:</strong> tarruda氏が言及した<code>smol-IQ2_XS</code>量子化（2.46 BPW）のような、より動的な量子化手法は、同じBPW範囲でも高い品質を維持できる可能性があるとされています。</li>
+</ul>
+<h2>その他の論点</h2>
+<ul>
+<li><strong>他のプラットフォームへの応用:</strong> LinuxシステムメモリやモバイルGPUでの同様のアプローチへの期待も示されています。</li>
+<li><strong>サーバーハードウェアとの比較:</strong> Macを「小さな推論サーバーのように」使う代わりに、中古のサーバーと実際のRAMを使う方が安価で賢明だという意見もあります。</li>
+<li><strong>API駆動型ラボの将来:</strong> 消費者向けハードウェアで大規模モデルが実行可能になることで、APIを提供する大規模なラボのビジネスモデルへの影響についても議論されています。バッチ処理による規模の経済、電力分配、利用効率の向上により、データセンターのトークンは依然として安価であるという見方が優勢です。</li>
+<li><strong>ライセンスの問題:</strong> GitHubリポジトリにライセンスが添付されていないことへの指摘があり、コードを合法的に実行できるかどうかの議論も発生しています。</li>
+<li><strong>Hacker Newsのタイトル表現:</strong> 「ラップトップで」というタイトルが、実際には高価なMacBook Proを指しているため、「平均的な人には手が届かない」という誤解を招く可能性があるという批判もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>本スレッドでは、Apple Silicon Macで大規模Mixture-of-Experts（MoE）モデルをSSDからストリーミングしてローカル実行する技術が議論されています。M5 Pro上で6.55t/sという速度は、ハードウェアの能力を示すものとして注目されましたが、SSDの寿命への影響（読み込み負荷は大きな問題ではないと結論付けられた）や、特に2ビット量子化と専門家数の削減によるモデル品質の低下が主要な懸念事項となりました。多くのユーザーは、2ビット量子化は実用的な用途には不十分であり、4ビット量子化が品質とパフォーマンスのバランスの取れた選択肢であると考えています。また、llama.cppとより高度な量子化技術を組み合わせることで、M1 Ultra上で20t/s以上を達成する別の方法も紹介され、モデルの品質を保ちつつ、より実用的な速度で大規模モデルを実行できる可能性が示されました。全体として、この技術は大規模モデルを消費者向けハードウェアで「実行できる」ことを示していますが、モデルの「実用的な品質」と「速度」のトレードオフが重要な課題として残っています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building an FPGA 3dfx Voodoo with Modern RTL Tools - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Building an FPGA 3dfx Voodoo with Modern RTL Tools</h1>
+        <div class="meta">
+            投稿日: 2026年03月22日 | ランク: 10
+        </div>
+        <a href="https://noquiche.fyi/voodoo" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、VoodooグラフィックカードをFPGAで再実装するというプロジェクトに関するものです。コメントでは、オリジナルVoodooカードへのノスタルジー、当時のハードウェアのブランド力、プロジェクトの技術的な詳細、そしてLLM（大規模言語モデル）のブログ記事作成への使用について議論されています。</p>
+<h2>VoodooカードへのノスタルジーとLinuxサポート</h2>
+<p>多くのコメント投稿者は、Voodooグラフィックカードに対する強いノスタルジーを表明しています。特に、1990年代後半にLinux環境でVoodooカードを動作させる際の苦労と達成感が語られています。当時のLinux（Red Hatなど）でのドライバ導入は容易ではなかったものの、その努力に見合うだけのゲーム体験（Q3、Unrealなど）が得られたと回顧されています。Voodoo 1が初めてのビデオカードだったという人も多く、当時の設定の難しさ（例えばダイヤルアップインターネットで情報を検索する、モデムの初期化文字列を設定するなど）が記憶されています。また、VoodooカードのドライバーがPPC32/MacOS9で優れていたという声や、NVIDIAによる3dfx買収後のドライバーサポート終了に不満を漏らす声も見られます。</p>
+<h2>当時のハードウェアとブランディング</h2>
+<p>当時のハードウェア製品名（例: PowerPC 8600）やブランディング（例: Voodoo）が、今の技術製品にはない特別な興奮と魅力を消費者に与えていたという意見が多く聞かれます。Voodooカード自体も「その時代にしてはありえないほど格好良かった」と評されており、そのデザイン性の高さが強調されています。一部では、Nvidia NV-1のようなVoodooに先行する技術（NURBSや前方テクスチャマッピングなど）の先進性を評価する声もありますが、プログラミングの複雑さやDirectXが三角形を標準としたことで普及しなかった経緯も語られています。Voodoo 3を額に入れて飾りたいと考えている人もいます。</p>
+<h2>プロジェクトの技術的側面とLLMの使用</h2>
+<p>プロジェクト自体は、「Hacker Newsにふさわしい」素晴らしい取り組みだと評価されています。特に、「ネットリスト認識トレース」といった技術的なアプローチや、Voodooカードの複雑な機能を再実装する難しさについて言及があります。</p>
+<p>一方で、ブログ記事がLLMによって生成されたことについて、賛否両論が上がっています。一部のユーザーは、LLM生成の文章に違和感を覚えたり、内容の「現代的」な部分が不明瞭だと感じたりしています。しかし、別のユーザーは、自身が数学的な能力を補うためにLLMを利用している経験を踏まえ、文章能力を補うためにLLMを使用することを「不正行為」と見なすべきではないと主張しています。技術者がコミュニケーション能力の不足をAIで補うことと、自分が数学的な能力の不足をAIで補うことを同等に捉え、より進歩的な視点を持つべきだという考えを示しています。</p>
+<p>また、レジスタ設計の技術的な詳細についても議論があり、著者がレジスタに付加的なセマンティクス（FIFO、floatからfixed-pointへの変換など）を追加する設計について、よりコンポーネントを分離すべきではないかという指摘がなされています。著者は、レジスタの特性を一箇所にまとめる利点を説明しつつ、計算ユニットがレジスタバンクからのコマンドを停止させる方が優雅かもしれないという示唆を受け入れています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、VoodooグラフィックカードのFPGA再実装プロジェクトを中心に、90年代のPCハードウェアへの強いノスタルジー、当時の製品ブランディングの魅力、そして技術的な議論（特にプロジェクトのレジスタ設計と、LLMによるブログ記事作成の是非）が展開されました。当時のLinux環境でのドライバ導入の困難さや、NVIDIAによる3dfx買収の余波など、個人的な経験に基づく回顧談が多く見られます。特に、LLMを技術的な不足を補うツールとして受け入れるべきかという問いは、現代におけるAIの役割について示唆に富むものでした。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
