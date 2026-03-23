@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bombadil: Property-based testing for web UIs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bombadil: Property-based testing for web UIs</h1>
+        <div class="meta">
+            投稿日: 2026年03月23日 | ランク: 10
+        </div>
+        <a href="https://github.com/antithesishq/bombadil" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、UIのプロパティベーステスト（PBT）のための新しいフレームワークであるBombadilについて議論しています。作者のowickstrom氏が質問に答え、プロジェクトの背景と機能について説明しています。</p>
+<h2>Bombadilの機能とPBTへのアプローチ</h2>
+<p>BombadilはUIのプロパティベーステストに焦点を当てた新しいフレームワークです。ユーザーは、UIの基本的な不変性が様々な条件下で維持されることを検証する「プロパティ」を定義できます。PBTのアプローチにより、開発者は少量の仕様から広範なテストを生成でき、多くのバグを発見するのに効果的であると評価されています。特に、特定のDOMセレクターを指定することで、PlaywrightやCypressのような既存ツールよりも高いパワー対ウェイト比を実現するとされています。</p>
+<h2>現実世界での適用性と課題</h2>
+<p>一部のユーザーは、BombadilがPlaywrightやCypressから乗り換える理由を示す具体的な例が不足していると指摘しています。フォーム入力のような複雑なユーザーインタラクションのテスト方法や、以前のページやディスク上の状態など、現在のページの状態以外の情報に基づいたテストの難しさについて懸念が表明されました。作者は、Bombadilがまだ新しく、状態空間探索の改善、レポーティング/デバッグ、CIとの統合など、多くの機能が開発中であることを認めています。</p>
+<h2>PBTの有効性と「神話」</h2>
+<p>PBTの有効性については様々な意見があります。一部のユーザーは、PBTがゼロ値、境界値、Unicode関連のバグなどのエッジケースを迅速に発見するのに非常に効果的であると高く評価しています。一方で、ランダムな入力だけでは「disallowed」や「limit == 4096」のような特定の条件に到達するのが難しいのではないかという疑問も投げかけられました。これに対し、PBTは「探索空間を網羅する」というよりは、「手動では思いつかないような条件でも基本的な不変性が保持されるかを確認する」という「正気度チェック」として最も価値があるという意見が示されました。コードカバレッジを追加することで、特定のコードパスがテストされていないことを特定できるという提案もありました。</p>
+<h2>技術的側面と設計思想</h2>
+<p>BombadilはRustで書かれており、単一の実行可能ファイルとして提供されるため、他のテストツールによく見られる「npm-dependencyhell」を回避できる点が評価されています。UIのプロパティを表現するための時相論理の使用が「モデルチェック」のようだと評され、その設計が評価されています。しかし、<code>U</code> (until) オペレーターの欠如など、時相論理の表現力に関する特定の制限も指摘されています。</p>
+<h2>プロジェクト名「Bombadil」への反応</h2>
+<p>プロジェクト名「Bombadil」は、J.R.R.トールキンの作品に由来しており、これに対する意見は分かれています。一部のユーザーは名前が良いと感じる一方で、トールキンのフィクションが商標権を侵害して悪用されることへの不満や、特定の会社がトールキン財団に多額のフィーを支払っている可能性があるという指摘がありました。一部のユーザーは、代わりにイアン・バンクスなどの別の作者の作品から名前を取ることを提案しています。</p>
+<h2>まとめ</h2>
+<p>Bombadilは、UIのプロパティベーステストに時相論理を導入する新しいアプローチを提案しており、その新しさと潜在的な有効性についてHacker Newsコミュニティで活発な議論が交わされています。ランダムなアクション生成やテスト範囲に関する懸念はあるものの、作者はプロジェクトがまだ初期段階であり、今後の開発でこれらの課題に取り組む意向を示しています。単一実行可能ファイルであることや、複雑なバグを発見する能力が評価されており、UIテストの未来におけるPBTの役割について、期待と懸念の両方が示されています。プロジェクト名の著作権問題に関するコメントも目立ちました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

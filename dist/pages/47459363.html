@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIO: The Bao I/O Coprocessor - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">BIO: The Bao I/O Coprocessor</h1>
+        <div class="meta">
+            投稿日: 2026年03月23日 | ランク: 7
+        </div>
+        <a href="https://www.bunniestudios.com/blog/2026/bio-the-bao-i-o-coprocessor/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、bunnie氏が開発した新しいIOコプロセッサ「BIO」と、Raspberry PiのRP2040/RP2350に搭載されている「PIO」の比較、およびその設計思想とFPGA実装について議論しています。</p>
+<h2>PIOの設計思想とFPGA実装</h2>
+<p>PIOがFPGA実装には不向きだという記事の内容に対し、一部のユーザーはPIO自体が悪いのではなく、著者がサードパーティ製のFPGA実装を不適切な場所に押し込もうとしているのが問題だと主張しています。PIOは本来の用途では優れた設計であり、実際のシリコンではGHzに近い速度で動作できると指摘されています。</p>
+<p>しかし、記事の著者であるbunnie氏は、PIOを設計研究の比較対象として批判的に検討しており、その設計が悪いという意味ではないと説明しています。PIOは複数のビットシフトを1クロックサイクルで実行できるが、BIOは同じ量のビットシフトに数サイクルを要するなど、それぞれ異なるトレードオフがあると述べています。また、PIOの高速性はオーバークロックによって達成されているが、BIOもオーバークロック可能であり、特定の条件下では800MHzで動作する可能性も示唆しています。</p>
+<h2>BIOとPIOの比較、および用途の考察</h2>
+<p>PIOとBIOは「良い」「悪い」ではなく「異なる」ものであり、それぞれ得意な用途があると説明されています。PIOはDVIビデオ信号のビットバンギングのようなタスクには優れていますが、BIOはプロトコル処理には向いています。面積の観点では、PIOはASIC/FPGAの両方でバレルシフターを複数必要とするため、BIOよりも大きくなる傾向があります。</p>
+<p>ユーザーからは、PIOがUSBのNRZIビットスタッフィングのような処理を限界まで活用している例が挙げられています。また、BIOはDVI出力には不向きであると明言されており、DVIに対応するためには特定のユースケースに最適化されたBIOの派生形が必要になる可能性が指摘されています。</p>
+<h2>タイミングとデバッグの課題</h2>
+<p>C言語でプログラムされるRISCモデルのBIOでは、コンパイルされたコードの命令タイミングが可変（1-3サイクル）であるため、タイミングの不確実性が生じると指摘されています。PIOはタイミング優先（タイミングが波形を決定する）であるのに対し、BIOはC言語を表現手段とし、明示的なハードウェア同期を行うことで明瞭性を優先しているという見方があります。</p>
+<p>bunnie氏は、<code>wait-to-quantum</code>レジスタのアイデアは、サイクルカウントの煩雑さから解放されるが、数サイクルの丸め誤差を犠牲にすると説明しています。最高のパフォーマンスを得るにはサイクルカウントが必要になりますが、BIOがオープンソースであるため、Verilatorシミュレーションで正確なサイクル数を把握できる利点も強調されています。非常に厳密な状況では、オープンソースのRTL設計が、これまでコーダーが利用できなかった新しいツールへのアクセスを可能にするとしています。</p>
+<h2>まとめ</h2>
+<p>この議論は、RP2040/RP2350のPIOとbunnie氏の新しいBIOコプロセッサの設計哲学、実装、そしてユースケースにおけるトレードオフに焦点を当てています。PIOはビットバンギングなどの高速なGPIO操作に優れ、その高速性はオーバークロックによって達成されることがありますが、FPGAでの実装は効率的ではないという見解もあります。一方、BIOはより汎用的なプロトコル処理に適しており、C言語でのプログラミングが可能ですが、可変命令タイミングがデバッグを複雑にする可能性があります。著者は、PIOとBIOはそれぞれ異なる強みを持つ「異なる」デザインであり、オープンソースであるBIOはVerilatorのようなツールで詳細なタイミング分析が可能であると説明しています。全体として、それぞれのコプロセッサが特定のアプリケーションに対して異なる利点と課題を提供していることが強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

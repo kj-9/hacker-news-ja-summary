@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivy under attack again: Widespread GitHub Actions tag compromise secrets - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Trivy under attack again: Widespread GitHub Actions tag compromise secrets</h1>
+        <div class="meta">
+            投稿日: 2026年03月23日 | ランク: 4
+        </div>
+        <a href="https://socket.dev/blog/trivy-under-attack-again-github-actions-compromise" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、セキュリティスキャナーであるTrivyの開発元であるAqua Securityが経験した度重なるセキュリティ侵害について議論しています。特に、攻撃者がDocker Hubアカウントを侵害し、悪意のあるTrivyイメージを公開したことに焦点を当てています。</p>
+<h2>度重なるセキュリティ侵害と対応の不備</h2>
+<p>多くのコメントが、Aqua Securityが立て続けに侵害を受けたこと、そしてその対応の不備を指摘しています。2月にリポジトリが侵害され、3月19日と22日にも同様の事態が発生しており、攻撃者が複数の資格情報ローテーション後も永続性を維持していた可能性が示唆されています。以前の監査でGitHub Actionsの設定に問題があったことも指摘されており、セキュリティ企業が自分たちのCIワークフローに任意のコード実行の脆弱性を提供していたと批判されています。</p>
+<h2>セキュリティツールの信頼性とリスク</h2>
+<p>セキュリティツール自体が攻撃経路になるリスクについて多くの議論がなされています。「セキュリティソフトウェアを構築しているからといって、有能であるとは限らず、利益よりも害をもたらす可能性がある」という意見が強く表明されています。セキュリティチームが新しいスキャナーのために広範なアクセスを要求することへの懸念や、そのようなツールが「レポート作成機」に過ぎず、実際にリスクを軽減しない可能性があるという指摘があります。多くのユーザーは、スキャナーをサンドボックス内で実行し、読み取り専用のミラーデータを与え、本番環境の権限から遠ざけるべきだと主張しています。</p>
+<h2>資格情報の管理とGitHub Actionsの脆弱性</h2>
+<p>今回の侵害が資格情報の漏洩によるものであること、そして2FAやリフレッシュトークンがあってもなおこのような問題が発生することへの疑問が呈されています。Aqua Securityが「資格情報とトークンをローテーションしたが、プロセスがアトミックでなかったため、攻撃者が更新されたトークンを知っていた可能性がある」と主張していることについて、その具体的な意味を問う声もあります。また、GitHub Actionsにおける依存関係のセキュリティホールについても言及があり、GitHub自身がフルコミットSHAへのピン留めを推奨しているにもかかわらず、GitHubが不変なバージョニングを強制しないことを批判するコメントもあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのユーザーは、Trivyの開発元であるAqua Securityが経験した複数のセキュリティ侵害について、その度重なる性質、対応の不備、そしてセキュリティツールの信頼性に関する広範な懸念を表明しています。特に、セキュリティツール自体が新たな脆弱性の原因となるリスク、資格情報管理の課題、およびGitHub ActionsのようなCI/CDパイプラインにおける依存関係のセキュリティに対する厳しい視点が示されています。多くのユーザーは、セキュリティツールを厳密なサンドボックス環境で運用し、最小限の権限で管理することの重要性を強調しており、セキュリティ業界全体が信頼性を高めるために、より堅牢なセキュリティプラクティスを採用する必要があることを示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
