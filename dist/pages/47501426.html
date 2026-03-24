@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tell HN: Litellm 1.82.7 and 1.82.8 on PyPI are compromised - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Tell HN: Litellm 1.82.7 and 1.82.8 on PyPI are compromised</h1>
+        <div class="meta">
+            投稿日: 2026年03月24日 | ランク: 5
+        </div>
+        <a href="https://github.com/BerriAI/litellm/issues/24512" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsでは、PyPIで公開されたLLMラッパーライブラリ「LiteLLM」のバージョン1.82.7と1.82.8にマルウェアが組み込まれていた件について議論されています。このマルウェアは、PyPIの公開トークンとGitHubの個人アクセストークンが盗まれたことによるサプライチェーン攻撃の一環であり、開発者のアカウントが侵害されていました。</p>
+<h2>攻撃の詳細と影響</h2>
+<p>攻撃者は<code>litellm_init.pth</code>ファイルや<code>proxy/proxy_server.py</code>にbase64でエンコードされたペイロードを追加し、システム起動時やモジュールのインポート時にマルウェアが自動実行されるようにしました。このマルウェアは、暗号通貨ウォレットやAPIキー、SSHキーなどの機密情報を収集し、外部サーバーに送信しようとします。多くのユーザーがメモリ不足やCPUの異常な高負荷（フォークボムのような挙動）を経験し、GitHubのissueスレッドでは攻撃者がボットを使って議論を妨害する行為も見られました。</p>
+<h2>根本原因と責任</h2>
+<p>LiteLLMの開発者の一人であるKrrish氏は、この攻撃がCI/CDパイプラインで使用されていた<code>trivy</code>の侵害に端を発していると説明しています。これにより、PyPI公開トークンとGitHub PATが漏洩し、攻撃者はLiteLLMのパッケージをPyPIに不正にアップロードすることが可能になりました。Krrish氏は、自身のGitHubアカウントがTeamPCPというグループに侵害され、個人リポジトリも改ざんされたことを認めています。</p>
+<h2>セキュリティ対策と将来への示唆</h2>
+<p>この事件を受けて、PyPIは問題のあるバージョンを隔離・削除しました。しかし、議論では、依存関係を扱う現在のソフトウェアエコシステムの脆弱性が浮き彫りになりました。</p>
+<ul>
+<li><strong>依存関係の管理:</strong> 多くのユーザーが、依存関係のバージョンを固定することの重要性を再認識しました。しかし、セキュリティパッチのために最新バージョンに更新する必要があるというジレンマも指摘されています。</li>
+<li><strong>サンドボックス化:</strong> 開発環境や実行環境のより厳格なサンドボックス化を求める声が多く上がっています。コンテナ、仮想マシン、pledge/unveilのようなOSレベルの機能、あるいは言語レベルのサンドボックス化が提案されています。</li>
+<li><strong>認証と公開プロセス:</strong> PyPIやGitHubなどのプラットフォームは、リリースプロセスにおいて多要素認証や複数の承認者を必須とすべきだという意見があります。</li>
+<li><strong>代替手段:</strong> LiteLLMの代替となるLLMラッパーやゲートウェイがいくつか紹介されました。また、「フレームワークを使わず、自分でコードを書くべき」という、抽象化への依存を減らす意見も出ました。</li>
+<li><strong>AIとセキュリティ:</strong> LLMがマルウェアの生成を助け、サプライチェーン攻撃の規模を拡大する可能性があるという懸念が表明されています。また、LLMの学習データに悪意のあるコードが混入するリスクについても議論されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>LiteLLMのサプライチェーン攻撃は、Pythonエコシステムにおける深刻な脆弱性と、現代のソフトウェア開発における依存関係管理の課題を浮き彫りにしました。この事件は、開発者が自身のプロジェクトで使用するライブラリをより慎重に評価し、セキュリティ対策を強化する必要があることを強く示唆しています。また、ソフトウェア公開プラットフォームやセキュリティツールの改善も求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
