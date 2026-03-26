@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Turbolite – a SQLite VFS serving sub-250ms cold JOIN queries from S3 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Turbolite – a SQLite VFS serving sub-250ms cold JOIN queries from S3</h1>
+        <div class="meta">
+            投稿日: 2026年03月26日 | ランク: 8
+        </div>
+        <a href="https://github.com/russellromney/turbolite" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>turboliteは、S3から直接SQLiteのコールドクエリを超高速で提供するRust製VFS（Virtual File System）です。B-treeを意識したデータ配置とプリフェッチ戦略により、特に多数のコールドデータベース（データベース・パー・テナント/セッション/ユーザー）の効率的な利用を目指す実験的プロジェクトです。</p>
+<h2>turboliteの概要と目的</h2>
+<p>開発者であるrussellthehippo氏は、オブジェクトストレージが埋め込みデータベースをクラウドストレージ上でサポートできるほど高速になったかを探るために、この実験的なSQLite VFSを開発しました。turboliteは、サブセカンドのコールドクエリパフォーマンスを実現し、特に非アクティブなデータベースごとに個別のボリュームを維持することが非効率的であるような、「多くのコールドなデータベースで、一時的なコールドリードが発生する」ユースケースを想定しています。まだ実験段階であり、データ破損の可能性もあるため、本番環境での利用は推奨されていません。</p>
+<h2>革新的な技術アプローチ</h2>
+<p>従来のSQLiteファイルから単純にページを読み取るのではなく、turboliteは以下の革新的なアプローチを採用しています：
+*   <strong>B-tree認識のページグループ化:</strong> SQLiteのB-tree構造を解析し、関連するページを圧縮されたページグループとしてまとめてS3に保存します。これにより、ファイル内の物理的な近さではなく、クエリに関連するデータグループを効率的にフェッチできます。
+*   <strong>マニフェスト:</strong> すべてのページがどこに存在するかを記録する「真のソース」として機能するマニフェストを保持します。
+*   <strong>seekable zstdフレームとS3範囲GET:</strong> キャッシュミスが発生した場合、S3の範囲GETとseekable zstdフレームを利用して、必要な1ページだけをダウンロードできるようにします。これにより、オブジェクト全体をダウンロードする必要がなくなります。
+*   <strong>クエリプランに基づくプリフェッチ:</strong> クエリプランからストレージ操作を受け取り、インデックスや大規模スキャンに必要なデータをアクセス順序に従って事前にダウンロード（「フロントラン」）します。
+*   <strong>ページタイプの意識:</strong> 内部B-treeページ、インデックスページ、データページなど、異なるページタイプを区別し、それぞれに適したプリフェッチ戦略（例：内部B-treeページは積極的にロード、インデックスページは積極的にプリフェッチ）を適用します。
+*   <strong>リクエスト数の最適化:</strong> 開発者は、生のバイト転送量よりもS3へのリクエスト数を減らすことが重要であると強調しており、グループ化とB-tree単位のプリフェッチによってこの問題に対処しています。</p>
+<h2>パフォーマンスと今後の課題</h2>
+<ul>
+<li><strong>パフォーマンス:</strong> EC2 + S3 Express上でのベンチマークでは、1.5GBのデータベースに対し、コールドポイントルックアップで100ms以下、5結合プロファイルクエリで200ms以下、空のキャッシュからのスキャンで600ms以下といった良好な結果が出ています。ただし、通常S3ではやや遅くなります。ストレージバックエンド（S3、S3 Express、Tigris）のラウンドトリップ遅延がパフォーマンスに大きく影響します。</li>
+<li><strong>限界と課題:</strong> 現在のturboliteはシングルライターのみをサポートしており、まだシステム実験の段階です。特にスキャン操作は、リモートオブジェクトストレージの性質上、依然としてローカルSSDのようにはいかない課題として認識されています。</li>
+<li><strong>エビクションポリシー:</strong> キャッシュのエビクションについては、キャッシュサイズ制限、チェックポイント時、一定の書き込み回数後、アイドル/経過時間後など、ポリシー駆動での実装が検討されています。ユーザーとVFSのハイブリッドポリシーが理想的だと考えられています。</li>
+<li><strong>その他の最適化:</strong> Graftのような類似プロジェクトからの知見も参考に、空きページの処理やLSM（Log-Structured Merge-tree）ライクな書き込みなど、さらなる最適化の可能性が議論されていますが、現状は読み取りパスのシンプルさを優先しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>turboliteは、オブジェクトストレージ上でSQLiteのコールドクエリを超高速で提供する革新的なプロジェクトです。SQLiteのB-tree構造を深く理解し、その特性に合わせたページグループ化、インテリジェントなプリフェッチ、そしてオブジェクトストレージの利用パターンに最適化された設計思想により、特に「多数のコールドデータベース」というニッチな領域における可能性を大きく広げています。まだ実験段階ですが、その設計アプローチとパフォーマンスは、クラウドネイティブなデータベースストレージの未来を示すものとして注目に値します。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
