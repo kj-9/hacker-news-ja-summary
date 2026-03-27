@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make macOS consistently bad (unironically) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Make macOS consistently bad (unironically)</h1>
+        <div class="meta">
+            投稿日: 2026年03月27日 | ランク: 1
+        </div>
+        <a href="https://lr0.org/blog/p/macos/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、macOS Sonoma（コードネーム「Tahoe」）のUI変更、特にウィンドウの角の丸み、タブの形状、ウィンドウ管理の挙動について議論しています。多くのユーザーがこれらの変更に不満を表明しており、中にはUIの使いやすさや一貫性に悪影響を与えていると指摘する人もいます。</p>
+<h2>UIの美的・機能的な問題</h2>
+<p>多くのユーザーは、macOS Sonomaの新しいUI、特にウィンドウの角の丸みや、Musicアプリなどのデザイン変更に不満を持っています。
+*   一部のユーザーは、角の丸みが視覚的に不快だと感じています（[1.2.1] dilap）。
+*   タブの「ピル型」デザインは特に不評で、以前のデザインよりも醜く、機能が劣るとの声があります（[1.3] pram, [1.9] lucasay）。
+*   ウィンドウのリサイズが難しくなったという指摘もあります（[1.2.2] JellyPlan, [1.10.3] mikey_p）。</p>
+<h2>ウィンドウ管理とフルスクリーン挙動</h2>
+<p>macOSのUIが、ユーザーがウィンドウをフルスクリーンにせず、画面の中央に半分のサイズで配置することを前提に最適化されているという意見が多く出ました。
+*   「MacのUIは、ほとんどのユーザーがウィンドウを全画面表示にせず、半分のサイズで中央に置いておくことを想定して最適化されているように感じる」（[1.7] _jab）。
+*   大型モニターを使用しているユーザーは、フルスクリーン表示が非実用的であり、コンテンツが画面全体に広がらず余白が多いウェブサイトの表示にも不満を持っています（[1.7.1] doubled112, [1.7.1.2] alex_c, [1.7.1.3] ryandrake）。
+*   しかし、一部のユーザーは、特に小型のラップトップではフルスクリーンを使用すると述べています（[1.7.8] Reason077）。
+*   macOSの緑色のボタンがウィンドウを単に最大化するだけでなく、メニューバーを非表示にし、新しい仮想デスクトップを作成する挙動も不満の対象です（[1.7.5] thesuitonym）。</p>
+<h2>macOSの全体的な品質と欠点</h2>
+<p>UIの変更がmacOSの全体的な品質に与える影響についても意見が交わされました。
+*   一部のユーザーは、ウィンドウの角のような些細なことが問題になるのは、macOSが非常に優れたOSである証拠だと考えています（[1.10] amarant）。
+*   しかし、他のユーザーは、これはOS全体に存在する根本的な設計上の欠陥や「ハック」の現れであると反論しています（[1.10.1] intrasight）。
+*   Finderの機能不足や、通知のクリアの煩雑さなど、他の重大な欠陥も挙げられています（[1.10.2] NwtnsMthd, [1.11] nostromo）。
+*   macOSは「何千もの小さな不満の積み重ね」（[1.10.7] bloomca）であり、システムの「意見の強さ」により気に入らない部分を変更できないことが最大の欠点であるという意見もあります（[1.10.5] amelius）。</p>
+<h2>SIP（システム整合性保護）の無効化</h2>
+<p>記事では、丸みを帯びた角を修正するためにSIPを無効にすることを提案していますが、これはセキュリティ上のリスクがあるとして批判されています。
+*   SIPはファイルシステムへの書き込みアクセス以上の機能を制御しており、無効化は「馬鹿げた行為」だと指摘されています（[1.6] dcrazy, [1.14.1] LatencyKills）。
+*   マルウェアがrootアクセスを持つ場合、SIPの有無にかかわらずシステムは危険にさらされるという意見もありますが（[1.14] streetfighter64）、SIPはパスワードや個人ファイルを保護するものではないと、元macOS開発者が反論しています（[1.14.1] LatencyKills）。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、macOS SonomaのUI変更、特にウィンドウの丸い角、ピル型タブ、およびウィンドウ管理の挙動に対する幅広い不満を浮き彫りにしています。これらの変更は、多くのユーザーにとって美的にも機能的にも問題があり、使いやすさを損ねていると感じられています。一部のユーザーはこれを些細なことと捉え、OSの全体的な品質の高さの証拠と見ていますが、別のユーザーは根本的な設計思想の欠陥や他のより深刻な問題の現れだと考えています。記事が提案するSIPの無効化については、セキュリティ上のリスクから強く批判されています。総じて、AppleがUI設計の一貫性とユーザーエクスペリエンスへの配慮を欠いているという認識が広がっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
