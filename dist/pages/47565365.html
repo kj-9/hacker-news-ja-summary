@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++26 is done ISO C++ standards meeting, Trip Report - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">C++26 is done ISO C++ standards meeting, Trip Report</h1>
+        <div class="meta">
+            投稿日: 2026年03月29日 | ランク: 2
+        </div>
+        <a href="https://herbsutter.com/2026/03/29/c26-is-done-trip-report-march-2026-iso-c-standards-meeting-london-croydon-uk/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にC++26の新機能、特にモジュールと契約の現状と将来について議論しています。多くの開発者がC++の複雑なビルドシステムとパッケージ管理の問題に不満を抱いており、RustのCargoのようなシンプルさを求めています。</p>
+<h2>モジュールは失敗したアイデアか？</h2>
+<p>C++のモジュール機能については、その採用と実用性に関して意見が分かれています。「失敗したアイデア」と考える人も多く、JSモジュールとは異なり、C++モジュールは導入から6年経ってもサポートが不十分で、ビルドやツールチェーンを複雑にすると指摘されています。一方、XMakeのようなツールを使えば機能すると主張するユーザーもいます。多くの人が、C++が開発者の支持を得るためには、モジュールのような機能を確実に機能させ、パッケージ管理を改善する必要があると認識しています。現在の標準化された設計は「使えない」と批判されており、Googleのような大企業が委員会を離れたことで、実用性からかけ離れたものが標準化されているとの見方もあります。</p>
+<h2>C++のビルドシステムとパッケージ管理</h2>
+<p>C++のビルドシステムとパッケージ管理の現状は、開発者にとって大きな課題となっています。RustのCargoのようなシンプルで強力なツールがないことが、新しい開発者をC++から遠ざけているという意見が多数を占めています。CMakeやBashスクリプトによる複雑な設定はうんざりさせるとの声があり、ConanやvcpkgといったC++の「Cargo代替」も、Cargoほど設定が容易ではないと指摘されています。Rustが安定したABIの概念を完全に拒否し、すべてをソースからビルドするのに対し、CやC++はバイナリライブラリをインストール/エクスポートする古い考え方に囚われていることが、効率の悪さや危険性につながっているという意見もあります。Mesonのような代替ビルドシステムを推奨する声もあります。</p>
+<h2>契約（Contracts）の導入とその複雑性</h2>
+<p>C++26に契約（Contracts）機能が導入されたことについては、その必要性と複雑性の間で議論が交わされています。一部のコメントでは、Bjarne Stroustrupの言葉を引用し、言語の複雑さをさらに増し、未完成で「膨れ上がった委員会設計」であると批判しています。しかし、Ada Sparkのような「正しい設計によるソフトウェア」を目的としたプログラミング言語にとって、契約は静的検証を可能にする重要な要素であるという反論もあります。ただし、現在のC++の契約設計が、本当に言語が必要としているものかについては疑問が呈されており、一旦標準化されると修正が非常に困難になるという懸念も示されています。</p>
+<h2>その他のC++26の新機能と課題</h2>
+<ul>
+<li><strong>リフレクション (Reflection)</strong>: 正式なリフレクションシステムの登場は多くの開発者にとって待ち望まれたもので、特にC++開発の初期からの変化に驚きの声が上がっています。一部のコンパイラ（GCCなど）では実装が進んでいますが、実用的な導入はまだ先になるとの見方もあります。</li>
+<li><strong>ヘッダーファイル</strong>: ヘッダーファイルの存在自体がC++の大きな課題であり、「ヘッダーファイルを扱う限り、すべては豚に口紅を塗るようなもの」という厳しい意見もあります。しかし、新しいプロジェクトではモジュールとCMake/ninja、またはBazelを使えばヘッダーファイルの問題は軽減されるという反論もあります。</li>
+<li><strong>透明なハッシュ文字列</strong>: unordered_map向けの透明なハッシュ文字列が標準から外れたことに対する不満が表明されています。</li>
+<li><strong>Unicodeサポート</strong>: C++がUnicodeを適切に扱えない現状に不満を表明するコメントもあります。</li>
+<li><strong>C++コミュニティの多様性</strong>: システムプログラミング言語の分野が非常に男性中心であるという観察に対するコメントも寄せられました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>C++26は、リフレクションや契約といった新機能の導入で大きな進歩を遂げていますが、同時に、モジュールの採用の遅れ、複雑なビルドシステムとパッケージ管理、言語の複雑さの増大といった長年の課題に直面しています。特に、RustのCargoのようなシンプルで効果的なパッケージ管理ツールの欠如は、新しい開発者にとってC++を魅力のないものにしているという意見が多く見られます。これらの課題を解決し、実用的なツールチェーンと安定したABIの提供が、C++の将来的な普及と開発者エクスペリエンスの向上にとって不可欠であるとコミュニティは考えています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
