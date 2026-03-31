@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Forkrun – NUMA-aware shell parallelizer (50×–400× faster than parallel) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Forkrun – NUMA-aware shell parallelizer (50×–400× faster than parallel)</h1>
+        <div class="meta">
+            投稿日: 2026年03月31日 | ランク: 10
+        </div>
+        <a href="https://github.com/jkool702/forkrun" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーは、GNU Parallelやxargs -Pの代替として設計された、シェル並列化エンジン「forkrun」について議論しています。forkrunは、現代のNUMAハードウェア上で、特に高頻度・低遅延のシェルワークロードにおいて、大幅なパフォーマンス向上を目指しています。</p>
+<h2>forkrunの紹介とパフォーマンス</h2>
+<p>開発者は、GNU Parallelが強力なマシン上でCPUコアを十分に活用できていないという自身の不満からforkrunを開発したと説明しています。forkrunは、低遅延のシェルワークロード向けに設計されており、以下の顕著なパフォーマンス向上を実現しています。</p>
+<ul>
+<li><strong>バッチディスパッチ速度</strong>: 20万回以上/秒（GNU Parallelでは約500回/秒）。</li>
+<li><strong>CPU利用率</strong>: 28論理コア全体で95〜99%（GNU Parallelでは約6%）。</li>
+<li><strong>実ワークロードでの速度</strong>: 典型的な高頻度・低遅延ワークロードで50倍〜400倍高速。</li>
+</ul>
+<p>これらのベンチマークは、タスクあたりの作業量がほぼゼロという、意図的に最悪のケース（ディスパッチオーバーヘッドが支配的）で測定されており、並列化フレームワーク自体の能力を示しています。</p>
+<h2>技術的特徴</h2>
+<p>forkrunの高性能を支える主要な技術は以下の通りです。</p>
+<ul>
+<li><strong>Born-local NUMA</strong>: 標準入力を共有memfdにsplice()し、ページをターゲットNUMAノードに配置することで、NUMAに最適化されたデータアクセスを実現します。</li>
+<li><strong>SIMDスキャン</strong>: 各ノードのインデクサがAVX2/NEONを使用してメモリ帯域幅に近い速度で行境界を検出し、ロックフリーリングにオフセットと行数を公開します。</li>
+<li><strong>ロックフリーなタスク要求</strong>: ワーカーはatomic_fetch_addを1回使用してバッチを要求し、ロックやCASリトライループを排除して競合を軽減します。</li>
+<li><strong>メモリ管理</strong>: バックグラウンドスレッドがfallocate(PUNCH_HOLE)を使用して、論理オフセットシステムを壊さずにスペースを再利用します。</li>
+</ul>
+<p>これら以外にも、フェーズ認識テールハンドリング、適応型バッチ処理、早期フラッシュ検出など、多くのシステムレベルの技術がオーバーヘッドの削減とスループットの向上に貢献しています。</p>
+<h2>インストールと利用</h2>
+<p>forkrunは、組み込みの自己解凍型C拡張を備えた単一のbashファイルとして提供されます。PerlやPython、インストールは不要で、任意のシェル関数の並列化をネイティブでサポートします。バイナリはGitHub Actionsで構築されており、CIへのトレーサビリティも確保されています。利用は以下の2コマンドで可能です。</p>
+<p><code>bash
+. frun.bash
+frun shell_func_or_cmd</code></p>
+<p>しかし、一部のユーザーからは、<code>curl</code>によるインストール方法への懸念が表明されています。</p>
+<h2>ユーザーの反応と代替手段</h2>
+<ul>
+<li>一部のユーザーは、GNU ParallelでCPUが十分に活用されないという同様のフラストレーションを経験しており、forkrunの登場を歓迎しています。</li>
+<li>別の一部のユーザーは、<code>parallel</code>をディスパッチ速度が重要でない重いタスク（例：ffmpegでの動画処理）に使用しており、forkrunの必要性を感じていません。</li>
+<li>Goプログラムを記述して並列処理を行うことで、Goランタイムがスケジューリングを処理し、execve()のオーバーヘッドがないため、同様の並列化ニーズを満たしているという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>forkrunは、GNU Parallelやxargs -Pのパフォーマンスボトルネック、特に高頻度・低遅延のシェルワークロードにおける問題を解決するために開発された、革新的なシェル並列化エンジンです。NUMA最適化、SIMDスキャン、ロックフリー処理などの高度なシステムレベル技術を駆使し、驚異的な速度と高いCPU利用率を実現しています。簡単な導入方法と既存ツールとの互換性により、多くの開発者にとって魅力的な選択肢となり得る一方で、重いIOバウンドタスクなど、一部のユースケースでは既存ツールで十分という意見や、Goのような他の並列化アプローチを好む声も存在します。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
