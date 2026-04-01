@@ -1,5 +1,166 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><item><title>GitHub's Historic Uptime</title><link>https://damrnelson.github.io/github-historical-uptime/</link><description>&lt;p&gt;&lt;a href="https://damrnelson.github.io/github-historical-uptime/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47591928.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><item><title>You're still signing data structures the wrong way</title><link>https://blog.foks.pub/posts/domain-separation-in-idl/</link><description>&lt;p&gt;&lt;a href="https://blog.foks.pub/posts/domain-separation-in-idl/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47605677.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントスレッドは、特定のデータ構造（例：Protocol Buffers）の署名において、型情報の欠如が引き起こす潜在的なセキュリティ問題（ある型のペイロードが別の型として解釈される可能性）と、その解決策について議論しています。&lt;/p&gt;
+&lt;h2&gt;型の曖昧さの問題&lt;/h2&gt;
+&lt;p&gt;多くの人が、Protocol Buffersのようなシリアライゼーション形式では、型名がシリアライズされた出力に含まれないため、異なるメッセージ型が同じバイナリ表現を持つ可能性があり、これがセキュリティ上のリスクとなることを指摘しています。オブジェクト指向言語のバックグラウンドを持つ開発者は、異なる型は「明らかに異なる」と認識しがちですが、シリアライゼーションの層ではそうではないことがあります。この問題は、「TreeRoot」型の署名が「KeyRevoke」型として再利用される可能性がある、という具体的な例で説明されています。&lt;/p&gt;
+&lt;h2&gt;ドメイン分離子の導入&lt;/h2&gt;
+&lt;p&gt;この問題に対する主な解決策として、「ドメイン分離子（domain separator）」の導入が提案されています。これは、署名計算時にメッセージの内容に加えて、そのメッセージの「文脈」や「型」を一意に識別する値を組み込むという考え方です。
+*   &lt;strong&gt;IDLに組み込む&lt;/strong&gt;: IDL（Interface Description Language）自体にドメイン分離子を含める方法が提案されています（例：Protocol Buffersのメッセージオプションとして &lt;code&gt;uint64 domain_separator&lt;/code&gt; を追加）。
+*   &lt;strong&gt;インバンドでの解決&lt;/strong&gt;: &lt;code&gt;type&lt;/code&gt; フィールドのような形で型情報をペイロードの一部として常に含めることで、ドメイン分離子の問題を回避できるという意見もあります。ただし、これはシリアライゼーションのオーバーヘッド増加という反論を受けることがあります。
+*   &lt;strong&gt;マルチセットハッシュ&lt;/strong&gt;: 別の解決策として、個別の正規化ステップなしに決定論的なハッシュを生成するマルチセットハッシュのアプローチも提案されています。しかし、これが型の曖昧さの問題をどのように解決するのかという疑問も呈されています。&lt;/p&gt;
+&lt;h2&gt;暗号設計の原則&lt;/h2&gt;
+&lt;p&gt;議論は、より広範な暗号設計の原則にも及びます。
+*   &lt;strong&gt;「The Cryptographic Doom Principle」&lt;/strong&gt;: 署名検証前に署名対象のデータを変更してはならない、という原則。
+*   &lt;strong&gt;「Horton principle」&lt;/strong&gt;: 署名が、送信されないがキー導出やMACの混入に使用される「文脈」にバインドされるべきである、という原則。これにより、署名者と検証者がメッセージの意図された文脈について暗号学的に合意することが保証されます。&lt;/p&gt;
+&lt;p&gt;一部のコメントでは、記事で提案されている「マジックナンバー」をプロトコルヘッダーに埋め込む方法は、このHorton principleに違反する（「文脈」が送信されてしまう）と批判されています。しかし、他のコメントでは、マジックナンバーは送信されるものではなく、署名の入力として使用される共有の文脈である、という理解が示されており、Horton principleの意図に沿っていると考えられています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;このスレッドは、Protocol Buffersなどのデータシリアライゼーション形式で発生する可能性のある、異なるメッセージ型が同じバイナリ表現を持つことによるセキュリティリスクについて掘り下げています。主要な解決策として、署名計算時にメッセージの型や文脈を一意に識別するための「ドメイン分離子」の導入が議論されています。この議論は、データシリアライゼーションと署名の設計における「The Cryptographic Doom Principle」や「Horton principle」といった確立された暗号設計原則の重要性にも触れています。解決策としては、IDLへの分離子の明示的な追加、インバンドでの型情報の組み込み、あるいは共有された非送信コンテキストとしての分離子の使用が挙げられています。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47605677</guid></item><item><title>TurboQuant KV Compression and SSD Expert Streaming for M5 Pro and IOS</title><link>https://github.com/SharpAI/SwiftLM</link><description>&lt;p&gt;&lt;a href="https://github.com/SharpAI/SwiftLM"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47604354.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントスレッドは、Apple Siliconデバイス（特にM5 Pro 64GB MacBook Pro）で大規模な100B+パラメータMoEモデルをネイティブに実行するための2つの新しいテクニック「TurboQuant KV圧縮」と「SSD Expert Streaming」を実装したプロジェクトSwiftLMについて議論しています。&lt;/p&gt;
+&lt;h2&gt;TurboQuant KV圧縮とSSD Expert Streaming&lt;/h2&gt;
+&lt;p&gt;SwiftLMプロジェクトは、M5 Pro 64GB MacBook Proで122BパラメータのMoEモデル（例：Qwen3.5-122B MoE）をネイティブに実行するために2つの主要な技術を実装しています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;TurboQuant KV圧縮&lt;/strong&gt;: TurboQuant論文 (Zandieh et al., ICLR 2026) のV3 Lloyd-MaxコードブックをネイティブC++に移植し、デ量子化をMetalシェーダーに融合することで、ランタイム時に4.3倍のKVキャッシュ圧縮を実現し、Pythonオーバーヘッドを排除しています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SSD Expert Streaming&lt;/strong&gt;: macOSのVMスワッピングやWatchdogカーネルキルを回避するために、約60GBの重みファイル全体はNVMeに残り、フォワードパスごとにトップKのアクティブなエキスパートページのみがGPUにストリーミングされます（約9GB/s）。これにより、M5 Pro 64GBでわずか2,694MBのアクティブGPU VRAMで推論が実行され、OSのページキャッシュがホットエキスパートの再利用を自動的に処理します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらのアプローチを組み合わせることで、Apple Siliconのメモリ制約のある環境でも大規模モデルを快適に実行できるとされています。また、iPhone 13 ProでのQwen 4Bモデルのテストも行われたとのことです。&lt;/p&gt;
+&lt;h2&gt;ベンチマークと「Vibe Coded」プロジェクトに関する懸念&lt;/h2&gt;
+&lt;p&gt;プロジェクトの発表に対し、多くのコメントが実際のベンチマーク、特にトークン/秒のパフォーマンスに関する情報の不足を指摘しています。
+一部のユーザーは、この種のプロジェクトが「vibe coded」（具体的なテストや検証が不十分で、AIにコード生成を指示するだけで作成されたように見える）であるという懸念を表明しています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ベンチマークの不足&lt;/strong&gt;: ユーザーは、実際のベンチマーク、特に異なるKV量子化レベルでの推論速度やタスク解決能力に関する詳細なデータが不足している点を指摘しており、プロジェクトのREADMEへの追加を求めています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;「Vibe Coded」への批判と擁護&lt;/strong&gt;: 「vibe coded」という言葉に対しては賛否両論があります。批判的な意見としては、このようなプロジェクトは真の価値を提供せず、既存のプロジェクトのメンテナーの時間を浪費する可能性があると主張されています。特に、AIを使用してコードを生成し、適切なテストや検証なしに公開・プルリクエストを提出することへの不満が示されています。一方、擁護する意見としては、紙から実装へ迅速に移行できるのは素晴らしいことであり、最適化がこれまで注目されてこなかった領域でのローハングフルーツ（簡単に達成できる改善）を特定するのに役立つという意見もあります。しかし、その場合でも、適切なテストと検証の重要性が強調されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;既存プロジェクトとの比較&lt;/strong&gt;: Llama.cppには既にKV圧縮機能があり、同様のTurboQuant PRもマージされる可能性があることが指摘されており、本プロジェクトがどの程度の差別化を図れているのかという疑問も呈されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;ローカルLLMの将来性&lt;/h2&gt;
+&lt;p&gt;Apple Siliconの進歩と、今回のSwiftLMのような技術開発を見て、多くのユーザーがローカルLLMの将来性に期待を寄せています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ローカル実行の利点&lt;/strong&gt;: 大規模なモデルがPCやスマートフォンでローカルに実行できるようになれば、プライバシー、レイテンシ、オフライン利用などの点で大きなメリットがあると考えられています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ハードウェアの進化&lt;/strong&gt;: Apple Siliconのようなハードウェアの進歩が、このトレンドを加速させているとの見方があります。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;課題&lt;/strong&gt;: 現在はまだ「少し手の届かない」状態であるものの、技術の進歩によってそれが現実のものになるという楽観的な意見が多いです。LLMの知能が使用するRAMに比例する傾向があるため、これらの最適化技術は広く採用されるだろうと考えられています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;SwiftLMプロジェクトは、Apple Siliconデバイス上で大規模なMoEモデルを効率的に実行するための革新的なKV圧縮とSSDストリーミング技術を導入しました。これにより、メモリ制約のある環境でのLLM利用に新たな可能性が開かれています。しかし、プロジェクトに対するコミュニティの関心は高いものの、実際のベンチマークデータの不足や「vibe coded」プロジェクトに対する一般的な懸念が指摘されており、より詳細な検証と情報提供が求められています。こうした技術の進展は、ローカルLLMの将来性を強く示唆しており、ハードウェアとソフトウェアの両面からの継続的な進化が期待されています。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47604354</guid></item><item><title>AI for American-produced cement and concrete</title><link>https://engineering.fb.com/2026/03/30/data-center-engineering/ai-for-american-produced-cement-and-concrete/</link><description>&lt;p&gt;&lt;a href="https://engineering.fb.com/2026/03/30/data-center-engineering/ai-for-american-produced-cement-and-concrete/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47603737.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;MetaがAIを活用してコンクリート配合を最適化し、国内材料の使用を促進する「BOxCrete」モデルを発表しました。この技術は、コンクリートの強度、硬化速度、持続可能性のバランスがとれた配合を迅速に見つけることを目指しており、国内セメント産業の課題解決にも貢献するとされています。&lt;/p&gt;
+&lt;h2&gt;AIとコンクリートの配合最適化&lt;/h2&gt;
+&lt;p&gt;Metaの「BOxCrete」モデルは、ベイズ最適化（特にガウス過程）と適応型実験を用いて、コンクリートの配合設計を改善するものです。これはLLM（大規模言語モデル）を使用するものではなく、検証済みのテストデータに基づいて予測を行い、最適な特性を持つ配合を特定します。これにより、サプライヤーは、より迅速に米国産の材料を配合に組み込むことができ、ターゲット仕様を満たす可能性が高い新しい配合を提案できるようになります。このモデルは、数ヶ月かかる従来のラボテストプロセスを短縮し、最適な配合を見つけるための現地テストの推奨に利用されます。&lt;/p&gt;
+&lt;h2&gt;国内材料の使用と「アメリカ・ファースト」の背景&lt;/h2&gt;
+&lt;p&gt;米国のセメント総消費量の22%は輸入に頼っており、その主な供給国はトルコ、カナダ、ベトナムです。MetaのAIモデルは、国内材料の利用を促進することで、国内産業を支援し、関税問題に対処する可能性を秘めています。一部のコメントでは、この取り組みがMark Zuckerberg氏の「アメリカ・ファースト」政策へのアピールであると指摘されていますが、モデル自体は数年前から開発されていたものです。国内セメント生産の質と量を向上させることは、国家的な利益に繋がると考えられています。&lt;/p&gt;
+&lt;h2&gt;コンクリート製造の複雑性と品質管理&lt;/h2&gt;
+&lt;p&gt;コンクリートは「単純」に見えるかもしれませんが、その製造は非常に複雑で、化学工学、材料科学、物理学、応用数学、コンピューターサイエンスといった学際的な専門知識が求められます。骨材（砂利や砂）の品質、地域の不純物、水分量など、多くの要因がコンクリートの強度と耐久性に影響を与えます。そのため、配合設計には職人の技と深い知識が必要です。AIモデルは、これらの複雑な要素を考慮し、最適な配合の候補を効率的に特定するのに役立ちますが、従来の厳格なテストプロセスを置き換えるものではありません。特に、現場でのスランプ試験（コンクリートの作業性を測る簡単な試験）や、硬化後のコア抜き試験といった検証は依然として不可欠とされています。&lt;/p&gt;
+&lt;h2&gt;AIへの懐疑論とHacker Newsの議論の質&lt;/h2&gt;
+&lt;p&gt;Metaの「AI for concrete」という発表に対し、コメントの中には「エイプリルフールのジョークではないか？」といった懐疑的な意見や、「AIに安全上重要な建設作業を任せるのは危険だ」という批判が多く見られました。特に、AIの定義をLLMと誤解しているユーザーが多く、AIが論理的思考や直接的な経験を持たないことへの懸念が表明されました。しかし、モデル開発者からは、これがLLMではなく、ガウス過程を用いたベイズ最適化であり、従来のテストを補完するものであることが明確に説明されました。このような誤解や、AIに対する「思考停止の批判」がHacker Newsの議論の質を低下させているという意見も出ています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Metaの「BOxCrete」AIモデルは、コンクリート配合の最適化を通じて、国内材料の利用促進と建設効率の向上を目指す画期的な取り組みです。このモデルは、複雑なコンクリートの特性を予測し、最適な配合候補を提案することで、従来の開発期間を短縮します。ただし、AIが従来の厳格な品質テストを完全に置き換えるものではなく、あくまでその補助として機能します。発表はエイプリルフールの直前だったため多くの憶測を呼びましたが、その技術的価値と国内産業への潜在的な貢献は大きいと評価されています。一方で、AIに対する一般的な誤解や過度な懐疑論が、建設的な議論を妨げる一因となっていることも示唆されました。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47603737</guid></item><item><title>StepFun 3.5 Flash is #1 cost-effective model for OpenClaw tasks (300 battles)</title><link>https://app.uniclaw.ai/arena?tab=costEffectiveness&amp;via=hn</link><description>&lt;p&gt;&lt;a href="https://app.uniclaw.ai/arena?tab=costEffectiveness&amp;via=hn"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47602879.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのユーザーは、OpenClawが実施した15モデルのLLMベンチマーク（パフォーマンスと費用対効果の2つのリーダーボード）に関する議論を行っています。OpenClawは、ユーザーが任意のタスクを提出し、選んだモデルをエージェントが評価するシステムです。&lt;/p&gt;
+&lt;h2&gt;パフォーマンスと費用対効果の乖離&lt;/h2&gt;
+&lt;p&gt;OpenClawのベンチマークでは、パフォーマンスと費用対効果のリーダーボードが大きく異なることが示されました。
+- パフォーマンス上位3モデル：Claude Opus 4.6、GPT-5.4、Claude Sonnet 4.6。
+- 費用対効果上位3モデル：StepFun 3.5 Flash、Grok 4.1 Fast、MiniMax M2.7。
+特にClaude Opus 4.6はパフォーマンスで1位である一方、費用対効果では14位でした。StepFun 3.5 Flashは費用対効果で1位、パフォーマンスで5位という結果です。GLM-5 Turbo、Xiaomi MiMo v2 Pro、MiniMax M2.7がGemini 3.1 Proのパフォーマンスを上回ったことも驚きとして挙げられています。&lt;/p&gt;
+&lt;h2&gt;StepFun 3.5 Flashの評価&lt;/h2&gt;
+&lt;p&gt;StepFun 3.5 Flashが費用対効果リーダーボードで1位になったことについて多くのコメントが寄せられました。
+- OpenRouter.aiでの人気モデルであること（ただし、長期間無料であったことが影響している可能性が指摘されています）。
+- 最も安価なモデルであるにも関わらず、純粋なパフォーマンスでも高いスコアを出せることが驚きであるとされています。
+- ユーザーによってはツール利用や創造的なライティングに優れる一方で、重大なミス（漢字の混入、誤字など）やプログラミング、長文ライティングには不向きという主観的な評価もあります。しかし、OpenClawのようなエージェントタスク（多くのツール呼び出しや簡単なプログラミングを含む）では非常に優れているとの意見もあります。
+- StepFun AIはベースモデル、中間チェックポイント、学習パイプライン全体を公開している稀有なAIラボとして評価されています。&lt;/p&gt;
+&lt;h2&gt;ベンチマーク方法論と透明性&lt;/h2&gt;
+&lt;p&gt;ベンチマーク方法論やデータの透明性に関する質問が多数寄せられました。
+- 300以上のベンチマークデータは全て公開されており、個々のバトル履歴、生成ファイル、判定結果、最終スコアが確認できることが説明されました。
+- 判定エージェントはLLM（Opus 4.6、GPT 5.4、Gemini 3.1 Proのいずれかを選択可能）が担当しており、人間の評価が現実的ではない理由（コードレビュー、視覚的なチェック、部分的な評価などにかかる時間とコスト）が説明されました。
+- 個々のバトルの詳細ページで時間やトークン数が確認できるものの、300以上のテーブルを広げるのは手間がかかるため、集計結果（平均トークン数/タスクなど）が欲しいという要望がありました。
+- ネットワークエラーが品質スコア0として計上され、Claude Haikuの平均品質がClaude Opusより高く見えるなど、信頼性の問題があるという指摘もありました。&lt;/p&gt;
+&lt;h2&gt;その他のモデルと懸念点&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Gemini 3.1 Proはスキル利用において非常に信頼性が低く、スキルを読み込んでも何も実行しないことがあると報告されています。&lt;/li&gt;
+&lt;li&gt;一部のコメントがAIによって生成されたように読めるという懸念も挙げられ、HNのガイドラインに反するという指摘がありました。&lt;/li&gt;
+&lt;li&gt;MiMo V2 Flash（Proではないバージョン）をベンチマークに追加する提案がありましたが、MiMo V2 ProがStepFunにパフォーマンスで劣るため、Flash版の性能はさらに低いと予想されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;OpenClawのLLMベンチマークは、パフォーマンスと費用対効果のランキングに大きな違いがあることを示し、特にStepFun 3.5 Flashが安価ながら高い性能を持つことが注目されています。ベンチマーク方法論の透明性やデータの集計方法については議論がありつつも、エージェント評価の難しさが浮き彫りになりました。Gemini 3.1 Proのスキル利用の不安定さも指摘され、各モデルの特性を理解する上で有益な情報を提供しています。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47602879</guid></item><item><title>EmDash – a spiritual successor to WordPress that solves plugin security</title><link>https://blog.cloudflare.com/emdash-wordpress/</link><description>&lt;p&gt;&lt;a href="https://blog.cloudflare.com/emdash-wordpress/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47602832.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントスレッドは、Cloudflareが発表した新しいCMS「EmDash」について議論しています。EmDashはTypeScriptで書かれており、サーバーレスで動作し、プラグインをサンドボックス化された環境（Dynamic Workers）で実行することでWordPressのセキュリティ問題を解決することを目指しています。しかし、その発表が4月1日であったことや、「AIネイティブ」を謳っていることから、エイプリルフールのジョークではないかという疑念が多くのコメントで提起されています。&lt;/p&gt;
+&lt;h2&gt;エイプリルフールのジョークか、本気の製品か？&lt;/h2&gt;
+&lt;p&gt;Cloudflareがエイプリルフールに製品を発表することが多いこと（例: 1.1.1.1 DNSサービス）から、EmDashがジョークなのか、本気の製品なのかについて多くの混乱と議論があります。
+*   一部のユーザーは、プロジェクト名「EmDash」や「AIネイティブ」という触れ込み、そして4月1日の発表日という組み合わせから、エイプリルフールのジョークだと確信しています。
+*   Cloudflareの社員がコメントで「エイプリルフールではない」「これは本物のプロジェクトだ」と明言しているにもかかわらず、多くのユーザーは疑念を抱き続けています。
+*   GitHubリポジトリのコミット履歴が発表日と同日であることや、Cloudflareの過去の「AI活用」を謳ったデモが「sloppy（ぞんざい）」だと批判された経験が、この疑念をさらに強めています。&lt;/p&gt;
+&lt;h2&gt;WordPressエコシステムの置き換えの難しさ&lt;/h2&gt;
+&lt;p&gt;多くのコメントが、EmDashがWordPressの「精神的後継者」を自称しているものの、WordPressの最大の強みである広大なエコシステム（WooCommerce、何百万ものテーマ、プラグイン、様々な外部APIとの統合）を置き換えることの難しさを指摘しています。
+*   WordPressユーザーは、WordPress自体のためではなく、その上に構築された膨大なプラグイン群やテーマ、ビジネスソリューションのために利用しています。これらの多くは「技術的な問題」を抱えながらも「ビジネス上の問題」を解決しています。
+*   EmDashのプラグインはTypeScriptで書かれ、サンドボックス化された環境で動作するため、既存のWordPressプラグインとは互換性がありません。この互換性の欠如が、採用の大きな障壁になると考えられています。
+*   非技術系の顧客にとって、WordPressの使いやすさや、Fiverrなどで安価にカスタマイズできる労働市場の存在が重要であり、EmDashがこれらを提供できるかどうかが疑問視されています。&lt;/p&gt;
+&lt;h2&gt;セキュリティとCloudflareインフラへのロックイン&lt;/h2&gt;
+&lt;p&gt;EmDashがWordPressのプラグインセキュリティ問題を解決すると主張している点には注目が集まっていますが、同時にCloudflareのインフラへのロックインを懸念する声も上がっています。
+*   EmDashは、サンドボックス化されたDynamic Workers内で各プラグインを実行し、ブリッジワーカーを介して権限を強制することで、セキュリティを向上させています。これはWordPressのプラグインアーキテクチャの根本的な問題を解決する可能性を秘めています。
+*   しかし、この主要なセキュリティ機能であるDynamic Workersは、Cloudflareのランタイムでのみ機能する設計になっている点が批判されています。これにより、EmDashはオープンソースでありながら、アーキテクチャ的にCloudflareのインフラにロックインされる可能性が指摘されています。
+*   一部のユーザーは、Cloudflareが人気のあるオープンソースプロジェクトを見つけては、自社のインフラで最適に動作するような代替品を作成するというビジネスモデルを採用していると見ています。&lt;/p&gt;
+&lt;h2&gt;AIによる開発と「Vibe Coding」への疑問&lt;/h2&gt;
+&lt;p&gt;EmDashが「AIエージェントによって開発された」と謳われていることに対して、「Vibe Coding（フィーリングでコードを書くこと）」の品質や信頼性に関する議論が繰り広げられています。
+*   一部のユーザーは、AIが生成したコードの安定性、長期的なメンテナンス性、そして人間がコードベースを深く理解せずにデバッグできるのかという点に疑問を呈しています。
+*   Cloudflareは過去にも「AIによって短期間で書き直された」と称するデモプロジェクトを発表し、その品質や事実誤認で批判された経緯があります。
+*   「Vibe Coding」という言葉の定義についても議論があり、AIによる開発は、適切なプロセスと人間のレビューがあれば、高品質なソフトウェアを生み出すことができるという意見もあります。しかし、一方で、AIが作成したコードには、開発者が意識していないトレードオフや、古い言語機能の使用、一貫性のない設計が見られるという批判もあります。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;CloudflareのEmDash発表は、エイプリルフールのジョークか本物かという混乱の中で、大きな議論を巻き起こしました。WordPressのプラグインセキュリティ問題に対処する意欲的な試みであると評価される一方で、WordPressの最大の強みである広大なエコシステムを置き換えることの困難さ、Cloudflareインフラへのロックインの可能性、そしてAIによる開発の信頼性といった点が主な懸念事項として挙げられています。多くのコメントは、EmDashが真にWordPressの「精神的後継者」となるには、技術的な優位性だけでなく、長期的なコミットメント、広範なコミュニティの構築、そして既存のビジネス課題への対応が不可欠であると考えています。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47602832</guid></item><item><title>Ask HN: Who is hiring? (April 2026)</title><link>https://news.ycombinator.com/item?id=47601859</link><description>&lt;p&gt;&lt;a href="https://news.ycombinator.com/item?id=47601859"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47601859.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsの「Who is Hiring?」スレッドでは、多種多様な企業が様々な職種の求人情報を掲載しています。特に、AI、機械学習、フルスタック開発、インフラ、DevOpsの分野で多くの機会が提供されています。リモートワーク可能な職種も多く見られますが、オンサイトまたはハイブリッド勤務を求める企業も少なくありません。&lt;/p&gt;
+&lt;h2&gt;AIと機械学習エンジニアリング&lt;/h2&gt;
+&lt;p&gt;AIと機械学習関連の職種は非常に多く、多くの企業がこの分野に注力しています。
+*   &lt;strong&gt;VLM Run&lt;/strong&gt;は、Vision-Language Model (VLM) システム向けのインフラを構築しており、インフラエンジニアとAI/MLエンジニアを募集しています。
+*   &lt;strong&gt;Shepherd&lt;/strong&gt;は、AIを活用した商業保険プラットフォームで、Machine Learning EngineerとApplied AI Engineerを求めています。
+*   &lt;strong&gt;Espresso AI&lt;/strong&gt;は、LLMを使ってデータウェアハウスやSparkジョブの効率を向上させるため、Staff ML Engineerを募集しています。
+*   &lt;strong&gt;Oscilar.com&lt;/strong&gt;は、AIリスク決定プラットフォームで、Staff GenAI Engineerをリモートで募集しています。
+*   &lt;strong&gt;PhysicsX&lt;/strong&gt;は、物理シミュレーションを高速化するAIネイティブプラットフォームを構築しており、Principal AI Engineerを募集しています。
+*   &lt;strong&gt;Cultivate AI&lt;/strong&gt;は、信用組合向けのAIプラットフォームを開発しており、Senior Software Engineer (AIスタックのオーナーシップ) を募集しています。
+*   &lt;strong&gt;Norm Ai&lt;/strong&gt;は、法務・コンプライアンス分野でAIを活用しており、Applied AI Engineerを求めています。
+*   &lt;strong&gt;Akur8&lt;/strong&gt;は、保険料設定プラットフォームでAI Engineerを募集しており、規制文書からの情報抽出に焦点を当てています。
+*   &lt;strong&gt;GameBrain AI&lt;/strong&gt;は、スポーツの試合準備とスカウトを加速するためのAIコンピュータビジョンモデルを開発しており、Staff Computer Vision Architectを募集しています。
+*   &lt;strong&gt;Prior Labs&lt;/strong&gt;は、表形式データに対応する基礎モデル(TabPFN)を開発しており、ML Engineer (Training Infrastructure, ML Platform), Research Engineer (Foundation Model), ML Engineer (Cloud Platform)などを募集しています。
+*   &lt;strong&gt;Higharc&lt;/strong&gt;は、住宅建設を変革するAIプラットフォームを構築しており、Senior AI Engineerを求めています。&lt;/p&gt;
+&lt;h2&gt;フルスタック、バックエンド、フロントエンド開発&lt;/h2&gt;
+&lt;p&gt;多様なスタックと経験レベルのフルスタック、バックエンド、フロントエンドエンジニアの需要も高いです。
+*   &lt;strong&gt;PrairieLearn&lt;/strong&gt;は、オープンソースの評価プラットフォームで、Node.js / TypeScript / Postgres / React / AIの経験を持つFull-Stack Software Engineerをリモート（米国）で募集しています。
+*   &lt;strong&gt;FetLife&lt;/strong&gt;は、Head of Engineering &amp;amp; InfrastructureおよびSenior DevOps Engineerをリモートで募集しており、Rails、Vue.js/Typescript、Rustなどのスタックを使用しています。
+*   &lt;strong&gt;Aha!&lt;/strong&gt;は、製品管理ツールで、Ruby on RailsとReactの経験を持つフルスタックエンジニアとDevOpsエンジニアをリモートで募集しています。
+*   &lt;strong&gt;OpenRent&lt;/strong&gt;は、英国の不動産賃貸プラットフォームで、Senior Full-Stack Engineerを募集しています。
+*   &lt;strong&gt;Alterdd&lt;/strong&gt;は、ファッション業界のフィットインテリジェンス層を構築しており、TypeScript、React、Node、Pythonの経験を持つLead Engineer (First Hire) を募集しています。
+*   &lt;strong&gt;Findigs&lt;/strong&gt;は、賃貸体験を革新するアプリケーションを構築しており、Python、Typescript、Node.js、Reactの経験を持つLead/Senior/Mid-Level Software Engineerを募集しています。
+*   &lt;strong&gt;UMH&lt;/strong&gt;は、製造業向けのリアルタイムデータプラットフォームで、Product Engineerを募集しています。
+*   &lt;strong&gt;Locket&lt;/strong&gt;は、急成長中のソーシャルアプリで、Backend engineersを募集しています。
+*   &lt;strong&gt;Ascertain&lt;/strong&gt;は、医療ワークフローを改善するソフトウェアを構築しており、Python、FastAPI、TypeScriptの経験を持つSenior Product Engineerを募集しています。
+*   &lt;strong&gt;RepSpark&lt;/strong&gt;は、B2B卸売ECプラットフォームで、GraphQL、React、TypeScript、PostgreSQL、AWSの経験を持つSenior Product Engineer (Front-End) を募集しています。
+*   &lt;strong&gt;WorkWhile&lt;/strong&gt;は、ML駆動の労働市場プラットフォームで、Senior &amp;amp; Staff Engineers (Backend, Full Stack) を募集しています。
+*   &lt;strong&gt;Arcol&lt;/strong&gt;は、建築設計のためのWebネイティブ3Dコラボレーションツールで、Typescript, Rust, wasm, WebGLの経験を持つSenior Software Engineerを募集しています。
+*   &lt;strong&gt;Stackable&lt;/strong&gt;は、Kubernetes上のオープンソースデータプラットフォームで、Product Engineer (Web &amp;amp; UI) を募集しています。
+*   &lt;strong&gt;Flaconi&lt;/strong&gt;は、ドイツのEコマース企業で、Staff Software Engineer - Frontend を募集しています。&lt;/p&gt;
+&lt;h2&gt;インフラ、DevOps、SRE&lt;/h2&gt;
+&lt;p&gt;スケーラブルで堅牢なシステムを構築・運用するためのインフラ、DevOps、SREエンジニアも広く求められています。
+*   &lt;strong&gt;FetLife&lt;/strong&gt;は、Head of Engineering &amp;amp; InfrastructureとSenior DevOps Engineerを募集しており、MySQL/PostgreSQL、ScyllaDB、Redis、ElasticSearch、Terraform、Google Cloudなどのスタックを使用しています。
+*   &lt;strong&gt;BIT Capital&lt;/strong&gt;は、AIを活用した資産運用ファンドで、Principal Engineer (Data &amp;amp; Platform) を募集しており、AWS、Databricks/Spark、Python、PostgreSQLなどの経験が求められます。
+*   &lt;strong&gt;Radar Labs&lt;/strong&gt;は、位置情報開発ツールで、SRE、データプラットフォーム、バックエンド、フルスタック、モバイルエンジニアを募集しており、Rust、TypeScript、Python、Scala、Terraformなどのスタックを使用しています。
+*   &lt;strong&gt;Discord&lt;/strong&gt;は、Database InfrastructureチームでSenior Software Engineerを募集しており、Rust、ScyllaDB、k8s、Python、Postgres、Elasticsearch、Terraformの経験を求めています。
+*   &lt;strong&gt;Temporal Technologies&lt;/strong&gt;は、スケーラブルで信頼性の高いアプリケーション構築プラットフォームで、Staff Software Engineer (Cloud Capacity, Replication Foundations, Reliability, DevProd (Infrastructure Observability)), Senior Software Engineer (Cloud Enablement, Release Engineering), Senior Engineering Manager (Cloud Enablement), Staff Software Engineer (AI SDK) など、複数のポジションをリモートで募集しています。
+*   &lt;strong&gt;Oklo&lt;/strong&gt;は、次世代原子炉のパイオニアで、Software Engineer (Infrastructure) を含む複数のソフトウェアエンジニアを募集しています。
+*   &lt;strong&gt;Cloudflare&lt;/strong&gt;は、エッジ推論プラットフォームの構築を支援するSystems EngineerとML Engineer (Workers AI) を募集しています。
+*   &lt;strong&gt;BetterDB&lt;/strong&gt;は、Valkeyのエコシステムツールを構築しており、Founding Engineer (observability, historical persistence, pattern analysis) を募集しています。
+*   &lt;strong&gt;Tavily&lt;/strong&gt;は、DevOps Engineerを募集しており、k8s、AWS、Helm、Terraformの経験が求められます。&lt;/p&gt;
+&lt;h2&gt;その他の注目職種&lt;/h2&gt;
+&lt;p&gt;上記の主要なカテゴリ以外にも、特定のドメイン知識やスキルセットを求める多様な職種が募集されています。
+*   &lt;strong&gt;WireScreen&lt;/strong&gt;は、グローバルサプライチェーンと中国関連リスクに対応するオープンソースインテリジェンスプラットフォームを構築しており、Senior Product Managerを募集しています。
+*   &lt;strong&gt;Assembly&lt;/strong&gt;は、AIネイティブな不動産投資会社で、Founding Engineer (Full-Stack) を募集しており、Python、React / TS、LLM API、データパイプライン、Ruby、Rails、Webスクレイピング、エンティティ解決の経験が関連します。
+*   &lt;strong&gt;Beacon AI&lt;/strong&gt;は、航空機の安全性と自律性を高めるインテリジェントシステムを構築しており、Lead iOS Engineer、Lead Infra/Backend Engineer、Lead WebApp/FrontEnd Engineer、Lead Autonomy/Robotics Engineerを募集しています。
+*   &lt;strong&gt;Tracebit&lt;/strong&gt;は、侵入検知のためのカナリアに着目したセキュリティ製品会社で、Founding Engineer、Founding Account Executive、Founding Customer Success Engineerを募集しています。
+*   &lt;strong&gt;Conductor&lt;/strong&gt;は、Mac上でコーディングエージェントを動かすアプリを開発しており、Software EngineerとDesignerを募集しています。
+*   &lt;strong&gt;MongoDB&lt;/strong&gt;は、Senior Developer Advocateをリモートで募集しており、大規模なデータアーキテクチャとパフォーマンスボトルネックの解決に焦点を当てています。
+*   &lt;strong&gt;Amodo Design&lt;/strong&gt;は、実世界の課題を解決するソフトウェアエンジニアを募集しており、科学ツール、自動化・ロボット工学、組み込みC/C++、Linux、CUDA、サーバーエンジニアリング、カスタムシミュレーションソフトウェア、データ分析パイプライン、組織ツールなど、幅広いプロジェクトに関わります。
+*   &lt;strong&gt;CodeWeavers&lt;/strong&gt;は、macOSとLinux向けのアプリケーションポート開発を行うSoftware Developer Port Jump Teamを募集しています。
+*   &lt;strong&gt;Skydio&lt;/strong&gt;は、自律飛行ドローン企業で、Robotics / Drones / Cloud / Web engineersを募集しています。
+*   &lt;strong&gt;Nuance Labs&lt;/strong&gt;は、人間の感情をリアルタイムで理解し表現する「human foundation model」を構築しており、Machine Learning Infra EngineerとSystems Engineer (Real-Time Engine) を募集しています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;今回のHacker Newsの求人スレッドは、AI/機械学習、フルスタック開発、インフラ/DevOpsの分野で特に多くの雇用機会を提供しています。リモートワークオプションも豊富ですが、オンサイトやハイブリッド勤務を重視する企業も目立ちます。各社が最先端技術を活用して、教育、金融、医療、不動産、製造、物流、サイバーセキュリティ、航空などの様々な産業に変革をもたらそうとしていることが伺えます。スタートアップから大企業まで幅広い規模の企業が参加しており、特に高い技術力と自律性を求める傾向が強いようです。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47601859</guid></item><item><title>GitHub's Historic Uptime</title><link>https://damrnelson.github.io/github-historical-uptime/</link><description>&lt;p&gt;&lt;a href="https://damrnelson.github.io/github-historical-uptime/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47591928.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Hacker Newsのコメントは、GitHubの信頼性に関するグラフについて議論しています。特に、Microsoftによる買収後の信頼性の低下や、その原因について意見が交わされています。&lt;/p&gt;
 &lt;h2&gt;GitHubの信頼性低下とMicrosoft買収の影響&lt;/h2&gt;
@@ -167,7 +328,20 @@
 &lt;p&gt;Anchorgridの発表は、建設業界のユーザーから大きな関心を集め、具体的な利用ケース（電気系統図からのBOM作成など）や価格設定に関する問い合わせが寄せられました。また、過去の文書処理技術における問題（Xerox JBIG2バグによる数字の意図しない置き換え）が想起され、OCRの精度がもたらす影響について言及する声もありました。&lt;/p&gt;
 &lt;p&gt;一方で、技術文書におけるOCRの精度、特に手書き、スタンプ、改訂履歴、低品質スキャンといった建設文書特有のエッジケースへの対応については懸念も示されました。提供されたサンプルでは、一部のドアの検出漏れがあったという具体的なフィードバックもあり、検出範囲の拡大と精度向上が今後の課題となることが示唆されました。&lt;/p&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;Anchorgridは、建設業界における長年の課題である、PDF形式の建設文書からのデータ抽出に焦点を当てたAPIとモデルを開発しました。業界の現実である「PDFが共通言語」であるという認識に基づき、ビジョンモデルを採用し、高精度なデータ抽出を目指す同社のアプローチは大きな注目を集めています。OCRの技術的課題、検出精度の維持・向上、そして多岐にわたる建設文書のエッジケースへの対応が、今後の製品開発における主要な課題となるでしょう。&lt;/p&gt;</description><pubDate>2026-03-30 20:35:40</pubDate><guid>47576055</guid></item><item><title>How to turn anything into a router</title><link>https://nbailey.ca/post/router/</link><description>&lt;p&gt;&lt;a href="https://nbailey.ca/post/router/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47574034.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Anchorgridは、建設業界における長年の課題である、PDF形式の建設文書からのデータ抽出に焦点を当てたAPIとモデルを開発しました。業界の現実である「PDFが共通言語」であるという認識に基づき、ビジョンモデルを採用し、高精度なデータ抽出を目指す同社のアプローチは大きな注目を集めています。OCRの技術的課題、検出精度の維持・向上、そして多岐にわたる建設文書のエッジケースへの対応が、今後の製品開発における主要な課題となるでしょう。&lt;/p&gt;</description><pubDate>2026-03-30 20:35:40</pubDate><guid>47576055</guid></item><item><title>Show HN: Zerobox – Sandbox any command with file, network, credential controls</title><link>https://github.com/afshinm/zerobox</link><description>&lt;p&gt;&lt;a href="https://github.com/afshinm/zerobox"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47574871.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントは、Rust製のクロスプラットフォームなCLIサンドボックスツール「Zerobox」の発表に関するものです。Zeroboxは、OpenAI Codexのサンドボックスクレートをベースに、シークレットインジェクションやネットワークフィルタリングなどの機能を追加しています。デフォルトでネットワークI/Oとファイル書き込みをブロックし、OSネイティブのサンドボックスメカニズム（LinuxではBubbleWrap、macOSではSeatbeltなど）を利用することで、VMやDockerなしでローカルコマンドを安全に実行できることが特徴です。特にAIエージェントのサンドボックス化を主要なユースケースとして提案されています。&lt;/p&gt;
+&lt;h2&gt;Zeroboxの機能と設計&lt;/h2&gt;
+&lt;p&gt;Zeroboxは、Rustで書かれたクロスプラットフォームのシングルバイナリCLIツールです。OpenAI Codexのサンドボックスクレートを活用し、シークレット注入（credential injection）やSDKなどの機能を追加しています。デフォルトではファイル読み込みのみを許可し、ファイル書き込みとネットワークI/Oはブロックする「deny by default」ポリシーを採用しています。MITM（中間者攻撃）プロキシを使用してネットワーク呼び出しをブロックし、サンドボックス内のプロセスに実際のシークレット値を公開することなく、プレースホルダーをネットワークレベルで実際のクレデンシャルに置き換えることができます。これにより、AIエージェントなどの信頼性の低いコードから機密情報が漏洩するリスクを低減します。Dockerのような複雑な設定やデーモンを必要とせず、ローカルでコマンドをサンドボックス化するのに適しており、LinuxではBubbleWrap、macOSではSeatbeltといったOSネイティブのサンドボックスソリューションを利用しています。&lt;/p&gt;
+&lt;h2&gt;サンドボックスアプローチと他ツールとの比較&lt;/h2&gt;
+&lt;p&gt;ZeroboxはDockerと同じカーネルメカニズム（namespace + seccomp）を使用していますが、デーモン不要、root不要、コールドスタートが約10msと低オーバーヘッドであることを強調しています。Dockerが包括的なファイルシステム隔離とリソース制限を提供するのに対し、Zeroboxはきめ細やかなファイル/ネットワーク/クレデンシャル制御と最小限のオーバーヘッドを提供します。また、Dockerコンテナ内でZeroboxを併用するシナリオも考えられます。Wasmベースのサンドボックスと比較して、ファイルシステムアクセスやサブプロセス起動が頻繁に必要な場合は、コンテナとseccompフィルタリングの組み合わせがより高速で広範なsyscallサポートを提供すると指摘されています。一部のユーザーからは、既存の信頼性の高い&lt;code&gt;sandbox-exec&lt;/code&gt;やDockerの利用を好む意見や、Zeroboxが内部的に利用するBubblewrapの呼び出し方に関する技術的な代替案（直接&lt;code&gt;unshare&lt;/code&gt;システムコールを使うべきではないか）も提言されました。&lt;/p&gt;
+&lt;h2&gt;セキュリティ、信頼性、およびクレデンシャル管理&lt;/h2&gt;
+&lt;p&gt;MITMプロキシによるクレデンシャル注入は、Zeroboxの最も興味深い機能として注目されました。サンドボックス内のプロセスが実際のシークレット値にアクセスできないため、AIエージェントやサードパーティツールのような信頼性の低いコードの実行におけるセキュリティリスクを大幅に軽減できます。また、デフォルト拒否のネットワークポリシーは、エージェントが機密性の高いデータを外部に不正に送信するのを防ぐ上で不可欠だと評価されています。しかし、多くの類似プロジェクトが存在する中で、Zeroboxのような新しいサンドボックスツールの「信頼性」を確立することが大きな課題として挙げられました。基盤となるOSのサンドボックスプリミティブは信頼性が高いものの、それらをどのように設定し、上位レイヤーで安全にラップするかが重要であり、徹底したテストと詳細なアーキテクチャドキュメントの必要性が強調されました。MITMプロキシの柔軟性に関しては、URLの変更に対する脆さが懸念されましたが、開発者はワイルドカードサポートで対応していると説明しました。&lt;/p&gt;
+&lt;h2&gt;ユーザビリティ（UX）とドキュメンテーションの改善&lt;/h2&gt;
+&lt;p&gt;コメントでは、ユーザーエクスペリエンスとドキュメンテーションの改善に関する具体的な提案が多数寄せられました。AIエージェントの監視のために、ファイル読み書きやネットワーク呼び出しなどの操作を詳細に記録するロギング機能の需要が高く、開発者はこれに関心を示し、既に&lt;code&gt;--debug&lt;/code&gt;フラグを追加し、OTEL統合も計画していると述べました。また、デフォルトでファイル読み込みが許可されている現在のポリシーに対し、より厳格なデフォルト拒否（&lt;code&gt;--deny-read=/&lt;/code&gt;）を容易にするためのインタラクティブなプロファイル作成機能が提案されました。これは、初回実行時にユーザーがアクセスを承認し、その設定をプロファイルとして保存・再利用するというもので、開発者もこのアイデアを高く評価し、プリセットプロファイルの提供と合わせて検討する意向を示しました。さらに、サンドボックスのメカニズム、テスト、そしてセキュリティに関する詳細なドキュメンテーションが、ツールの信頼性を確立し、ユーザーが安心して採用するための鍵となると強く要望されました。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Zeroboxは、OSネイティブのメカニズムとMITMプロキシを組み合わせた効率的なローカルサンドボックスツールとしてHacker Newsで紹介され、特にAIエージェントの安全な実行に対する関心を集めました。その主要な利点は、デフォルト拒否のセキュリティポリシー、MITMプロキシによる安全なクレデンシャル注入、そしてDockerと比較して低いオーバーヘッドとデーモン不要な点にあります。&lt;/p&gt;
+&lt;p&gt;コミュニティからは、ロギング機能の拡充、インタラクティブなプロファイル作成機能、そしてサンドボックスのメカニズムとテストに関する詳細なドキュメンテーションを通じて、信頼性と使いやすさをさらに高めることへの期待が寄せられました。特に、多くのサンドボックスツールが登場する中で、その「信頼性」をどのように確立するかが重要な議論点となりました。開発者はこれらのフィードバックを積極的に受け入れ、機能改善やドキュメント強化に取り組む姿勢を示しています。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47574871</guid></item><item><title>How to turn anything into a router</title><link>https://nbailey.ca/post/router/</link><description>&lt;p&gt;&lt;a href="https://nbailey.ca/post/router/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47574034.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;このHacker Newsのスレッドは、既存のPC（特に古いもの）をルーターとして使用するというアイデアについて議論しています。多くのユーザーがこのアプローチを支持し、その柔軟性、コスト効率、学習価値を強調しています。&lt;/p&gt;
 &lt;h2&gt;単一ネットワークインターフェースとVLAN&lt;/h2&gt;
@@ -325,7 +499,17 @@
 &lt;li&gt;&lt;strong&gt;C++コミュニティの多様性&lt;/strong&gt;: システムプログラミング言語の分野が非常に男性中心であるという観察に対するコメントも寄せられました。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;C++26は、リフレクションや契約といった新機能の導入で大きな進歩を遂げていますが、同時に、モジュールの採用の遅れ、複雑なビルドシステムとパッケージ管理、言語の複雑さの増大といった長年の課題に直面しています。特に、RustのCargoのようなシンプルで効果的なパッケージ管理ツールの欠如は、新しい開発者にとってC++を魅力のないものにしているという意見が多く見られます。これらの課題を解決し、実用的なツールチェーンと安定したABIの提供が、C++の将来的な普及と開発者エクスペリエンスの向上にとって不可欠であるとコミュニティは考えています。&lt;/p&gt;</description><pubDate>2026-03-29 20:21:30</pubDate><guid>47565365</guid></item><item><title>Neovim 0.12.0</title><link>https://github.com/neovim/neovim/releases/tag/v0.12.0</link><description>&lt;p&gt;&lt;a href="https://github.com/neovim/neovim/releases/tag/v0.12.0"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47565316.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;C++26は、リフレクションや契約といった新機能の導入で大きな進歩を遂げていますが、同時に、モジュールの採用の遅れ、複雑なビルドシステムとパッケージ管理、言語の複雑さの増大といった長年の課題に直面しています。特に、RustのCargoのようなシンプルで効果的なパッケージ管理ツールの欠如は、新しい開発者にとってC++を魅力のないものにしているという意見が多く見られます。これらの課題を解決し、実用的なツールチェーンと安定したABIの提供が、C++の将来的な普及と開発者エクスペリエンスの向上にとって不可欠であるとコミュニティは考えています。&lt;/p&gt;</description><pubDate>2026-03-29 20:21:30</pubDate><guid>47565365</guid></item><item><title>An Introduction to Writing Systems and Unicode</title><link>https://r12a.github.io/scripts/tutorial/part2</link><description>&lt;p&gt;&lt;a href="https://r12a.github.io/scripts/tutorial/part2"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47565350.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントは、Richard Ishida氏のUnicodeおよび言語関連のウェブサイト（r12a.github.io）への言及から始まり、彼の専門知識への賞賛、そして簡体字中国語のグリフ形状やUnicodeにおけるHan Unificationに関する具体的な議論へと展開しています。&lt;/p&gt;
+&lt;h2&gt;Richard Ishidaの仕事とリソースへの評価&lt;/h2&gt;
+&lt;p&gt;人々はRichard Ishida (r12a.github.ioの作者) を、Unicodeや言語関連のトピックにおいて長年貢献してきた貴重な人物として高く評価しています。特にW3Cのテキストレイアウト要件に関するボランティア活動を通して彼と働いた経験を持つ人は、彼が書記体系に深く関心を持ち、この分野で多くの価値ある仕事をしてきたことを強調しています。彼のウェブサイトは、Unicodeや言語関連のトピックにおいて長らく貴重な情報源となっています。&lt;/p&gt;
+&lt;h2&gt;簡体字中国語のグリフ形状に関する議論&lt;/h2&gt;
+&lt;p&gt;一部のユーザーは、記事中の画像で簡体字中国語とされているテキストのグリフ形状が、中国政府が定義する標準的な漢字の形状ではなく、日本の漢字の標準的な形状に近いように見えると指摘しました。しかし、これに対し別のユーザーは具体例を挙げながら反論し、提示された画像が「沟」や「时」のような簡体字中国語に特有の形を使用しており、日本の漢字や繁体字中国語とは異なることを示しました。また、「統/统」や「请」も同様に簡体字中国語の形が正しく使用されており、日本の漢字とは異なると説明しています。&lt;/p&gt;
+&lt;h2&gt;UnicodeのHan Unificationに関する議論&lt;/h2&gt;
+&lt;p&gt;UnicodeのHan Unificationに対する一般的な不満として、簡体字と繁体字が同じコードポイントを共有しているため、表示はフォントに依存するという指摘が上がりました。しかし、この見解に対しては、これは不正確であるという訂正が入りました。実際には、簡体字の圧倒的多数はUnicode 1.0以来、独自のコードポイントを持っており、この点に関する詳細な情報源（r12a.github.io/scripts/chinese/）が提示されました。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントでは、Richard Ishida氏のUnicodeおよび言語に関する貴重な貢献が高く評価されています。また、簡体字中国語のグリフ形状が日本の漢字と混同されることや、UnicodeのHan Unificationにおける簡体字・繁体字のコードポイント共有に関する誤解が、具体的な例や情報源によって解消されました。これにより、言語学やUnicodeの実装に関する深い洞察が提供されました。追加情報としてUTF-8 Playground（utf8-playground.netlify.app）も紹介されました。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47565350</guid></item><item><title>Neovim 0.12.0</title><link>https://github.com/neovim/neovim/releases/tag/v0.12.0</link><description>&lt;p&gt;&lt;a href="https://github.com/neovim/neovim/releases/tag/v0.12.0"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47565316.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;今回のHacker Newsのコメントは、Neovimの最新バージョンである0.12.0（またはまだ「v0」であること）と、それに伴う変更点、特に&lt;code&gt;vim.pack&lt;/code&gt;という新しい組み込みのプラグインマネージャーやマルチカーソル機能、そしてZigビルドシステムの導入について議論しています。また、Vim/NeovimとVS Code間の選択、AIコード補完ツールの統合、そしてNeovimの将来の方向性についても幅広い意見が交わされています。&lt;/p&gt;
 &lt;h2&gt;Neovimのバージョンと開発状況&lt;/h2&gt;
@@ -339,7 +523,17 @@
 &lt;h2&gt;Zigビルドシステムの導入&lt;/h2&gt;
 &lt;p&gt;Zigビルドシステムが導入されたことについて、これがC言語からの移行の始まりではないかという推測がなされています。ZigはCプロジェクトのビルドをCMakeよりもずっと簡単にするため、Cコードベースを「近代化」する手段として段階的に導入される可能性があると考えられています。しかし、中には既存の成熟したビルドシステムからZigのような比較的新しいシステムに移行することに懐疑的な意見もあります。&lt;/p&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;Neovimの最新アップデートと今後の方向性に関する議論は多岐にわたります。特に新しい組み込みプラグインマネージャー&lt;code&gt;vim.pack&lt;/code&gt;は既存の&lt;code&gt;lazy.nvim&lt;/code&gt;との比較で注目を集めていますが、その設計思想は異なることが強調されています。また、マルチカーソル機能の導入は多くのユーザーにとって生産性向上に繋がる待望の機能であり、その使用方法についても活発な意見交換がなされました。VS Codeとの比較ではNeovimの優位性が強調されつつも、両者の良い点を組み合わせるアプローチも提案されています。Zigビルドシステムの導入は、Neovimの技術スタックにおける将来的な進化の可能性を示唆しています。全体として、Neovimコミュニティは活発で、新しい機能や改善に対する期待と、既存の慣習とのバランスについて様々な視点から議論が交わされています。&lt;/p&gt;</description><pubDate>2026-03-29 20:21:30</pubDate><guid>47565316</guid></item><item><title>Voyager 1 runs on 69 KB of memory and an 8-track tape recorder</title><link>https://techfixated.com/a-1977-time-capsule-voyager-1-runs-on-69-kb-of-memory-and-an-8-track-tape-recorder-4/</link><description>&lt;p&gt;&lt;a href="https://techfixated.com/a-1977-time-capsule-voyager-1-runs-on-69-kb-of-memory-and-an-8-track-tape-recorder-4/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47564421.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Neovimの最新アップデートと今後の方向性に関する議論は多岐にわたります。特に新しい組み込みプラグインマネージャー&lt;code&gt;vim.pack&lt;/code&gt;は既存の&lt;code&gt;lazy.nvim&lt;/code&gt;との比較で注目を集めていますが、その設計思想は異なることが強調されています。また、マルチカーソル機能の導入は多くのユーザーにとって生産性向上に繋がる待望の機能であり、その使用方法についても活発な意見交換がなされました。VS Codeとの比較ではNeovimの優位性が強調されつつも、両者の良い点を組み合わせるアプローチも提案されています。Zigビルドシステムの導入は、Neovimの技術スタックにおける将来的な進化の可能性を示唆しています。全体として、Neovimコミュニティは活発で、新しい機能や改善に対する期待と、既存の慣習とのバランスについて様々な視点から議論が交わされています。&lt;/p&gt;</description><pubDate>2026-03-29 20:21:30</pubDate><guid>47565316</guid></item><item><title>Windows 95 defenses against installers that overwrite a file with an older one</title><link>https://devblogs.microsoft.com/oldnewthing/20260324-00/?p=112159</link><description>&lt;p&gt;&lt;a href="https://devblogs.microsoft.com/oldnewthing/20260324-00/?p=112159"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47565307.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Windows 95のインストーラーが使用していた、上書きされがちなシステムファイルをバックアップし、インストーラー完了後に復元または更新する「SYSBCKUP」メカニズムについて議論されており、これがインストーラーが99%で停止する問題と関連しているか、またその設計の奇妙さや潜在的な悪用可能性について意見が交わされています。&lt;/p&gt;
+&lt;h2&gt;SYSBCKUPメカニズムの概要&lt;/h2&gt;
+&lt;p&gt;Windows 95は、インストーラーが頻繁に上書きする可能性のある共通ファイルを&lt;code&gt;C:\Windows\SYSBCKUP&lt;/code&gt;ディレクトリにバックアップとして保持していました。インストーラーが完了すると、Windowsはこれらの共通ファイルが上書きされたかどうかを確認し、もし上書きされていれば元のファイルを復元、またはより新しいバージョンであればSYSBCKUPを更新するという仕組みでした。この設計は、一部のユーザーから「正気を逸している」と評されています。&lt;/p&gt;
+&lt;h2&gt;インストーラーの99%停止問題との関連&lt;/h2&gt;
+&lt;p&gt;あるユーザーは、このSYSBCKUPメカニズムが、インストーラーが進行状況の99%で永遠に停止してしまうという昔ながらの問題の原因ではないかと推測しています。しかし、別のユーザーは、Windows 95の元のバージョンが「インストール完了後にコンポーネントを復元する」方式を採用していたのであれば、インストーラーの実行中にハングを引き起こす直接の原因ではない可能性が高いと指摘しています。ただし、Windows 95がインストーラーの完了を誤判断して、復元プロセスを早めてしまった場合は別かもしれません。&lt;/p&gt;
+&lt;h2&gt;設計の奇妙さと潜在的な悪用&lt;/h2&gt;
+&lt;p&gt;このSYSBCKUPメカニズム、特にSYSBCKUPディレクトリ内のファイルよりも高いバージョン番号を持つファイルに置き換えられた場合、その新しいファイルがSYSBCKUPディレクトリにコピーされるという側面は、その設計の奇妙さが際立っています。これにより、悪意のあるインストーラーがOSを乗っ取り、他のインストーラーがシステムをクリーンアップしようとするたびに、自身の不正なシステムコンポーネントを無限に書き換え続けることが可能になるという、ユーモラスかつ危険なシナリオも示唆されています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;これらのコメントは、Windows 95のインストーラーが、共通のシステムファイルを保護するために使用していた「SYSBCKUP」というユニークでやや強引なメカニズムに焦点を当てています。ユーザーは、このメカニズムが当時のインストーラーの停止問題に関連している可能性を議論し、その設計が非常に奇妙であると評価しています。また、この仕組みが悪意のある目的で利用される可能性についても言及しており、Windows 95時代のソフトウェア開発における課題と工夫の一端が垣間見えます。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47565307</guid></item><item><title>Voyager 1 runs on 69 KB of memory and an 8-track tape recorder</title><link>https://techfixated.com/a-1977-time-capsule-voyager-1-runs-on-69-kb-of-memory-and-an-8-track-tape-recorder-4/</link><description>&lt;p&gt;&lt;a href="https://techfixated.com/a-1977-time-capsule-voyager-1-runs-on-69-kb-of-memory-and-an-8-track-tape-recorder-4/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47564421.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Hacker Newsのコメントは、ボイジャー1号の少ないメモリ量（69KB）と現代のソフトウェア（LinkedInなど）のメモリ使用量の対比、そしてボイジャーミッションの驚異的な技術的・科学的偉業について議論しています。&lt;/p&gt;
 &lt;h2&gt;現代ソフトウェアの肥大化&lt;/h2&gt;
@@ -361,7 +555,19 @@
 &lt;li&gt;&lt;strong&gt;感動とインスピレーション:&lt;/strong&gt; 多くの人がボイジャーミッションに感動し、それがキャリアや人生の意味、友情、目的についての考察を促すと述べています。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;このHacker Newsのスレッドは、ボイジャー1号の驚異的な技術的偉業と、わずか69KBのメモリで達成された成果を巡る賞賛で溢れています。特に、現代のソフトウェアの肥大化（例：LinkedIn）との対比が多くのユーザーの共感を呼び、効率的なエンジニアリングの価値について考えさせられます。また、ボイジャーが持つ長期的な耐久性、困難な条件下での遠隔操作、そして数世紀に一度の惑星直列を活用した軌道設計といった側面が強調されています。一方で、元の記事がLLMによって書かれたと見られることへの批判も見られますが、全体としては、ボイジャーが人類の好奇心、技術力、そして宇宙における我々の立ち位置を象徴する、深い感動と哲学的な示唆に満ちたミッションとして認識されていることが示されています。&lt;/p&gt;</description><pubDate>2026-03-29 20:21:30</pubDate><guid>47564421</guid></item><item><title>Further human + AI + proof assistant work on Knuth's "Claude Cycles" problem</title><link>https://twitter.com/BoWang87/status/2037648937453232504</link><description>&lt;p&gt;&lt;a href="https://twitter.com/BoWang87/status/2037648937453232504"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47557166.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;このHacker Newsのスレッドは、ボイジャー1号の驚異的な技術的偉業と、わずか69KBのメモリで達成された成果を巡る賞賛で溢れています。特に、現代のソフトウェアの肥大化（例：LinkedIn）との対比が多くのユーザーの共感を呼び、効率的なエンジニアリングの価値について考えさせられます。また、ボイジャーが持つ長期的な耐久性、困難な条件下での遠隔操作、そして数世紀に一度の惑星直列を活用した軌道設計といった側面が強調されています。一方で、元の記事がLLMによって書かれたと見られることへの批判も見られますが、全体としては、ボイジャーが人類の好奇心、技術力、そして宇宙における我々の立ち位置を象徴する、深い感動と哲学的な示唆に満ちたミッションとして認識されていることが示されています。&lt;/p&gt;</description><pubDate>2026-03-29 20:21:30</pubDate><guid>47564421</guid></item><item><title>Show HN: Git bayesect – Bayesian Git bisection for non-deterministic bugs</title><link>https://github.com/hauntsaninja/git_bayesect</link><description>&lt;p&gt;&lt;a href="https://github.com/hauntsaninja/git_bayesect"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47557921.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントは、git bisectの確率的バージョンである「git_bayesect」というツールと、その背後にある数学について議論しています。このツールは、特に非決定的なバグや不安定なテストの特定に役立つと評価されています。&lt;/p&gt;
+&lt;h2&gt;非決定的なバグへの対応&lt;/h2&gt;
+&lt;p&gt;多くのユーザーは、非決定的なバグや不安定なテストの特定における&lt;code&gt;git_bayesect&lt;/code&gt;の潜在的な有用性に感銘を受けています。従来の&lt;code&gt;git bisect&lt;/code&gt;は決定的なバグに依存するのに対し、&lt;code&gt;git_bayesect&lt;/code&gt;は非決定的なバグや、再現手順が不明確なバグにも対応できる点が評価されています。&lt;/p&gt;
+&lt;h2&gt;数学的アプローチと拡張性&lt;/h2&gt;
+&lt;p&gt;ユーザーは、&lt;code&gt;git_bayesect&lt;/code&gt;の背後にある数学的な側面（特にベイズ確率の利用）に関心を示しています。隠れマルコフモデルとの関連性や、特定のコミットでテストを複数回実行して失敗確率を得る機能（およびそのためのベータ分布の更新方法）について議論されています。開発者によると、複数回の試行結果をまとめて記録する機能は容易に追加可能であり、現在のところは個別の観測を繰り返すことで対応できます。&lt;/p&gt;
+&lt;h2&gt;パフォーマンス回帰とノイズの多いベンチマーク&lt;/h2&gt;
+&lt;p&gt;ノイズの多いベンチマークにおけるパフォーマンス回帰の特定という、関連する課題についても言及されています。ユーザーは、生のベンチマークスコアを各ステップで直接入力できるように&lt;code&gt;git_bayesect&lt;/code&gt;を一般化することの実現可能性について問いかけており、既存のアプローチでは閾値を使うことで情報が失われる可能性を指摘しています。&lt;/p&gt;
+&lt;h2&gt;その他のユースケース&lt;/h2&gt;
+&lt;p&gt;LLM（大規模言語モデル）のインタラクションを含むテストなど、特定のユースケースでの有用性も示唆されています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;git_bayesect&lt;/code&gt;は、特に非決定的なバグや不安定なテスト、あるいはノイズの多いパフォーマンス回帰の特定において、従来の&lt;code&gt;git bisect&lt;/code&gt;の限界を超える革新的なツールとしてHacker Newsで注目されています。そのベイズ確率に基づくアプローチと、複数回の試行や生のベンチマークスコアに対応するための拡張性について活発な議論が交わされており、多くの開発者がその実用性と数学的な洗練さに期待を寄せています。&lt;/p&gt;</description><pubDate>2026-04-01 20:35:39</pubDate><guid>47557921</guid></item><item><title>Further human + AI + proof assistant work on Knuth's "Claude Cycles" problem</title><link>https://twitter.com/BoWang87/status/2037648937453232504</link><description>&lt;p&gt;&lt;a href="https://twitter.com/BoWang87/status/2037648937453232504"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/47557166.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;このHacker Newsのコメントスレッドは、LLM（大規模言語モデル）がKnuthの「Claude's Cycles」問題という数学的な難問を解決したというニュースについて議論しています。特に、この進展が「我々凡人にとって何を意味するのか」という問いを中心に、AIが社会や雇用に与える影響について様々な意見が交わされています。&lt;/p&gt;
 &lt;h2&gt;LLMによる問題解決の意義&lt;/h2&gt;

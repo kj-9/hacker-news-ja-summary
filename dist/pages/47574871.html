@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Zerobox – Sandbox any command with file, network, credential controls - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Zerobox – Sandbox any command with file, network, credential controls</h1>
+        <div class="meta">
+            投稿日: 2026年04月01日 | ランク: 10
+        </div>
+        <a href="https://github.com/afshinm/zerobox" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Rust製のクロスプラットフォームなCLIサンドボックスツール「Zerobox」の発表に関するものです。Zeroboxは、OpenAI Codexのサンドボックスクレートをベースに、シークレットインジェクションやネットワークフィルタリングなどの機能を追加しています。デフォルトでネットワークI/Oとファイル書き込みをブロックし、OSネイティブのサンドボックスメカニズム（LinuxではBubbleWrap、macOSではSeatbeltなど）を利用することで、VMやDockerなしでローカルコマンドを安全に実行できることが特徴です。特にAIエージェントのサンドボックス化を主要なユースケースとして提案されています。</p>
+<h2>Zeroboxの機能と設計</h2>
+<p>Zeroboxは、Rustで書かれたクロスプラットフォームのシングルバイナリCLIツールです。OpenAI Codexのサンドボックスクレートを活用し、シークレット注入（credential injection）やSDKなどの機能を追加しています。デフォルトではファイル読み込みのみを許可し、ファイル書き込みとネットワークI/Oはブロックする「deny by default」ポリシーを採用しています。MITM（中間者攻撃）プロキシを使用してネットワーク呼び出しをブロックし、サンドボックス内のプロセスに実際のシークレット値を公開することなく、プレースホルダーをネットワークレベルで実際のクレデンシャルに置き換えることができます。これにより、AIエージェントなどの信頼性の低いコードから機密情報が漏洩するリスクを低減します。Dockerのような複雑な設定やデーモンを必要とせず、ローカルでコマンドをサンドボックス化するのに適しており、LinuxではBubbleWrap、macOSではSeatbeltといったOSネイティブのサンドボックスソリューションを利用しています。</p>
+<h2>サンドボックスアプローチと他ツールとの比較</h2>
+<p>ZeroboxはDockerと同じカーネルメカニズム（namespace + seccomp）を使用していますが、デーモン不要、root不要、コールドスタートが約10msと低オーバーヘッドであることを強調しています。Dockerが包括的なファイルシステム隔離とリソース制限を提供するのに対し、Zeroboxはきめ細やかなファイル/ネットワーク/クレデンシャル制御と最小限のオーバーヘッドを提供します。また、Dockerコンテナ内でZeroboxを併用するシナリオも考えられます。Wasmベースのサンドボックスと比較して、ファイルシステムアクセスやサブプロセス起動が頻繁に必要な場合は、コンテナとseccompフィルタリングの組み合わせがより高速で広範なsyscallサポートを提供すると指摘されています。一部のユーザーからは、既存の信頼性の高い<code>sandbox-exec</code>やDockerの利用を好む意見や、Zeroboxが内部的に利用するBubblewrapの呼び出し方に関する技術的な代替案（直接<code>unshare</code>システムコールを使うべきではないか）も提言されました。</p>
+<h2>セキュリティ、信頼性、およびクレデンシャル管理</h2>
+<p>MITMプロキシによるクレデンシャル注入は、Zeroboxの最も興味深い機能として注目されました。サンドボックス内のプロセスが実際のシークレット値にアクセスできないため、AIエージェントやサードパーティツールのような信頼性の低いコードの実行におけるセキュリティリスクを大幅に軽減できます。また、デフォルト拒否のネットワークポリシーは、エージェントが機密性の高いデータを外部に不正に送信するのを防ぐ上で不可欠だと評価されています。しかし、多くの類似プロジェクトが存在する中で、Zeroboxのような新しいサンドボックスツールの「信頼性」を確立することが大きな課題として挙げられました。基盤となるOSのサンドボックスプリミティブは信頼性が高いものの、それらをどのように設定し、上位レイヤーで安全にラップするかが重要であり、徹底したテストと詳細なアーキテクチャドキュメントの必要性が強調されました。MITMプロキシの柔軟性に関しては、URLの変更に対する脆さが懸念されましたが、開発者はワイルドカードサポートで対応していると説明しました。</p>
+<h2>ユーザビリティ（UX）とドキュメンテーションの改善</h2>
+<p>コメントでは、ユーザーエクスペリエンスとドキュメンテーションの改善に関する具体的な提案が多数寄せられました。AIエージェントの監視のために、ファイル読み書きやネットワーク呼び出しなどの操作を詳細に記録するロギング機能の需要が高く、開発者はこれに関心を示し、既に<code>--debug</code>フラグを追加し、OTEL統合も計画していると述べました。また、デフォルトでファイル読み込みが許可されている現在のポリシーに対し、より厳格なデフォルト拒否（<code>--deny-read=/</code>）を容易にするためのインタラクティブなプロファイル作成機能が提案されました。これは、初回実行時にユーザーがアクセスを承認し、その設定をプロファイルとして保存・再利用するというもので、開発者もこのアイデアを高く評価し、プリセットプロファイルの提供と合わせて検討する意向を示しました。さらに、サンドボックスのメカニズム、テスト、そしてセキュリティに関する詳細なドキュメンテーションが、ツールの信頼性を確立し、ユーザーが安心して採用するための鍵となると強く要望されました。</p>
+<h2>まとめ</h2>
+<p>Zeroboxは、OSネイティブのメカニズムとMITMプロキシを組み合わせた効率的なローカルサンドボックスツールとしてHacker Newsで紹介され、特にAIエージェントの安全な実行に対する関心を集めました。その主要な利点は、デフォルト拒否のセキュリティポリシー、MITMプロキシによる安全なクレデンシャル注入、そしてDockerと比較して低いオーバーヘッドとデーモン不要な点にあります。</p>
+<p>コミュニティからは、ロギング機能の拡充、インタラクティブなプロファイル作成機能、そしてサンドボックスのメカニズムとテストに関する詳細なドキュメンテーションを通じて、信頼性と使いやすさをさらに高めることへの期待が寄せられました。特に、多くのサンドボックスツールが登場する中で、その「信頼性」をどのように確立するかが重要な議論点となりました。開発者はこれらのフィードバックを積極的に受け入れ、機能改善やドキュメント強化に取り組む姿勢を示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
