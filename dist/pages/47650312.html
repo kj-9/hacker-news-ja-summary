@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A tail-call interpreter in (nightly) Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A tail-call interpreter in (nightly) Rust</h1>
+        <div class="meta">
+            投稿日: 2026年04月05日 | ランク: 8
+        </div>
+        <a href="https://www.mattkeeter.com/blog/2026-04-05-tailcall/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、VM/インタープリタが直接コードよりも高性能を発揮できるという驚くべき現象と、特にRustの文脈での末尾呼び出し最適化（TCO）について議論しています。</p>
+<h2>VM/インタープリタが直接コードを上回る理由</h2>
+<p>多くの人が、VMやインタープリタが直接書かれたコードよりも高速になり得ることに驚きを表明しています。これは直感に反するように見えますが、主な理由は命令キャッシュの効率と分岐予測にあります。
+*   <strong>専門化されたVMの効率性</strong>: 非常に専門化されたVM/命令インタープリタは驚くほど効率的であり、Rustの実装や手書きのARM64アセンブリを上回ることもあります。シリアライゼーションのような特定のタスクでは、VM/インタープリタはより高いパフォーマンスとよりコンパクトなコードサイズを実現できます。
+*   <strong>抽象化と間接性の利点</strong>: 抽象化レイヤーを追加することは間接性を高めるため、通常はパフォーマンスの低下につながると考えられます。しかし、これは命令キャッシュの効率性と分岐予測によって説明されることが多く、LuaJITのMike Pall氏などの専門家も指摘しています。
+*   <strong>歴史的背景と再発見</strong>: MicrosoftのMIDL、Bellardのffasn1、Protocol BuffersのUPB、Swiftの値ウィットネスなど、シリアライゼーションや型情報の処理において、コード生成からバイトコード/テーブル駆動型アプローチに切り替えることで改善が見られた多くの歴史的な例が挙げられています。Swiftのケースでは、ABI互換性を持つポリモーフィックな値型を扱うために、ネイティブコード生成からバイトコードに移行しました。</p>
+<h2>末尾呼び出し最適化（TCO）</h2>
+<p>Rustの新しい<code>become</code>キーワードに関連して、末尾呼び出し最適化（TCO）についても多くの議論がされています。
+*   <strong>RustでのTCO</strong>: Rustには<code>become</code>キーワードが導入され、末尾呼び出しの最適化を可能にしています。これにより、スタックを肥大化させることなく、ループのような機能を記述できるようになります。これは、OCamlなど関数型言語の経験者にとって歓迎される機能です。
+*   <strong>TCOの重要性</strong>: 単に末尾呼び出しが存在するだけでなく、コンパイラやランタイムが呼び出し元のフレームを適切に再利用し、新しいコールフレームをプッシュしないことが重要であると指摘されています。これにより、スタックオーバーフローのリスクを軽減し、パフォーマンスを向上させることができます。</p>
+<h2>まとめ</h2>
+<p>このコメントスレッドでは、VMやインタープリタが特定のシナリオ（特にシリアライゼーションや型システム）で、命令キャッシュの効率と分岐予測のおかげで、直接書かれたコードよりも優れたパフォーマンスを発揮するという直感に反する現象が議論されています。また、Rustにおける末尾呼び出し最適化（TCO）の導入と、そのパフォーマンスとイディオム的なプログラミングへの影響についても触れられています。これらは、より効率的でコンパクトなソフトウェアを開発するための高度な技術的考慮事項を示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
