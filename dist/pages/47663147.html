@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Freestyle: Sandboxes for AI Coding Agents - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Freestyle: Sandboxes for AI Coding Agents</h1>
+        <div class="meta">
+            投稿日: 2026年04月06日 | ランク: 3
+        </div>
+        <a href="https://www.freestyle.sh" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Freestyleは、AIエージェント向けのクラウド環境「Coding Agents」を提供する企業です。既存のツールが不十分であるとのフィードバックを受け、EC2のような強力なサンドボックスを構築しています。最大の特徴は、メモリ全体をフォークできる機能と、500ミリ秒で起動する高速なVMです。同社は、クラウドプロバイダーの制約を回避するため、自社でベアメタルインフラを運用しています。</p>
+<h2>メモリフォークと高速起動</h2>
+<p>Freestyleのコア技術は、VMのメモリ全体を400ミリ秒以内でフォークできる点です。これにより、ブラウザの実行状態やMinecraftサーバーの状態など、メモリ上のあらゆる状態を複製できます。これはCopy-on-Write（CoW）メモリ技術を使用しており、VMのサイズやフォークの数に関わらずフォーク時間はO(1)です。スナップショット作成には2～4秒かかりますが、フォークはほぼ瞬時に行われます。VMの起動時間も約500ミリ秒と非常に高速です。</p>
+<p>この技術は、AIエージェントが複数のアイデアを並行して評価したり、ウェブサイトのテストで異なるシナリオを同時に検証したりするユースケースに非常に有効です。また、問題発生時のデバッグや、特定のエッジケースの再現とテストにも役立ちます。</p>
+<h2>他社との比較と独自性</h2>
+<p>Freestyleは、Modal、Daytona、Blaxel、E2B、Vercel、Fly.io Spritesといった競合他社と比較して、最も強力でEC2に近いソリューションを目指しています。</p>
+<ul>
+<li><strong>Daytona</strong>：Sysboxを使用しているため、低レベルの操作で問題が発生することがある。</li>
+<li><strong>Modal</strong>：GPUサポートを提供している唯一のプロバイダー。</li>
+<li><strong>E2B/Vercel</strong>：優れたハードウェア仮想化サンドボックス。</li>
+<li><strong>Freestyle</strong>：完全なLinuxとハードウェア仮想化、eBPF、Fuseなどをサポートし、Debianをシステムdで実行します。ユーザーがブートディスクにアクセスしたり、VMを再起動したりできる唯一のプロバイダーです。</li>
+<li><strong>Fly.io Sprites</strong>：Freestyleに最も類似しており、ハードウェア仮想化と高速起動、完全なLinuxをサポートします。しかし、Spritesはテンプレートユーティリティが貧弱で、Freestyleはフォーク機能、高度なテンプレート、優れたデバッグ体験で優位性があります。</li>
+</ul>
+<p>また、Freestyleはプラットフォーム事業者向けであり、個人ユーザーやホビイスト向けではありません。EXE.devのようなサービスは個人開発者向けですが、Freestyleはそのようなサービスを構築するプラットフォームとなることを意図しています。</p>
+<h2>ベアメタルへの移行とセキュリティ</h2>
+<p>パフォーマンスと複雑なワークロードをサポートするため、FreestyleはGoogle CloudやAWSのベアメタルノードではなく、自社のベアメタルラックに移行しました。クラウドプロバイダーのベアメタルノードのコストが、ハードウェアの総コストに匹敵すると判断したためです。この選択により、クラウド仮想化のオーバーヘッドを避け、高性能を実現しています。</p>
+<p>セキュリティ面では、サンドボックスは潜在的な攻撃対象となるため、FreestyleはユーザーのメインVPC外で動作するように設計されています。VM内での複数のLinuxユーザーをサポートし、秘密鍵やコードを隔離できるほか、将来的に特定のドメインやプロトコルに対して鍵を注入するシークレットAPIを計画しています。AIエージェント自体は信頼できないものとして扱い、最小限の権限で動作させることを推奨しています。</p>
+<h2>その他の技術的詳細と将来の展望</h2>
+<ul>
+<li><strong>VMスペック</strong>：RAM、ディスク、CPUサイズを選択可能。</li>
+<li><strong>Kubernetes</strong>：VM内でKINDなどのKubernetesクラスターを実行できる可能性があります。</li>
+<li><strong>自己ホストの検討</strong>：小規模なワークロードであれば、Firecrackerなどのオープンソースツールを使った自己ホストも可能ですが、Freestyleは負荷の急増時や複雑な機能（フォーク、GPUなど）が必要な場合に適しています。</li>
+<li><strong>オープンソースについて</strong>：FreestyleはクローズドソースのSaaSですが、その技術は大規模なインフラと最適化を必要とするため、一般的なコンシューマーハードウェアでは動作しません。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Freestyleは、AIエージェントが「コンピュータを扱う」という次の世代のニーズに応えるべく、強力で高速、そして複製可能な仮想マシン環境を提供しています。独自のメモリフォーク技術、わずか500msのVM起動時間、そしてベアメタルインフラの採用により、既存のサンドボックスの課題を解決し、開発者と同等の自律的な作業をAIエージェントに可能にすることを目指しています。プラットフォーム事業者向けのサービスであり、AIエージェントの並列処理や複雑なデバッグ、テストシナリオの実行に大きなメリットを提供します。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
