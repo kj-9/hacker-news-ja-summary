@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git commands I run before reading any code - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Git commands I run before reading any code</h1>
+        <div class="meta">
+            投稿日: 2026年04月08日 | ランク: 3
+        </div>
+        <a href="https://piechowski.io/post/git-commands-before-reading-code/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、新規コードベースを理解するためのGitコマンドと、関連するGitの運用プラクティス（特にsquash-merge）についての議論を中心に展開しています。提供されたコマンドは、コードベースの活動状況、主要な貢献者、問題箇所を迅速に把握するのに役立つと評価されていますが、その解釈には注意が必要だという指摘も多くあります。</p>
+<h2>Gitコマンドの有用性と解釈</h2>
+<p>提供されたGitコマンドは、プロジェクトの最も変更されたファイル、主要な貢献者、バグが集中する箇所、プロジェクトの活性度、チームの緊急対応頻度などを把握するのに役立つと多くの人が評価しています。
+しかし、これらのコマンドの出力はそのまま鵜呑みにすべきではなく、プロジェクトの具体的な状況やチームの文化を考慮して解釈する必要があるという意見が多数寄せられています。</p>
+<p>例えば、「最も変更されたファイル」が必ずしも「触るのが怖いファイル」であるとは限らず、設定ファイル、ロックファイル、自動生成コード、READMEなどが頻繁にリストアップされるため、それらを除外する必要があるという指摘がありました。また、コミット数が多い貢献者が、必ずしも最も価値のある貢献者であるとは限らず、単にコミットが細かかったり、試行錯誤が多かったりする開発者である可能性も示唆されています。</p>
+<h2>Gitの知識とツールの利用</h2>
+<p>多くの開発者は、日常的なGit操作以外ではコマンドを覚えておらず、必要な時に検索したり、エイリアスやスクリプトを作成したりしていると述べています。Gitの複雑なUXに対する不満の声も多く聞かれ、多くの「人間年」がGitの学習に費やされているという意見もありました。</p>
+<p>Jujutsuのような代替VCSが提案され、その表現力の高さやGitよりもシンプルな日常使用が評価される一方で、Gitの普遍性や既存のワークフローとの互換性の問題から、JujutsuからGitに戻ったという経験も共有されています。</p>
+<p>最近では、AI（LLM）を使ってGitコマンドを生成したり、コミットメッセージを作成したりするアプローチも議論されており、Gitの複雑さを軽減する可能性が指摘されています。</p>
+<h2>Squash-Mergeワークフロー</h2>
+<p>スレッドで最も活発な議論の一つが、プルリクエスト（PR）を単一のコミットにまとめる（squash-merge）ワークフローの是非についてです。</p>
+<p><strong>Squash-Mergeの擁護派は、以下のメリットを主張しています。</strong>
+*   メインブランチの履歴をクリーンで線形に保つことができる。
+*   PRごとに1つのコミットになるため、ロールバックやCherry-pickが容易。
+*   開発者が実験的なコミットやWIP（作業中）コミットを自由に作成でき、レビュー後にまとめてクリーンな1コミットとしてマージできる。
+*   GitHubのようなツールとの相性が良い。</p>
+<p><strong>一方、Squash-Mergeに反対する人々は、以下の懸念を表明しています。</strong>
+*   個々の変更に関する詳細な履歴（誰が何を変更したか、なぜ変更したか）が失われる。
+*   <code>git bisect</code>などのツールでのデバッグが難しくなる。
+*   複数人での共同作業や、関連する複数のコミットを論理的な単位としてレビューする際に不便。
+*   PRの作成者がマージされずにコミットが破棄される場合、reflogに残るとはいえ、履歴が「破壊された」と感じる。</p>
+<p>多くの人は、チームやプロジェクトの文化、規模、使用するツールによって、最適なマージ戦略は異なると認識しており、一概に「どちらが優れている」とは言えないという見解です。</p>
+<h2>コミットメッセージの重要性</h2>
+<p>提供されたコマンドの一部がコミットメッセージに依存するため、コミットメッセージの品質に関する議論も発生しました。「変更した内容」や「修正」といった簡素なメッセージが多い現状が指摘され、AIによるコミットメッセージ生成への期待が語られました。</p>
+<p>一方で、質の高いコミットメッセージは将来のチームメンバーや自分自身にとって貴重な情報源であり、これを期待することはリーダーシップやチームの文化の問題であるという意見が多くありました。コミットメッセージには、コードだけでは伝わらない意思決定の背景やビジネス上の動機が含まれるべきだと考えられています。</p>
+<h2>まとめ</h2>
+<p>本スレッドでは、コードベースを分析するためのGitコマンドが共有され、その実用性と解釈に関する議論が展開されました。これらのコマンドは有用であるものの、出力の文脈的解釈の重要性、Gitの複雑性、そしてJujutsuのような代替ツールの登場が指摘されました。特にsquash-mergeワークフローについては、履歴の清潔さと情報の損失という二つの側面から活発な意見交換が行われ、コミットメッセージの品質がプロジェクト理解に与える影響も強調されました。最終的には、Gitの機能を最大限に活用するには、ツールの習熟だけでなく、チーム内の効果的なコミュニケーションとワークフローの確立が不可欠であることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

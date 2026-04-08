@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expanding Swift&#x27;s IDE Support - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Expanding Swift&#x27;s IDE Support</h1>
+        <div class="meta">
+            投稿日: 2026年04月08日 | ランク: 10
+        </div>
+        <a href="https://swift.org/blog/expanding-swift-ide-support/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>VS Code向けSwift拡張機能がOpen VSX Registryで利用可能になったことについてのコメントです。これにより、Swift開発者がVS Codeでより簡単に開発できるようになることが期待されています。</p>
+<h2>SwiftUI/iOS開発のサポート</h2>
+<p>コメントでは、このVS Code拡張機能がSwiftUIやiOS開発をサポートするかどうかが大きな議論の焦点となっています。</p>
+<ul>
+<li>多くの人がSwiftUIのサポートに関心を示していますが、どのような種類のサポート（言語チェック、ライブプレビューなど）を期待しているかによって意見が異なります。</li>
+<li>この拡張機能は主に「純粋な」Swift開発を目的としており、iOS開発の公式サポートは期待できないとの見方があります。Androidアプリ開発がAndroid Studioなしでは難しいのと同様の状況と指摘する声もあります。</li>
+<li>しかし、非公式な方法としては、拡張機能のLSP（Language Server Protocol）サポートにフックしたり、<code>xcode-build-server</code>のようなツールを使って<code>xcodebuild</code>のログをLSPに渡し、SwiftUIプロジェクトのサポートを実現するプロジェクトも存在します。また、VS CodeでiOS開発を容易にする追加ツール（<code>sweetpad</code>など）も開発されています。</li>
+</ul>
+<h2>VS CodeでのSwift開発の現状</h2>
+<ul>
+<li>今回の発表は歓迎すべき改善であるものの、タイトルはややクリックベイトであるとの指摘もあります。</li>
+<li>実際には、CursorなどのVS Code派生エディタでSwiftを使用することは以前から可能でした。しかし、昨年Microsoftがフォーク版の公式VS Codeマーケットプレイスへのアクセスを禁止したため、手動で<code>.vsix</code>ファイルをダウンロードしてインストールする必要がありました。</li>
+<li>今回のOpen VSX Registryへの掲載により、この拡張機能を再び正規の方法でインストールできるようになったことが最大の進歩であり、開発者にとっては非常に喜ばしいことです。</li>
+</ul>
+<h2>オープンソースIDEへの要望</h2>
+<ul>
+<li>一部のユーザーは、再起動せずに自己修正できる、Swift製のオープンソースIDE（Oberon µSystemsのComponent Pascalのような機能を持つもの）の存在について疑問を呈しています。</li>
+<li>しかし、そのような具体的な要件を満たすIDEは現在のところ存在しないだろうという意見が大勢です。</li>
+</ul>
+<h2>まとめ</h2>
+<p>VS Code向けSwift拡張機能がOpen VSX Registryで利用可能になったことは、Swift開発コミュニティにとって歓迎すべき進展であり、これまで手動でのインストールが必要だった状況が改善されました。この拡張機能は主に純粋なSwift開発に焦点を当てていますが、SwiftUIやiOS開発に関しては、非公式な方法やコミュニティ製のツールを通じてサポートを拡充しようとする動きが見られます。また、再起動なしに自己修正可能なSwift製オープンソースIDEへの具体的な要望も挙がっていますが、その実現は難しいとされています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
