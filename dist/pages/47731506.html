@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Mac Substitute is an API-level reimplementation of 1980s-era Mac OS - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Advanced Mac Substitute is an API-level reimplementation of 1980s-era Mac OS</h1>
+        <div class="meta">
+            投稿日: 2026年04月11日 | ランク: 4
+        </div>
+        <a href="https://www.v68k.org/advanced-mac-substitute/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、MacintoshのOSをエミュレートする新しいプロジェクト「MetaMage 1」について議論しています。特に、WineのようにROMの代わりにMacintosh Toolbox APIを再実装することで、Mac OSアプリをネイティブに実行できるようにするアプローチが注目されています。</p>
+<h2>プロジェクトの性質と技術的詳細</h2>
+<p>MetaMage 1は、WineがWindows向けに行うように、Mac OSのROMをエミュレートするのではなく、Macintosh Toolbox APIを再実装することでクラシックMac OSアプリケーションを実行しようとするプロジェクトです。これにより、ハードウェアエミュレーションよりも効率的にMacアプリを動作させることができます。コメントでは、このアプローチを「Wine for classic Mac OS」と表現する声や、「Wine + FEX」に似ているという指摘があります。また、過去にも同様のアプローチでMacアプリをPCに移植する試みがあったことが語られています。</p>
+<h2>既存のエミュレーターとの比較と機能の要望</h2>
+<p>既存のMacエミュレーター「Executor」や「Basilisk II」との比較が話題に上がっています。特に「Basilisk II」ではARM64 JITの実装が進められており、MetaMage 1が提供するモダンな利便性（ファイル共有など）への期待が表明されています。さらに、現代のウィンドウフレームで古いアプリを起動したり、ファイル保存を可能にする「Carbon for old apps」のような機能や、「slow it down」機能、過去のハードウェアの音を再現する機能への要望も出ています。</p>
+<h2>課題と実装の詳細</h2>
+<p>プロジェクトを試したユーザーからは、特定のToolboxコール（<code>OpenDF</code>や<code>FSpOpenDF</code>）が未実装であるためにエラーが発生するという報告がありました。開発者からは、これらのコールがSystem 7で追加された比較的新しいAPIであり、アプリケーションによってはその利用可能性をチェックせずに呼び出すため、エラーとなることが説明されています。また、開発者がVNCとX11のフロントエンドに長年触れていないこと、およびVNCクライアントでの接続を促す発言もあり、開発の現状が垣間見えます。</p>
+<h2>クラシックMac OSのプログラミング言語</h2>
+<p>クラシックMac OSのプログラミングに関する歴史的な背景も議論されています。オリジナルのMacシステムソフトウェアはアセンブリで書かれていたものの、Pascalの呼び出し規約や構造体レイアウトを採用しており、アプリケーション開発の主要言語としてPascalが期待されていたことが言及されています。これにより、C言語で開発する際もPascalの規約に合わせる必要があったとのことです。</p>
+<h2>まとめ</h2>
+<p>MetaMage 1は、Wineのような手法でクラシックMac OSアプリケーションを現代のシステムで実行可能にする野心的なプロジェクトです。これにより、古いMacアプリに新たな命を吹き込み、現代的な利便性（高速な動作、ファイル共有など）を提供する可能性を秘めています。未実装のToolboxコールや、フロントエンドの問題など、まだ課題は残されていますが、コミュニティからの期待と関心は高く、今後の発展が注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keeping a Postgres Queue Healthy - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Keeping a Postgres Queue Healthy</h1>
+        <div class="meta">
+            投稿日: 2026年04月11日 | ランク: 8
+        </div>
+        <a href="https://planetscale.com/blog/keeping-a-postgres-queue-healthy" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、PostgreSQLにおけるトランザクション管理、特にMVCC（Multi-Version Concurrency Control）とバキューム処理が、高頻度で更新されるキューテーブルと長時間実行されるクエリによってどのように影響を受けるか、そしてその解決策について議論しています。</p>
+<h2>PostgreSQLのMVCCとバキュームの問題</h2>
+<p>PostgreSQLのMVCCは、古いトランザクションが終了するまで「MVCC horizon」を進めることができず、その結果、更新によって生じた「デッドタプル」が蓄積し続けることが指摘されています。特に、長時間実行される分析クエリなどが存在すると、このホライゾンが進まず、高頻度で更新されるキューテーブルのバキュームがブロックされ、ディスク容量の浪費や性能低下を引き起こす可能性があります。</p>
+<h2>キューの実装と代替案</h2>
+<p>コメントでは、PostgreSQLをキューとして使用する際の具体的な実装（例：<code>FOR UPDATE SKIP LOCKED</code>）とその問題点、そして代替案が議論されています。</p>
+<ul>
+<li><strong>PostgreSQLをキューとして使うことの是非:</strong><ul>
+<li>一部のユーザーは、Graphile WorkerのようにPostgreSQLをキューとして使うことでシンプルさを保てると主張しています。</li>
+<li>しかし、多くのユーザーは、スケールアップの限界（例：1-10k writes/secの予算）や、ボトルネックになりやすい点から、特定のスケールを超えるとPostgreSQLは最小限の機能に留めるべきだと指摘しています。</li>
+<li>長時間実行トランザクションと高頻度トランザクションをPostgreSQLの同一インスタンスで混在させるのは賢明ではない、という意見が多数あります。</li>
+</ul>
+</li>
+<li><strong>代替キューソリューション:</strong><ul>
+<li>SQS（AWSのSimple Queue Service）は、シンプルでAWSエコシステムに統合されているため、多くのケースで良い選択肢とされています。</li>
+<li>Kafkaは強力なツールであるものの、導入と運用が複雑であり、特定の要件がない限り過剰な選択である可能性があります。</li>
+<li>0MQやRMQなどのメッセージキューも検討されています。</li>
+</ul>
+</li>
+<li><strong>PostgreSQLキューの最適化:</strong><ul>
+<li>HOT (Heap Only Tuples) 更新を促進するために、<code>fillfactor &lt; 100</code>の設定を検討する提案があります。ただし、インデックスが更新されるステータスカラムに依存している場合、HOT最適化は適用されない可能性があります。</li>
+<li>トランザクションを可能な限り短く保つことの重要性が強調されています。</li>
+<li>デッドタプルによるパフォーマンス低下を軽減するために、単調増加するカラムを追加し、<code>WHERE column &lt; ?</code>句を使用するアプローチも提案されています。</li>
+</ul>
+</li>
+</ul>
+<h2>記事の内容とPlanescaleのソリューション</h2>
+<p>記事の著者がPlanescaleのメンバーであることから、Planescaleが提供するPostgreSQLの特別なバージョンが、このMVCCホライゾン問題に対処するためのツールを持っていることが示唆されています。記事は、この問題を説明し、Planescaleのソリューションを丁寧にプロモーションしていると受け止められています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、PostgreSQLをキューとして使用する際のMVCCとバキュームの問題、特に長時間実行されるクエリが高頻度で更新されるテーブルの性能に与える悪影響について深く掘り下げています。シンプルさを求める低〜中規模のシステムではPostgreSQLをキューとして利用する利点がある一方で、特定のスケールを超えると、SQSやKafkaなどの専用のメッセージキューシステムを導入することが推奨されています。Planescaleのソリューションはこの問題への対処法の一つとして提示されていますが、多くのコメントは、長時間のOLAPスタイルと高頻度のキュー処理を同じPostgreSQLインスタンスで混在させることの難しさを強調しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surelock: Deadlock-Free Mutexes for Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Surelock: Deadlock-Free Mutexes for Rust</h1>
+        <div class="meta">
+            投稿日: 2026年04月11日 | ランク: 7
+        </div>
+        <a href="https://notes.brooklynzelenka.com/Blog/Surelock" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この投稿は、Rustの新しいロックライブラリ「<code>lock_level</code>」について議論しています。<code>lock_level</code>は、デッドロックを防止するためにロックに全順序を課すことで、静的なデッドロック検出を目指しています。</p>
+<h2>TVarsと他分野からのアイデアの伝播</h2>
+<p>多くのコメントは、<code>lock_level</code>のベースとなっているトランザクショナルメモリ（TVars）のような概念が、なぜ他のプログラミング言語や分野に広く採用されないのかという一般的な問題に焦点を当てています。
+*   <strong>分野間の隔絶</strong>: データベースやスーパーコンピューティングのような分野には、スケーラブルなシステムに関する深い洞察や優れたアイデアがたくさんありますが、他のソフトウェア分野に浸透することはめったにないと指摘されています。
+*   <strong>発見とコミュニケーション</strong>: アイデアの伝播が遅いのは、真に実用的ではないからではなく、むしろ「発見」と「コミュニケーション」の問題であると考える人もいます。言語設計の議論がそれぞれのコミュニティに閉じこもりがちであることも一因とされています。
+*   <strong>TVarsの実装の複雑性</strong>: TVarsの真のサポートは、言語全体に新しいパラダイムを要求するほど複雑であり、「言語をHaskellに変える」ようなものであれば、多くの人にとって受け入れがたいでしょう。
+*   <strong>Haskellの成功とその他</strong>: MicrosoftのJoe Duffyによる2010年の記事が参照され、無制限のトランザクショナルメモリは「愚かな試み」であった可能性が高いが、Haskellのように明示的なアノテーションを必要とする「境界付き」トランザクショナルメモリは有効であるという見解が示されています。</p>
+<h2><code>lock_level</code>の設計とデッドロック防止</h2>
+<p><code>lock_level</code>ライブラリの核となる設計原則、特に「Level」抽象化と全順序付けについて議論されています。
+*   <strong>全順序付け vs. DAG</strong>: <code>lock_level</code>がDAG（有向非巡回グラフ）ではなく全順序を採用している点について、DAGではコンパイラが承認してもデッドロックが発生する可能性があるため、意図的な設計決定であると説明されています。
+*   <strong>「Level」抽象化</strong>: ロックに優先順位（レベル）を割り当てることで、常に高レベルのロックを先に取得し、低レベルのロックを後で取得するという規則を強制します。これにより、ロックの順序付けを静的に検査し、デッドロックを防止します。
+*   <strong>批判と懸念</strong>:
+    *   この「Level」構造が新しい認知的負担を生むこと、また複数レベルのミューテックスが一般的なパターンなのか疑問視する声もあります。
+    *   グローバルな設定オブジェクトを保護するような「グローバルロック」とアイテムごとのロックを同じ仕組みで扱う場合の優先順位逆転の可能性について質問が投げかけられました。しかし、設計上、ロックは常に優先順位の降順に保持されるため、優先順位逆転は不可能であると説明されています。
+    *   アドレスの不安定性や、ミューテックスが移動された場合の挙動に関する疑問も提起されています。</p>
+<h2>非同期コードとの互換性</h2>
+<p><code>lock_level</code>が非同期コードでどのように機能するか、特にRustの非同期ランタイムとの互換性について懸念が表明されています。
+*   <strong>ブロッキング呼び出し</strong>: <code>lock_level</code>のロック取得メソッドはブロッキングであるため、ロックが競合した場合、非同期ランタイムのエグゼキュータをブロックしてしまう可能性があります。
+*   <strong><code>Send</code>制約</strong>: キーおよびガード型は<code>Send</code>ではないため、ロックやキーを<code>await</code>ポイントをまたいで保持すると<code>Future</code>が<code>Send</code>ではなくなります。これは一般的な非同期ランタイム（Tokioなど）の要求と衝突する可能性があり、システム設計で考慮が必要です。</p>
+<h2>記事の執筆スタイルについて</h2>
+<p>一部のコメントでは、記事の執筆スタイルがChatGPTのようなAIによって生成されたものであるという不満が表明されています。
+*   <strong>「ChatGPTボイス」</strong>: 多くの人が、記事がAIによって書かれたような「耳障りな」トーンであると感じています。
+*   <strong>反論</strong>: この種のコメントにうんざりしているという意見や、記事からGPTボイスを感じないという反論もあります。
+*   <strong>HNのガイドライン</strong>: AIによる生成であるという非難は、Hacker Newsのガイドラインに反する可能性があると指摘されていますが、記事が部分的にAIによって生成されたものであるという指摘はガイドラインに反しないという見解もあります。</p>
+<h2>まとめ</h2>
+<p><code>lock_level</code>は、Rustにおけるデッドロック検出と防止のための新しいアプローチとして提案されており、ロックに全順序を課す「Level」抽象化を通じて静的なデッドロック検出を目指しています。このアプローチは、データベース分野のアイデアを取り入れたものとして評価される一方で、その複雑性、既存のパターンとの適合性、特に非同期コードとの互換性について議論を呼んでいます。また、記事の執筆スタイルがAI生成であるか否かという、最近のトレンドを反映した議論も展開されました。デッドロックがデバッグの難しい問題であるため、このライブラリが実用的な解決策を提供できるかに関心が集まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
