@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking down a 25% Regression on LLVM RISC-V - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Tracking down a 25% Regression on LLVM RISC-V</h1>
+        <div class="meta">
+            投稿日: 2026年04月13日 | ランク: 10
+        </div>
+        <a href="https://blog.kaving.me/blog/tracking-down-a-25-regression-on-llvm-risc-v/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にプログラミングにおけるアマチュアとプロフェッショナルのスキルレベル、およびオープンソースソフトウェア開発の性質と価値について議論しています。</p>
+<h2>無償の仕事とオープンソースの価値</h2>
+<p>一部のコメントでは、開発者が「無償の仕事」をするべきではないという意見が出されましたが、他の多くの人々は、楽しむために無償で貢献する開発者の価値を強調しています。LLVMプロジェクトやRISC-V ISAなどの例が挙げられ、無料かつオープンなソフトウェアから多くの人々が価値を得ており、自身の貢献もその精神に基づいていると感じていることが指摘されています。現代のソフトウェアインフラストラクチャは、「楽しむためにそれを行う人々」に大きく依存しているという見解も示されました。</p>
+<h2>アマチュアとプロフェッショナルのスキルレベル</h2>
+<p>「お金を要求する人は、喜びのためにそれを行う人ほど優秀になる可能性が低い」という前提が議論の焦点となっています。
+*   <strong>プロフェッショナル優位の主張</strong>: 一般的には、報酬を得てフルタイムで集中できるプロフェッショナルの方が、趣味で行うアマチュアよりも優れていると理解されているという意見があります。
+*   <strong>アマチュア優位または同等論の主張</strong>: プログラミングは、練習にほとんどリソースを必要としないため、他の多くの分野とは異なり、アマチュアとプロフェッショナルのスキルレベルの境界線が曖昧であるという意見が複数あります。アマチュアは、仕事として行うよりもはるかに挑戦的で興味深いプロジェクトに自由に取り組むことができるため、自身のスキル向上に繋がると主張する人もいます。
+*   <strong>バランスの取れた見方</strong>: エリートなプロフェッショナルはエリートなアマチュアよりも平均的に優れているが、より多くのエリートアマチュアがエリートプロフェッショナルになることで、より良い状況になるとする意見もあります。現代のソフトウェアインフラは、アマチュアだけでなく多くのプロフェッショナルにも依存していることも指摘されています。</p>
+<h2>RISC-Vのエコシステムと展望</h2>
+<p>コメントの一部は、RISC-Vに関する元の記事の内容に触れています。特に、RISC-Vの最適化が日々現れていることに喜びが表明されており、これはRISC-Vチップの高速化と普及に伴い、ソフトウェアエコシステムが準備万端であることを示唆しています。過去にはハードウェアが先行し、ソフトウェアが遅れて登場することが多かったが、今回は逆の順序で進んでいると指摘されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、主にプログラミングにおけるオープンソースの貢献や、アマチュアとプロフェッショナルのスキルレベルの比較について活発な議論が展開されました。楽しむために無償で貢献する開発者の価値が強調されつつ、プロフェッショナルが持つ集中力とスキルのメリットも認識されています。特にプログラミングの分野では、他の職種に比べてアマチュアとプロフェッショナルのスキル差が小さい、あるいは特定の条件下ではアマチュアが優位に立つ可能性があるという見解が多く見られました。また、RISC-Vのような新しい技術のエコシステムが、ハードウェアの普及に先行してソフトウェアの準備が進んでいることに期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
