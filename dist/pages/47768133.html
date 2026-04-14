@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Routines - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Claude Code Routines</h1>
+        <div class="meta">
+            投稿日: 2026年04月14日 | ランク: 4
+        </div>
+        <a href="https://code.claude.com/docs/en/routines" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Anthropicが発表したClaude Codeの新機能「Routines」（スケジュール実行、API呼び出し、GitHubイベントへの反応が可能）について議論しています。特に、モデルの性能の一貫性、Anthropicの利用制限、およびベンダーロックインへの懸念が中心的なテーマです。</p>
+<h2>Claudeの性能と利用制限に関する懸念</h2>
+<p>最近、Claudeのコード利用制限が大幅に削減されたという報告があり、多くのユーザーがモデルの性能と利用に関する問題について議論しています。
+*   <strong>100万トークンコンテキストウィンドウの影響</strong>: 多くのユーザーは、100万トークンのコンテキストウィンドウの導入が、Claudeの性能低下の根本原因であると考えています。リリース当初は非常に強力だったものの、Anthropicは負荷に対処するため多くの調整を試み、その結果ユーザーを苛立たせていると指摘されています。
+*   <strong>「Max」思考モードの変更</strong>: ユーザーは、Anthropicが「High」モードを以前の「Medium」モードに変更し、新しい「Max」モードを追加したことを批判しています。これにより、ユーザーは以前と同じ性能を得るために、さらに設定を調整する必要があると感じています。
+*   <strong>不透明な利用規約と制限</strong>: Anthropicの利用規約（特にサードパーティ製ツールでの利用制限）が不明確であるという不満が多数上がっています。ユーザーは、CLIからの<code>claude -p</code>コマンドの使用が許可される範囲や、自動化ツールへの組み込みの可否について混乱しており、Anthropicのコミュニケーション戦略に一貫性がないと批判しています。これはユーザーの利用をためらわせる「チリングエフェクト」を引き起こしていると指摘されています。
+*   <strong>モデルの性能低下（ナーフ）</strong>: 多くのユーザーが、特に最近数週間でClaudeのモデル（Opusを含む）の性能が著しく低下していると感じています。「賢くなった」という報告の後に「バカになった」という体験はよくあるパターンだと見られており、モデルが意図的に性能を落とされているのではないかという疑念も呈されています。</p>
+<h2>新機能「Routines」とベンダーロックイン</h2>
+<p>Routinesは、OpenClawなど競合ツールからヒントを得た機能であると認識されており、Anthropicが自社エコシステムへのロックインを進めようとしていると見られています。
+*   <strong>OpenClawとの類似性</strong>: RoutinesはOpenClawのような既存のAIエージェントツールの機能を模倣していると指摘されており、AnthropicがOpenClawの「堀」を埋めようとしていると見られています。
+*   <strong>ベンダーロックインへの懸念</strong>: ユーザーは、Anthropicが「プラットフォーム」化しようとしていることに強い懸念を抱いています。Routinesのような機能は、ユーザーをAnthropicのエコシステムに閉じ込め、将来的に他のプロバイダーへの移行を困難にすると考えられています。
+*   <strong>機能の信頼性への不信</strong>: ユーザーは、Routinesのような新機能が長期的に安定して提供されるか、モデルの性能が維持されるかについて不信感を表明しています。多くのLLM関連機能がすぐに廃止される状況を鑑み、ベンダーに依存しない独自のツールスタックを構築すべきだという意見もあります。
+*   <strong>GitHubとの連携</strong>: RoutinesがGitHubイベントに反応できる点は評価されているものの、GitHub Agentic Workflowsなど同様の機能を提供する既存ツールと比較検討されています。GitHub-triggered LLMがプロンプトインジェクション攻撃のリスクを抱える可能性も指摘されています。</p>
+<h2>AI開発の現状と課題</h2>
+<p>AI開発の急速なペースと、それがユーザーにもたらす影響についても議論されています。
+*   <strong>「AI軍拡競争」</strong>: AI企業間の激しい競争が、毎週のように新機能がリリースされる状況を生み出しています。これにより、ユーザーはどのツールが価値があるかを判断する時間がないと感じています。
+*   <strong>不十分なキャパシティプランニング</strong>: Anthropicが100万トークンのコンテキストウィンドウの負荷を適切に見積もれず、その結果として現在の問題を引き起こしているという意見があります。
+*   <strong>「プログラミング」の再定義</strong>: Routinesのような自動化ツールは、従来の「プログラミング」や「ソフトウェアエンジニアリング」の概念を再定義する可能性があり、「vibe coding」や「promptramming」といった新しい用語が提案されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AnthropicのClaude Codeの新機能「Routines」について、興奮と同時に深い懸念を示しています。ユーザーは、モデルの性能低下、不明確で一貫性のない利用制限、そしてベンダーロックインの試みに対して強い不満を表明しています。新機能が開発者の生産性を向上させる可能性を認識しつつも、 Anthropicの信頼性、透明性、長期的な戦略に対する疑問が、多くのユーザーを慎重な姿勢にさせています。特に、既存のモデルの性能が不安定である現状において、さらなるロックインを促す機能には懐疑的な見方が多く見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

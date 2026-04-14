@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5NF and Database Design - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">5NF and Database Design</h1>
+        <div class="meta">
+            投稿日: 2026年04月14日 | ランク: 6
+        </div>
+        <a href="https://kb.databasedesignbook.com/posts/5nf/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、データベースの正規化と非正規化に関する議論で、特に「正規形」の概念が実際のデータベース設計でどのように捉えられているかに焦点を当てています。</p>
+<h2>正規化と非正規化のバランス</h2>
+<p>多くのコメントは、データの正規化と非正規化のバランスの重要性を強調しています。一般的には、最初は正規化されたデータから始め、特定のユースケースやパフォーマンス要件に応じて非正規化するのが良いとされています。ただし、データを全く正規化しない方が良いケースもあるという意見も存在します。あるユーザーは、「痛むまで正規化し、動くまで非正規化する」というモットーを共有しており、これが実用的なアプローチとして共感を集めています。</p>
+<h2>正規形の有効性とその批判</h2>
+<p>正規形（1NF, 2NF, 3NFなど）は、データベース設計の基本的な概念ですが、その実用性については様々な意見があります。</p>
+<ul>
+<li><strong>教育ツールとしての有用性</strong>: 正規形は、部分関数従属性や推移的関数従属性といった概念を理解するための教育ツールとして非常に有用であると認識されています。これにより、開発者は「痛み」を伴うバグを通じて、これらの違反を直感的に認識できるようになります。</li>
+<li><strong>実務での限界</strong>: 一方で、正規形を「番号付きリスト」として考えることや、厳密な学術的定義に固執することの有用性には疑問が呈されています。特に4NFや5NFの定義は曖昧であり、実際のデータベース設計で直接的な指針として機能しない場合があります。一部のユーザーは、正規形が冗長性を避け、関係性を統合するという二つの主要な洞察に集約されるべきだと主張しています。</li>
+<li><strong>正規化プロセスの出発点</strong>: 著者は、正規化の概念が伝統的に「非正規化されたテーブル」を正規化するというプロセスとして提示されることに不満を表明しています。本来、データベース設計は最初から正規化を意識した形で行われるべきであり、なぜ非正規化された出発点が存在するのかが不明確だと指摘しています。</li>
+</ul>
+<h2>その他の関連トピック</h2>
+<ul>
+<li><strong>UUIDのバージョン</strong>: データベースの主キーとしてのUUIDの利用に関して、UUID v7が多くのデータベースワークロードに適しているという意見が述べられています。</li>
+<li><strong>JSONの使用</strong>: 複雑なオブジェクトの保存にJSON blobを使用することは、特定のシナリオでは合理的であり、I/Oの密度を高める利点があるという見方もあります。</li>
+<li><strong>「寿司の原則」</strong>: 生データ（raw data）を「ゴールデンソース」として扱い、加工されていない権威あるソースからデータを取り込むべきだという「寿司の原則」が紹介されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドでは、データベースの正規化が理論と実践の間でどのように位置づけられるかについて活発な議論が展開されました。正規形はデータベース設計の基本概念を学ぶ上で価値があるものの、実際の開発現場では柔軟なアプローチが求められ、「痛むまで正規化し、動くまで非正規化する」という実用的な哲学が共有されています。また、UUIDの選択やJSONの使用など、特定の技術的選択肢についても言及があり、全体としてデータベース設計における実践的な知見と課題が浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
