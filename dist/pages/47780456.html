@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cal.com is going closed source - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Cal.com is going closed source</h1>
+        <div class="meta">
+            投稿日: 2026年04月15日 | ランク: 9
+        </div>
+        <a href="https://cal.com/blog/cal-com-goes-closed-source-why" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Cal.comが、AIがもたらすセキュリティ上の懸念を理由に、オープンソースからクローズドソースへの移行を発表した件について、Hacker Newsのコメント欄では活発な議論が交わされています。多くの人がこの決定に懐疑的であり、AIによるセキュリティ問題を本当の理由とするのは不誠実であると考えています。</p>
+<h2>セキュリティに関するAIの影響</h2>
+<p>AIがコードの脆弱性を発見する能力について、様々な意見が出されています。</p>
+<ul>
+<li><strong>AIによる脆弱性発見の容易さ</strong>: AI（特にLLM）が非常に短時間かつ低コストでオープンソースプロジェクトの脆弱性を発見できるという指摘があります（例：16歳の隣人が15分と100ドルのClaudeクレジットでハッキングできる）。これは、攻撃者と防御側の双方にとって非対称なゲームであると強調されています。防御側はすべての脆弱性を見つける必要があるのに対し、攻撃側は一つ見つければ良いからです。</li>
+<li><strong>「セキュリティ・バイ・オブスキュリティ」への懸念</strong>: コードをクローズドソースにすることが「セキュリティ・バイ・オブスキュリティ（秘匿による安全）」に過ぎず、これは長年にわたり誤ったアプローチとされてきたという批判が多数あります。コードを隠しても、LLMはブラックボックステストやリバースエンジニアリングを通じて脆弱性を発見できる可能性があるという意見です。</li>
+<li><strong>LLMを活用した防御の可能性</strong>: LLMが脆弱性発見に優れているなら、コードを公開する前に自社でLLMを使って監査すべきだという意見も多くあります。これにより、公開前に潜在的な問題を修正できるはずだとされています。しかし、このアプローチには、常に最新のLLMモデルで監査し続けるコストや、すべての脆弱性を見つけられる保証がないという反論もあります。</li>
+<li><strong>コストの非対称性</strong>: オープンソースプロジェクトはしばしば資金不足であり、LLMによる継続的な監査コストを負担できないという現実的な問題が指摘されています。一方で、営利企業はオープンソースの利用コストとしてその責任を負うべきだという声もあります。</li>
+</ul>
+<h2>隠されたビジネス上の理由</h2>
+<p>コメントの多くは、Cal.comの決定がセキュリティではなく、他のビジネス上の理由によるものであると推測しています。</p>
+<ul>
+<li><strong>ビジネス上の決定</strong>: この決定はセキュリティ上の理由よりもビジネス上の決定であり、AIによってセルフホスティングが容易になり、ホスティングサービスへの支払いのインセンティブが低下していることが背景にあるという見方が有力です。</li>
+<li><strong>コモディティ化</strong>: Cal.comの製品が、Google Workspaceの予約機能などによってコモディティ化しつつあるという指摘があります。Googleが同様の機能を提供するようになったことで、競争が激化している可能性があります。</li>
+<li><strong>AIを言い訳にする風潮</strong>: AIがスタッフの解雇、製品部門の閉鎖、そして今回のようなソースコードの非公開化など、「悪いこと」を行うための言い訳として多用されているという皮肉なコメントもあります。</li>
+<li><strong>コードの盗用/競合の懸念</strong>: 一部のユーザーは、本当の脅威はAIが悪意のあるアクターによるコードの盗用や再利用を容易にし、競合製品が簡単に作られることにあると考えています。セキュリティ上の問題よりも、AIによる知的財産の保護が目的ではないかという推測です。</li>
+<li><strong>有料プランへの転換の難しさ</strong>: Cal.comが有料プランへのユーザー転換に苦戦しているのではないかという意見もあります。オープンソースとしての価値提案が顧客獲得の大きな要因であった可能性が指摘されています。</li>
+<li><strong>オープンソース・ベイト・アンド・スイッチ</strong>: 多くのコメンテーターは、この動きを「オープンソースのベイト・アンド・スイッチ（餌をまいてから変更する）」と批判しています。Cal.comが以前にオープンソースへの積極的なコミットメント（coss.comの立ち上げなど）を示していたことから、この180度の転換は顧客を失望させると見られています。</li>
+</ul>
+<h2>オープンソースの未来と課題</h2>
+<p>この議論は、AI時代におけるオープンソースのあり方、特に営利企業がオープンソースをどのように活用していくかというより広範な問いを提起しています。</p>
+<ul>
+<li><strong>オープンソースの終焉？</strong>: 一部のコメントは、AIの登場により、オープンソースやブログのような公開の文化が衰退し、すべてがクローズドソースになる未来を予測しています。</li>
+<li><strong>「真の」オープンソース</strong>: 創業者が初期の採用を促進するためにオープンソースを利用している現状を批判し、投資家から支援を受ける企業にとってオープンソースはブランド戦略に過ぎないという意見があります。将来的には、真の理念に忠実なオープンソースプロジェクトのみが存続するだろうと予測されています。</li>
+<li><strong>オープンソースのメリット</strong>: 対照的に、AI時代においてオープンソースの価値はむしろ高まるという意見もあります。LLMを使って脆弱性を発見するコストをオープンソースコミュニティで共有できるため、クローズドソースよりも多くの精査を受け、迅速にバグが修正される可能性があると主張されています。</li>
+<li><strong>非対称性への対応</strong>: 攻撃側がわずかな脆弱性を見つければよいのに対し、防御側はすべての脆弱性を修正する必要があるという非対称な状況に、オープンソースはどのように対応すべきかという課題が浮き彫りになっています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Cal.comがAIによるセキュリティ上の懸念を理由にクローズドソースに移行するという決定に対し、Hacker Newsのコメントは概ね懐疑的です。多くのユーザーは、この理由が「セキュリティ・バイ・オブスキュリティ」に過ぎず、AIを便利な言い訳として利用した、より深いビジネス上の理由（製品のコモディティ化、競合他社によるコードの盗用、有料プランへの転換の困難さなど）があると見ています。</p>
+<p>この議論は、AIがコードの脆弱性発見を加速させる中で、オープンソースプロジェクトが直面する財政的、倫理的、そして実用的な課題を浮き彫りにしています。AI時代のオープンソースの持続可能性と、企業がオープンソースに対してどのような姿勢を取るべきかについて、まだ明確な答えは見つかっていません。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
