@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Put your SSH keys in your TPM chip - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Put your SSH keys in your TPM chip</h1>
+        <div class="meta">
+            投稿日: 2026年04月16日 | ランク: 10
+        </div>
+        <a href="https://raymii.org/s/tutorials/Put_your_SSH_keys_in_your_TPM_chip.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、SSHキーなどの認証情報をTPM（Trusted Platform Module）やYubiKeyのようなハードウェアセキュリティキーに保存することのメリットとデメリットについて議論されています。主な論点は、マルウェアからの保護、利便性、そしてTPMの実際のセキュリティ価値です。</p>
+<h2>ハードウェアセキュリティキー (YubiKey) の利点</h2>
+<p>多くのユーザーは、YubiKeyのような物理的なセキュリティキーが、SSHキーを保護する上で大きな利点を提供すると考えています。</p>
+<ul>
+<li><strong>マルウェアからの保護</strong>: ハードウェアセキュリティキーに保存された秘密鍵は、デバイスからエクスポートできないため、マルウェアが秘密鍵を盗み出して他の場所で使用することを防ぎます。キーの署名操作はデバイス内部で行われ、秘密鍵がホストのRAMに現れることはありません。</li>
+<li><strong>物理的な確認</strong>: YubiKeyは、署名操作を行う際にユーザーが物理的にタッチすることを要求できるため、攻撃者がユーザーの知らないうちに操作を行うのを防ぐことができます（ただし、熟練した攻撃者による欺瞞の可能性は議論されています）。</li>
+<li><strong>シンプルさ</strong>: 最新のOpenSSHはFIDO2をネイティブにサポートしており、YubiKeyを使ったSSHキーの生成と管理が非常に簡単になっています。複数のキーを作成し、それぞれにパスワードとタッチ要求を設定することも可能です。</li>
+<li><strong>複数の用途</strong>: YubiKeyは、SSHだけでなく、Gitコミットの署名、KeePassXCとの連携など、さまざまな用途に利用できます。</li>
+</ul>
+<h2>TPMのセキュリティと課題</h2>
+<p>TPMにキーを保存することの有効性と潜在的な問題について、多くの意見が寄せられています。</p>
+<ul>
+<li><strong>セキュリティの目的</strong>: TPMは、抽象的な「セキュリティ」のためではなく、主にデバイスの「認証」のために設計されているという意見があります。雇用主や銀行などの第三者が、接続元のデバイスが正規のものであることを確認するために価値を発揮します。個人が自分のデバイス間でのアクセスを管理する場合には、その価値が薄れるという指摘もあります。</li>
+<li><strong>マルウェアからの保護</strong>: TPMもYubiKeyと同様に、秘密鍵がデバイスからエクスポートされるのを防ぎ、マルウェアが鍵を盗むことを困難にします。これにより、システムが侵害された場合でも鍵をローテーションする必要が減り、監査が容易になります。</li>
+<li><strong>「イビルメイド攻撃」対策</strong>: 個人にとっては、TPMの「測定されたブート（measured boot）」機能が、起動プロセスが改ざんされていない場合にのみ復号キーを提供することで、「イビルメイド攻撃」（物理的な改ざん）に対して役立つ可能性があります。</li>
+<li><strong>パフォーマンスの問題</strong>: TPMを使ったECC256キーでの署名には約500msかかり、スクリプト実行時など、多数の署名操作が必要な場合に問題となることがあります。</li>
+<li><strong>BIOSアップデートとTPMのワイプ</strong>: 多くのデスクトップマザーボード（特にコンシューマー向け）では、BIOSをアップデートするとTPMがワイプされ、鍵が失われるリスクが指摘されています。</li>
+<li><strong>認証時の安全性</strong>: TPMにキーが保存されていても、システムが侵害されている場合、悪意のあるソフトウェアが正規のSSHクライアントのふりをして署名操作を要求し、ユーザーが気付かずに承認してしまう可能性が議論されています。</li>
+</ul>
+<h2>その他の関連事項</h2>
+<ul>
+<li><strong>PINとパスワード</strong>: TPMの「PIN」が実際にはパスワードのように機能するが、デバイスに紐付けられ、ブルートフォース攻撃に強いことから「PIN」という呼び名が使われているという説明がありました。</li>
+<li><strong>macOSのSecure Enclave</strong>: macOSでは、サードパーティ製ソフトウェアなしでSSHキーをSecure Enclaveに移動できるようになっており、Touch IDによる認証を要求できます。</li>
+<li><strong>レガシーシステムとの互換性</strong>: YubiKeyのFIDO2機能は、サーバー側のOpenSSHが十分に新しいバージョンでないと利用できない場合があります。</li>
+<li><strong>キーの損失リスク</strong>: ハードウェアにキーを紐付けることの懸念として、ハードウェアが故障した場合にアクセスできなくなるリスクが挙げられます。複数の方法を用意し、バックアップをテストすることが推奨されます。</li>
+</ul>
+<h2>まとめ</h2>
+<p>SSHキーをTPMやYubiKeyのようなハードウェアセキュリティキーに保存することは、特にマルウェアによる秘密鍵の盗難を防ぎ、物理的な認証を可能にする点で、セキュリティを向上させる有効な手段です。YubiKeyは、その使いやすさと物理的なタッチ要求により、個人および組織での採用が進んでいます。TPMも特定の認証シナリオや「イビルメイド攻撃」対策には有用ですが、BIOSアップデートによるキーのワイプやパフォーマンスの課題、およびシステムが侵害された際の認証プロセスの安全性については注意が必要です。個々の脅威モデルと利便性のバランスを考慮し、適切なソリューションを選択することが重要であると議論されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
