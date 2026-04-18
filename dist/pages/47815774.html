@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migrating from DigitalOcean to Hetzner - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Migrating from DigitalOcean to Hetzner</h1>
+        <div class="meta">
+            投稿日: 2026年04月18日 | ランク: 2
+        </div>
+        <a href="https://isayeter.com/posts/digitalocean-to-hetzner-migration/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この投稿は、ある企業がDigitalOceanからHetznerの専用サーバーに移行し、月額1,432ドルから233ドルへと大幅なコスト削減を達成したことについての議論です。コメントは主にこの移行の経済的、技術的な側面、特にHetznerの専用サーバーモデルに伴うトレードオフと、Hetznerと他のクラウドプロバイダーの比較に焦点を当てています。</p>
+<h2>コスト削減とクラウドプロバイダーの比較</h2>
+<p>多くのコメント投稿者は、DigitalOcean (DO) やAWSのような「ハイパースケーラー」が提供する仮想サーバーから、Hetznerのようなプロバイダーが提供するベアメタルまたは専用サーバーへの移行による劇的なコスト削減に同意しています。彼らは、EUのクラウドプロバイダーが一般的に米国のプロバイダーよりもコストパフォーマンスに優れていると指摘しています。</p>
+<p>しかし、このコスト削減にはトレードオフが伴うことを指摘する人もいます。主な議論は、DOのような仮想サーバーはハードウェア障害時に別のサーバーにライブ移行できるのに対し、Hetznerの専用サーバーではハードウェア障害が発生した場合、手動でのハードウェア交換とデータの復元が必要となり、サービス停止時間が長くなる可能性があるという点です。これは「リンゴとオレンジの比較」であり、提供されるサービスレベルが異なるという意見が多く見られます。</p>
+<h2>可用性と冗長性に関する懸念</h2>
+<p>議論の大きなテーマの一つは、単一の専用サーバーに移行することによる可用性と冗長性の欠如です。元のDO設定も単一のVMであったため、移行によって冗長性が低下したわけではないという指摘がある一方で、多くのユーザーは、「数十万のユーザーにサービスを提供する」アプリケーションにとって、単一サーバーでのセットアップはリスキーすぎると考えています。</p>
+<p>解決策として、ソフトウェアRAID、冗長電源、リモートバックアップなどの導入が提案されています。また、予算があれば、完全に同一の予備サーバーを用意したり、PostgreSQLのpg_auto_failoverのようなHA（高可用性）ソリューションを導入したりすることも議論されています。一部のユーザーは、ウェブサイトがビジネスの中核ではない中小企業や趣味のプロジェクトでは、時折のダウンタイムは許容できると主張しています。</p>
+<h2>移行プロセスとAIの役割</h2>
+<p>元の記事では、34のNginxサイトと30のMySQLデータベースを含む複雑な環境をゼロダウンタイムで移行した詳細な手順が説明されています。この移行の技術的な側面、特にMySQLのデータベースの同期やNginxのリバースプロキシへの変換について言及するコメントもあります。</p>
+<p>注目すべきは、Redisの作成者であるantirezが、同様の移行を「Claude Code」（AIアシスタント）の助けを借りて行ったと述べたことです。これは、AIが移行などの複雑なタスクを簡素化し、ベンダーロックインを減らす可能性についての議論を引き起こしました。しかし、AIが「すべてを移行した」という表現は誤解を招く可能性があり、実際にはAIがボイラープレートコードの作成を支援したに過ぎないと指摘する意見もあり、AIの過度な宣伝に対する批判も聞かれました。</p>
+<h2>Hetznerの評判と問題点</h2>
+<p>Hetznerに対する全体的な意見は肯定的ですが、いくつかの懸念も表明されています。HetznerのIPアドレスは「評判が悪い」とされ、一部のファイアウォールポリシーでブロックされたり、スクレイパーやハッカーに利用されたりする傾向があるという報告があります。また、Hetznerがアカウントの支払いを拒否したり、ユーザーアカウントやサービスを予告なく削除したりするといった、カスタマーサポートに関する「ホラーストーリー」も共有されています。さらに、Hetznerは新規顧客に対してパスポートなどのID提示を求める場合があるという不満の声も聞かれました。</p>
+<h2>まとめ</h2>
+<p>DigitalOceanからHetznerの専用サーバーへの移行は、大幅なコスト削減をもたらしますが、特に高可用性が要求されるサービスにおいては、冗長性と可用性に関する慎重な検討と追加の対策が必要です。Hetznerは優れたコストパフォーマンスを提供し、多くのユーザーに推奨されていますが、IPアドレスの評判やカスタマーサポートの問題、アカウント認証要件などの注意点も存在します。AIは移行プロセスを支援するツールとしてその可能性を示していますが、その能力を過大評価すべきではありません。最終的に、クラウドプロバイダーの選択は、アプリケーションの要件、予算、リスク許容度、および運用チームが管理できる複雑さのレベルとの間のトレードオフの問題であるという点で、多くのユーザーが同意しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
