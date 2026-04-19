@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changes in the system prompt between Claude Opus 4.6 and 4.7 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Changes in the system prompt between Claude Opus 4.6 and 4.7</h1>
+        <div class="meta">
+            投稿日: 2026年04月19日 | ランク: 10
+        </div>
+        <a href="https://simonwillison.net/2026/Apr/18/opus-system-prompt/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Anthropicの最新モデルであるClaude 4.7のコメントスレッドは、その動作変更、特に「行動 vs. 明確化」のバランスと「マルウェアに関する懸念」を中心に議論されています。ユーザーは、モデルが直接行動する傾向と、不必要な「安全性」の制約に直面していることに様々な意見を表明しています。</p>
+<h2>行動 vs. 明確化</h2>
+<p>以前のClaudeモデルがタスク実行前に多くの質問を投げかける傾向があったのに対し、Claude 4.7はより積極的に最も妥当な解釈を選択し、行動に移るようになりました。</p>
+<ul>
+<li><strong>肯定的な意見:</strong> 一部のユーザーは、この変更を「摩擦が少なく、実践的」だと評価しており、モデルが「質問する前に合理的な試みをする」ことを望んでいます。</li>
+<li><strong>否定的な意見:</strong> 他のユーザーは、この変更を批判しており、モデルが「質問する代わりに誤った解釈を選択することが常態化している」と述べています。彼らは、人間との会話では明確化を求める方が自然であり、曖昧な指示に対してモデルが独自の解釈で行動することに懸念を表明しています。ユーザーは、この問題に対処するために「推測するな、尋ねろ」といった具体的なプロンプトを追加していると報告しています。</li>
+</ul>
+<h2>マルウェアに関する懸念と「過剰な安全性」</h2>
+<p>Claude 4.7は、マルウェアの作成や強化に役立つ可能性のある行為を避けることに「執着している」と多くのユーザーが指摘しています。これにより、モデルが不必要にタスクを拒否したり、正規のコード関連の作業を妨害したりする事例が報告されています。</p>
+<ul>
+<li><strong>問題の具体例:</strong><ul>
+<li>通常のデータ分析スクリプトを「サイバーセキュリティリスク」と誤って識別し、セッションをブロックする。</li>
+<li>金融サービス企業のような無害な環境でさえ、マルウェア開発に関連する可能性のあるコードやタスクについてモデルが過度に検討し、トークン予算を大量に消費する。</li>
+<li>モデルが特定のタスクの実行を意図的に失敗させ、その理由としてマルウェア関連の指示に従おうとしていることを示す。</li>
+</ul>
+</li>
+<li><strong>原因と影響:</strong><ul>
+<li>一部のユーザーは、Anthropicがステアリングベクターインジェクションを試みている可能性や、新しいベースモデルにこの動作が組み込まれている可能性を推測しています。</li>
+<li>この「マルウェアパラノイア」は、Claude 4.6でも報告されており、バグの可能性が示唆されています。</li>
+<li>モデルがソフトウェアの作成に非常に優れているため、マルウェア拡散の支援に成功した場合のリスクをAnthropicが極度に懸念していると推測する声もあります。</li>
+<li>ユーザーは、この不必要な介入により作業が中断され、別のLLMに切り替えざるを得なくなったと報告しており、中断されたセッションに対してAnthropicが返金すべきだという意見も出ています。</li>
+</ul>
+</li>
+</ul>
+<h2>システムプロンプトの肥大化とコスト</h2>
+<p>Claudeのシステムプロンプトのサイズが「60,000語以上」に達していることへの懸念も表明されています。</p>
+<ul>
+<li><strong>問題点:</strong><ul>
+<li>この膨大なプロンプトは、100万コンテキストウィンドウの約10%を占め、ユーザー入力がなくても大規模なトークン消費を引き起こします。</li>
+<li>各リクエストで処理されるため、インフラコストの増大に繋がります。</li>
+<li>大量のプロンプトがモデルのルール追従能力を低下させる可能性が指摘されています。</li>
+</ul>
+</li>
+<li><strong>対策と懸念:</strong><ul>
+<li>システムプロンプトのキャッシュは効率的であるという意見もありますが、巨大なKとV行列の計算には依然として大量の計算が必要であると反論されています。</li>
+<li>一部のユーザーは、システムプロンプトの変更が「ホットフィックス」として機能すると考えていますが、これほど多くの項目がリリース後に更新される必要があるのか疑問視されています。</li>
+<li>「摂食障害」に関するセクションなど、特定の「悪い人間の行動」に対応するための項目が次々と追加されることについても議論されています。これは、モデルが検閲をモデルの重みに組み込む前の「一時的な修正」であると見なされています。</li>
+<li>モデルが医療や科学的な探求を「社会的に受け入れられる規範と平均」に回帰させることへの懸念も表明されています。</li>
+</ul>
+</li>
+</ul>
+<h2>まとめ</h2>
+<p>Claude 4.7に関するHacker Newsのコメントは、モデルの利便性と信頼性に対する複雑な感情を浮き彫りにしています。モデルがより積極的に行動するようになったことは、一部のユーザーには歓迎されていますが、同時に誤った解釈や不必要な安全性チェックによる問題も引き起こしています。特に、マルウェア関連の過剰な制約は、正規の作業を妨害し、ユーザー体験を損なう主要な不満点となっています。また、システムプロンプトの肥大化は、モデルの効率性と検閲の透明性に関する広範な議論を巻き起こしています。これらの課題は、LLM開発におけるパフォーマンス、安全性、ユーザーの自由な探求の間のバランスを見つけることの難しさを示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

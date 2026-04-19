@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I wrote a CHIP-8 emulator in my own programming language - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">I wrote a CHIP-8 emulator in my own programming language</h1>
+        <div class="meta">
+            投稿日: 2026年04月19日 | ランク: 4
+        </div>
+        <a href="https://github.com/navid-m/chip8emu" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、あるエミュレータプロジェクト（Spectre）がAIによって生成されたものではないかという初期の疑問に対し、作者がプロジェクトの背景、技術的動機、達成された改善点、そして言語テストとしての目的を説明しています。</p>
+<h2>プロジェクトの起源とAI生成疑惑への反論</h2>
+<p>ユーザーが、短期間での大量のコードコミットと行数から、このSpectreプロジェクトがAIによって生成されたものではないかと推測しました。これに対し、作者である<code>pizza_man</code>は、このプロジェクトは自身がNim言語で作成した既存のエミュレータ「Cemu」をSpectre言語で書き直したものであると明確に否定しています。</p>
+<h2>技術的動機とエミュレータの改善</h2>
+<p>作者は、この書き直しを、Spectre言語が外部のCライブラリ（具体的にはSDL2）を使用するような、より実践的なアプリケーションに対応できるかをテストする目的で行ったと説明しています。この過程は、コンパイラのFFI（外部関数インターフェース）の使いやすさ、グローバル変数の扱い、およびツールの使いやすさといった、これまで試していなかった領域のストレステストとして機能しました。また、オリジナルのCemuに比べて、CPU速度の変更機能や、CHIP-8のASDFコントロールがSpace Invadersのようなゲームには不便だったため、より良いコントロールマッピングなど、いくつかの機能が追加されました。コアのエミュレータロジックは元のものに近いものの、入力処理、レンダリングループ、タイミングといった周辺インフラは、よりクリーンで堅牢になったと述べています。</p>
+<h2>プロジェクトの成果と今後の課題</h2>
+<p>このプロジェクトは、小規模ながらも、Spectre言語がより実質的なアプリケーションを処理できることを検証するという目的を十分に果たしました。同時に、コンパイラやツールチェーンにおいて改善が必要な粗削りな部分もいくつか明らかになったと作者は指摘しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、SpectreエミュレータプロジェクトがAIによって生成されたものではないかという憶測に対し、作者がNimで書かれた既存エミュレータの書き直しであることを説明しました。このプロジェクトの主な目的は、Spectre言語が外部Cライブラリ（SDL2）を伴う実用的なアプリケーションを処理できるか検証することであり、FFIやツールの使いやすさのストレステストとして機能しました。結果として、言語の可能性が実証されるとともに、改善点も特定できたとまとめられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
