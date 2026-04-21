@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laws of Software Engineering - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Laws of Software Engineering</h1>
+        <div class="meta">
+            投稿日: 2026年04月21日 | ランク: 6
+        </div>
+        <a href="https://lawsofsoftwareengineering.com" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ソフトウェア開発における「法則」や経験則のリストについて議論しています。これらの法則の定義、適用性、矛盾、および現代のソフトウェアエンジニアリングへの関連性について様々な意見が交わされました。</p>
+<h2>「法則」の定義と有効性</h2>
+<p>多くのコメント投稿者は、サイトに掲載されている「法則」が物理法則のような厳密なものではなく、むしろ「経験則」「格言」「観察」であると指摘しています。中には「法則と呼ぶのは非常に悪い考えだ」という意見や、「これらの法則は多くの内部矛盾を含んでおり、都合の良いものを選んで自分の主張を正当化できる」という指摘もあります。また、「ソフトウェアエンジニアリングは科学を装ったブードゥー教だ」と述べ、実験的に検証された「法則」がないことへの不満も表明されています。</p>
+<h2>特定の法則に対する議論</h2>
+<h3>早すぎる最適化 (Premature Optimization)</h3>
+<p>この法則、特にドナルド・クヌースの引用は、最も活発に議論されたテーマの一つです。
+*   <strong>誤解されがち:</strong> 多くの人が「早すぎる最適化は諸悪の根源」という言葉を、パフォーマンスを全く考慮しない言い訳として使っていると指摘されています。
+*   <strong>クヌースの真意:</strong> クヌースが言及したのは、コンパイラが未熟だった時代の手動による低レベルな最適化（ループアンローリングや関数インライン化など）であり、アルゴリズムやデータ構造の選択とは異なるとの声が多く聞かれました。
+*   <strong>現代の関連性:</strong> 「今日のパフォーマンスは主にアーキテクチャの選択によるものであり、最初から考慮する必要がある」という意見がある一方で、「想像上のスケールに基づいて不必要な複雑性（マイクロサービス、キャッシング層など）を追加するほうが、真のボトルネックを見逃すよりも有害だ」という反論もあります。</p>
+<h3>DRY (Don't Repeat Yourself)</h3>
+<p>DRY原則についても様々な意見がありました。
+*   <strong>誤解と過剰適用:</strong> 「DRYは誤解されている」という意見が多く、特に「似たような機能を持つ2つの異なる関数を書くのを避けるために、過剰な抽象化を生み出す」という問題が指摘されています。
+*   <strong>SPOT (Single Point Of Truth):</strong> DRYを「Single Point Of Truth」として再定義する提案があり、「将来的に一方のインスタンスが変更されたときに、もう一方も同じように変更されるべきであれば、それを単一のインスタンスにすべきだ」とされています。
+*   <strong>「Rule of 3」:</strong> コードの重複が3回発生するまでリファクタリングを控える「Rule of 3」が、より実用的なアプローチとして言及されています。</p>
+<h3>Postelの法則 (Postel's Law) vs. Hyrumの法則 (Hyrum's Law)</h3>
+<p>これら2つの法則は、API設計における厳格さ vs 寛容さの矛盾するアプローチとして対比されています。
+*   <strong>Postelの法則の衰退:</strong> 「寛容に受け入れ、厳格に送信せよ」というPostelの法則は、かつてよく引用されましたが、最近ではHyrumの法則（「APIのあらゆる観察可能な挙動は、最終的に誰かに依存される」）がより注目されており、Postelの法則は「破られた場合にユーザーに苦痛を与える」ため「完全に捨てた」という意見も出ています。
+*   <strong>バランスの重要性:</strong> 内部APIや設定解析では厳格に、クライアントアップグレードを強制できない外部境界では寛容に、というバランスが提案されています。</p>
+<h2>その他の提案と意見</h2>
+<ul>
+<li><strong>欠けている法則:</strong> Boydの繰り返し開発の法則、Ousterhoutの複雑性分解の法則、Greenspunの第10の法則、Chestertonのフェンス、Littleの法則、Kernighanの法則、Curlyの法則、Wadsworth定数など、様々な「法則」が提案されました。</li>
+<li><strong>サイト自体の問題:</strong> サイトがトラフィック制限に達して一時的に停止したことに対し、「ソフトウェアエンジニアリングのウェブサイトなのに」という皮肉なコメントや、AIが生成した「AIスロップ」であるという疑念も表明されました。</li>
+<li><strong>AIとの関連性:</strong> AIによるコーディングが普及する現代において、これらの「法則」が「もはや適用されないのか」「関連性がなくなるのか」という疑問も提示されています。</li>
+<li><strong>実務経験の重要性:</strong> 「これらの法則は、実際に失敗を経験しなければ意味をなさない」「本から学べるものではない」という意見が多くありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>本コメントスレッドでは、ソフトウェア開発における「法則」や経験則が、厳密な科学的原則ではなく、文脈依存の指針として理解されるべきであることが強調されました。特に「早すぎる最適化」と「DRY」は、その誤解や過剰適用がもたらす潜在的な問題について熱心に議論されました。また、これらの「法則」は矛盾する可能性があるため、適切なバランス感覚と実務経験が不可欠であるという認識が共有されています。現代のAI活用環境において、これらの「法則」が今後どのように再評価されるかについても関心が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
