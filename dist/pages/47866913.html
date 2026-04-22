@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Over-editing refers to a model modifying code beyond what is necessary - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Over-editing refers to a model modifying code beyond what is necessary</h1>
+        <div class="meta">
+            投稿日: 2026年04月22日 | ランク: 2
+        </div>
+        <a href="https://nrehiew.github.io/blog/minimal_editing/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、AIコーディングエージェントが「やりすぎ」る傾向、特にリファクタリングやコード変更において過剰な作業を行うことについて議論しています。多くのユーザーは、この挙動がコードの複雑さを増し、レビューを困難にし、潜在的なバグを導入すると指摘しています。</p>
+<h2>AIエージェントの「やりすぎ」問題</h2>
+<p>多くのユーザーは、AIエージェントが要求されたタスクを超えてコードを過度に編集する傾向があることを指摘しています。GPT-5.4が「多すぎることをしすぎる」という意見や、エージェントが行うリファクタリングは実際には「スロットマシンの腕を引くようなもの」であり、改善ではないと批判する声もあります。また、既存のロジックと同じことをする新しいコードを記述したり、意図せず他のユースケースを壊したり、クラス間で状態を変更してデッドロックやバグを引き起こしたりするケースも報告されています。これにより、レビューの負担が増え、見かけ上の進捗が相殺されるという懸念が表明されています。</p>
+<h2>「リファクタリング・アズ・ユー・ゴー」と技術的負債</h2>
+<p>コード変更とリファクタリングを同時に行う「リファクタリング・アズ・ユー・ゴー（進捗に合わせてリファクタリングする）」という古い概念が議論されています。かつては推奨されながらも実践されなかったこのアプローチをAIエージェントが実行することで、その欠点が顕在化しているという意見があります。しかし、同時に、これは未熟な開発者の行動であり、大規模なPRで小さなUI修正を行う際にコードを「クリーンアップ」しようとすることが最悪の事態を招くと反論する声もあります。Extreme Programmingの「ボーイスカウトのルール」（来た時よりも美しくして去る）を支持する意見もあれば、リファクタリングと新機能（またはバグ修正）を同じコミットに入れるのは悪い習慣だと指摘する意見もあります。エージェントが不適切なリファクタリングを行うため、これを停止させて、より具体的な指示を与えたいと感じるユーザーもいます。</p>
+<h2>自律型エージェントと人間による制御</h2>
+<p>AIエージェントの自律性についても議論が集中しています。ユーザーは、エージェントが複数のファイルを操作し、テストを実行し、デプロイを行うといった「やりすぎ」の挙動に対して不安を感じています。何が起こっているのか理解できない、あるいはAWSの認証情報のような機密情報を誤って送信するリスクがあるといった懸念が表明されています。また、AIに頼りすぎることで、開発者自身のスキルが停滞する「学習の欠如」を心配する声もあります。</p>
+<p>多くのユーザーは、AIを「ツール」として扱い、すべてのコマンドを手動で承認し、エージェントに設計やアーキテクチャの決定を任せないというアプローチを推奨しています。これにより、開発速度は大幅には向上しないかもしれませんが、コードの理解度は維持できると考えられています。しかし、この「すべての動きを慎重にレビューする」ワークフローは、創造的なエンゲージメントの欠如やフロー状態に入れないことから、「非常に不愉快で難しい」と感じるユーザーもいます。一方で、エージェントに完全に自由に作業させることは、技術的負債の蓄積、意図しないデータベースの削除、セキュリティ上の脆弱性の導入につながる可能性があると警告されています。</p>
+<p>LLMの予測不可能性も懸念されており、コンパイラのような決定論的なツールとの比較がなされています。コンパイラは予測可能で、その内部動作を知る専門家がいるのに対し、LLMは乱数シードによって決定論的であると主張する意見があるものの、その振る舞いは人間には非決定論的に見え、コードのレビューが必須であるとされています。</p>
+<h2>LLMを効果的に活用するための戦略</h2>
+<p>ユーザーは、AIエージェントをより効果的に活用するための様々な戦略を共有しています。</p>
+<ul>
+<li><strong>詳細な指示と制約:</strong> エージェントに対し、最小限の変更を行うよう促したり、変更を正当化するよう求めたりすることで、過剰な編集を防ぎます。</li>
+<li><strong>コンテキスト管理:</strong> プロジェクトのコンテキストや既存コードの「硬直度」に応じて、エージェントが既存コードをどれだけ積極的に変更できるかを事前に説明します。</li>
+<li><strong>段階的なアプローチ:</strong> 開発の中核部分は自身で書き、AIには定型的なコード作成や実験的な部分を任せる「3つのモード」を提唱するユーザーもいます。</li>
+<li><strong>安全な実行環境:</strong> プロダクションの認証情報をAIに与えず、サンドボックス化された環境で実行することで、意図しない破壊を防ぎます。</li>
+<li><strong>頻繁なコミットとレビュー:</strong> 各プロンプトサイクル後にコミットし、<code>git add -p</code>のようなツールを使って変更を細かく確認し、すべての変更を理解するよう努めます。</li>
+<li><strong>透明性の向上:</strong> LLMがより透明性のある診断出力や変更理由を提供すれば、より積極的に活用できるという意見があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AIコーディングエージェントの「やりすぎ」問題、特に過剰なリファクタリングやコード変更について深い懸念を表明しています。この挙動は、コードの複雑性を増大させ、レビューの負担を高め、技術的負債やセキュリティリスクを招く可能性があります。多くのユーザーは、AIを「自律的な代替物」ではなく「ツール」として扱い、厳格な管理と人間によるレビューの重要性を強調しています。また、エージェントに具体的な指示を与えたり、安全な実行環境で作業させたりするなど、より効果的に活用するための戦略が提案されています。AI技術の急速な進歩を考慮すると、現在の問題点も将来的に解決される可能性があるという期待も示されていますが、現状では、人間の開発者がAIの出力に対して常に注意深く、批判的な視点を持つことが不可欠であるという認識が支配的です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
