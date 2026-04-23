@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitwarden CLI compromised in ongoing Checkmarx supply chain campaign - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bitwarden CLI compromised in ongoing Checkmarx supply chain campaign</h1>
+        <div class="meta">
+            投稿日: 2026年04月23日 | ランク: 3
+        </div>
+        <a href="https://socket.dev/blog/bitwarden-cli-compromised" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、GitHub Actionsを悪用したBitwarden CLIのサプライチェーン攻撃に関するものです。Bitwardenの公式CLIの特定バージョン（2026.4.0）に悪意のあるコードが含まれており、これがGitHub ActionsのCI/CDパイプラインの侵害を通じて公開されました。コメントでは、この攻撃の広がり、JavaScriptエコシステムの脆弱性、そして将来の攻撃を防ぐための対策について議論されています。</p>
+<h2>攻撃の影響と対象</h2>
+<p>Bitwarden自身は、この攻撃によるエンドユーザーへの影響はほとんどなく、特定の短期間にnpm経由でCLIをインストールした場合にのみ影響を受ける可能性があると説明しています。影響を受けた場合、ローカルマシン上のすべてのシークレットがアクセスされたり、実行可能ファイルにバックドアが仕掛けられたりするリスクがあります。ブラウザ拡張機能やWeb版には影響がないとされています。</p>
+<h2>JavaScriptエコシステムへの懸念</h2>
+<p>多くのコメントで、JavaScript（TypeScript）でCLIツールを構築することへの懸念が表明されています。NPMエコシステムは、数百ものサードパーティパッケージをインポートすることを奨励する傾向があり、これによりサプライチェーン攻撃のリスクが増大すると指摘されています。標準ライブラリの脆弱性や、不必要なほど多くの依存関係を抱えることが問題視されています。</p>
+<h2>対策とセキュリティプラクティス</h2>
+<p>将来のサプライチェーン攻撃を防ぐための様々な対策が提案されています。
+*   <strong>リリース遅延（Cooldowns）</strong>: パッケージマネージャー（npm, pnpm, bunなど）に設定できる「最低リリース期間（min-release-age）」を設け、新しいパッケージが公開されてから実際に利用可能になるまでに一定期間（例：7日間）待機させることで、セキュリティスキャナーが脅威を検出する時間を与えるというアイデアです。
+*   <strong>代替CLIツール</strong>: Bitwardenの公式CLIの代わりに、Rustで書かれた<code>rbw</code>や<code>pass</code>/<code>gopass</code>といった代替ツールが推奨されています。これらのツールは、依存関係が少ない、あるいはより堅牢なエコシステムを持つとされています。
+*   <strong>パスワードマネージャーの選択</strong>: KeePass（特にKeePassXC）のようなローカルで管理するパスワードマネージャーを推す声も多く聞かれます。Syncthingやクラウドストレージと組み合わせてKeePassファイルを同期させる方法が議論されています。
+*   <strong>ブラウザ拡張機能のリスク</strong>: ブラウザ拡張機能は利便性が高い一方で、統合ポイントが増えることで侵害のリスクも高まるという意見があり、デスクトップアプリからのコピペやグローバルショートカットの利用を推奨する人もいます。しかし、ブラウザ拡張機能の自動入力機能はフィッシング対策に有効であるという反論もあります。
+*   <strong>その他</strong>: 依存関係のピン留め、インストール後のスクリプトの無効化、別の開発者アカウントの使用、ソースからのビルドなども提案されています。</p>
+<h2>まとめ</h2>
+<p>Bitwarden CLIのサプライチェーン攻撃は、GitHub ActionsとJavaScript/NPMエコシステムの脆弱性を改めて浮き彫りにしました。多くのコメントは、この種の攻撃が今後も続くと予想しており、ソフトウェアの依存関係管理、開発言語の選択、およびセキュリティプラクティスの見直しが不可欠であると結論付けています。特に、新しいパッケージの自動更新に対する「リリース遅延」の導入が、当面有効な対策として注目されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

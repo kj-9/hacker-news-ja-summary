@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An update on recent Claude Code quality reports - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">An update on recent Claude Code quality reports</h1>
+        <div class="meta">
+            投稿日: 2026年04月23日 | ランク: 4
+        </div>
+        <a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Anthropic社のAIモデルClaudeのパフォーマンス低下と、それに対する同社の対応に関するユーザーからの批判的な意見をまとめています。ユーザーは、モデルの性能が低下した具体的な理由として、デフォルト設定の変更、古いセッションからの「思考トークン」の削除、システムプロンプトの変更などを挙げています。</p>
+<h2>モデルパフォーマンスの低下と原因</h2>
+<p>ユーザーは、Claudeのモデルパフォーマンスが過去数ヶ月で著しく低下したと報告しています。Anthropicは「モデルの性能は低下していない」と主張しているものの、以下の変更が実質的なパフォーマンス低下を引き起こしたと指摘されています。</p>
+<ul>
+<li><strong>デフォルト設定の変更</strong>: 3月にClaude Codeのデフォルト推論レベルが「高」から「中」に変更されました。AnthropicはUIの凍結を防ぐためと説明していますが、ユーザーはこれをコスト削減策と見ており、知能の低下を招いたと感じています。</li>
+<li><strong>思考トークンの削除</strong>: 1時間以上アイドル状態のセッションで、以前の思考トークンが削除される変更が3月26日に導入されました。これにより、モデルが「物忘れがひどく、繰り返し」になるバグが発生し、ユーザーはコンテキストを失い、パフォーマンスが大幅に低下したと報告しています。この変更は4月10日に修正されました。</li>
+<li><strong>システムプロンプトの変更</strong>: 4月16日に簡潔さを追求するシステムプロンプトの指示が追加され、コーディング品質が損なわれました。これは4月20日に元に戻されました。</li>
+</ul>
+<p>これらの変更について、ユーザーはAnthropicが透明性を欠き、問題を「ガスライティング」していると非難しています。</p>
+<h2>信頼性とコミュニケーションの欠如</h2>
+<p>多くのユーザーは、Anthropicがこれらの変更を事前に通知せず、問題が顕在化してから初めて認めたことに不満を表明しています。</p>
+<ul>
+<li><strong>A/Bテストと価格設定</strong>: Anthropicが価格設定に関するA/Bテストをユーザーに通知なしで行ったことについても批判が集中しており、これはサブスクリプション製品として「許しがたい」とされています。</li>
+<li><strong>社内ツールの使用</strong>: Anthropicが社内で異なるバージョンのClaude Codeを使用していることが示唆されており、これが一般ユーザーが経験する問題の発見と修正が遅れる原因であると指摘されています。</li>
+<li><strong>「Vibe-coding」文化</strong>: 一部のユーザーは、Anthropicの「vibe-coding」（直感的な開発）文化が、テスト不足や不注意な変更につながっていると推測しています。</li>
+</ul>
+<h2>競合他社への移行と選択肢</h2>
+<p>パフォーマンスの低下と信頼の喪失を受けて、多くのユーザーが他のLLMプロバイダーへの移行を検討または実行しています。</p>
+<ul>
+<li><strong>Codex/OpenAIへの移行</strong>: 多くのユーザーがCodex（OpenAIのモデル）に移行し、Anthropicよりも一貫した、または優れたパフォーマンスを報告しています。</li>
+<li><strong>他のモデルの検討</strong>: MiniMax、GLM 5.1、Kimi、Qwenなどのモデルも代替として挙げられています。</li>
+<li><strong>セルフホスト型モデル</strong>: 一部のユーザーは、ベンダーロックインや予期せぬ変更を避けるため、セルフホスト型モデルが最善の道だと主張しています。</li>
+</ul>
+<h2>継続的な問題と改善の必要性</h2>
+<p>ユーザーは、Anthropicが発表した解決策が表面的なものであり、根本的な問題に対処していないと感じています。</p>
+<ul>
+<li><strong>キャッシュ管理</strong>: 1時間以上のアイドルセッションでコンテキストが失われる問題は、多くのユーザーにとって「コーナーケース」ではなく日常的なワークフローであり、透明性の高いキャッシュ管理オプションや長期的なセッション保存機能の要望が寄せられています。</li>
+<li><strong>使用制限のリセット</strong>: Anthropicが使用制限をリセットしたことに対し、一部のユーザーは既に制限に達していたため恩恵がなく、他のユーザーは週ごとのリセットサイクルが変更されたことに混乱を表明しています。</li>
+<li><strong>UIと機能の問題</strong>: 「Adaptive thinking」モードの信頼性の欠如や、「Plan」モードでの予期せぬ実行など、Claude CodeのUIと機能に関する継続的なバグが報告されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AnthropicのClaudeモデルのパフォーマンス低下、特にClaude Codeの品質問題に対して、ユーザーが抱いている深い不満と不信感を示しています。デフォルト設定の変更、思考トークンの削除バグ、システムプロンプトの変更といった「最適化」が、ユーザー体験を著しく損ねました。ユーザーは、これらの変更に関するAnthropicの透明性の欠如、問題発生後の対応の遅さ、そして「ガスライティング」的な姿勢に特に批判的です。多くのユーザーが信頼を失い、Codexなどの競合他社への移行を検討または実行しており、Anthropicには製品の品質、信頼性、コミュニケーションの改善が強く求められています。特に、長時間のセッション管理やキャッシュの振る舞いについて、より明確な情報開示とユーザーによる制御が望まれています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
