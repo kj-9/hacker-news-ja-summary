@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The woes of sanitizing SVGs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The woes of sanitizing SVGs</h1>
+        <div class="meta">
+            投稿日: 2026年04月27日 | ランク: 9
+        </div>
+        <a href="https://muffin.ink/blog/scratch-svg-sanitization/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、SVGのセキュリティ問題、特にユーザーがアップロードしたSVGをサニタイズする際の課題と、それに対する潜在的な解決策について議論しています。多くのユーザーは、SVGが単なる画像フォーマットではなく、HTMLと同様に危険なマークアップ言語であるという認識を共有しています。</p>
+<h2>SVGのセキュリティ問題と課題</h2>
+<p>コメントでは、SVGがスクリプトタグ、外部リソースの読み込み、イベントハンドラ、CSSによる外部呼び出しなど、様々な方法でセキュリティ上のリスク（XSSなど）を引き起こす可能性が指摘されています。特に、ユーザーが生成したSVGを扱う場合、これらの危険な要素を適切にサニタイズすることが極めて困難であるという点が強調されています。シンプルな正規表現によるスクリプトタグの除去は不十分であり、より洗練されたホワイトリスト方式のアプローチが必要だと考えられています。</p>
+<h2>SVGのサブセット化と新しいフォーマットの提案</h2>
+<p>多くのコメントは、「ほとんどの実際のユースケースをカバーするSVGの小さなサブセット」をサポートするというアイデアに賛同しています。これは、SVGの複雑で危険な機能を除外し、静的なグラフィックに特化した軽量なバージョンを作成することを目指しています。具体的には、SVGを「パスと塗りつぶしの集まり」と「巧妙で危険なもの」に区別し、前者のみを許可するべきだという意見があります。
+また、<code>&lt;img&gt;</code>タグに埋め込まれたSVGがスクリプトを実行しない挙動を標準化し、<code>tvg</code>（Tiny Vector Graphics）や<code>savg</code>（Safe Vector Graphics）のような新しいフォーマット名で仕様化する提案も複数見られます。実際に、<code>tinyVG</code>というプロジェクトがすでに存在し、このアイデアを実現しようとしていることが紹介されています。</p>
+<h2>既存の対策と提案される解決策</h2>
+<p>現在利用可能な対策としては、<code>&lt;img&gt;</code>タグにSVGを埋め込むことでスクリプトの実行を防ぐ方法が挙げられます。また、CSP（Content Security Policy）がHTTPリーク問題に対する信頼できる解決策として推奨されています。CSPはHTTPヘッダーだけでなく、HTML内の<code>&lt;meta&gt;</code>タグで設定することも可能で、ブラウザがこれを永続的なルールとして扱うため、悪意のあるスクリプトによる改ざんを防げると指摘されています。
+その他、<code>&lt;svg&gt;</code>タグに<code>sandbox</code>属性を追加して<code>&lt;iframe&gt;</code>のように機能させる、あるいはMicrosoft Excelが危険な機能をスイッチの裏に隠したように、SVGにもセキュリティレベルを選択できるようなフラグを追加するなどのアイデアも提示されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、SVGのセキュリティに関する深い議論を展開しています。SVGは単なる画像フォーマットではなく、HTMLと同様に危険なマークアップ言語であるという共通認識があります。この問題に対する主要な解決策として、SVGの安全なサブセットを定義し、それを新しいフォーマットとして標準化すること（例：tinyVG）や、既存のブラウザ機能（<code>&lt;img&gt;</code>タグ、CSP）を最大限に活用することが提案されています。特に、CSPはXSSやHTTPリーク問題に対する強力な防御策として広く支持されており、より安全なWebアプリケーション開発における重要なツールであることが再確認されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
