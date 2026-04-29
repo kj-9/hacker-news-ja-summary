@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastCGI: 30 years old and still the better protocol for reverse proxies - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">FastCGI: 30 years old and still the better protocol for reverse proxies</h1>
+        <div class="meta">
+            投稿日: 2026年04月29日 | ランク: 5
+        </div>
+        <a href="https://www.agwa.name/blog/post/fastcgi_is_the_better_protocol_for_reverse_proxies" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、FastCGIとHTTPリバースプロキシを比較した記事に対する反応と、それぞれの技術の長所と短所について議論しています。特に、セキュリティ、利便性、パフォーマンス、そしてエンドツーエンド原則と最小権限の原則の間の緊張が主な焦点となっています。</p>
+<h2>FastCGIの利点と採用状況</h2>
+<p>FastCGIは、HTTPリバースプロキシと比較して、セキュリティ面での利点が強調されています。特に、クライアントからのヘッダーとプロキシが設定するヘッダーを明確に分離できる点が評価されており、これにより潜在的なセキュリティリスク（例：信頼できないヘッダーの伝播）を回避できるとされています。一部のユーザーは、PerlやPHPのFPM（FastCGI Process Manager）でFastCGIを利用しており、シンプルで堅牢なセットアップが可能だと報告しています。しかし、FastCGIがWebSocketをサポートしていない点や、アプリケーションがFastCGIプロトコルを直接扱う必要がある点は欠点として挙げられています。</p>
+<h2>HTTPリバースプロキシの普及と課題</h2>
+<p>多くのコメントでは、HTTPがリバースプロキシのデファクトスタンダードとなっている現状が語られています。これは、HTTPのシンプルさ、普遍性、そして複雑なネットワークトポロジーを簡単に実現できる柔軟性によるものとされています。NginxなどのHTTPリバースプロキシは広く利用されており、その設定は長年にわたり引き継がれていることが多いです。しかし、HTTPリバースプロキシには、ヘッダーの取り扱いに関するセキュリティ上の脆弱性（例：プロキシが転送すべきでないヘッダーを誤って転送する可能性）が指摘されています。これを解決するためには、プロキシ側で明示的にヘッダーをホワイトリスト化する必要があるものの、これが運用上のオーバーヘッドになることも言及されています。</p>
+<h2>エンドツーエンド原則と最小権限の原則</h2>
+<p>議論の中心の一つは、TCP/IPのエンドツーエンド原則（E2E）とセキュリティの最小権限の原則（PoLP）の間の緊張です。
+E2E原則は、ネットワークプロトコルが透過的であるべきであり、アプリケーションロジックはネットワークのエッジノードに置かれるべきだという考え方を支持します。これにより柔軟性が高まりますが、悪用されるリスクも伴います。
+一方、PoLPは、システムは必要な最小限の情報のみを許可し、それ以外は拒否すべきだという考え方です。これによりセキュリティが強化されますが、システムの柔軟性は低下します。
+コメントでは、データセンター内でのE2E原則は、特にセキュリティの文脈で必ずしも適切ではない可能性が指摘されています。プロキシによる厳密なヘッダーのフィルタリングやホワイトリスト化は、PoLPを適用する良い例として挙げられています。</p>
+<h2>その他のプロトコルと技術</h2>
+<p>FastCGIやHTTP以外にも、様々なプロトコルや技術が議論されています。
+・<strong>組み込みサーバー</strong>: アプリケーション内にHTTPサーバーを直接組み込むアプローチが普及しているものの、インターネットに直接公開する際のセキュリティリスクが指摘されています。
+・<strong>CGI</strong>: 古い技術だが、シンプルさゆえに特定の用途（例：カスタムページ生成）で再評価されています。ただし、環境変数を用いたHTTPヘッダーの受け渡しにはセキュリティ上の注意が必要です（httpoxyのような脆弱性）。
+・<strong>Web Application Socket (WAS)</strong>: FastCGIの課題を解決するために考案されたカスタムプロトコル。制御ソケットとデータパイプを分離することで、効率的なデータ転送と柔軟な操作（splice()の利用など）を実現しています。
+・<strong>HTTP/2.0+</strong>: HTTP/2.0で導入された多重化はパフォーマンス向上に寄与しますが、ヘッダーのセキュリティ問題は解決しないと指摘されています。また、HTTP/2.0の多重化は「TCP over TCP」のようなもので、より多くの接続を開く方が良いという意見もあります。
+・<strong>WebTransport</strong>: WebSocketsの新しい代替技術として言及されています。</p>
+<h2>まとめ</h2>
+<p>FastCGIは、HTTPリバースプロキシと比較して、特にセキュリティ面でヘッダーの明確な分離という利点を提供しますが、WebSocketの非サポートや開発の利便性で劣る点があります。HTTPリバースプロキシは、そのシンプルさと柔軟性により広く普及していますが、ヘッダー処理におけるセキュリティ上の課題があり、厳密な設定（ホワイトリスト化など）が必要です。これは、システムの柔軟性を重視する「エンドツーエンド原則」と、セキュリティを重視する「最小権限の原則」の間の、ウェブアーキテクチャにおける根本的な緊張を浮き彫りにしています。最終的には、特定のユースケース、パフォーマンス要件、およびセキュリティ体制に応じて、どちらのアプローチがより適切であるかを判断する必要がある、というのが全体的な論調です。また、Nginxの設定の複雑さや、カスタムプロトコルの検討など、関連する様々な技術的側面も議論されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

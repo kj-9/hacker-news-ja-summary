@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zed 1.0 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zed 1.0</h1>
+        <div class="meta">
+            投稿日: 2026年04月29日 | ランク: 2
+        </div>
+        <a href="https://zed.dev/blog/zed-1-0" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、エディタ「Zed」のバージョン1.0リリースについてのもので、その機能、パフォーマンス、AI統合、UI/UX、その他のエディタとの比較など、多岐にわたる意見が交わされています。</p>
+<h2>AI/エージェント統合</h2>
+<p>ZedのAI統合（特にClaude CodeやCodex）について、様々な意見があります。
+*   <strong>肯定的な意見</strong>: 多くのユーザーは、ZedのAIエージェント統合が非常にうまく機能し、コードの表示とチャットを同時に行える「ACP」（Agentic Code Panel）が便利だと評価しています。特に、ターミナルでの作業と比較して生産性が向上すると感じている人もいます。また、AI機能を完全にオフにできる設定があることも言及されています。
+*   <strong>懸念点</strong>: 一部のユーザーは、AI統合がまだ未成熟で、サブエージェント/チームの表示、コンテキストのクリア、コンテキストの使用状況表示、モデルの努力レベル変更など、多くの機能が不足していると指摘しています。また、<code>mcp</code>や<code>plugins</code>などのClaude自体の管理コマンドがサポートされていない点が挙げられています。ZedのACPがClaude Codeの機能に追いつく必要があるという意見もあります。一部のユーザーは、AI統合が優先されることで、他の重要な機能が後回しになることを懸念しています。</p>
+<h2>パフォーマンスとリソース使用</h2>
+<p>Zedの主要なセールスポイントの一つがパフォーマンスとリソース効率ですが、これについても意見が分かれています。
+*   <strong>肯定的な意見</strong>: 多くのユーザーはZedの速度と応答性、特にmacOSやLinuxでのパフォーマンスを高く評価しており、VS CodeやJetBrains IDEsと比較してメモリ使用量が少ないと報告しています。特に大規模プロジェクトでのVS Codeの動作の遅さに不満を持つユーザーは、Zedのパフォーマンスを歓迎しています。
+*   <strong>懸念点</strong>: 一方で、一部のユーザーはZedのメモリ使用量が多い、アイドル時でも高いCPU使用率を示す（特にLinuxで800 syscalls/secのスパムを指摘する声も）、あるいはMacでのバッテリー寿命への影響を懸念しています。VS Codeよりもパフォーマンスが劣ると感じる人もいます。</p>
+<h2>UI/UXと機能</h2>
+<p>UI/UXと機能面では、賛否両論があります。
+*   <strong>肯定的な意見</strong>: ユーザーは、Zedのクリーンで洗練されたデザイン、多くのキーボードショートカット、そして「バッテリーが付属している」ような体験（Pythonなどの高品質なリンターがデフォルトで設定されているなど）を好意的に見ています。特に「Go to definition」やインラインエラーハンドリングなどのLSP機能は、正しく設定すれば非常に便利だとされています。SSHリモート開発、Dev Containers、Vimキーバインドのサポートも評価されています。
+*   <strong>批判的な意見</strong>:
+    *   <strong>検索UI</strong>: 多くのユーザーが、検索結果が新しいタブで開かれるUIに不満を表明しており、JetBrainsやVimのTelescopeスタイルの検索を好む声があります。検索が遅いという指摘もあります。
+    *   <strong>テーマ</strong>: デフォルトのテーマが「地味すぎる」「読みにくい」と感じるユーザーが多く、コントラストの改善やアイコンの視認性の向上を求める声があります。テーマは変更可能ですが、デフォルトの選択に不満を持つ人がいます。
+    *   <strong>不足している機能</strong>: Pythonノートブックのサポート、高度なGit統合（ステージング/アンステージング差分）、Scalaのような特定の言語での高度なデバッグ・リファクタリング機能、拡張APIの制限（新しいGUI要素の追加不可）、非ラテンキーボードレイアウトでのショートカットの問題、スクリーンリーダーのサポート不足などが挙げられています。
+    *   <strong>エージェントファーストのレイアウト</strong>: 最近導入された「エージェントファースト」のレイアウトが、元に戻せない、またはワークフローに合わないと感じるユーザーもいます。
+    *   <strong>未保存のファイルの永続性</strong>: Sublime Textでは維持される未保存のファイルのセッションが、Zedでは失われることがあるという報告もあります。</p>
+<h2>他のエディタとの比較</h2>
+<p>Zedは、Sublime Text、VS Code、JetBrains IDEs、Emacs、Vim/Neovim、Gramなど、様々な競合エディタと比較されています。
+*   <strong>Sublime Text</strong>: Sublime Textの高速さとシンプルさを好むユーザーが、Zedに移行した、または移行を検討しているケースが多く見られます。ZedはSublime Textの現代版、より機能豊富な代替品と見なされています。しかし、Sublimeの優れた「未保存タブの記憶」機能がZedにないという不満もあります。
+*   <strong>VS Code</strong>: VS Codeの機能の豊富さを認めつつも、その肥大化、メモリ使用量、パフォーマンスの低下に不満を持つユーザーがZedへの移行を検討しています。ZedはVS Codeの「ネイティブ版」や「高速版」として評価されることが多いです。ただし、VS Codeと比較して機能不足を指摘する声もあります。
+*   <strong>JetBrains IDEs</strong>: JetBrains製品の強力な機能セットは評価されていますが、その重さ、リソース消費、パフォーマンスの問題、頻繁なバグ、AI統合へのシフトに対する懸念から、一部のユーザーはZedに移行しています。
+*   <strong>Emacs/Vim/Neovim</strong>: これらのエディタのユーザーは、Zedの速度と応答性を評価しつつも、Emacsの強力な拡張性やVim/Neovimのカスタマイズ性に匹敵しないと感じています。ただし、Emacsのキーバインドサポートは多くのEmacsユーザーにとって十分であるとされています。</p>
+<h2>その他の懸念事項</h2>
+<ul>
+<li><strong>ライセンスと信頼</strong>: Zedのライセンス条項（特に顧客データに関するセクション）について、プライバシーやデータ使用に関する懸念が表明されています。VCからの資金提供を受けているため、将来的な「エンシット化」を懸念する声もあります。</li>
+<li><strong>Linuxサポート</strong>: Linuxユーザーからは、Wayland環境での色の問題、ビットマップフォントのサポート不足、非ラテンキーボードレイアウトでのショートカットの問題、高いCPU使用率などの課題が報告されています。</li>
+<li><strong>拡張性</strong>: 現在のZedの拡張APIは非常に制限されており、新しいGUI要素を追加できない点が不満として挙げられています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Zedのバージョン1.0リリースは、コミュニティで大きな注目を集めています。その高速性と応答性、AI統合は多くのユーザーから高く評価されており、特にVS CodeやJetBrains IDEsの重さに不満を持つ人々にとって魅力的な選択肢となっています。しかし、検索UI、テーマ、拡張APIの制限、特定の言語サポートの未成熟さ、一部のパフォーマンスやリソース使用に関する問題など、改善の余地がある点も指摘されています。</p>
+<p>AI統合については、その便利さを評価する声がある一方で、機能不足や将来的な方向性に関する懸念も存在します。Zedのチームは、フィードバックを取り入れながら、今後もエディタを積極的に改善していくことが期待されます。多くのユーザーは、Zedが将来的に最高のコードエディタになる可能性を秘めていると感じており、その成長に期待を寄せています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy Fail – CVE-2026-31431 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Copy Fail – CVE-2026-31431</h1>
+        <div class="meta">
+            投稿日: 2026年04月29日 | ランク: 3
+        </div>
+        <a href="https://copy.fail/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Linuxカーネルの脆弱性「Copy-Fail」（CVE-2026-31431）に関するもので、ローカルで特権昇格を可能にし、影響を受けるシステムでroot権限を取得できるというものです。この脆弱性は、SUIDバイナリ（この場合は<code>su</code>コマンド）のページキャッシュを悪用し、悪意のあるシェルコードに置き換えることで機能します。</p>
+<h2>脆弱性の詳細と影響</h2>
+<p>この脆弱性はLinuxカーネルの<code>algif_aead</code>モジュールに存在し、2017年からパッチが適用されるまで存在していました。このエクスプロイトは、SUID実行可能ファイルのページキャッシュを一時的に書き換え、再起動後には元に戻るため、恒久的な変更は行いません。多くのユーザーがテスト環境でroot権限を取得できることを確認しており、Ubuntu 24.04 LTSなどの人気ディストリビューションでもパッチが適用されていない状態であることが報告されています。これにより、共有ホスティング環境やコンテナ、CI/CD環境など、多くのLinuxシステムが影響を受ける可能性があります。</p>
+<h2>CVEの名前付けとマーケティング</h2>
+<p>多くのコメントで、CVEに「Copy-Fail」のようなキャッチーな名前と専用ドメインが付けられていることについて議論されています。一部のユーザーはこれをマーケティング戦略と見ていますが、多くのユーザーはHeartbleedやLog4Shellのように、脆弱性を記憶しやすく、広範囲にわたるパッチ適用を促すために役立つと考えています。数字だけのCVE IDよりも、名前があった方が脆弱性について議論しやすいという意見が多く寄せられました。ただし、一部のユーザーは、AIが生成したようなウェブサイトのコンテンツや、存在しないRHELバージョン（RHEL 14.3）が記載されていることなど、マーケティング手法に疑問を呈しています。</p>
+<h2>パッチと緩和策</h2>
+<p>脆弱性は2026年4月1日にメインラインカーネルにパッチが適用されましたが、多くのディストリビューションではまだ利用可能ではありません。Debian StableやUbuntu 24.04 LTSなど、一部の主要なディストリビューションが依然として脆弱な状態であることが報告されています。
+推奨される緩和策は以下の通りです。
+1.  カーネルを、コミット<code>a664bf3d603d</code>を含むバージョンに更新する（例: 6.18.22+, 6.19.12+, 7.0+）。
+2.  一時的な対策として、<code>algif_aead</code>カーネルモジュールを無効にする。<code>echo "install algif_aead /bin/false" &gt; /etc/modprobe.d/disable-algif.conf</code>を実行し、<code>rmmod algif_aead</code>でモジュールをアンロードします。
+3.  seccompを使用して<code>AF_ALG</code>ソケットの作成をブロックする。</p>
+<h2>コンテナエスケープとAndroidへの影響</h2>
+<p>エクスプロイトのウェブサイトでは、Kubernetesやコンテナからのエスケープも可能であると主張していますが、現在のPoCスクリプトはSUIDバイナリの書き換えに依存しているため、rootless Podmanのような環境ではコンテナをエスケープできないことが確認されています。ただし、脆弱性の根本原因であるページキャッシュの任意の変更は、コンテナエスケープにも悪用される可能性が示唆されています。また、Androidデバイスへの影響も議論されましたが、Androidは通常<code>nosuid</code>でマウントされており、SELinuxによる制限、および<code>AF_ALG</code>ソケットを開く権限がないことから、直接的なPoCの適用は難しいようです。</p>
+<h2>コードの品質とAI生成コンテンツ</h2>
+<p>エクスプロイトのPoCスクリプト（732バイトのPythonスクリプト）の短さや、ウェブサイトのコンテンツの品質についても議論がありました。一部のユーザーは、PoCコードの難読化（例: <code>os as g</code>）や、ウェブサイトのAI生成のような文章（存在しないRHEL 14.3の記載など）について批判的でした。これは、迅速な公開のために急いで作成されたことが原因であると説明されています。しかし、この脆弱性自体は本物であり、重要なものであるという認識が共有されています。</p>
+<h2>まとめ</h2>
+<p>「Copy-Fail」（CVE-2026-31431）は、Linuxカーネルの<code>algif_aead</code>モジュールの脆弱性で、ローカルでの特権昇格を可能にし、root権限を奪取できる極めて深刻な問題です。この脆弱性は、SUIDバイナリのページキャッシュを一時的に書き換えることで機能し、多くのLinuxディストリビューションが影響を受けます。特に、まだパッチが適用されていないUbuntu 24.04 LTSなどのシステムでは、容易にroot権限が取得できることが報告されています。キャッチーな名前は脆弱性の周知に役立つ一方で、ウェブサイトのAI生成のような記述や情報の不正確さが批判を呼んでいます。即座の対策としては、カーネルの更新と、<code>algif_aead</code>モジュールの無効化が推奨されます。コンテナエスケープの可能性も示唆されていますが、その具体的な方法については今後の詳細な発表が待たれます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
