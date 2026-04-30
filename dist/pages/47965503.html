@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I built a Game Boy emulator in F# - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">I built a Game Boy emulator in F#</h1>
+        <div class="meta">
+            投稿日: 2026年04月30日 | ランク: 5
+        </div>
+        <a href="https://nickkossolapov.github.io/fame-boy/building-a-game-boy-emulator-in-fsharp/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、F#で書かれたGame Boyエミュレータプロジェクトを中心に展開されています。このプロジェクトは、AIに頼らずに「生身の人間が努力して何かを学ぶ」ことの良い例として評価されています。</p>
+<h2>AIと手作業コーディングのバランス</h2>
+<p>このエミュレータプロジェクトは、AIを使わずにゼロから構築された学習プロジェクトとして高く評価されています。
+*   <strong>「職人的コーディング」の価値:</strong> AIが普及する中でも、手作業でコードを書く「職人的コーディング」は残り続けるという意見があります。F#のような言語では、AIに細かく指示を出すよりも、自分でコードを書く方が速く、効率的だと感じる開発者もいます。
+*   <strong>AI使用の倫理と実用性:</strong> 一部の開発者は、LLMの初期の剽窃問題を理由に、AIツールの使用を拒否しています。AIが生成するコードの品質や、倫理的な懸念から、生産性向上よりも自身の価値観を優先する人もいます。一方で、AIをアジャイル開発の各段階で活用し、速度向上を図る柔軟なアプローチを提唱する意見もあります。</p>
+<h2>F#のパフォーマンスと設計</h2>
+<p>F#のパフォーマンス特性と、関数型プログラミングにおける設計上の課題が議論されています。
+*   <strong>関数型と命令型のバランス:</strong> F#は関数型言語ですが、パフォーマンスが重要な場面では、関数内で命令型のアプローチ（ミュータブルなデータ構造やループ）を併用することで、性能を向上させることができると指摘されています。これにより、関数外への副作用を避けつつ、実用的な速度を得られます。
+*   <strong>イミュータブルデータ構造の活用:</strong> 通常はイミュータブルな<code>Map</code>のようなデータ構造が推奨されますが、ボトルネックとなる部分では、従来のハッシュマップのようなミュータブルな構造に切り替える柔軟性が重要です。これは、関数型の「理解しやすさ」と性能のバランスを取るための現実的なアプローチとされています。
+*   <strong>最適化とコンパイラの役割:</strong> 不変性を重視したプログラミングは、並行処理におけるデータ競合の回避や、推論の容易さという利点があります。関数の内部で局所的に可変状態を使用することは、これらの利点を損なうことなくパフォーマンス向上に繋がると考えられています。</p>
+<h2>エミュレータ開発の学習価値と課題</h2>
+<p>エミュレータ開発は、新しい言語を学ぶ上で非常に有効な手段であり、F#のような関数型言語でエミュレータを作成することへの関心が示されています。
+*   <strong>学習プロジェクトとしてのエミュレータ:</strong> エミュレータをゼロから構築することは、言語を深く理解し、ハードウェアの仕組みを学ぶための優れた方法であると広く認識されています。
+*   <strong>機能型言語でのエミュレータ実装:</strong> ハードウェアを表現する際には命令型言語が直感的ですが、F#のような関数型言語でエミュレータを実装する例は、その抽象化の工夫が評価されています。ただし、メモリなど一部の領域ではF#の可変変数や配列が利用されており、完全にイミュータブルな実装ではないことも指摘されています。
+*   <strong>パフォーマンス改善のヒント:</strong> エミュレータのコードに対して、割り当てを減らすための識別ユニオンの活用や、レジスタの型に関する指摘など、具体的な最適化の提案もなされています。特に、ウェブレンダリングのためにFableを使ってJavaScriptにトランスパイルする際に、数値型の挙動が異なるため、明示的なビットマスク処理が必要になるというF#の特定の課題が挙げられています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、F#でGame Boyエミュレータを開発した学習プロジェクトを巡るものです。AIの利用が広がる中で、手作業での学習とコーディングの価値が再評価され、「職人的コーディング」という概念が浮上しました。F#のパフォーマンスと設計については、関数型と命令型のバランスを取り、ボトルネック部分で現実的な最適化を行うことの重要性が強調されました。エミュレータ開発は、言語学習の優れた手段であり、特にF#のような関数型言語で実装される場合、その設計上の工夫が注目されています。全体として、技術的な探求心と実践的なアプローチが評価される一方で、AI技術の倫理的な側面についても議論が交わされました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
