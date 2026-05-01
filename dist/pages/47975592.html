@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>whohas – Command-line utility for cross-distro, cross-repository package search - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">whohas – Command-line utility for cross-distro, cross-repository package search</h1>
+        <div class="meta">
+            投稿日: 2026年05月01日 | ランク: 5
+        </div>
+        <a href="https://github.com/whohas/whohas" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、異なるLinuxディストリビューション間でのパッケージ検索の課題と、それを解決するためのツールについて議論しています。特に、Perlで書かれた古いスクリプト「package-search」が話題の中心となっていますが、関連する新しいツールや概念についても言及されています。</p>
+<h2>package-searchスクリプトの現状と懸念</h2>
+<p>「package-search」スクリプトはPerlで書かれており、11年前に最終リリースされ、リポジトリドメインがハードコードされていることが指摘されています。一部のユーザーは、これだけ古いツールがまだ機能するのか、あるいはUbuntu 26.04のような最新のシステムに対応できるのか疑問を呈しています。しかし、Ubuntuのパッケージ検索URL自体は変更されていないため、機能する可能性を指摘する声もあります。最新のコミットは4年前であり、放棄されたプロジェクトと見なされていますが、フォーク可能であり、そのアイデアは依然として有用であると考えられています。</p>
+<h2>現代的なアプローチと代替案</h2>
+<p>多くのユーザーは、「package-search」のようなツールが現代においてはNode.jsで実装され、パッケージ検索ウェブサイトの解析、あるいはAPIを介して行われるべきだと考えています。Repologyは不安定ながらもAPIを提供しており、代替手段として挙げられています。また、pkgs.orgのような既存のパッケージ検索サイトも紹介されています。</p>
+<h2>AI/エージェントの可能性と批判</h2>
+<p>一部のコメントでは、このような煩雑な作業はAIエージェントに適しているとの意見が出ています。AIエージェントが自律的にリポジトリリストやパッケージメタデータを検索・更新し、SQLiteに保存し、Web UIとCLIを提供するというアイデアが提案されています。しかし、これに対し、LLM（大規模言語モデル）を何でもかんでも使う必要はなく、データ型やデータ構造を使えば100行程度のスクリプトで実現できると反論する声もあります。</p>
+<h2>新しいツールの提案と関連する概念</h2>
+<p>DistroboxやBedrock Linuxとの組み合わせ、Homebrew for Linux、Nixpkgsの<code>nix-locate</code>コマンドなど、パッケージ管理に関連する他のツールや概念も議論されています。また、新しいパッケージマネージャー「abxpkg」の作者も、同様の検索コマンドを実装する予定だと述べています。Linuxユーザー空間におけるメタデータの不足、特にプロセスやプロジェクトの資金源や所有者に関する情報の不足も指摘されており、これを補完するGUIタスクマネージャーの構想も語られています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Linuxにおける異なるディストリビューション間でのパッケージ検索という、一見地味だが重要な課題に焦点を当てています。古いPerlスクリプト「package-search」の機能性や維持に関する疑問から始まり、現代的なAPI駆動型アプローチ、AIエージェントの可能性、そしてRepologyやNixpkgsといった既存の代替案や新しいツールの提案へと議論が広がっています。この種のツールは、パッケージ名や利用可能性のわずかな違いによって失われる時間という、小さな煩わしさを解消する上で非常に価値があるという共通認識が見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
