@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do_not_track - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Do_not_track</h1>
+        <div class="meta">
+            投稿日: 2026年05月02日 | ランク: 4
+        </div>
+        <a href="https://donottrack.sh/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーたちは、多くのCLIツール、SDK、フレームワークがデフォルトでテレメトリーデータを収集している問題について議論しています。特に、これをオプトアウトするための標準的な方法がないこと、そしてプライバシーに対する懸トを表明しています。</p>
+<h2>デフォルトでのテレメトリー収集とオプトアウトの難しさ</h2>
+<p>多くのユーザーは、CLIツール、SDK、フレームワークがデフォルトでテレメトリーデータを収集する現状に懸念を抱いています。特に、PythonのtransformersライブラリがHugging Faceにデータを送信するのを止めるのが非常に困難であった経験（ユーザー[1.5]）や、特定の環境変数を設定しなければならない煩雑さ（ユーザー[1.8]）が指摘されています。ユーザーは、このようなデフォルトのオプトインが「ダークパターン」であると考えており、プライバシーを尊重する代替ツールを探すべきだと主張しています（ユーザー[1.4]）。</p>
+<h2>標準化への懐疑と代替アプローチ</h2>
+<p>提示されたような新しい「標準」によって問題が解決されることに対しては、懐疑的な意見が多いです。ブラウザの「Do Not Track (DNT)」機能が広告主によって無視されてきた経緯（ユーザー[1.13.2]）を例に挙げ、同様の運命をたどる可能性が指摘されています（ユーザー[1.13]）。
+代わりに、以下のような代替アプローチが提案されています。
+*   <strong>独自のDNSでブラックリスト運用</strong>: テレメトリードメインをブロックするDNSブラックリストの利用（ユーザー[1.3]）。
+*   <strong>専用のシェルスクリプト</strong>: 既知の「Do Not Track」環境変数を一括で設定するスクリプトの作成（ユーザー[1.7]、[1.9]、[1.11]）。実際に、既存のツール（toptout.meやdo-not-track-cli）が紹介されています（ユーザー[1.13.3]）。
+*   <strong>そもそもスパイウェアを許さない</strong>: コンピュータに「スパイウェア」を入れないという根本的な解決策（ユーザー[1.3.1]）。</p>
+<h2>テレメトリー収集に対する倫理的・法的問題</h2>
+<p>ユーザーは、テレメトリー収集、特にクラッシュダンプや匿名化された利用パターンであっても、デフォルトでのオプトインに強く反対しています。
+*   <strong>「匿名化」データの利用</strong>: 匿名化されたデータでも、監視資本主義の世界では、ユーザーの行動を追跡するなど、広範な目的で利用される可能性があると指摘されています（ユーザー[1.12.1]）。
+*   <strong>プライバシーは権利</strong>: プライバシーは権利として扱われるべきであり、金銭のために悪用されるべきではないという意見があります（ユーザー[1.16]）。
+*   <strong>デフォルトはオプトアウトではなくオプトインであるべき</strong>: ユーザーは、トラッキングを許可するメカニズムを標準化し、設定がなければ「スパイするな」を意味するべきだと主張しています（ユーザー[1.14]）。
+*   <strong>法的規制の必要性</strong>: デフォルトでのオプトイン追跡を違法とし、高額な罰金や懲役刑を科すことで、企業が追跡機能を組み込むことを抑止すべきだという意見も出ています（ユーザー[1.10]）。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのユーザーは、デフォルトでテレメトリーデータを収集する多くのCLIツールやSDKの現状に対し、強い不満と懸念を表明しています。彼らは、提案されているような新しい「標準」によるオプトアウトの最適化よりも、プライバシー保護の倫理的・法的側面から根本的な解決を求めています。具体的には、プライバシーを権利として尊重し、デフォルトはオプトアウトではなく明示的なオプトインであるべきだと主張しています。実用的な解決策としては、独自のDNSブロックリストの運用や、既知の「Do Not Track」環境変数を一括設定するスクリプトの使用が提案されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

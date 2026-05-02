@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsigned Sizes: A Five Year Mistake - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Unsigned Sizes: A Five Year Mistake</h1>
+        <div class="meta">
+            投稿日: 2026年05月02日 | ランク: 6
+        </div>
+        <a href="https://c3-lang.org/blog/unsigned-sizes-a-five-year-mistake/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドでは、主にプログラミング言語における符号なし整数（unsigned integers）の使用、特にサイズやインデックスとしての利用について議論されています。多くのコメントがC言語の振る舞いと関連付けており、符号なし整数のメリットとデメリット、そしてそれらが引き起こすバグについて意見が交わされています。</p>
+<h2>符号なし整数の必要性と利点</h2>
+<p>システムプログラマーからは、符号なし整数が特定のシナリオで非常に有用であるという意見が挙がっています。特に、負の値が不要で、ワードの全範囲を最大限に活用したい場合（低レベルプログラミングや、メモリ/キャッシュ性能のためにデータ型サイズを効率化したい場合）に有効だとされています。例えば、グラフィックスやシミュレーションにおける数百万のインデックスを保存する際に、<code>uint32_t</code>が<code>int32_t</code>では小さすぎるが<code>uint64_t</code>では無駄が多すぎるといった「スイートスポット」になることがあります。Javaのような言語ではAPIを通じて利用可能であり、ワイヤープロトコルやFFI（外部関数インターフェース）との連携で必要になることが指摘されています。また、値が常に0以上であることが論理的に分かっている場合に、それを反映する型を持つべきだという意見もあります。</p>
+<h2>符号なし整数の問題点とバグの発生源</h2>
+<p>多くの議論は、符号なし整数が引き起こす潜在的なバグに焦点を当てています。
+*   <strong>インデックスとサイズとしての使用:</strong> 符号なし型をサイズやインデックスに使用すると、トリッキーなバグが発生しやすいと指摘されています。特にC言語では、符号ありと符号なしの型が混在する計算や暗黙的な型変換が問題を引き起こすことがあります。
+*   <strong>ラップアラウンド挙動:</strong> 符号なし整数は、最小値を下回る（例：<code>0U - 1U</code>）と最大値にラップアラウンドするという挙動があります。これは、負の値が必要な場合に、期待しない大きな正の値として解釈され、エラーが検知しにくくなる原因となります。
+*   <strong>符号ありとの混合:</strong> 符号ありのインデックスと符号なしのサイズを比較する際に、暗黙の型変換が誤った結果を招くことがあります。C言語の<code>sizeof</code>が符号なし値を返すことも、この問題を複雑にしています。
+*   <strong>「負」の意味の曖昧さ:</strong> 符号なし整数は「負にならない」というよりも「モジュロ演算」の挙動を示すため、純粋な非負整数とは異なります。この違いが、プログラマーの期待と実際の挙動の間にギャップを生じさせます。</p>
+<h2>解決策と代替案</h2>
+<p>問題に対するいくつかの解決策や異なるアプローチが提案されています。
+*   <strong>言語設計の改善:</strong> C言語の暗黙的な型変換の設計が問題の根源であると指摘されており、言語自体を修正すべきだという意見が優勢です。例えば、Rustでは型変換の厳密さが早期のバグ検出に役立っています。
+*   <strong>明示的なキャスト:</strong> 符号なしと符号ありの型を混ぜる場合は、明示的なキャストを行うことで正確なコードを記述できますが、冗長になるという欠点があります。
+*   <strong>非負整数型:</strong> プロセッサが実装する非負整数とモジュロ整数の違いを明確にし、プログラミング言語がこれらを区別する専用の型を持つべきだという意見もあります。Pascalの範囲型のようなアプローチも言及されています。
+*   <strong>抽象化:</strong> 配列のインデックス付けのような低レベルな操作を、イテレータや不透明なハンドル（opaque handles）のような高レベルな抽象化で置き換えることで、直接的な数値計算によるバぐを減らせる可能性が示唆されています。
+*   <strong>Bjarne Stroustrupの見解:</strong> C++の設計者Bjarne Stroustrupも、この議論に関連する意見を述べていることが共有されています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、符号なし整数の使用をめぐる複雑な議論を浮き彫りにしています。システムプログラミングの文脈では、メモリ効率や完全なワード範囲の利用のために符号なし整数が不可欠である一方、インデックスやサイズとして使用する際には、特にCのような言語の設計上の特性（暗黙の型変換やモジュロ演算の挙動）により、潜在的なバグや理解の困難さが伴うことが多くのコメントで指摘されています。根本的な解決策としては、言語設計の改善や、より厳密な型システム、あるいは特定の用途に特化した新しい型の導入が望まれています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
