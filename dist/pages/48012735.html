@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Edge stores all passwords in memory in clear text, even when unused - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Microsoft Edge stores all passwords in memory in clear text, even when unused</h1>
+        <div class="meta">
+            投稿日: 2026年05月04日 | ランク: 6
+        </div>
+        <a href="https://twitter.com/L1v1ng0ffTh3L4N/status/2051308329880719730" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Microsoft Edgeがメモリ内にパスワードを平文で保存しているという主張について議論しています。多くのユーザーはこれが広く知られた事実であり、他のブラウザやパスワードマネージャーにも共通の問題であると考えています。議論は、攻撃モデル、セキュリティの層、パスワード管理ツールの比較、およびOSの限界に焦点を当てています。</p>
+<h2>「メモリに保存」と「メモリに読み込み」の違い</h2>
+<p>一部のユーザーは、「パスワードがメモリに保存される」という表現と「メモリに読み込まれる」という表現の違いを指摘しています。「保存」という言葉は通常ディスクへの永続的な保存を意味し、より重大なセキュリティリスクを示唆しますが、「読み込み」は一時的な揮発性メモリへの読み込みを指します。パスワードマネージャーはウェブページにプレーンテキストの文字列を挿入する必要があるため、パスワードは一時的にメモリに読み込まれる必要があります。</p>
+<h2>管理者権限と「気密ハッチ」のメタファー</h2>
+<p>コメントの多くは、攻撃者が端末サーバーで管理者権限を取得した場合、任意プロセス・メモリを読み取ることができるという前提に基づいています。この状況は「気密ハッチの向こう側」というメタファーで表現されており、すでにシステム全体が侵害されている場合、パスワードがメモリ内で暗号化されているかどうかは、攻撃者の作業をわずかに容易にする程度で、根本的な防御にはならないという意見が支配的です。管理者権限を持つ攻撃者は、デバッガーをアタッチしたり、パスワードを復号化したりすることが可能であるため、メモリ内の平文パスワードの有無は問題にならないと見なされます。</p>
+<h2>セキュリティのレイヤーとスイスチーズモデル</h2>
+<p>一方で、セキュリティは複数の層からなるシステムであるという意見もあります。各層には弱点（「穴」）があるものの、それらを重ね合わせることで全体的なセキュリティが向上するという「スイスチーズモデル」が引き合いに出されています。管理者権限を持つ攻撃者に対する防御は難しいとしても、メモリ内でパスワードを暗号化することは、コールドブート攻撃や、任意メモリ読み取りを可能にするような特定の種類の攻撃を困難にする可能性があると指摘されています。</p>
+<h2>パスワードマネージャーの比較とOSの限界</h2>
+<p>議論は、ブラウザ内蔵のパスワードマネージャー（Edge、Chrome、Firefox）と、専用のパスワードマネージャー（KeePass、Bitwarden）の比較にも及びました。多くのユーザーは、専用のパスワードマネージャー、特にKeePassのようなオフラインで動作するものが、ベンダーロックインやビジネスモデルの懸念がない点で優れていると考えています。しかし、最終的には、パスワードマネージャーの種類に関わらず、OSのプロセスモデルが同じユーザーコンテキストで実行されている限り、任意メモリを読み取れる悪意のあるプロセスからの保護は困難であるという共通認識があります。パスキーのようなハードウェアにバインドされた認証方法が将来の解決策として提案されていますが、利便性の問題が指摘されています。</p>
+<h2>まとめ</h2>
+<p>Microsoft Edgeがメモリにパスワードを平文で保存しているという報告に対し、多くのHacker Newsユーザーは、これはEdgeに固有の問題ではなく、Chromeなどの他のブラウザやKeePassなどの専用パスワードマネージャーにも共通するOSレベルの限界であると考えています。管理者権限を持つ攻撃者に対しては、メモリ内のパスワードの暗号化は限定的な防御にしかならないという「気密ハッチ」の議論が中心ですが、一部のユーザーはセキュリティを多層的なアプローチで捉えるべきであり、メモリ内暗号化も特定の種類の攻撃に対する防御層の一つとなり得ると主張しています。パスワードマネージャーの比較では、KeePassのようなオフラインツールが好まれる傾向にありますが、パスキーのような新しい認証技術への移行が、根本的なセキュリティ問題の解決策として期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securing a DoD Contractor: Finding a Multi-Tenant Authorization Vulnerability - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Securing a DoD Contractor: Finding a Multi-Tenant Authorization Vulnerability</h1>
+        <div class="meta">
+            投稿日: 2026年05月04日 | ランク: 3
+        </div>
+        <a href="https://www.strix.ai/blog/how-strix-found-zero-auth-vulnerability-dod-backed-startup" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、国防総省（DoD）のトレーニングプラットフォームにおけるSchemata社の脆弱性と、a16z（Andreessen Horowitz）という略語の認識について議論しています。</p>
+<h2>a16z略語の認識度</h2>
+<p>一部のユーザーは、a16zがAndreessen Horowitzを指すことを知らず、タイトルがわかりにくいと指摘しています。特に、長年HNを利用しているユーザーでさえ、この略語を知らないケースがあることが示されました。一方、他のユーザーはa16zという略語がHNコミュニティでは一般的であり、彼らのウェブサイトのドメイン名もa16z.comであるため、特に問題ないと感じています。この議論は、投稿のタイトルが元の記事と一致する必要があるというHNのガイドラインにも触れています。</p>
+<h2>CEOの対応と脆弱性開示</h2>
+<p>Schemata社のCEOが脆弱性報告に対して「報酬を求めているのか」と返答したことに対し、多くのユーザーが批判的です。これは不適切な対応であり、脆弱性情報を扱うベンダーの態度として問題視されています。</p>
+<p>一方で、脆弱性報告の信頼性の問題も提起されています。多くの企業が、詳細を伏せたまま報酬を要求するスパムのような脆弱性報告に日々直面しており、その中から真の脅威を見つけることが難しいという現実が語られています。中には、実際には脆弱性がないにもかかわらず、セキュリティ監査サービスの契約に繋げようとする悪質なケースもあると報告されています。</p>
+<h2>セキュリティ監査と法的な問題</h2>
+<p>発見された脆弱性（組織スコープの欠如、テナント分離の不在、権限チェックの不備など）が非常に基本的であるにもかかわらず、SchemataがSOC2やISOに準拠しているのかという疑問が呈されています。一部のユーザーは、多くのセキュリティ監査が形骸化しており、実際のセキュリティ強化には繋がっていないと批判しています。</p>
+<p>また、独立した研究者が法的な安全を確保しながら脆弱性を開示する方法についても議論されています。特にDoD関連のシステムの場合、法的なリスクが伴うため、多くの経験豊富な研究者は関わろうとしないとのことです。DoDには脆弱性開示プログラムがあるものの、請負業者管理の資産が含まれるかは不明です。脆弱性情報を金銭目的で隠匿することが恐喝にあたるのか、という問いもなされています。</p>
+<h2>スタートアップにおけるセキュリティ文化</h2>
+<p>多くのスタートアップでは、セキュリティよりも資金調達やAPI連携、デザインなどが優先されるため、基本的なセキュリティ対策がおろそかになりがちであることが指摘されています。VercelやSupabaseのようなプラットフォームの普及により、クライアントサイドでのAPIキー漏洩やデータベースのRLS（行レベルセキュリティ）設定の不備など、基本的なミスが増えているとの見解もあります。罰則が少ないため、スタートアップがセキュリティに対する姿勢を変えるインセンティブが不足しているという意見もあります。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、DoD関連のトレーニングプラットフォームにおける重大な脆弱性の発見を巡る議論から、セキュリティ業界の多角的な課題を浮き彫りにしています。特に、a16zのような略語の普及とアクセシビリティの問題、ベンダーの不適切な脆弱性対応、セキュリティ報告のスパム問題、形骸化した監査体制、そしてスタートアップにおけるセキュリティ文化の欠如などが主要なテーマです。独立した研究者が法的な安全を確保しながら脆弱性を開示することの難しさも強調されており、セキュリティエコシステム全体の改善が必要であることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
