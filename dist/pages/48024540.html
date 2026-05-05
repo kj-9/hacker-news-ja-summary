@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accelerating Gemma 4: faster inference with multi-token prediction drafters - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Accelerating Gemma 4: faster inference with multi-token prediction drafters</h1>
+        <div class="meta">
+            投稿日: 2026年05月05日 | ランク: 2
+        </div>
+        <a href="https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドでは、GoogleがGemma 4モデルに導入したマルチトークン予測（MTP）または推測的デコーディング機能と、それによってもたらされる速度向上について議論されています。コメントは、Googleのオープンソース戦略、GemmaとQwenなどの他のモデルとの比較、ローカル環境でのLLMの実行、およびMTPの技術的側面を中心に展開されています。</p>
+<h2>Googleの戦略とGemmaの位置づけ</h2>
+<p>GoogleがGemma 4を積極的にクラウドで推進しないことについて疑問が呈されています。一部のユーザーは、GoogleがGemmaのような小規模で寛容なライセンスのモデルを商用インフラでホストする価値がないと考えているか、Geminiとの価格設定問題が生じる可能性があると推測しています。また、Googleの内部は非常に強力な「領地」の集まりであり、Google CloudがGemmaよりもClaudeの方が収益性が高いと判断すれば、Claudeの使用を推進する可能性があるという意見もあります。Googleの戦略は、純粋な性能よりも計算効率に焦点を当て、既存の数十億のユーザーにこれらのモデルをスケーリングして配布することにあるという見解もあります。</p>
+<h2>Gemma 4と他のモデルの比較</h2>
+<p>Gemma 4とQwen 3.6の性能、特に速度と品質に関して多くの議論が交わされています。</p>
+<ul>
+<li><strong>速度:</strong> Gemma 4は、Qwenと比較して一般的に高速であると評価されています。特にMTPと推測的デコーディングの導入により、さらに速度が向上すると期待されています。ただし、Qwen 3.6のMTPサポートもllama.cppに追加されつつあります。</li>
+<li><strong>品質とタスク:</strong><ul>
+<li><strong>コード生成:</strong> Qwen 3.6はコーディングタスクでGemma 4よりも優れていると広く認識されています。一部のユーザーは、Gemmaがツール呼び出しのトレーニングをまったく受けていないと推測していますが、Gemmaのモデルはツール呼び出しのためにトレーニングされており、実装の問題が原因であるという反論もあります。</li>
+<li><strong>一般問い合わせと散文:</strong> Gemma 4は一般問い合わせや散文において非常に優れていると評価されています。</li>
+<li><strong>ツール呼び出し:</strong> Gemma 4はツール呼び出しにも対応していますが、Qwenの方が優れているという意見や、Gemma 4のチャットテンプレートが最近更新され、ツール呼び出し関連のバグが修正されたという情報もあります。</li>
+</ul>
+</li>
+<li><strong>効率:</strong> Gemmaは他のモデルと比較して、同じベンチマーク性能を維持しつつ、出力あたりのトークン数がはるかに少ないという意見があります。これにより、タスク完了までの時間が短縮されます。</li>
+</ul>
+<h2>マルチトークン予測（MTP）と推測的デコーディング</h2>
+<p>MTPまたは推測的デコーディングは、Gemma 4の主要な速度向上機能として注目されています。</p>
+<ul>
+<li><strong>仕組み:</strong> 小規模なドラフトモデルが次のトークンを迅速に予測し、大規模モデルがそれらの予測を並行して検証することで、速度を向上させます。予測が正しければ、一度に複数のトークンが生成されたことになり、間違っていれば、大規模モデルが正しいトークンを再生成します。</li>
+<li><strong>品質への影響:</strong> このメカニズムにより、品質の劣化なしに速度向上を実現できるとされています。これは、最終的な出力は常に大規模モデルによって生成されるためです。</li>
+<li><strong>技術的な詳細:</strong> GoogleはMTPのために最適化されたドラフトモデルを提供しており、これらのドラフトモデルはメインモデルのアクティベーションをシームレスに利用し、KVキャッシュを共有することで、メモリオーバーヘッドを最小限に抑えています。</li>
+<li><strong>実装状況:</strong> llama.cppやOllama、vLLMなどの主要なローカルLLMランタイムでMTPサポートが追加または作業中です。</li>
+</ul>
+<h2>ローカルLLMとハードウェア</h2>
+<p>ローカルLLMの性能向上は著しく、サブ1000ドルの投資で驚くべき速度と品質が得られると評価されています。</p>
+<ul>
+<li><strong>ハードウェア要件:</strong> Gemma 4 26Bモデルは、RTX 3090（4ビット量子化）で高速に動作し、3060でも（TurboQuant / Q4で）十分な速度が得られます。Gemma 4 31BモデルをMTPで実行するには、より強力なMacが必要な場合があります。</li>
+<li><strong>LM Studio/Ollama:</strong> LM StudioでのGemma 4の動作に関する問題や、OllamaでのMTPのサポートについても言及されています。</li>
+<li><strong>速度の未来:</strong> 現在のLLMの出力速度は、かつてのダイヤルアップモデムのようなものであり、将来は「ブロードバンド」のような劇的な速度向上が期待されています。TaalasやGroqのような企業がカスタムハードウェアで数千トークン/秒の速度を実現している例が挙げられています。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li>Google AI StudioやGoogle AI Edge Gallery for Android/iOSでのGemmaの利用可能性。</li>
+<li>LLMがテキストを編集する際に、OT（オペレーショナル・トランスフォーメーション）を生成して既存のテキストに適用するのではなく、完全なテキストを再生成する現在の方式に対する疑問。</li>
+<li>GemmaとGeminiが他のモデルと比較して、出力あたりのトークン消費量が少ないという観察。</li>
+<li>Gemini Proの使用経験（コード生成能力、速度、トークン制限、CO2排出量など）に関する議論。</li>
+</ul>
+<h2>まとめ</h2>
+<p>GoogleのGemma 4モデルは、マルチトークン予測（MTP）の導入により、品質を損なうことなく大幅な速度向上を実現しました。これにより、特にローカル環境でのLLMの利用がより実用的かつ魅力的なものになっています。Gemma 4は一般問い合わせや散文で高い性能を発揮する一方で、コーディングタスクではQwen 3.6が依然として優位性を持つと評価されています。Googleの戦略は、純粋な性能だけでなく、計算効率とスケーラビリティに焦点を当てていると見られており、これはAIを数十億のユーザーに届ける上で不可欠な要素です。LLMの出力速度はまだ発展途上であり、カスタムハードウェアの進化により、将来的に劇的な高速化が期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
