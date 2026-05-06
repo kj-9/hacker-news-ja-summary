@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Supabase to Clerk to Better Auth - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">From Supabase to Clerk to Better Auth</h1>
+        <div class="meta">
+            投稿日: 2026年05月06日 | ランク: 6
+        </div>
+        <a href="https://blog.val.town/better-auth" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、認証サービス（Auth0、Clerk、Supabaseなど）の利用と、自分で認証を実装すること（Better Authや既存のWebフレームワークの機能を使うなど）について議論しています。特に、Clerkに対する批判が多く、Better AuthやWebフレームワークの組み込み機能、あるいは「ゼロから」認証を実装することの利点が強調されています。</p>
+<h2>Clerkに関する批判</h2>
+<p>Clerkは初期のプロトタイプ作成には良いが、本番環境での利用には多くの問題があるという意見が多数を占めています。主な批判点は以下の通りです。
+*   <strong>肥大化とパフォーマンス</strong>: Web3、Stripeなど様々な機能を詰め込みすぎているため、JSバンドルが肥大化し、ブラウザのロードが遅い。
+*   <strong>デバッグの困難さ</strong>: ライブラリが難読化されており、TypeScriptのコードも抽象化されすぎていて、デバッグが非常に難しい。
+*   <strong>機能不足</strong>: 監査ログやバージョン管理といった重要な機能が欠如している。
+*   <strong>信頼性</strong>: APIコールやトークン更新の失敗によるダウンタイムが発生することがあり、本番環境での信頼性に欠ける。
+*   <strong>エンタープライズ機能の不足</strong>: 適切なRBAC機能がなく、ロールが組織に紐付けられており、グローバル管理者のような概念の実装が難しい。</p>
+<h2>Better Authへの高評価</h2>
+<p>Better Authは、Clerkとは対照的に、多くのユーザーから肯定的に評価されています。
+*   <strong>データ主権</strong>: 認証データを自分のデータベースに保持できるため、特定のDBプロバイダーに縛られない。
+*   <strong>豊富な機能と無料</strong>: OAuthプロバイダー（Google、Apple、GitHubなど）を含む多くの認証機能を無料で利用できる。
+*   <strong>ハック性（拡張性）</strong>: Clerkよりも「ハックしやすく」、iframe postMessageによる認証プラグインの追加など、柔軟なカスタマイズが可能。
+*   <strong>オープンソース</strong>: オープンソースであり、ユーザーや認証テーブルの管理をサービスに任せることも、自分で全て実行することも選択できる。</p>
+<h2>Webフレームワークの組み込み認証と自己実装</h2>
+<p>多くのコメントで、Laravel (Socialite, Sanctum)、ASP .NET Core、Ruby on Rails、Django、Phoenix (Elixir) など、既存のWebフレームワークが提供する認証機能やパッケージの活用が推奨されています。
+*   <strong>OOTB（Out-of-the-Box）機能</strong>: これらのフレームワークは、ソーシャルログイン、パスワードリセット、多要素認証など、多くの認証機能を最初から提供しているか、容易に統合できるパッケージがある。
+*   <strong>コントロールとシンプルさ</strong>: 自分で認証を実装する（あるいはフレームワークの機能を使う）ことで、依存関係を減らし、システムの信頼性を高め、必要な機能をよりシンプルに管理できるという意見が多い。
+*   <strong>Lucia Auth</strong>: Lucia Authは、ライブラリの提供から、認証を自分で実装するための学習リソース提供に方針転換したことで、ユーザーがセキュリティや認証の仕組みを深く理解し、自信を持って管理できるよう支援している点が評価されています。
+*   <strong>SaaSのトレードオフ</strong>: SaaS認証プロバイダーは開発時間を短縮できる一方で、依存関係の増加、パフォーマンスの低下、デバッグの困難さ、信頼性の問題、特定の機能へのロックインなど、長期的な課題を引き起こす可能性があると指摘されています。</p>
+<h2>認証の複雑さとオフロードの是非</h2>
+<p>「なぜユーザーテーブルをサードパーティにオフロードするのか？」という問いに対し、様々な意見が交わされました。
+*   <strong>開発時間の短縮</strong>: Greenfieldプロジェクトにおいて、手書きの認証はMVP開発時間の多くを占めるため、オフロードすることで開発を加速できる。
+*   <strong>複雑な機能の実装</strong>: SSO、SAML、SCIM、OIDC、OAuth、2FA、パスワードレス認証など、複雑なエンタープライズレベルの認証機能を自社で全て実装・維持するのは非常に困難で、専門的な知識とリソースが必要。
+*   <strong>ビジネスリスク</strong>: 認証はシステムの根幹であり、セキュリティや信頼性が極めて重要。専門のサードパーティに任せることで、セキュリティリスクを軽減し、問題が発生した場合の責任の所在を明確にできるというビジネス上のメリットが挙げられています。
+*   <strong>信頼性の問題</strong>: システム全体の信頼性は、構成要素の信頼性の積で決まるため、サードパーティに依存することは全体の信頼性を低下させる可能性があるという指摘もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、現代のWeb開発における認証戦略について活発な議論が展開されています。ClerkのようなサードパーティSaaS認証サービスは初期のプロトタイプ作成には便利ですが、肥大化、パフォーマンス、デバッグの困難さ、信頼性の問題、機能不足など、本番環境での長期的な利用には多くの課題を抱えているという批判が多く寄せられました。対照的に、Better Authは自分のデータベースに認証データを保持できる柔軟性、豊富な機能を無料で提供している点、そして高い拡張性で評価されています。また、Laravel、Django、RailsといったWebフレームワークの組み込み認証機能や、Lucia Authのように自己実装を支援するアプローチも、より高いコントロールと信頼性を提供すると見なされています。認証はシステムのクリティカルな部分であり、開発の迅速化と長期的な安定性・保守性、セキュリティのバランスをどのように取るかが重要な選択肢となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
