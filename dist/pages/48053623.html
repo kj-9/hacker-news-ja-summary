@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirtyfrag: Universal Linux LPE - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Dirtyfrag: Universal Linux LPE</h1>
+        <div class="meta">
+            投稿日: 2026年05月07日 | ランク: 1
+        </div>
+        <a href="https://www.openwall.com/lists/oss-security/2026/05/07/8" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、「Dirty Frag」と呼ばれるLinuxカーネルの脆弱性とその開示プロセス、そして一般的なLinuxセキュリティやAIによる脆弱性発見の可能性について議論しています。</p>
+<h2>開示のタイムラインと責任ある開示</h2>
+<p>コメントは、2026年4月29日に脆弱性がセキュリティチームとネットデブメーリングリストに提出され、5月7日にlinux-distrosメーリングリストに詳細が送られた経緯を説明しています。5日間のエンバーゴ期間が設定されていましたが、同日に第三者によって別のESP脆弱性の情報とエクスプロイトが公開されたため、このエンバーゴが破られました。その結果、元々の「Dirty Frag」エクスプロイトも完全に公開されました。</p>
+<p>一部のユーザーは、開示から7日後にroot権限を取得する「ハウツーガイド」が公開されたことに「責任ある開示」とは言えないと疑問を呈していますが、他のユーザーは、エンバーゴが第三者によって破られたのは報告者のせいではないと擁護しています。また、この脆弱性が「Copy Fail」に非常に似ているため、他の研究者もすぐに発見する可能性があると判断された緊急性があったという見方もあります。エンバーゴが実際に破られたのか、それとも報告者が注目を浴びたかっただけなのかという疑問も提示されましたが、配布版メンテナーが合意して公開された事実から、その可能性は低いと反論されています。</p>
+<h2>Dirty Fragの技術的詳細と緩和策</h2>
+<p>「Dirty Frag」は、「Copy Fail」に類似したページキャッシュの書き込み脆弱性であることが指摘されています。「Copy Fail」の緩和策（<code>algif_aead</code>のブラックリスト化）が適用されているシステムでも、「Dirty Frag」には依然として脆弱であると述べられています。</p>
+<p>提案されている緩和策として、以下のコマンドで関連モジュールを削除する方法が紹介されています（ただし、テスト・検証はされていないとのこと）：
+<code>sh -c "printf 'install esp4 /bin/false\ninstall esp6 /bin/false\ninstall rxrpc /bin/false\n' &gt; /etc/modprobe.d/dirtyfrag.conf; rmmod esp4 esp6 rxrpc 2&gt;/dev/null; true"</code>
+この変更を適用するには再起動が必要な場合や、すでにエクスプロイトされたマシンでは<code>sudo echo 3 &gt; /proc/sys/vm/drop_caches</code>を実行する必要がある可能性が示唆されています。</p>
+<p>この脆弱性には<code>esp4</code>、<code>esp6</code>、<code>rxrpc</code>の3つのモジュールが関与していると理解されていますが、<code>esp4</code>は<code>CONFIG_AF_RXRPC</code>、<code>esp6</code>は<code>CONFIG_INET_ESP</code>、<code>rxrpc</code>は<code>CONFIG_INET6_ESP</code>に対応すると誤解があるようです（正しくは<code>rxrpc</code>が<code>CONFIG_AF_RXRPC</code>で、<code>esp4/esp6</code>が<code>CONFIG_INET_ESP</code>/<code>CONFIG_INET6_ESP</code>に関連する可能性があります）。</p>
+<h2>LinuxとAndroidのセキュリティ、およびAIによる脆弱性発見</h2>
+<p>LinuxがBSDよりも脆弱性が多いかという問いに対し、主な理由は「より大きなターゲットである」ためという意見が多数です。Androidは、デスクトップLinuxと比較して多くの強化とサンドボックス化が施されており、この脆弱性はAndroidでは機能しないことが指摘されています。これは、強化されたカーネル/ランタイム環境がすでに利用可能であることを示唆しています。Androidは「Linuxではない」という意見も出ましたが、公式API経由でのみアクセス可能という限定的なLinuxであるという反論もあります。</p>
+<p>現代のLLMが「ローハンギングなセキュリティバグ」を修正するのに役立つかという議論では、AIが新たな脆弱性の発見に役立つ可能性を認めつつも、Linuxでは日々新しい脆弱性が導入され、既存のバグも未対処のままであるため、AIが「安全なLinux」を実現するまでには至らないという懐疑的な意見が多いです。AIが探索を妨げ、創造性を阻害する可能性も指摘されていますが、より幅広いプロンプトや、見つかったバグの「類似クラス」を探すことで、この問題に対処できるという意見もあります。</p>
+<h2>まとめ</h2>
+<p>「Dirty Frag」は、「Copy Fail」と類似したページキャッシュの脆弱性であり、エンバーゴが破られたことで急遽詳細が公開されました。この事態は、Linuxカーネルのセキュリティと、脆弱性開示のプロセスの複雑さを浮き彫りにしています。一時的な緩和策としてモジュールの削除が提案されていますが、根本的な解決にはパッチが必要です。また、AIによる脆弱性発見の将来性については議論が分かれており、ツールとしての可能性を認めつつも、Linuxのような大規模なプロジェクトにおけるセキュリティの課題は根深いという認識が示されました。Androidの例は、カーネルの強化とサンドボックス化によってある程度のセキュリティ向上は可能であることを示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
