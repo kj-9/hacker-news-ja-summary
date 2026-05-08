@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What we lost the last time code got cheap - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What we lost the last time code got cheap</h1>
+        <div class="meta">
+            投稿日: 2026年05月08日 | ランク: 2
+        </div>
+        <a href="https://www.poppastring.com/blog/what-we-lost-the-last-time-code-got-cheap" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、LLM（大規模言語モデル）をコーディングエージェントとして利用する際のメリットと課題、特にコードの読解とドキュメンテーションに焦点を当てて議論しています。多くのユーザーがLLMがコードを理解し、説明する能力を高く評価する一方で、その生成するコードの品質、コメントの有用性、そして人間の開発者の思考能力への影響について懸念を表明しています。</p>
+<h2>LLMによるコードの読解と説明</h2>
+<p>多くのユーザーは、LLMがコードベースを理解し、その機能を説明するのに非常に役立つと指摘しています。これにより、新しいプロジェクトへのオンボーディングが容易になったり、巨大なコードベースの特定の部分を素早く見つけたりできるようになります。</p>
+<ul>
+<li><strong>コードベースの高速理解:</strong> LLMはコードベースの概要をmarkdown形式で提供したり、コードが何をするのかを説明したりするのに優れていると評価されています（[1.1.1]）。</li>
+<li><strong>コードの意図の解明:</strong> ユーザーは、LLMに特定のコードがなぜそのように実装されたのかを尋ねることで、優れた説明を得られたと報告しています。これには、自身が書いた古いコードの非直感的な部分や欠陥を説明する能力も含まれます（[1.1.2.1], [1.1.2.1.1]）。</li>
+<li><strong>特定の情報に焦点を当てる:</strong> LLMに変数名や関数名を無視させ、「CRUD（作成、読み取り、更新、削除）がどのように状態を操作するか」といった本質的な部分に焦点を当てることで、より効果的な理解が得られるという意見もあります（[1.1.3]）。</li>
+<li><strong>Joel Spolskyの「読むのは書くより難しい」説への反論:</strong> LLMが複雑なコードベースを説明できるようになったことで、以前は自明とされた「読むのは書くより難しい」という考え方が、もはや真実ではないという意見も出ています（[1.1.4]）。</li>
+<li><strong>コードレビューの補助:</strong> LLMが生成したコードの変更点をレビューし、不明な点があればすぐに説明を求めることで、最終的に変更内容とその根拠を理解できるようになります。これはコードレビュー時や長期的な保守にも役立つ可能性があります（[1.10]）。</li>
+</ul>
+<h2>ドキュメンテーションとコメントの課題</h2>
+<p>AIが生成するコードのドキュメンテーション、特にコメントの質と量については様々な意見があります。</p>
+<ul>
+<li><strong>コメントの質の低さ:</strong> LLMが生成するコメントは、コードの「何をするか」を繰り返すだけの冗長なものであり、「なぜそうするのか」といったより有用な情報が不足しているという批判があります（[1.2.1.1], [1.2.1.2]）。</li>
+<li><strong>Claudeのデフォルト設定:</strong> Claudeはデフォルトでコメントを生成しないように設定されており、ユーザーが明示的にコメントを追加するように指示しない限り、既存のコメントを削除することさえあると報告されています（[1.2.1.3], [1.2.5]）。これは、一部の開発者がコードのコメントを過度に嫌う傾向と似ていると指摘されています。</li>
+<li><strong>LLMの「理由」の限界:</strong> LLMがその選択の理由を説明する能力には限界があり、文脈から正当化を「見つける」だけで、実際にはハルシネーション（誤情報生成）のリスクを伴うという指摘もあります（[1.2.2]）。ただし、議論を促すようなプロンプト（「これについて最も強い賛否両論を挙げ、出典を示せ」など）は有効な場合があるようです（[1.2.2.2]）。</li>
+<li><strong>意図を記録する重要性:</strong> エージェントが計画を立てる際に人間が下したアーキテクチャや製品の選択に関する意図が、コードやコメントに記録されないという問題が提起されています。この問題を解決するために、<code>decisions.md</code>ファイルを作成し、人間が介入した際にその意図を記録するアプローチが提案されています（[1.8]）。これは、人間の開発者にとっても同様の問題であり、デザインドキュメントやコミットメッセージ、ADR（Architectural Decision Records）で意図を記録する重要性が強調されています（[1.8.3], [1.8.4]）。</li>
+</ul>
+<h2>その他の懸念と議論</h2>
+<ul>
+<li><strong>思考能力の減退:</strong> LLMにコードを読ませることで、開発者自身の思考能力が衰えるのではないかという懸念が表明されています（[1.1.2.2]）。これに対し、「なぜアセンブリを読まないのか」という反論もあり、技術の進化に伴う思考の変化を示唆しています（[1.1.2.2.2]）。</li>
+<li><strong>AI生成コードの品質:</strong> AIが生成するコードは「多くの場合問題ない」とされる一方で、実際には最初の試行でそのまま動作することは稀で、多くの反復とエッジケースの修正が必要になるという経験談もあります（[1.3]）。TDD（テスト駆動開発）のアプローチを用いることで、一発で動作するコードの確率が高まる可能性も示唆されています（[1.3.1]）。</li>
+<li><strong>開発者のモチベーションと役割の変化:</strong> AIの導入によって、開発者のモチベーション維持や、変化への適応が課題となっています。単なる「コードライター」から「機能の実装者」へと役割を移行させ、設計プロセスに積極的に関与させることで、エンゲージメントを高めるというアプローチが提案されています（[1.4.1]）。</li>
+<li><strong>LLMが書いたテキストのスタイル:</strong> 本記事の一部がLLMによって書かれたように見えるという指摘があり、その文体が「AIらしさ」を想起させると言われています。しかし、これはLLMが登場する前から存在した文体であり、Paul Grahamのような著名な書き手も使用していると反論されています（[1.6.2], [1.6.2.1]）。AI生成のコードには寛容なのに、AI生成のテキストには厳しいという二重基準を指摘する声もあります（[1.6.3]）。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、LLMがコードの理解と説明において大きな潜在能力を持つ一方で、そのコード生成の品質、ドキュメンテーションの課題、そして開発者の役割や思考プロセスへの影響について重要な議論を提起しています。LLMはコードベースへのオンボーディングや、特定のコードの意図を素早く把握するのに非常に有効ですが、生成されるコードのコメントは必ずしも有用ではなく、LLMが示す「理由」にはハルシネーションのリスクが伴います。また、AIに依存しすぎると人間の開発者の思考力が低下する懸念や、AI生成コードの品質が常に高いとは限らないという現実も指摘されています。効果的なAI活用の鍵は、AIの能力と限界を理解し、人間の判断とドキュメンテーションの重要性を維持しながら、AIを「思考の加速器」として活用することにあると示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
