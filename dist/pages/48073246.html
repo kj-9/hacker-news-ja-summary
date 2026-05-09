@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLMs corrupt your documents when you delegate - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">LLMs corrupt your documents when you delegate</h1>
+        <div class="meta">
+            投稿日: 2026年05月09日 | ランク: 9
+        </div>
+        <a href="https://arxiv.org/abs/2604.15597" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、LLMがテキストを繰り返し処理することで精度が低下するという、最近の論文で示された「退化（Degradation）」または「意味的アブレーション（Semantic Ablation）」の概念について議論しています。多くのコメント投稿者は、この現象を彼ら自身のLLM利用経験と照らし合わせ、その原因と緩和策について意見を交換しています。</p>
+<h2>LLMにおける品質低下の性質</h2>
+<p>多くのユーザーは、LLMがテキストを繰り返し処理する際に品質が低下するという論文の結果に同意しています。これを「セマンティック・アブレーション（意味的アブレーション）」、「平均回帰（mean reversion）」、「ブルシット層（bullshit layer）」などと表現し、各処理でニュアンスや正確性が失われると指摘しています。特に、モデルが記憶を消去して毎回新しいセッションとして処理する場合や、コンテキストウィンドウがクリアされるかどうかにかかわらず、編集のたびに発生すると述べられています。弱いモデルでは内容の削除が主な原因である一方、最先端モデルでは内容の破損が主な原因であるという論文の発見も議論されています。</p>
+<h2>人間との比較と誤りの種類</h2>
+<p>LLMの誤りを人間と比較する意見も多く見られます。人間も間違いを犯すが、LLMの誤りは「難易度」や「トレーニングデータ」とは無関係に発生し、計画、コード作成、報告などあらゆるレベルで発生すると指摘されています。LLMは人間の認知能力（重要度を認識し、自己修正する能力）を持たず、知らないことを「知らない」と言わずにでっち上げる傾向があるという意見もあります。一方、人間がドキュメント全体を記憶して再生成するような方法で編集する場合、LLMよりも劣化する可能性があるという反論もありますが、これは人間が通常行う編集方法ではないと指摘されています。</p>
+<h2>エージェントとツールの重要性</h2>
+<p>LLMの品質低下を軽減するための主要なアプローチとして、「エージェント」や「ツール」の使用が強調されています。多くのユーザーは、LLMにファイル全体を再生成させるのではなく、差分（diff）を生成させたり、特定のセクションを外科的に編集させたりするべきだと主張しています。<code>str_replace</code>や<code>insert</code>のような特定の編集ツールが不可欠であり、論文で用いられた単純な<code>read_file()</code>と<code>write_file()</code>のみのハーネスでは不十分であると指摘されています。適切なツールとプロンプト設計がなければ、LLMは「常識」がなく、非効率的で間違った方法で作業を進める可能性があると考えられています。</p>
+<h2>コーディングにおけるLLMの利用と課題</h2>
+<p>コーディングの文脈では、LLMの有用性と課題が具体的に議論されています。LLMはプロトタイプ作成や「ライターズブロック」の解消に役立つが、システムへの理解度が低下し、その後の「本番実装」や「強化」フェーズを遅らせる可能性があるという意見があります。また、LLMが生成したコードは「何も隠されていない」不気味な感覚があり、人間のコードに見られる「理論構築」の感覚が欠如しているとも述べられています。コードの品質が低下すると、以前のミスや誤解が積み重なり、将来のミスにつながる「繰り返し圧縮（repeated compression）」の問題も懸念されています。</p>
+<h2>モデルの崩壊と未来への懸念</h2>
+<p>LLMの繰り返し処理による品質低下は、「モデルの崩壊（Model Collapse）」という現象に関連付けられています。これは、LLMの出力で再トレーニングすることで、分布の裾野が失われ、内容の多様性や正確性が失われるというものです。一部のコメント投稿者は、この現象がインターネット全体や技術的知識に影響を与え、人類が最初からすべてを再構築する必要があるかもしれないという悲観的な見方を示しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、LLMがテキストを繰り返し処理する際に品質が低下するという「意味的アブレーション」現象に焦点を当てています。多くのユーザーがこの現象を経験から裏付け、その原因をLLMの確率的な性質と人間の認知能力の欠如に求めています。この課題に対処するためには、LLMに特定の編集ツールを使いこなせるエージェントハーネスの設計が不可欠であり、ファイル全体を再生成させるのではなく、外科的な編集や差分生成を促すアプローチが推奨されています。特にコーディングの分野では、LLMの利用がプロトタイプ作成には役立つものの、コードの品質低下や「モデルの崩壊」といった潜在的なリスクが指摘され、慎重なアプローチと人間のレビューの重要性が強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

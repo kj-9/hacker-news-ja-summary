@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google broke reCAPTCHA for de-googled Android users - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Google broke reCAPTCHA for de-googled Android users</h1>
+        <div class="meta">
+            投稿日: 2026年05月09日 | ランク: 10
+        </div>
+        <a href="https://reclaimthenet.org/google-broke-recaptcha-for-de-googled-android-users" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、Google Cloudの新しい詐欺対策（reCAPTCHAの次世代版）とそれがWeb利用者にもたらす影響、特にリモート認証の側面について議論しています。多くのユーザーが、この新しいシステムがプライバシー、匿名性、および特定のデバイス（特にGoogle Playサービスがないもの）でのWebアクセスに与える影響について懸念を表明しています。</p>
+<h2>reCAPTCHAとWebアクセスの課題</h2>
+<p>多くのユーザーは、reCAPTCHAやCloudflare Turnstileなどの認証システムによってWebサイトが利用できなくなっていると報告しています。特に、IPアドレスの共有、VPNの使用、Linuxベースのブラウザや非Chromiumブラウザの使用などが原因で、無限のCAPTCHAループやアクセスブロックに遭遇しています。これにより、Etsy、Discord、Delta航空、チケット販売サイト、AliExpressなどの利用が困難になっています。解決策として、Cloudflare WARP（CloudflareのVPNサービス）や静的IPアドレスの利用が挙げられていますが、データセンターIPアドレスはさらに疑われる場合もあるとの指摘もあります。</p>
+<h2>リモート認証とプライバシーへの影響</h2>
+<p>新しいreCAPTCHAは、事実上リモート認証であり、デバイスをユーザーに紐づけることが技術的に可能であると理解されています。Googleサーバーがデバイスの識別キー（EK）から一時的な認証キー（AIK）への変換を記録する場合、認証はデバイスのEKに簡単にトレースされ、Googleの協力を得てユーザーの匿名性が失われる可能性があります。これにより、Googleがすべてのサービスでユーザーのすべてのアカウントを紐づけられるようになる可能性があると懸念されています。</p>
+<h2>非Google/Appleエコシステムユーザーへの影響</h2>
+<p>Google PlayサービスのないAndroidフォン（GrapheneOS、Huaweiなど）やLinuxデスクトップユーザーは、reCAPTCHAを通過できず、多くのWebサイトにアクセスできなくなる可能性があります。これは、GoogleがPlayサービスのあるデバイスやAppleのデバイスに有利な独占的行動であると見なされています。一部のユーザーは、GoogleやAppleの認証済みスマートフォンがないと、政府、医療、教育などの必須サービスにアクセスできなくなることへの懸念を表明しています。</p>
+<h2>代替案と規制の必要性</h2>
+<p>CAPTCHAの代替案として、Cloudflare Turnstile、hCaptcha、Friendly Captcha、Proof-of-WorkベースのCAPTCHA、ドメイン固有の質問などが提案されています。しかし、多くのウェブマスターはreCAPTCHAを「使い慣れている」という理由で利用しており、代替案への移行が進まないという問題があります。</p>
+<p>多くのコメントは、この状況は規制（独占禁止法、DMAなど）によってのみ解決できると主張しています。Googleの行動は反競争的であり、Googleの市場支配力を利用して、自社のサービスを使用しないデバイスを排除しているという見方です。政府や金融機関のウェブサイトがこれらのシステムを採用することで、市民が特定のテクノロジー（GoogleやAppleのスマートフォンなど）を使用することを事実上強制されることへの懸念も表明されています。</p>
+<h2>まとめ</h2>
+<p>Google Cloudの新しい詐欺対策は、リモート認証の採用により、Webアクセスとプライバシーに深刻な影響を与えています。特に、Google PlayサービスやAppleの認証システムに依存しないユーザーは、多くのWebサイトから締め出されるリスクに直面しています。これは、技術的な問題だけでなく、独占禁止法やプライバシー規制の観点からも議論を呼んでおり、一部のユーザーは、企業による Web の支配に対抗するために、規制の強化や代替エコシステムの構築が必要であると訴えています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I’ve banned query strings - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">I’ve banned query strings</h1>
+        <div class="meta">
+            投稿日: 2026年05月09日 | ランク: 3
+        </div>
+        <a href="https://chrismorgan.info/no-query-strings" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「URLへのクエリ文字列追加の是非」という記事に対する議論で、主にサードパーティがURLにクエリ文字列を追加することの妥当性と影響に焦点を当てています。</p>
+<h2>サードパーティによるクエリ文字列の追加問題</h2>
+<p>多くのコメントは、サードパーティが他のウェブサイトのURLに勝手にクエリ文字列（特にトラッキング目的のUTMパラメータなど）を追加することに反発しています。これは「他人のURLにゴミを追加する行為」であり、「傲慢の極み」と見なされています。ユーザーのプライバシー侵害、醜いURL、サーバー側の問題を引き起こす可能性があるといった点が指摘されています。元の記事の著者が「不正なクエリ文字列は許可しない」という方針を掲げ、これを414エラー（URI Too Long）で対応していることに対し、一部からは「ユーモラスだが、堅牢性の原則に反する」という意見もあります。</p>
+<h2>クエリ文字列の正当な利用と誤用</h2>
+<p>クエリ文字列自体は、検索機能、フィルター設定、単一ページアプリケーションの状態保存など、多くの正当で有用な用途があることが強調されています。これらは透明性が高く、ユーザーがURLを共有することで、他のユーザーも同じ状態を見ることができるという利点があります。しかし、無関係なトラッキング情報をURLに付加することは、サイト管理者がトラッキングを望まない場合や、ユーザーがプライバシーを重視する場合に問題となります。</p>
+<h2>堅牢性の原則とエラーハンドリング</h2>
+<p>記事の著者が、予期しないクエリ文字列に対して414エラーを返すことについて、「堅牢性の原則（Postel's Law: 送信には保守的に、受信には寛容に）」に反するという議論が生まれました。しかし、これに対し「堅牢性の原則自体が、悪意のある利用者がいる今日のインターネットでは問題となる場合がある」という反論もあります。未知のクエリ文字列に対して404エラーを返すことは、標準の観点からも正当な反応であると指摘されています。</p>
+<h2>ウェブリングと分散型コンテンツ</h2>
+<p>元の記事で触れられている「wander console」や「web rings」のような概念は、企業による強制的なフィードが主流の現代において、人間がキュレーションする分散型コンテンツの復活の可能性を示唆するものとして好意的に受け止められています。これは、過去のウェブリングと似ているが、より柔軟なグラフ構造を持つ点が異なるとされています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、サードパーティによるURLへの無許可のクエリ文字列追加が、プライバシー侵害、UXの悪化、およびサーバー側の予期せぬ動作を引き起こすため、問題視されています。一方で、クエリ文字列には検索やアプリの状態管理といった正当で有用な利用法も多く、その全てを一概に否定すべきではないという意見も出ました。議論は、堅牢性の原則、エラーハンドリングのベストプラクティス、そして分散型ウェブコンテンツの未来にまで及び、現代のインターネットにおけるURLの扱い方と、ユーザー体験、プライバシー、サイト管理のバランスの難しさを示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
