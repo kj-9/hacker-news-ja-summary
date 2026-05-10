@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakebase architecture delivers faster Postgres writes - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Lakebase architecture delivers faster Postgres writes</h1>
+        <div class="meta">
+            投稿日: 2026年05月10日 | ランク: 6
+        </div>
+        <a href="https://www.databricks.com/blog/how-lakebase-architecture-delivers-5x-faster-postgres-writes" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Databricksが発表したPostgreSQLのパフォーマンス改善に関するブログ記事（「Lakebase」と呼ばれるアーキテクチャ）について、Hacker Newsでのコメントは、その技術的な詳細、運用上の課題、そして「Lakebase」というネーミングについて議論しています。DatabricksのVPがいくつかの質問に答えています。</p>
+<h2>パフォーマンスと技術的詳細</h2>
+<p>Databricksが実施したPostgreSQLのパフォーマンス改善は、WAL（Write-Ahead Log）における「Full Page Images（FPI）」の定期的な記録を停止することで達成されました。これにより、ストレージ層がページを再構築する際のWALのリプレイ長が無限になるという新たな課題が発生しましたが、Databricksはこの問題を別途解決し、大きなスループット向上を実現しました。この最適化は、ストレージとコンピュートが分離されたアーキテクチャ（Lakebase）において特に効果があるとのことです。</p>
+<h2>HA（高可用性）とレプリカ</h2>
+<p>このパフォーマンス改善自体はHAとは直交するものの、ストレージ分離型アーキテクチャはHAを簡素化し、ゼロダウンタイムパッチングや、データ全体を複製せずに非常に高速（サブ秒）に作成できる「シャロー」なリードレプリカを可能にします。Citusのような特定の拡張機能は現在サポートされていませんが、これは技術的制限よりも顧客からの要望が少ないためであると説明されています。</p>
+<h2>Lakebaseアーキテクチャの適用範囲とメリット</h2>
+<p>Lakebaseアーキテクチャは、ストレージとコンピュートが分離されたPostgreSQLのマネージドサービスであり、小規模なインスタンスから大規模なインスタンスまで、幅広いユースケースでパフォーマンスの恩恵を受けられるとされています。多くのユーザーがデータレイクを必要としないにもかかわらず、クラウドのマネージドPostgreSQLサービスではストレージとコンピュートが分離されていることが多いため、この最適化は広く適用される可能性があります。</p>
+<h2>「Lakebase」というネーミング</h2>
+<p>「Lakebase」という名前については、コメント欄で議論が交わされました。ストレージとコンピュートの分離は、過去5年間でDBMS開発の一般的なトレンドであり、学術文献にも標準的な名称があります。一部のユーザーは、業界標準の名称を避け、独自の用語を導入することは、ハブリス（傲慢）であり、マーケティング的な意図があると批判しています。これに対し、Databricks側は「Lakebase」が単にストレージ分離を指すだけでなく、S3が古いデータのオーソリティストレージとして機能し、PostgreSQL以外のエンジンでもS3データを直接操作できるという特徴を強調していると説明しています。</p>
+<h2>まとめ</h2>
+<p>DatabricksはPostgreSQLのWALからFull Page Imagesを削除することでパフォーマンスを大幅に向上させました。これは同社のストレージ分離型アーキテクチャ「Lakebase」に特化した最適化であり、HAの簡素化や高速なリードレプリカ作成といったメリットをもたらします。Lakebaseは小規模から大規模なインスタンスまで利用でき、多くのマネージドPostgreSQLユーザーに恩恵があるとされています。しかし、「Lakebase」というネーミングは、ストレージとコンピュートの分離という一般的なトレンドに対する独自の名称であり、その妥当性について議論が巻き起こりました。Databricksは、S3をオーソリティストレージとして利用し、PostgreSQL以外のエンジンによるデータアクセスを可能にするというLakebaseの追加機能を強調することで、このネーミングを正当化しようとしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
