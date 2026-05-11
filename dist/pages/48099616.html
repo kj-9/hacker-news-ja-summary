@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library for fast mapping of Java records to native memory - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Library for fast mapping of Java records to native memory</h1>
+        <div class="meta">
+            投稿日: 2026年05月11日 | ランク: 1
+        </div>
+        <a href="https://github.com/mamba-studio/TypedMemory" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Javaにおける構造体のようなデータ構造（array of structs）を実現するためのライブラリに関するものです。Javaのガベージコレクション（GC）のオーバーヘッドを避け、高性能なデータ処理を行うためのオフヒープメモリ利用に焦点を当てています。</p>
+<h2>Javaの「array of structs」の必要性</h2>
+<p>多くのコメントで、Javaが「array of structs」機能を切実に必要としているという意見が述べられています。これは、高パフォーマンスが要求されるシナリオ、特にゼロアロケーションを目指す場合に重要です。現状では、GCの負担が大きく、高性能なアプリケーション開発の障壁となっています。</p>
+<h2>ライブラリの技術的詳細とパフォーマンス</h2>
+<ul>
+<li><strong>実装方法:</strong> このライブラリはC言語のstructレイアウトを模倣し、クラスファイルAPIを使って初期化時にバイトコードを生成します。これにより、リフレクションを避け、高性能なget/set操作を実現しています。生成されたクラスは「hidden class」として扱われます。</li>
+<li><strong>レコード型との連携:</strong> Javaのレコード型をネイティブメモリにマッピングします。将来的には、バリューレコードと組み合わせることでゼロコストアロケーションも期待されています。ただし、レコードフィールドが配列の場合、ヒープアロケーションが発生するためパフォーマンスが低下する可能性があります。</li>
+<li><strong>パフォーマンスベンチマーク:</strong> 開発者はC言語に近いパフォーマンスを示す予備テスト結果を報告しており、近くJMHベンチマークを実施する予定です。</li>
+<li><strong>C#のSpanからの着想:</strong> このライブラリはC#のSpanにインスパイアされていることが明かされています。</li>
+</ul>
+<h2>課題と懸念点</h2>
+<ul>
+<li><strong>オフヒープ利用のメリットとデメリット:</strong> オフヒープメモリとオブジェクトアロケーションのコストが、一部のユースケースでライブラリの利点を相殺する可能性があるという懸念が示されています。</li>
+<li><strong>「value classes」の適用性:</strong> 「value classes」が配列のイミュータビリティ要件のためにこの用途に役立つか疑問視されています。</li>
+<li><strong>「map Java record types onto native memory」の意味:</strong> この表現の具体的な動作（フライウェイトパターンなのか、オフヒープからデータを読み込んでレコードインスタンスを生成するのか）について質問がありました。開発者はバイトコード生成によってリフレクションを回避していると説明しています。</li>
+<li><strong>ユニオン型の扱い:</strong> 開発者はユニオン型の実装について、現時点ではシンプルで人間工学的な方法がないため一時停止していると述べています。</li>
+</ul>
+<h2>ユースケースと類似プロジェクト</h2>
+<ul>
+<li><strong>チェスエンジンの例:</strong> GCの重さを最も感じた例として、トランスポジションテーブルを必要とするJava製のチェスエンジンが挙げられています。オフヒープメモリの利用がGCオーバーヘッドを回避するのに役立つとされています。</li>
+<li><strong>SBEとの比較:</strong> 他の高性能なデータ処理ライブラリ（SBEなど）との比較が求められています。</li>
+<li><strong>過去の類似プロジェクト:</strong> 過去にも同様の目的で、インターフェースを使って構造体のレイアウトを定義し、アノテーションプロセッサでコード生成を行うアプローチが試みられていたことが紹介されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、Javaにおける高性能なオフヒープデータ処理と「array of structs」の必要性を浮き彫りにしています。開発中のライブラリは、クラスファイルAPIによるバイトコード生成とレコード型との連携を通じて、GCのオーバーヘッドを回避し、C言語に近いパフォーマンスを目指しています。C#のSpanから着想を得ており、今後のJMHベンチマーク結果に注目が集まっています。しかし、オフヒープ利用のコスト、value classesの適用性、およびユニオン型サポートの課題など、まだ議論の余地がある点も指摘されています。全体として、Javaがデータ指向プログラミングの新しいフェーズに移行する中での重要な取り組みとして期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
