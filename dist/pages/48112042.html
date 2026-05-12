@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERT is releasing six CVEs for serious security vulnerabilities in dnsmasq - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">CERT is releasing six CVEs for serious security vulnerabilities in dnsmasq</h1>
+        <div class="meta">
+            投稿日: 2026年05月12日 | ランク: 3
+        </div>
+        <a href="https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q2/018471.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>最近のdnsmasqにおける5つのCVE（共通脆弱性識別子）の発見は、この広く利用されているソフトウェアのセキュリティ、特にIoTデバイスや家庭用ルーターでの利用に関する懸念を引き起こしました。コメントでは、Debianのソフトウェアパッケージングポリシー、AIによるバグ発見の可能性、そして代替DNSソフトウェアの役割について議論が展開されています。</p>
+<h2>dnsmasqの脆弱性と影響</h2>
+<p>今回のCVEはdnsmasqに影響を与えるもので、特に更新がめったに行われない数百万ものデバイスで使用されていることが懸念されています。攻撃者がルーターに侵入した場合、暗号化されていないリクエストのMITM（中間者攻撃）や、更新サーバーへのトラフィックブロック、IoTデバイスへのアクセス、さらにはルーターをプロキシとして利用するなどの悪用が可能になります。これにより、家庭のネットワーク全体が危険にさらされる可能性があります。</p>
+<h2>Debianのパッケージングポリシーと「安定性」</h2>
+<p>Debianの「安定版（stable）」における古いdnsmasqのバージョンについて、更新の必要性が議論されています。多くのコメントは、Debianがセキュリティ修正をバックポートする傾向にある一方で、新しいバージョンへのアップグレードには消極的であると指摘しています。</p>
+<ul>
+<li><strong>バックポートとバージョンの古さ</strong>: Debianの安定版は古いバージョンのパッケージを使用し、セキュリティ修正はバックポートされます。これにより、機能変更が少なく「安定」が保たれるという考え方です。しかし、一部のユーザーは、このアプローチが「フランケンシュタインのような」バージョンを生み出し、非CVEのバグ修正が取り込まれないことや、開発コスト、エラーの発生しやすさを批判しています。</li>
+<li><strong>安定版の哲学</strong>: Debianの安定版を擁護する側は、特に大規模な組織や、システム変更を最小限に抑えたいユーザーにとって、そのモデルが適切であると主張します。2年ごとのリリースサイクルは、変更をテスト環境で事前に確認し、本番環境での問題を避けるためのものです。</li>
+<li><strong>「Debian unstable」との比較</strong>: 最新のソフトウェアを求めるユーザーには、Debian unstable（またはtesting）の使用が推奨されています。しかし、Debianの安定版のモデルそのものに疑問を呈する意見もあり、自動テストの進化やメモリ安全な言語への移行を促すべきだと主張しています。</li>
+<li><strong>OpenSSHの例</strong>: DebianがOpenSSHのデフォルト設定を上流と異なるようにパッチを適用している例を挙げ、これを「DebSSH」と呼ぶべきだと批判する意見もあります。</li>
+</ul>
+<h2>AIによるバグ発見とソフトウェア品質</h2>
+<p>AIが大量のバグレポートを生成している現状について言及があり、これが「新しい世界の秩序」と評されています。</p>
+<ul>
+<li><strong>AIの能力</strong>: AIがバグを見つけることと、完璧なソフトウェアを最初から書くことの間には非対称性があるという意見があります。攻撃者は一つでも穴を見つければよいのに対し、防御者は永久に完璧でなければなりません。AIはトレーニングデータに基づいており、そのデータ自体が完璧ではないため、完璧なソフトウェアを書くことは困難です。</li>
+<li><strong>メモリ安全な言語への移行</strong>: LLMの登場により、メモリ安全な言語で製品を書き直すことがより実現可能になり、クラス全体のバグを排除できる可能性があると指摘されています。</li>
+</ul>
+<h2>代替DNSソフトウェア</h2>
+<p>dnsmasqの脆弱性を受けて、代替のDNSソフトウェアに関する議論も持ち上がっています。</p>
+<ul>
+<li><strong>MaraDNSの紹介</strong>: コメント投稿者の一人が、自身の開発するMaraDNSがAI支援のセキュリティ監査を広範に受けており、2023年以降深刻なセキュリティバグが発見されていないと「厚かましく」宣伝しています。</li>
+<li><strong>反論と人気</strong>: しかし、他のユーザーはdnsmasqの長年の実績と広く利用されていることを指摘し、MaraDNSは「証明されていない」と反論しています。また、「すべてのソフトウェアにはバグがある」という前提や、人気が品質よりも活動によって決まる傾向があるとの意見も出ています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>今回のdnsmasqのCVEは、広く使われているソフトウェアのセキュリティと、それを支えるディストリビューション（特にDebian）のパッケージング戦略、そして進化するAIによるセキュリティ監査について活発な議論を巻き起こしました。家庭用ルーターからIoTデバイスまで、多数のデバイスで利用されているdnsmasqの脆弱性は深刻な影響を及ぼす可能性があり、Debianの「安定性」哲学が、現代の高速なセキュリティ脅威にどこまで対応できるのかという根本的な問いを投げかけています。また、AIがバグ発見に貢献する一方で、完璧なソフトウェア開発の難しさと、メモリ安全な言語への移行の重要性も浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

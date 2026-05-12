@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendering the Sky, Sunsets, and Planets - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Rendering the Sky, Sunsets, and Planets</h1>
+        <div class="meta">
+            投稿日: 2026年05月12日 | ランク: 7
+        </div>
+        <a href="https://blog.maximeheckel.com/posts/on-rendering-the-sky-sunsets-and-planets/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Maxime E. W.による大気レンダリングに関する記事について、その視覚的な美しさ、技術的な深さ、教育的価値を高く評価しています。多くの人が記事のインスピレーション、そして自身のプロジェクトへの関連性を強調しています。</p>
+<h2>視覚的な美しさと技術への感銘</h2>
+<p>コメントの多くは、記事が提示する視覚的な結果に驚きと感動を表明しています。ユーザーは、その美しさ、ゴージャスさ、そして「素晴らしい乗り物」であると表現しています。また、その技術的な深さにも感銘を受けており、わずか数%しか理解できなかったとしても、その労力と結果に圧倒されたと述べています。物理モデルに基づいたレンダリング手法は、グラフィックハックよりも好ましいと評価されています。</p>
+<h2>大気レンダリングの過去と現在</h2>
+<p>ユーザーは、大気レンダリングの分野における歴史的な論文やプロジェクトについて言及しています。特に、1993年のNishitaらの論文が「このトピックの絶対的なオリジナル」として挙げられ、数少ない計算で現実世界の複雑な現象をうまくモデル化できることに驚きが表明されています。モバイルフォンやブラウザでこのようなことが可能になった現代の進歩についても触れられています。</p>
+<h2>関連プロジェクトとインスピレーション</h2>
+<p>多くのユーザーが、記事が自身のプロジェクトや興味と強く関連していることを示しています。以下のような言及がありました:
+*   <strong>SpaceEngine</strong>: 長年存在する素晴らしいソフトウェアで、細部へのこだわりが際立っていると高く評価されています。その壮大なスケールと詳細なFAQも魅力として挙げられています。
+*   <strong>Sebastian Lague</strong>: 彼の惑星生成実験や雰囲気に関する動画は非常に楽しませるものであり、多くの人にとってインスピレーションの源となっています。
+*   <strong>自身のゲーム開発</strong>: RayleighおよびMie散乱をゲームエンジンに実装した経験や、空のレンダリングに取り組んでいること、プロシージャルな宇宙/惑星生成器を開発していることなどが共有されています。MITライセンスのおかげで、ゲームのスカイボックス問題が解決したと喜ぶ声もあります。
+*   <strong>プラネタリウム/スターマップアプリ</strong>: 開発中のアプリで大気散乱を実装するToDoリストにあると述べられています。</p>
+<h2>改善点と今後の考察</h2>
+<p>一部のコメントでは、現在のデモにおける改善点やさらなる考察が提示されています。
+*   日没後すぐに空が真っ暗になるのではなく、地平線の下に太陽が沈んだ後も、上層大気には太陽が当たっているため、かなりの時間「薄明かり」が続くべきだという指摘がありました。
+*   リアルタイムレンダリングにおける物理的な正確さと美的感覚のバランスについて、開発者が悩む点も言及されています。</p>
+<h2>まとめ</h2>
+<p>Maxime E. W.による大気レンダリングの記事は、Hacker Newsコミュニティからその視覚的な美しさ、技術的な深さ、そしてインスピレーションを与える価値に対して絶賛されています。ユーザーは、歴史的な論文から現代のプロジェクト（SpaceEngineやSebastian Lagueの動画）まで幅広い関連コンテンツに言及し、自身のゲーム開発やシミュレーションにおける大気レンダリングへの関心を表明しています。記事は、多くの開発者にとって、同様のビジュアルを達成するための刺激と学びの源となっており、この分野における今後の発展への期待も高まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
