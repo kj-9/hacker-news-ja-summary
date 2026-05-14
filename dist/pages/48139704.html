@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinUI 3 Performance: A Leap Forward - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">WinUI 3 Performance: A Leap Forward</h1>
+        <div class="meta">
+            投稿日: 2026年05月14日 | ランク: 6
+        </div>
+        <a href="https://github.com/microsoft/microsoft-ui-xaml/discussions/11096" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Windowsの新しいUIフレームワークであるWinUI 3について、その品質、Microsoftの開発戦略、そしてクロスプラットフォーム開発の現状に焦点を当てて議論しています。</p>
+<h2>Microsoftの品質と信頼性</h2>
+<p>多くのユーザーは、Microsoftが再び品質に注意を払い始めたことに驚きを示しています。しかし、「十分な人が戻ってきたら、広告やパフォーマンスを低下させる機能が復活し、サイクルが繰り返されるだろう」と懐疑的な意見もあります。Windowsの過去のリリース（98、ME、XP、Vista、7、8、10、11）における「良いリリースと悪いリリースの繰り返し」というMicrosoftの傾向を指摘する声や、Windows 10や11の品質自体に疑問を呈する意見もあります。特に、Windows 8.1がパフォーマンス面では優れていたという意見や、Windows 10のリリース時の評価が低かったことに言及するコメントも見られます。</p>
+<h2>WindowsのUI開発の現状</h2>
+<p>WinUI 3に対する期待と失望が入り混じっています。多くの開発者は、WinUI 3によってMicrosoftがWindowsアプリ開発を統合し、大幅に改善することを期待しています。しかし、過去にMicrosoftが提供してきたGUI開発ツール（WinUI 3を含む）によって「何度も失望させられてきた」と語る開発者もおり、「WPFが依然として最適な選択肢である」と考えています。Win32 APIを使い続けている開発者もいます。MicrosoftがWinUIをmacOSでも動作するように投資することを望む声もありますが、実現可能性は低いと見られています。</p>
+<h2>クロスプラットフォーム開発への関心</h2>
+<p>デスクトップアプリを開発する人々は、OS固有のソフトウェアよりもEGUIのようなクロスプラットフォームツールを使用する理由を求めています。これは、OS固有のソフトウェアが「最大の互換性の誤りの一つ」であるという認識に基づいています。Avalonia UIのようなクロスプラットフォームのオープンソースフレームワークへの関心が高く、WPFの精神的な後継として評価されています。Avaloniaは.NET MAUIのバックエンドとしても機能し始めており、Microsoftがクロスプラットフォーム開発に力を入れている兆候と見られています。F#のサポートがないためAvaloniaを支持する声もあります。</p>
+<h2>既存のWindowsアプリケーションへの影響</h2>
+<p>一部のユーザーは、WinUI 3の改善がファイルマネージャーや画像ビューアーなどの既存のWindowsプログラムにどのように反映されるか疑問を呈しています。特に、Microsoft製デバイスであるSurface Book 2でさえ、ファイルマネージャーや画像ビューアーのパフォーマンスが極端に低下することに不満を感じており、「かつては最適だった標準アプリの品質低下」を嘆いています。WinUI 3の目標の一つとして、これらのコアアプリの改善が含まれていることが指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、WinUI 3に対する期待と懐疑的な見方が混在していることを示しています。Microsoftの過去の品質サイクルのパターンに対する不信感が根強く、特に既存のWindowsアプリケーションのパフォーマンス劣化は多くのユーザーにとって深刻な問題です。同時に、WinUIがWindowsアプリ開発の統合と品質向上に繋がることを望む声も多く、クロスプラットフォーム開発の重要性が高まる中で、Avaloniaのような代替フレームワークへの関心も高まっています。MicrosoftがWinUI 3を通じて、長年の課題であった品質と開発体験を根本的に改善できるかが焦点となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

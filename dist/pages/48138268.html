@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Nginx Exploit - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">New Nginx Exploit</h1>
+        <div class="meta">
+            投稿日: 2026年05月14日 | ランク: 4
+        </div>
+        <a href="https://github.com/DepthFirstDisclosures/Nginx-Rift" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーは、NGINXのngx_http_rewrite_moduleにおけるヒープバッファオーバーフローの脆弱性（CVE-2026-42945、通称「NGINX Rift」）について議論しています。この脆弱性は2008年から存在しており、特定の<code>rewrite</code>ディレクティブの使用パターンでトリガーされ、PoCでは認証なしのリモートコード実行（RCE）に悪用されています。</p>
+<h2>脆弱性の詳細と影響</h2>
+<p>この脆弱性は、<code>rewrite</code>ディレクティブが名前のないキャプチャ（例: <code>$1/$2</code>）と置き換え文字列中の<code>?</code>を使用し、その後に<code>set</code>、<code>if</code>、または別の<code>rewrite</code>が続く場合に発生します。根本原因は、classic two-passスクリプトエンジンのバグ（長さ計算とngx_escape_uriによる実際のコピーパスの不一致）です。この脆弱性は、URLリライティングを行うほとんどのNGINXインスタンスに影響を与えます。</p>
+<h2>ASLRと緩和策</h2>
+<p>公開されたPoCはASLR（Address Space Layout Randomization）が無効になっていることを前提としています。一部のコメントでは、これにより脆弱性のリスクが大幅に低下すると指摘されていますが、多くのセキュリティ専門家は、ASLRは防御的技術であり、十分な動機を持つ攻撃者にとっては回避可能であると強調しています。彼らは、ASLRがRCEを困難にするだけであり、脆弱性自体を軽減するものではないため、早急なパッチ適用が重要であると警告しています。</p>
+<p>F5のアドバイザリでは、名前のないキャプチャの代わりに名前付きキャプチャを使用することが緩和策として推奨されています。主要なNGINXバージョン（1.31.0、1.30.1）およびOpenRestyにはパッチがリリースされています。</p>
+<h2>NGINXの利用と代替</h2>
+<p>多くのユーザーがNGINXで<code>rewrite</code>ディレクティブや<code>set</code>ディレクティブを日常的に使用しているため、広範な影響が懸念されています。特に、PHPとの統合におけるデフォルト設定など、一般的な利用パターンで脆弱な設定が見られます。</p>
+<p>ApacheやNGINXに代わる、メモリセーフな言語で書かれたWebサーバー（例: Caddy、Jetty）に関する議論もされています。しかし、既存のWebサーバーは大規模な運用で実績があり、機能も豊富なため、メモリ安全な言語への移行だけでは十分な利点にならないという意見もあります。また、メモリセーフな言語で書かれていても、別の種類の脆弱性が存在する可能性も指摘されています。</p>
+<h2>脆弱性発見の経緯とバージョン管理</h2>
+<p>この脆弱性は、DepthFirstのセキュリティ分析ツールによって自律的に発見されました。これは、AI支援によるセキュリティ脆弱性発見プロセスの有効性を示唆しています。</p>
+<p>NGINXのバージョン番号（1.x台が長い）と、Reactのような新しいソフトウェアのバージョン番号（19.x台）を比較し、ソフトウェア開発のアプローチの違いについて言及するコメントもありました。これに対し、バージョン管理スキームは任意であり、メジャーバージョンを頻繁に上げる必要がないのはNGINXが後方互換性を重視しているためだという反論が多数寄せられました。</p>
+<h2>まとめ</h2>
+<p>このNGINXのヒープバッファオーバーフロー（CVE-2026-42945）は、<code>rewrite</code>ディレクティブの一般的な使用パターンに影響を与える重大な脆弱性です。公開されたPoCはASLR無効を前提としていますが、セキュリティ専門家はASLRを信頼しすぎず、早急にパッチを適用するか、名前付きキャプチャへの変更を推奨しています。また、この脆弱性の発見プロセスはAI支援ツールの可能性を示しており、NGINXのような成熟したC言語ベースのソフトウェアにおけるメモリ安全性の課題と、メモリセーフな言語で書かれた代替ソリューションの潜在的な利点についても議論が交わされました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
