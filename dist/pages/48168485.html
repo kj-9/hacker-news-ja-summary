@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUDA Books - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">CUDA Books</h1>
+        <div class="meta">
+            投稿日: 2026年05月17日 | ランク: 9
+        </div>
+        <a href="https://github.com/alternbits/awesome-cuda-books" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、CUDAプログラミングに関する書籍や学習リソース、そして現在の業界トレンドについて議論しています。特に、生CUDAカーネル開発と高レベルライブラリの利用のバランス、そしてLLMが普及する時代における学習のあり方に焦点が当てられています。</p>
+<h2>CUDA学習リソースの推奨と評価</h2>
+<p>複数のCUDAプログラミング書籍が言及され、その内容や有用性について議論されています。</p>
+<ul>
+<li><strong>推奨される書籍:</strong> 「CUDA Programming: A Developer's Guide to Parallel Computing with GPUs」が最高の入門書として挙げられています。</li>
+<li><strong>評価の低い書籍:</strong> 「Programming Massively Parallel Processors: A Hands-on Approach」は多くの間違いがあり、分かりにくいと評され、「CUDA by Example: An Introduction to General-Purpose GPU Programming」は単純すぎてアーキテクチャを抽象化しすぎているとされています。</li>
+<li><strong>オンラインリソース:</strong> OLCF (Oak Ridge National Laboratory) のCUDAトレーニングシリーズが、入門と基礎学習に役立つと推奨されています。</li>
+<li><strong>書籍の古さ:</strong> 2012年出版の書籍について、内容が古すぎないかという懸念が示されています。</li>
+<li><strong>将来の書籍:</strong> あるユーザーは、ハードウェアのエンジニアリングから最適化までをカバーする新しいCUDA書籍を執筆する計画があると述べています。</li>
+</ul>
+<h2>CUDAプログラミングの現在のトレンドと課題</h2>
+<p>CUDAカーネルを直接記述することと、高レベルライブラリやフレームワークを利用することについての議論が展開されています。</p>
+<ul>
+<li><strong>NVIDIAの推奨:</strong> NVIDIA内部の関係者の中には、生CUDAカーネルの自作よりも、既存の高レベルライブラリの利用を推奨する声があることが指摘されています。</li>
+<li><strong>生のCUDAカーネルの必要性:</strong> しかし、他のコメントでは、NVIDIAで働いているかどうかではなく、低レベル制御、マイクロ最適化、メモリトラフィックの回避、カーネル融合などの目的のために、生CUDAが必要となる場合があるという反論がなされています。適切なツールを状況に応じて選ぶべきだとされています。</li>
+<li><strong>NVIDIAへの依存と課題:</strong> NVIDIAが常にすべてのGPUアーキテクチャ（特にデータセンター向けではないもの）に対して、最新の安定したカーネルサポートを迅速に提供するとは限らないという懸念も示されています。</li>
+<li><strong>新しいツール:</strong> PythonからCUDAカーネルを直接記述できるWarpのような新しいツールが紹介され、その手軽さが評価されています。</li>
+</ul>
+<h2>LLM時代における学習と生産性</h2>
+<p>生成AI、特にLLMがビジネスの生産性向上に活用される現代において、時間をかけて本を読むことの価値や、新しいスキルの習得方法について皮肉を交えた議論がなされています。</p>
+<ul>
+<li><strong>読書時間の確保:</strong> 企業がLLMを用いて生産性を大幅に向上させることを求める中で、じっくりと本を読む時間をどのように確保するのかという疑問が呈されています。</li>
+<li><strong>プロンプターとしての役割:</strong> 企業はプログラマーではなく、プロンプターを求めているという見解も述べられています。</li>
+<li><strong>AIとの協業（皮肉）:</strong> エージェント（AI）がすべての作業を行っている間に読書をする、あるいはエージェントに読書をさせる、といったコメントもあります。</li>
+</ul>
+<h2>その他の学習リソース</h2>
+<ul>
+<li><strong>関連分野の書籍:</strong> 厳密にはCUDAではないものの、「AI Systems Performance Engineering」も言及に値するとして挙げられています。</li>
+<li><strong>MOOCsへの関心:</strong> パラレルプログラミングやNVIDIA関連の良いMOOCs（大規模公開オンライン講座）はないかという質問も出ています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このスレッドは、CUDAプログラミングの学習者が利用できる様々な書籍やオンラインリソースについて、その長所と短所、そして古さという観点から詳細に議論しています。また、今日のAI技術の進化に伴い、生のCUDAカーネルを記述することの意義と、高レベルライブラリやツール（Warpなど）の利用動向が活発に議論されています。特に、LLMが生産性向上に貢献する時代において、深く専門的な知識を学習することの価値や、学習時間の確保に関する示唆に富むコメントも特徴的です。全体として、CUDAエコシステムが進化し続ける中で、学習方法や開発アプローチも変化している現状が反映されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

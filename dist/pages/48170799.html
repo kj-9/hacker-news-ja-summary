@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The occasional ECONNRESET - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The occasional ECONNRESET</h1>
+        <div class="meta">
+            投稿日: 2026年05月17日 | ランク: 3
+        </div>
+        <a href="https://movq.de/blog/postings/2026-05-05/1/POSTING-en.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、TCPソケットのクローズとそれに伴う<code>RST</code>（リセット）動作、特にHTTP/1.1のコンテキストにおける影響について議論しています。</p>
+<h2>接続の「Lingering Close」と<code>RST</code></h2>
+<p>記事の「ソケットを閉じる際に未読データが残っていると<code>RST</code>が発生する」という点に対し、Apacheのドキュメントの「Lingering Close」に関するセクションが参照されました。これは古い情報ではないかという疑問も提示されましたが、<code>shutdown</code>関数が使われない場合、過去の教訓を学び直す必要があると指摘されています。多くのコメンターが、ソケットをクローズする際に受信バッファに未読データが残っていると<code>RST</code>が生成されるのはTCPの標準的な挙動であり、30年以上前から普遍的に実装されていると認識しています。</p>
+<h2><code>RST</code>の発生条件と「ひどい影響」</h2>
+<p>LinuxのTCPコードのコメント（RFC 2525のセクション2.17に言及）が引用され、データが失われた場合に<code>RST</code>が送信される理由が説明されています。具体的には、FTPクライアントで大量のGETを行い、プロセスを中断し、ウィンドウサイズがゼロになった後にクライアントを<code>kill -9</code>した場合、古いカーネルが<code>FIN</code>を送信することで「ひどい影響」があったと書かれています。</p>
+<p>コメンターは、<code>FIN</code>の代わりに<code>RST</code>が送信される「ひどい影響」について推測しています。クライアントがクリーンな切断とみなし、ファイル全体を受け取ったと誤解する可能性や、タイムアウトがゼロであるため接続が永久にハングアップする可能性が挙げられました。</p>
+<h2>HTTP/1.1における「Connection: close」の難しさ</h2>
+<p>HTTP/1.1サーバー側で「Connection: close」をHTTPリプライに追加する際の難しさも議論されました。これは、理想的には接続を閉じる前にクライアントからのパイプライン化されたすべてのリクエストを読み取る必要があるためですが、通常これは避けるべき挙動です。しかし、これを怠るとクライアントが部分的な応答を受け取るリスクがあるため、「Content-Length」や「Transfer-Encoding: chunked」をリプライに追加することが推奨されます。ただし、コンテンツ長を事前に知らない場合に「Connection: close」を使うことが多いというジレンマが指摘されています。</p>
+<h2>GoサービスでのTCPコネクション再利用のデバッグ経験</h2>
+<p>あるコメンターは、Goベースのサービスで同様の問題をデバッグした経験を共有しました。HTTP応答を読み込まずにクローズしていたため、TCPコネクションの再利用が期待通りに行われず、新しいTCPコネクションが頻繁に作成されていました。これは、裏側で<code>RST</code>が発生していた可能性が高いと推測されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、TCPソケットのクローズと<code>RST</code>の発生条件、特に未読データが残っている場合の挙動について深く掘り下げています。RFCやLinuxカーネルのコード、Apacheのドキュメントなどを参照しながら、<code>RST</code>がTCPプロトコルにおける標準的かつ意図的なエラー処理メカニズムであることが確認されました。また、HTTP/1.1プロトコル、特に<code>Connection: close</code>ヘッダーを使用する際の複雑性や、プログラミング言語のランタイムが提供するネットワークライブラリ（Goの例など）がこの低レベルなTCP動作にどのように影響するかについても議論されました。全体として、TCP接続の最適な管理とエラーハンドリングには、プロトコルの詳細な理解が不可欠であることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

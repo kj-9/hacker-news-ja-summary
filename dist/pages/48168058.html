@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native all the way, until you need text - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Native all the way, until you need text</h1>
+        <div class="meta">
+            投稿日: 2026年05月17日 | ランク: 7
+        </div>
+        <a href="https://justsitandgrin.im/posts/native-all-the-way-until-you-need-text/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、特にmacOS/iOSアプリにおけるリッチテキスト、Markdown、およびストリーミングテキストのレンダリングに関する課題を中心に議論しています。多くの開発者が、最新のAppleのUIフレームワーク（SwiftUI、TextKit2）でこれらの機能を実装する際の困難さやパフォーマンスの問題を指摘しており、結果としてWeb技術（WebKit、Electron）への依存が高まっている状況について意見を交わしています。</p>
+<h2>ネイティブUIにおけるMarkdown/リッチテキストレンダリングの困難さ</h2>
+<p>多くのコメント投稿者が、SwiftUIやTextKitといったネイティブAPIを使って、Markdownのレンダリング、ストリーミング、テキスト選択といったリッチテキスト機能を実装することの難しさを強調しています。
+*   著者は、チャットアプリでMarkdownのレンダリング、スムーズなスクロール、メッセージ全体の選択をネイティブで実現できないと述べています。彼によると、ストリーミングデータでのレイアウト更新、文字方向の検出、単語や行の区切り、UI要素のリサイズといったタスクが非常に複雑になります。
+*   他の開発者も同様の経験を語っており、Markdownレンダリングやストリーミングが遅く、UIがロックアップしたり、既存のテキストエディタコンポーネントがバグだらけだったりすると指摘しています。
+*   一部のコメントでは、2015年頃のiOSアプリでクリック可能なリンクをパラグラフ内にレンダリングすることすら悪夢だったという経験が語られています。</p>
+<h2>WebKit/Web技術の代替としての利用</h2>
+<p>多くの開発者は、ネイティブUIの課題を解決するためにWebKitなどのWeb技術を「実用的な選択肢」として利用していると述べています。
+*   著者は現在、最終的なMarkdownレンダリングとストリーミングにWebKitを使用していると明かしており、リッチテキストや優れたタイポグラフィをプラットフォームと戦うことなく実現するには、Web技術が現実的な選択肢となると結論付けています。
+*   WebKitはmacOS上のネイティブOSフレームワークであるため、MarkdownのレンダリングにWebKitを使用することは「完全に適切」であるという意見もあります。MarkdownがHTMLにトランスパイルされることを意図しているため、Webレンダラが理にかなっているとされています。
+*   ただし、このアプローチにはコストがあることも指摘されています。<code>WKWebView</code>のインスタンスごとにWebKitエンジンがロードされ、パフォーマンスとメモリのオーバーヘッドが発生するため、ネイティブコンポーネントのように気軽に利用できるわけではありません。また、ネイティブの利点を失い、完全なWebスタックの力を得られるわけでもないという中途半端な状況が、多くの企業がElectronを選択する理由を説明していると著者は述べています。
+*   「HTML + CSSはGUIを作成するための最も強力なシステムである」と主張するコメントもあり、ブラウザレンダリングエンジンはGPUアクセラレーションや長年の実地テストによって非常に成熟しており、性能面でもネイティブUIと遜色ないか、むしろ上回る場合もあるという見方があります。</p>
+<h2>パフォーマンスとメモリの議論</h2>
+<p>Web技術とネイティブUIのパフォーマンスとメモリ使用量について、様々な意見が交わされています。
+*   メモリ使用量の多さがElectronなどのWeb技術の欠点として挙げられており、複数のElectronアプリを同時に実行すると、低メモリデバイスでシステムがラグを起こす原因になると指摘されています。
+*   しかし、一方で「ブラウザレンダリングエンジンは成熟しており、パフォーマンス面ではもはやネイティブAPIの方が優れているとは言えない」という意見もあります。Appleの最新のSwiftUIベースのSystem Preferencesでさえ、セクション切り替え時にWebページの読み込みよりも遅延することがあると指摘されています。
+*   ネイティブアプリが依然としてパフォーマンスとリソース消費において優れているという意見もあり、特にQt C++とQMLで開発されたアプリはWebアプリよりも大幅に高速でメモリ使用量が少ないというベンチマークが提示されています。
+*   「JavaScriptは『ものすごく速い』わけではない」という反論もあり、MicrosoftがTypeScriptコンパイラをGoで再実装して10倍高速化した事例が挙げられ、ElectronのようなWeb技術への依存はパフォーマンスの問題を引き起こすという意見もあります。</p>
+<h2>スキル不足 vs. フレームワークの未熟さ</h2>
+<p>ネイティブUIにおける困難さが、開発者のスキル不足によるものなのか、それともフレームワーク自体の未熟さによるものなのかという議論があります。
+*   一部のコメントは、著者の問題が「スキル不足」に起因すると示唆しており、既存の成熟したMarkdownレンダラライブラリ（<code>swift-markdown-ui</code>や<code>Textual</code>など）を使えば問題ないはずだと反論しています。
+*   しかし、著者はこれらのライブラリも試したが、パフォーマンスの課題（特にストリーミングや大規模コンテンツでの遅延）があったと具体的に反論しています。
+*   他の開発者も、SwiftUIやTextKit2がリッチテキスト処理において「未熟である」という著者の見方に同意しており、特に「大規模なデータに対するインクリメンタルな変更」に対応するAPIが不十分だと指摘しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのこのスレッドは、macOS/iOSアプリでリッチテキストやMarkdownを扱う際のネイティブUIフレームワーク（SwiftUI, TextKit2）の困難さを浮き彫りにしています。多くの開発者が、ストリーミングデータや複雑なフォーマットにおけるパフォーマンス、スムーズなテキスト選択などの課題に直面し、結果としてWebKitのようなWeb技術を実用的な代替案として採用しています。Web技術にはメモリ消費や完全なネイティブ体験の欠如といったデメリットがあるものの、その成熟したレンダリングエンジンと広大なエコシステムが、開発者に「プラットフォームと戦うことなくプロダクトを構築する」道を提供していると評価されています。一方で、ネイティブAPIが「スキル不足」ではなく、フレームワーク自体の「未熟さ」に起因しているという議論も活発に行われています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
