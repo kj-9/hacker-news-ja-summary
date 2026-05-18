@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We stopped AI bot spam in our GitHub repo using Git&#x27;s –author flag - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">We stopped AI bot spam in our GitHub repo using Git&#x27;s –author flag</h1>
+        <div class="meta">
+            投稿日: 2026年05月18日 | ランク: 3
+        </div>
+        <a href="https://archestra.ai/blog/only-responsible-ai" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、オープンソースプロジェクトでのAIによる質の低いプルリクエスト（PR）やissueへの対応策について議論しています。特に、GitHubの「事前貢献の要求」フラグと、ウェブサイトでのCAPTCHAを通過したユーザーに小さなコミットを作成して共同作業者として追加するCIスクリプトを組み合わせたArchestra社のソリューションが注目されています。</p>
+<h2>Archestraのソリューションとその評価</h2>
+<p>Archestraは、GitHubの「事前貢献の要求」フラグを利用し、ウェブサイトでCAPTCHAを通過したユーザーに対して小さな共同コミットを作成するCIスクリプトを導入しました。これにより、最初の1週間で500以上のボットをブロックできたと報告しています。</p>
+<ul>
+<li><strong>CAPTCHAと摩擦の追加</strong>: コメントでは、このアプローチがAIボットに対して「摩擦」を加え、投稿を諦めさせる効果があると評価されています。CAPTCHAの通過はボットの活動を抑制するのに有効だと考えられています。</li>
+<li><strong>技術的な側面</strong>: CIスクリプトがGitHubのREST APIを通じて機能することが説明されており、その実装例も共有されています。</li>
+<li><strong>懸念点</strong>: 一部のユーザーは、この方法がGitHubの「interaction limits」を一時的にリセットするものであり、将来的に変更される可能性があると指摘しています。また、共同作業者として追加されるユーザーが、実際に質の高いPRを提出できるかどうかが事前にわからないという懸念も示されています。</li>
+<li><strong>セキュリティへの影響</strong>: 事前貢献を必要とする設定が、悪意のあるユーザーが些細な変更をマージさせて貢献者リストに入り、より高い権限を得るリスクがあるとの指摘があります。Archestraはこれに対し、「すべての外部貢献者に対して承認を要求する」ことをデフォルトにすべきだと主張しています。</li>
+<li><strong>皮肉</strong>: ArchestraがAI企業であり、AIによって生成されたPRに苦しんでいるという「皮肉」が指摘されています。</li>
+</ul>
+<h2>GitHubの役割とインセンティブ</h2>
+<p>多くのコメントは、GitHubとMicrosoftがAIによるスパム問題の解決に積極的でない、あるいはむしろ問題の一因であると主張しています。</p>
+<ul>
+<li><strong>インセンティブの欠如</strong>: GitHubはAIによる活動をブロックするインセンティブがないと指摘されています。AIによるPRは、GitHubがCoPilotのサブスクリプションを販売し、LLM生成のPRがビジネスモデルの一部であるため、むしろ売上を伸ばす要因になりうると考えられています。</li>
+<li><strong>不十分なツール</strong>: GitHubがPRのスパムを削減するためのより厳格な措置、フィルター、またはツールを実装していないことへの不満が表明されています。</li>
+<li><strong>本質的な問題の認識</strong>: この問題はオープンソースコミュニティや個々のプロジェクトが解決すべきものではなく、スパムメールの問題と同様にGitHubがプラットフォームレベルで対応すべきだという意見があります。</li>
+</ul>
+<h2>潜在的な解決策と提案</h2>
+<p>AIによるスパムに対抗するための様々なアイデアが提案されていますが、それぞれに課題も指摘されています。</p>
+<ul>
+<li><strong>トークンシステム</strong>: ユーザーにPRごとに有効なトークンを付与し、質の高いPRに対してさらにトークンを与えるシステムが提案されています。これにより、意味のある議論に参加し、良いアイデアを持つ人に貢献を促すことができます。</li>
+<li><strong>ELOベースの評価システム</strong>: 貢献の質に基づいてユーザーを評価するELO（Eloレーティングシステム）のようなシステムが提案されています。これは人間対AIではなく、実際に役立つ効果的な貢献と低品質なスパムを区別することを目的としています。しかし、ELOシステムは操作されやすいという懸念や、特定のユーザーがコミュニティプロジェクトを支配するリスクも指摘されています。</li>
+<li><strong>デポジットシステム（Pfandシステム）</strong>: PRごとに少額のデポジット（例：10ドル）を要求し、PRが承認された場合に返却するというアイデアも提案されました。これにより、ボットや低品質な貢献を抑制し、デポジットはトリアージ費用に充てることができます。しかし、これは新規ユーザーの参入障壁を高め、経済的に恵まれない国の人々や若者の貢献を阻害する可能性があり、また、デポジットの返還を巡るトラブルや詐欺の可能性も指摘され、強い反発を招いています。</li>
+<li><strong>実名ポリシーと評判</strong>: GitHubに実名ポリシーを導入し、貢献を評判と認識で報いることで、匿名アカウントやボットによる悪意のある活動を抑制できるという意見もあります。</li>
+<li><strong>署名付きコミット</strong>: 既知の作者からの署名付きコミットが役立つという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Archestra社のCAPTCHAと共同コミットによるAIスパム対策は、一定の成功を収めており、短期的な解決策としては評価されています。しかし、この問題の根本的な解決には、GitHubがAIによる活動へのインセンティブを再考し、プラットフォームレベルでより堅牢なツールとポリシーを提供する必要があるという意見が大勢を占めています。提案されたトークンシステムや評判システム、デポジットシステムなど、様々なアプローチが議論されていますが、それぞれに技術的、社会的、経済的な課題があり、万能な解決策は見つかっていません。AIによるオープンソースへの貢献は、開発者コミュニティにとって新たな大きな課題となっており、今後もその対策が模索され続けるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
