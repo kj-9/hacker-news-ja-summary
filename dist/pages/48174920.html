@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How fast is N tokens per second really? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How fast is N tokens per second really?</h1>
+        <div class="meta">
+            投稿日: 2026年05月20日 | ランク: 5
+        </div>
+        <a href="https://mikeveerman.github.io/tokenspeed/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、LLMのトークン生成速度の可視化ツールに関する議論で、主に様々な速度での体験、速度と品質のトレードオフ、エージェントワークフローへの影響、そしてトークン速度の測定方法に関する技術的な詳細に焦点を当てています。</p>
+<h2>体感速度と使いやすさ</h2>
+<p>多くのユーザーが、LLMのトークン生成速度に対する自身の「体感」について言及しています。5トークン/秒は人間がタイピングするより速いものの、エージェントとしては「遅い」と感じるという意見と、思考やウォームアップを含めると人間の方が速いという意見が混在しています。10トークン/秒が「不満を感じない」スイートスポットだと考える人もいれば、60トークン/秒がエージェント作業の最低速度だと主張する人もいます。100-150トークン/秒は速すぎて人間が追いつけないと感じる一方で、300トークン/秒は1990年代のダイヤルアップモデムの速度に例えられ、GenAIの現状を「ダイヤルアップ時代」と表現する人もいます。800トークン/秒のような超高速になると、人間が読む速度がボトルネックになると指摘されています。</p>
+<h2>速度と出力品質のトレードオフ</h2>
+<p>一部のユーザーは、特にローカルハードウェアで20-30トークン/秒の速度が出せる場合、真の問題はトークン/秒ではなく出力の品質だと考えています。Cerebrasのような高速なシステムでは、600トークン/秒以上といった超高速なエージェントコーディングが可能ですが、そのモデルが最新でなかったり、出力品質が最高レベルでない場合、高速に「悪いコード」を生成することになり、これは「新しい種類の不快さ」だと指摘されています。品質を重視するユーザーは、適切な20行のコードのために10〜15分待つことも厭わないと述べています。</p>
+<h2>エージェントワークフローへの影響</h2>
+<p>高速なトークン生成は、エージェントワークフローに大きな影響を与えると予測されています。600トークン/秒以上の速度は「根本的に異なる体験」をもたらし、プロトタイピングのフィードバックループが劇的に加速される可能性があります。複数のアプローチを並行して試したり、進化アルゴリズムのようにLLMを多数実行して最適なものを評価するような「分岐戦略」が可能になると考えられています。しかし、一方で、超高速でコードが生成されると問題を発見するのが難しくなり、修正する前に大量のトークンを消費してしまうリスクも指摘されています。</p>
+<h2>技術的な詳細と測定の課題</h2>
+<p>トークン/秒という指標だけでは不十分で、以下の点を考慮すべきだという意見が提示されています：
+1.  <strong>デコーディングT/S</strong>: モデルが自己回帰的にテキストを生成する速度。
+2.  <strong>プリフィルT/S</strong>: プロンプト処理速度。
+3.  <strong>コンテキストサイズによる速度の変動</strong>: コンテキストが増加するにつれてこれらの数値がどのように変化するか。
+4.  <strong>ユースケース</strong>: 膨大なテキストを読んで短い出力を得るのか、短い質問から大量のテキストを生成するのか。
+特に、ローカルモデル作業ではプリフィル速度がボトルネックになることが多く、大規模なコンテキストを読む速度の重要性が強調されています。また、LLMは「思考」プロセスで多くのトークンを消費するため、単に出力コードのトークン速度を見るだけでは実際のユーザー体験を表せないという指摘もあります。</p>
+<h2>まとめ</h2>
+<p>LLMのトークン生成速度の可視化ツールは、ユーザーが様々な速度でのLLMの動作を理解するのに役立っています。多くのユーザーは、LLMの出力速度に対する個人的な「体感」を共有しており、人間がタイピングする速度とは異なる認識があることが明らかになりました。高速化はエージェントワークフローに革命をもたらす可能性を秘めている一方で、現在のモデル品質とのバランスや、高速すぎるゆえに問題を見落とすリスクも指摘されています。また、単一のトークン/秒という指標だけではLLMのパフォーマンスを完全に把握することはできず、プリフィル速度、デコーディング速度、コンテキスト長による変化、および特定のユースケースを考慮したより詳細な測定が求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
