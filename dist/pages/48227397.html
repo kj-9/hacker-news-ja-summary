@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog ran on Ubuntu 16.04 for 10 years. I migrated it to FreeBSD - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Blog ran on Ubuntu 16.04 for 10 years. I migrated it to FreeBSD</h1>
+        <div class="meta">
+            投稿日: 2026年05月21日 | ランク: 3
+        </div>
+        <a href="https://crocidb.com/post/this-blog-ran-on-ubuntu-16-04-for-10-years-i-migrated-it-to-freebsd/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にFastfetchのメモリ使用量レポートの疑問、Linuxディストリビューションの長期サポートに関する議論、そしてプライバシー懸念を抱える現在のLinuxエコシステムへのフラストレーションを中心に展開されています。</p>
+<h2>Fastfetchのメモリ使用量表示について</h2>
+<p>ユーザーは、Fastfetchが報告するメモリ使用量が<code>btop</code>で表示される値よりも常に高いという疑問を呈しています。これは、Fastfetchがファイルシステムキャッシュなどの要素を含んだ「実際のメモリ使用量」を報告しているのに対し、<code>btop</code>はプロセスが使用する合計メモリを報告しているためではないかと推測されています。</p>
+<h2>長期サポートと安定性を持つLinuxディストリビューション</h2>
+<p>コメントの大部分は、長期サポート（LTS）と安定性を提供するLinuxディストリビューションの選択肢について議論しています。</p>
+<ul>
+<li><strong>CentOS 7の代替</strong>: ユーザーは、かつてCentOS 7を小規模VMで使用していたように、長期間セキュリティアップデートが提供され、アップデートによる破損リスクが少ないディストリビューションを求めています。</li>
+<li><strong>Alma/Rocky Linux</strong>: 10年間のサポート期間があり、RHELのダウンストリームクローンであるため、これらのディストリビューションが最良の選択肢であると認識されています。RHEL自体も10台まで無料アクセスを提供しています。</li>
+<li><strong>Debian/Ubuntu</strong>: これらも一般的な選択肢ですが、ユーザーはUbuntu/Debianのアップグレードで、サードパーティのバイナリや設定ファイルが壊れるといった問題に遭遇した経験を共有しています。教育機関でUbuntuをサポートするユーザーは、LTSアップグレードが数ヶ月にわたる作業になることもあると述べています。</li>
+<li><strong>「なぜそこまで気にするのか？」への反論</strong>: アップグレードの手間を省き、安定した稼働を優先するため、ディストリビューションの変更が最小限に抑えられることを望む声が多く聞かれます。</li>
+</ul>
+<h2>プライバシー懸念とLinuxエコシステムの動向</h2>
+<p>一部のユーザーは、現在のLinuxディストリビューションが、年齢確認/証明、デフォルトのテレメトリ、AIの統合といったプライバシーを侵害する可能性のある動きを進めていることに懸念とフラストレーションを表明しています。ユーザーは、これまでWindowsからLinuxへの移行を歓迎していたものの、これらの傾向により、主要なディストリビューションから距離を置くことを検討しています。</p>
+<h2>まとめ</h2>
+<p>コメントは、Fastfetchのメモリレポートの技術的な疑問から始まり、小規模サーバーやVM環境における長期サポートと安定性を重視するLinuxディストリビューションの選定へと移ります。Alma/Rocky LinuxがCentOSの有力な代替として浮上する一方で、Debian/Ubuntuのアップグレードに伴う問題点が指摘されています。最終的には、年齢確認やテレメトリなど、プライバシーを侵害する可能性のあるLinuxエコシステムの最新の動向に対する強い懸念と不満が表明され、多くのユーザーが期待していた「オープンで自由な」Linuxの理想が失われつつあることへの失望が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

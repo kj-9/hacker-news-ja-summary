@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Freenet, a peer-to-peer platform for decentralized apps - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Freenet, a peer-to-peer platform for decentralized apps</h1>
+        <div class="meta">
+            投稿日: 2026年05月21日 | ランク: 5
+        </div>
+        <a href="https://freenet.org/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、Freenetの創設者であるIan Clarke氏が、2000年代初頭のP2PプロジェクトFreenetの再設計版「Hyphanet」（現在は新しいFreenet、またはFreenet 2023と呼ばれる）を発表しています。この新しいFreenetは、グローバルで分散型のキーバリューストアであり、WebAssemblyコントラクトを利用して状態の有効性、変異、効率的な同期を定義します。特に、状態の一貫性問題に対するユニークな解決策として、結合操作が交換法則を満たすように設計されており、状態更新が迅速にネットワーク全体に伝播します。</p>
+<h2>新しいFreenetのアーキテクチャと特徴</h2>
+<p>新しいFreenetは、分散型のグローバルキーバリューストアとして設計されており、キーはWebAssemblyコントラクトで、値（状態）の有効性、変更方法、ピア間の効率的な同期方法を定義します。この設計により、Freenetアプリケーションはネットワークから直接ダウンロードされ、Webブラウザでシングルページアプリケーションのように実行できます。APIサーバーに接続する代わりに、WebアプリはローカルのFreenetピアに接続し、ローカルのWebSocket接続を介してコントラクトとやり取りします。状態の一貫性については、すべてのコントラクトが、任意の順序で結合しても同じ結果になる「結合操作」（communitative merge operation）を定義する必要があり、これにより状態の更新が迅速にネットワーク全体に伝播します。</p>
+<h2>CRDTsとの関連性と状態の削除・変更</h2>
+<p>コメントでは、新しいFreenetの結合操作がCRDTs（Commutative Replicated Data Types）と密接に関連していることが指摘されており、Freenetコントラクトの状態はCmRDTとして捉えることができます。状態の削除や変更がどのように交換法則を満たすかという疑問に対し、開発者はデータやアプリケーションの性質に応じてアプローチが異なると説明しています。例えば、チャットアプリ「River」では、最新のメッセージを保存し、古いものを削除したり、禁止されたユーザーとそのメッセージを削除する際に「墓石（tombstone）」のようなアプローチを使用しています。WebAssemblyコントラクトは非常に柔軟であり、アプリケーションごとに最適な方法を設計できるため、単一の解決策はありません。</p>
+<h2>Freenetの分散化とインセンティブ</h2>
+<p>Freenetは、GoogleやAmazonのような企業に依存しない、根本的に分散化されたインターネットを目指しています。ユーザーがピアを運用する長期的なインセンティブについては、当初はネットワークの成功への貢献意欲がモチベーションとなっています。将来的には、リソース提供に対して「カルマ」のような評判システムを構築し、特定のリソースへのアクセスをゲートするなどの活用が検討されています。また、匿名性については、以前のFreenetが抱えていた問題（違法コンテンツなど）に対応するため、新しいFreenetではプラットフォームに単一の匿名性アプローチを縛るのではなく、サービスとして複数の匿名性オプションを提供し、分散型評判システムで不快なコンテンツからユーザーを保護する方針です。</p>
+<h2>プロジェクトの背景と方向性の論争</h2>
+<p>コメントでは、Freenetの再設計とリブランディングの背景について一部で論争が提起されています。元のFreenet開発チームの作業が一方的に破棄され、新しい開発者による書き直しが「裏取引」によって決定されたという主張があります。これに対し、開発者（Ian Clarke氏）は、FAQを引用し、2019年から「Locutus」（後の新しいFreenet）の開発が始まり、2005年のFreenet 0.5から0.7への移行と同様にプロジェクトが大きく再構築されたと説明しています。元のFreenetは「Hyphanet」として独立したプロジェクトになったこと、そして新しいFreenetは匿名性アプローチを多様化し、違法コンテンツ問題にも対処する方針であることが述べられています。</p>
+<h2>まとめ</h2>
+<p>新しいFreenetは、2000年代初頭のFreenetを現代の課題に合わせて再設計した、分散型のキーバリューストアです。WebAssemblyコントラクトと、結合操作の交換法則を利用した状態同期により、高速で一貫性のある分散型アプリケーションプラットフォームを提供します。CRDTsと関連の深いこのアーキテクチャは、データやアプリケーションの要件に応じた柔軟な状態管理を可能にします。プロジェクトの分散化と、ユーザーがピアを運用するインセンティブ、および匿名性への新しいアプローチが議論されています。また、プロジェクトの再設計と元のFreenetコミュニティとの関係については、一部で論争が存在しますが、開発者はプロジェクトの将来的な関連性と成功のために必要な道筋であったと主張しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
