@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deno 2.8 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Deno 2.8</h1>
+        <div class="meta">
+            投稿日: 2026年05月22日 | ランク: 8
+        </div>
+        <a href="https://deno.com/blog/v2.8" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Deno v2.8のリリースに関する議論では、Node.jsとBunを比較し、各ランタイムの長所と短所、特にセキュリティ、パフォーマンス、エコシステムの互換性に焦点を当てています。Denoのnpmデフォルト化と、それが初期の設計思想とどのように異なるかについても議論されています。</p>
+<h2>Deno v2.8のリリースと変更点</h2>
+<p>Deno v2.8のリリース投稿はまだ公開されていませんが、GitHubのリリースページで確認できます。DenoはJavaScriptとTypeScriptのランタイムであり、新しい<code>deno pack</code>コマンドにより、安全でシンプルなパッケージングが可能になります。npmをデフォルトでサポートするようになったことは大きな変更であり、初期のHTTPベースのインポート機構から離れて、より広範なエコシステムへの適合を目指していると見られています。これに対し、一部のユーザーはDenoの初期の「クリーンな決別」という理念が失われたと感じています。しかし、npmとの互換性は、より多くのユーザーがDenoを採用する上で不可欠であるという意見もあります。JSR（Deno独自のレジストリ）は、依然としてよりクリーンなエコシステムとして評価されています。</p>
+<h2>Deno、Node.js、Bunの比較</h2>
+<p>コメントでは、Deno、Node.js、Bunの3つのJavaScriptランタイムが比較されています。</p>
+<ul>
+<li><strong>Node.js</strong>: 安定したソリューションであり、TypeScript対応が進み、将来的にはネイティブ依存関係を含む単一実行ファイルのビルドが可能になる点が評価されています。</li>
+<li><strong>Bun</strong>: 「混沌としているが速い」と評され、Zig言語による高速化、標準ライブラリにすべてを含めるアプローチ、Node互換性が魅力とされています。しかし、Anthropic社による買収がプロジェクトの持続可能性に与える影響や、最近の「vibe code」騒動による信頼性の問題が懸念されています。Node互換性テストではDenoに劣りますが、より簡単な開発体験を提供すると評価されています。</li>
+<li><strong>Deno</strong>: サンドボックスと簡単なサードパーティ依存関係のインポートという独自の強みがありました。サンドボックス機能は現在ではよりコモディティ化されたと感じられ、インポートメカニズムも<code>npm add</code>ほど便利ではないという意見もあります。しかし、基本的なパーミッションモデル、Rustで書かれていること、ネイティブなTypeScriptサポート、Node互換性の高さ（テストでBunを上回る）が評価されています。初期のNodeとの非互換性が普及の障壁になったが、現在は互換性向上に注力していると認識されています。</li>
+</ul>
+<h2>Bunの急速な成長とDenoの普及の課題</h2>
+<p>Bunの急速な成長の要因としては、その高速なパフォーマンス（特にWebリクエストの処理）、Zig言語の採用、Nodeとの高い互換性、オールインワンのCLIによる開発体験の簡素化が挙げられています。初期のDenoがNodeとの非互換性を強調していたのに対し、BunはDenoの優れた機能とNode互換性を両立させたことでユーザーを獲得しました。Denoは当初、既存のNodeエコシステムとの互換性が低かったため、採用が進まなかったと指摘されています。しかし、現在ではDenoもNode互換性を大幅に向上させており、Node、Deno、Bunの3つのランタイムは互いに収束しつつあるという見方もあります。</p>
+<h2>TypeScriptとブラウザのネイティブサポート</h2>
+<p>TypeScriptが現代のブラウザでネイティブにサポートされていないことについて、いくつかの議論があります。主な理由は、TypeScriptがJavaScriptのスーパーセットであり、最終的にはJavaScriptにコンパイルされること、および型がランタイムに影響を与えないこと、そして標準化のプロセスに時間がかかることなどが挙げられます。また、もし静的型付け言語をサポートするなら、WebAssemblyにコンパイルする方が理にかなっているという意見もあります。</p>
+<h2>まとめ</h2>
+<p>Deno v2.8のリリースを巡るHacker Newsのコメントは、JavaScriptランタイムの状況に関する活発な議論を反映しています。Denoはnpmサポートのデフォルト化により、初期のクリーンな設計思想から一歩踏み出し、より広いエコシステムとの互換性を重視する方向へとシフトしています。Node.jsは引き続き安定した選択肢であり、Bunはその速度とNode互換性で注目を集めていますが、その持続性と信頼性には疑問符がついています。DenoはNode互換性を大幅に向上させ、セキュリティモデルや開発体験の良さで評価されていますが、過去の非互換性が普及の障壁となった経緯があります。最終的に、どのランタイムを選択するかは、プロジェクトの要件、開発者の優先順位（パフォーマンス、セキュリティ、互換性など）、そして各ランタイムが提供するツールやエコシステムへの適合性によって決まるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
