@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>80386 Microcode Disassembled - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">80386 Microcode Disassembled</h1>
+        <div class="meta">
+            投稿日: 2026年05月23日 | ランク: 10
+        </div>
+        <a href="https://www.reenigne.org/blog/80386-microcode-disassembled/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーたちは、80386プロセッサのマイクロコードをリバースエンジニアリングした記事について議論しています。特に、マイクロコードの抽出方法、その複雑さ、そして教育的価値について焦点が当てられています。</p>
+<h2>マイクロコードの抽出方法</h2>
+<p>ユーザーたちは、高解像度のダイ画像からマイクロコードを再構築するプロセスに強い関心を示しています。マイクロコードはROMに格納されており、1と0はトランジスタの有無として視覚的に区別できると説明されています。</p>
+<ul>
+<li><strong>視覚的検出</strong>: 画像内の特定の配線の交差点にトランジスタが存在するかどうかで、1または0を識別します。</li>
+<li><strong>自動化と手動検証</strong>: 最初に単純な画像処理ソフトウェアや機械学習（畳み込みニューラルネットワーク）でビット位置と値を自動的に分類しますが、画像が不完全であったり、ホコリなどのアーティファクトがあるため、広範囲の手動検証が必要になります。</li>
+<li><strong>詳細なワークフロー</strong>: ROMビットの抽出、物理的から論理的なビット順序の決定、マイクロ命令境界の特定、フィールド境界の推測、ハードウェアとの関連付け、x86命令とマイクロコードのエントリポイントの関連付け、そして既知のアーキテクチャ動作との検証といった複雑なステップが含まれます。</li>
+</ul>
+<h2>マイクロコードとプロセッサ設計の複雑さ</h2>
+<p>80386のマイクロコードの複雑さと、それがレガシーな設計（8086）との後方互換性を保つために必要であったことが議論されています。</p>
+<ul>
+<li><strong>後方互換性</strong>: 80386の設計が不必要に複雑になったのは、ビジネス上の強力な理由から8086との後方互換性が必要だったためであり、これは「悪い設計」というよりは「必要性による複雑さ」であると指摘されています。</li>
+<li><strong>マイクロコードの役割</strong>: マイクロコードは、プログラマレベルのx86命令セットを実装する、カスタムのVLIWプロセッサ用のコードとして機能します。マイクロコード内の各フィールドは、プロセッサの異なる部分に信号を送り、内部バスやレジスタ、機能ユニット間で値をルーティングして、x86命令を実行させます。</li>
+<li><strong>nand2tetrisとの比較</strong>: nand2tetrisは抽象化の各レベルでシンプルさを強調するため、マイクロコードのような複雑な要素はスキップされます。nand2tetrisの命令は、マイクロコードのステップ数とは異なり、1命令あたり1ステップでハードウェアを直接制御します。</li>
+</ul>
+<h2>教育的価値と学習リソース</h2>
+<p>このような低レベルのプログラミングやプロセッサ設計の理解は、大学の授業や自己学習を通じて得られる貴重な経験であると多くのユーザーが感じています。</p>
+<ul>
+<li><strong>nand2tetris</strong>: マイクロプロセッサ設計を学ぶための優れた自己学習リソースとして、「nand2tetris.org」が繰り返し推奨されています。ただし、マイクロコードについてはカバーしていない点が指摘されています。</li>
+<li><strong>代替リソース</strong>: マイクロコードを学ぶための書籍として「Constructing a Microprogrammed Computer by O.J. Mengali」が紹介されています。また、CPUの動作原理を学ぶための書籍として「Code by Charles Petzold」や「Pattern on the Stone by Danny Hillis」が挙げられています。</li>
+<li><strong>DIYプロジェクト</strong>: Ben Eaterの8ビットCPUをブレッドボードで構築するシリーズや、Morphle Logicのようなゲートレベル設計をシミュレートするツールが、実践的な学習方法として言及されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、80386プロセッサのマイクロコードをリバースエンジニアリングしたプロジェクトの技術的な深さと、それがプロセッサ設計の理解、教育、そして歴史的背景に与える影響を多角的に掘り下げています。ユーザーは、高解像度のダイ画像からマイクロコードを抽出する複雑なプロセス（画像処理、機械学習、手動検証の組み合わせ）に魅了され、後方互換性のために生じたプロセッサ設計の複雑さを理解しています。また、nand2tetrisのような既存の教育リソースの限界を指摘しつつ、マイクロコードを含む低レベルのプログラミングを学ぶための多様な方法やリソースが共有されています。全体として、この議論は、技術的な解明がいかに深く、面白く、そして教育的であるかを浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
