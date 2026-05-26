@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What color is your function? (2015) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What color is your function? (2015)</h1>
+        <div class="meta">
+            投稿日: 2026年05月26日 | ランク: 9
+        </div>
+        <a href="https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、JavaScriptのasync/awaitの導入によって広く議論されるようになった「関数カラーリング問題」について深く掘り下げています。この問題は、非同期関数が同期関数から直接呼び出せない（逆もまた然り）という制約から生じ、コードベース全体にasync/awaitキーワードの伝播を強いるというものです。コメントでは、async/awaitの利点と欠点、Go言語のような代替アプローチ、および関数カラーリングが他のプログラミングパラダイム（エラーハンドリング、スレッド安全性など）にどのように現れるかについて、さまざまな意見が交わされています。</p>
+<h2>関数カラーリング問題の定義と存在</h2>
+<p>多くのコメントが、関数カラーリング問題の「定義」と「存在」そのものについて議論しています。</p>
+<ul>
+<li><strong>問題の定義と特徴</strong>: <code>jerf</code>は、関数カラーリングの核心は「非局所的な考慮事項」であり、スタックの深い場所にある関数が特定の「色」を持っている場合、その最上位関数まで変更する必要があることだと説明しています。これは、エラー伝播のように局所的に処理できるものとは異なり、回避不可能であると主張します。<code>amiga386</code>は、この記事がJavaScriptの「単一スレッドイベント処理ループ」という性質に特化したものであり、他の言語では異なる問題であると指摘しています。</li>
+<li><strong>Go言語のアプローチ</strong>: <code>nickcw</code>はGoが「太いランタイム」によってasyncの魔法を隠し、関数カラーリングの問題を回避していると指摘しますが、<code>context.Context</code>やエラー伝播といった別の「配管作業」が必要になることを認めます。しかし、<code>jerf</code>は<code>context.Context</code>は<code>context.Background()</code>を渡すことで簡単にバイパスできるため、「色」ではないと反論します。<code>assbuttbuttass</code>はGoのゴルーチンは自由にブロックでき、asyncのように「ブロッキングコードを書くことに常に神経質になる必要がない」点を評価しています。</li>
+<li><strong>問題の解決</strong>: <code>wasmperson</code>は、async/awaitによってJavaScriptのエコシステムが整理され、関数カラーリング問題は「解決された」と考えています。しかし、<code>cogman10</code>はこれに異議を唱え、問題は async 関数が通常の関数から直接呼び出せない点にあり、スレッドは <code>async</code> を必要としないためこの問題を解決すると述べています。<code>slopinthebag</code>は、async/awaitスタイルの言語を使ってきた経験から、「関数カラーリングの『問題』に一度も遭遇したことがない」と述べています。</li>
+</ul>
+<h2>async/awaitの是非と開発者体験</h2>
+<p>async/awaitの導入が開発者体験に与える影響についても、賛否両論が展開されています。</p>
+<ul>
+<li><strong>async/awaitの利点</strong>: <code>seabrookmx</code>は、<code>asyncio.gather</code>がスレッドプールやCeleryよりも少ないコードで済み、FastAPIのようなエコシステムではI/Oバウンドな呼び出しに<code>await</code>を適用する開発者オーバーヘッドは低いと主張します。<code>moomin</code>は、async/awaitがコールバックパターンを単純化し、非ブロッキングな中断を可能にする「素晴らしいパラダイム」だと評価します。<code>wesselbindt</code>は、関数シグネチャから関数がI/Oを行う可能性があることを知ることに価値を見出し、explicitな記述を好むと述べています。</li>
+<li><strong>async/awaitの欠点と代替案</strong>: <code>graemep</code>はPythonでasyncを使うことに疑問を呈し、必要であればPython以外の言語や、より多くのプロセス・ハードウェアの使用を検討すべきだと提案します。<code>bigstrat2003</code>は、パフォーマンス以外の観点から見ると、asyncは開発者にとってスレッドよりも扱いにくく、推論が難しいと主張し、asyncの人間工学的な利点はないと述べています。<code>ian_j_butler</code>は、複雑なアプリでasyncが必要な場合は、Celeryのような専用のインフラストラクチャを使うべきだと主張し、asyncは「問題を抱えた解決策」だと見ています。<code>bre1010</code>は、<code>await</code>を逆転させて<code>dontawait</code>のようなキーワードで同期的な振る舞いを明示する方が良いと提案しています。</li>
+<li><strong>JavaScriptの設計</strong>: <code>kubb</code>は、JavaScriptのasync関数は「正しい設計」であり、開発者は賞賛に値すると主張します。しかし、<code>tikotus</code>は、C#がより良く実装した一方、JavaScriptは「浅いコピー」であり、いくつかの詳細を台無しにしたと批判しています。</li>
+</ul>
+<h2>他の言語における「色」の概念</h2>
+<p>コメントでは、関数カラーリングの概念が、async/await以外にも様々なプログラミング言語の機能に適用できるかどうかが議論されています。</p>
+<ul>
+<li><strong>Go言語の暗黙的な色</strong>: <code>viktorcode</code>や<code>slopinthebag</code>は、Go言語も関数に「色」があるが、それが暗黙的に扱われるため、プログラマが呼び出し側でどちらがどちらであるかを推測するのが難しいだけだと指摘します。</li>
+<li><strong>HaskellとRust</strong>: <code>qihqi</code>は、Haskellの純粋関数と非純粋関数（IOモナド）、Rustの<code>unsafe</code>関数を、言語が「重要なこと」を示すための「色付けされた関数」の良い例として挙げます。しかし、<code>sheept</code>はRustの<code>unsafe</code>は、非対称性（片方の色からしか呼べない）がないため、関数カラーリングの良い例ではないと反論しています。</li>
+<li><strong>Javaのチェック済み例外</strong>: <code>clintonc</code>はJavaのチェック済み例外を「色付け」の例として挙げ、その是非を問いかけます。<code>nemothekid</code>や<code>jcranmer</code>は、チェック済み例外が元の記事の5つの基準（関数に色がある、呼び出し方が色に依存する、赤い関数は赤い関数からしか呼べない、赤い関数は呼び出すのがより面倒、コアライブラリに赤い関数がある）をほとんど満たしていると主張しますが、<code>dnautics</code>や<code>sheept</code>は、<code>try/catch</code>ブロックで囲むことで非<code>throws</code>関数から<code>throws</code>関数を呼び出せるため、#3の「赤い関数は赤い関数からしか呼べない」という非対称性が成立しないと反論しています。<code>Terr_</code>は、チェック済み例外のコンセプト自体は評価しつつも、Javaでの実装が問題だったと指摘しています。</li>
+<li><strong>代数的エフェクト</strong>: <code>satvikpendem</code>は、OCaml 5の代数的エフェクトが関数カラーリング問題を解決すると提案し、Rustにも導入されることを望んでいます。しかし、<code>zokier</code>は、エフェクトが問題を悪化させ、各ライブラリが独自の「色」を持つ可能性もあると懸念を示しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、「関数カラーリング問題」が単なるasync/awaitの技術的制約以上の、プログラミングパラダイム、開発者体験、言語設計哲学に関する深い議論であることを示しています。async/awaitを支持する人々は、それがコードを整理し、I/Oバウンドな操作を効率的に扱うための有用なツールであると見ています。一方、批判的な人々は、それがコードベース全体に不必要な複雑さを導入し、Go言語のような代替手段や、よりインフラストラクチャに依存するアプローチの方が優れていると主張します。また、この「色」の概念が、エラーハンドリング、スレッド安全性、純粋性など、他の言語機能にもどのように適用されるかについての考察も提示されており、この問題がプログラミングの根源的なトレードオフの一つであることが浮き彫りになっています。記事が書かれた2015年当時と比較して、async/awaitは多くの言語で普及し、その問題の受け止め方も変化していることが伺えます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

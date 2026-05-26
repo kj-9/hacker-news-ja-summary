@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Minicor (YC P26) – Windows desktop automations at scale - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Minicor (YC P26) – Windows desktop automations at scale</h1>
+        <div class="meta">
+            投稿日: 2026年05月26日 | ランク: 8
+        </div>
+        <a href="https://www.minicor.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Minicorは、APIを持たないデスクトップシステムにAI企業がスケーラブルなRPA（Robotic Process Automation）を迅速に構築できるようにするプラットフォームです。このコメントスレッドでは、Minicorのローンチ発表と、その機能、課題、競合との比較、そしてRPA全般に関する議論が交わされています。</p>
+<h2>RPA（Robotic Process Automation）とは何か？</h2>
+<p>多くのユーザーがRPAという用語に馴染みがなかったため、その定義について質問がありました。開発者や他のユーザーからの説明によると、RPAは「Desktop/Web上でクリック/キー操作をシミュレートするスクリプト」であり、「マウスのクリックやキー操作をトリガーしてタスクを実行する」ための「ロボティック・プロセス・オートメーション」の略語です。</p>
+<h2>スケーラブルなRPAの課題とMinicorの解決策</h2>
+<p>開発者は、RPAのスケーリングが非常に難しいと指摘しています。主な課題は以下の通りです。</p>
+<ul>
+<li><strong>スクリプト作成の難しさ</strong>: システムの学習、自動化の定義、UIの頻繁な変更。</li>
+<li><strong>オーケストレーションの難しさ</strong>: VMの状態管理、キューイング、並列化。</li>
+<li><strong>デバッグの難しさ</strong>: 観測可能性の欠如、誤検知、連鎖的な障害。</li>
+</ul>
+<p>Minicorはこれらの問題に対し、Claude Code/CodexなどのLLM（大規模言語モデル）を使用して、仮想マシン（VM）上でデスクトップソフトウェアを操作するためのPythonベースのRPAワークフローを生成・管理するMaster Control Program (MCP) を構築しました。このアプローチにより、以下の解決策を提供します。</p>
+<ul>
+<li><strong>コードベースのワークフロー</strong>: Pythonスクリプトとして実行され、速度、コスト、決定性を向上させます。</li>
+<li><strong>APIトリガー</strong>: 任意の入出力スキーマに従ってAPIからワークフローをトリガーできます。</li>
+<li><strong>詳細な観測可能性</strong>: 各実行のビデオ再生とログが保存されます。</li>
+<li><strong>デバッグとバージョン管理</strong>: MCPがRPAをデバッグし、基盤となるコードに変更を加え、すべてバージョン管理されます。</li>
+<li><strong>並列化と2FA/OTP対応</strong>: VMのクローン作成ツールや2FA/OTPチャレンジの処理機能も備えています。</li>
+<li><strong>回復力</strong>: ワークフローがコードベースであるため、Slack通知、Human-in-the-loopステップ、スクリーンショットをLLMに渡してVMの状態を確認するなどのトリガーを追加できます。特に、障害発生時には決定的なコードを実行し、エージェントが回復をサポートするハイブリッドなアプローチが採用されています。</li>
+</ul>
+<h2>レガシーシステムとAI導入の融合</h2>
+<p>レガシーシステムを利用している企業がAIの導入に消極的ではないかという質問に対し、開発者や他のユーザーは、むしろレガシーシステムのユーザーはAIの導入に非常に積極的であると答えています。</p>
+<ul>
+<li><strong>既存システムの不満</strong>: ユーザーは既存のレガシーシステムを嫌っているが、ERPのような主要システムの変更は非常に困難なため、AIを使って既存のシステムを自動化したいと考えています。</li>
+<li><strong>AI企業への販売</strong>: Minicorは、病院などエンドユーザーに直接販売するのではなく、既にレガシーシステムを使用する顧客を持つAI企業（例：医師向けのAI書記サービス）に販売することで、間接的にレガシーシステムへのAI導入を支援しています。</li>
+</ul>
+<h2>セキュリティとプライバシー（特に医療分野）</h2>
+<p>医療分野での利用を想定しているため、セキュリティとプライバシーに関する懸念が複数提起されました。</p>
+<ul>
+<li><strong>LLMによる機密データの処理</strong>: スクリーンショットに患者/顧客データが含まれるかどうかについて、開発者は、本番環境では機密データを含まない画面の特定領域をスクリーンショットし、LLMが「はい/いいえ」を判断できるようにすると説明しています。</li>
+<li><strong>データストレージ</strong>: ログは顧客の選択したバケットに顧客の環境内に書き込まれるため、PHI（保護対象保健情報）が顧客のVPC（Virtual Private Cloud）を離れることはありません。</li>
+</ul>
+<h2>競合製品との比較</h2>
+<ul>
+<li><strong>CyberDesk</strong>: CyberDeskがエージェントベースの自動化を主な原動力としているのに対し、Minicorはエージェントを使ってPythonコードを作成/保守/サポートし、コードベースの自動化に焦点を当てています。</li>
+<li><strong>Convey</strong>: Conveyが画面キャプチャと口頭指示でエージェントをトレーニングするのに対し、Minicorは自動化を実行するエージェントは提供せず、コーディングエージェントをレガシーシステムに接続し、コードベースの自動化を大規模に行うことに特化しています。これは、「ロボティック・プロセス・オートメーションにおける30%のエラー率」の解決を目指していると説明されています。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li><strong>RPAをソフトウェアテストに利用する可能性</strong>: 開発者は、GUIインタラクションのTDD（テスト駆動開発）のように、ソフトウェアの新リリースをテストするためにMinicorが利用されている顧客がいることを確認しました。</li>
+<li><strong>用語の明確化</strong>: RPAのような専門用語は、初めての人にも分かりやすく説明する必要があるというフィードバックがありました。</li>
+<li><strong>ウェブサイトの改善点</strong>: ロゴの視認性や「on-premise/premises」のような専門用語の正確性に関する提案がありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Minicorは、APIを持たないデスクトップレガシーシステム向けに、AI企業がスケーラブルで堅牢なRPAを構築・運用するためのプラットフォームを提供しています。LLMを活用して決定論的なPythonコードベースの自動化を生成・管理することで、従来のRPAが抱えていたスクリプト作成、オーケストレーション、デバッグの課題を克服しようとしています。特に、医療分野のような機密性の高い環境での利用を念頭に置き、データプライバシーとセキュリティに配慮した設計がなされており、レガシーシステムとAI技術の橋渡しとして期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
