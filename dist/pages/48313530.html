@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just Use Postgres for Durable Workflows - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Just Use Postgres for Durable Workflows</h1>
+        <div class="meta">
+            投稿日: 2026年05月28日 | ランク: 3
+        </div>
+        <a href="https://www.dbos.dev/blog/postgres-is-all-you-need-for-durable-execution" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、Postgresを耐久性のあるワークフローエンジンとして利用するアプローチについて、その利点、限界、そしてTemporalやDBOSのような代替ソリューションとの比較が活発に議論されています。</p>
+<h2>Postgresをワークフローエンジンとして活用するメリットと課題</h2>
+<p>Postgresを耐久性のあるワークフローや分散キューとして利用することの有効性が議論されました。<code>SKIP LOCKED</code> やアドバイザリロックを活用することで、競合状態なしに安全な分散キューを構築できるという意見があります。一部のユーザーは、Postgresが多機能であるため、ワークフローエンジン、ベクトル検索、時系列データ、OLTP/OLAP、キューなど、ほとんどのシステム要件を満たせると主張しています。これにより、データの一元化が図られ、システムのシンプルさが保たれるというメリットが挙げられています。また、Postgresの <code>LISTEN/NOTIFY</code> 機能が将来のバージョンで改善される予定であることも言及されました。</p>
+<p>しかし、このアプローチには限界も指摘されています。リトライ、バックオフ、タイムアウト、キャンセル、バージョニング、可視性、タスクルーティング、レート制限、ハートビート、スタックワーカー検出、リプレイ/デバッグ、ワークフロー移行といったワークフローシステムに不可欠な機能は、Postgresだけではすべて自力で実装する必要があり、最終的に「ワークフローエンジンの劣悪なコピー」になってしまうという懸念が示されています。また、大規模なデータ（TB単位）を扱う際や、クラウド環境でのPostgresの運用コストが問題となる可能性も指摘されており、「すべてをPostgresで」という考え方が宗教的だと批判する声もあります。</p>
+<h2>TemporalとDBOS：専用ワークフローソリューションの評価</h2>
+<p><strong>Temporal</strong> については、その強力さと、適切なエンジニアリングプラクティスを強制する側面が評価されています。複雑なライフサイクルロジックをAPIから切り離すのに役立つという意見もあります。一方で、ペイロードサイズやイベントサイズに制限があるという問題が指摘されました（ただし、外部ストレージによる解決策も導入されています）。特に、インフラの複雑さとコストに関して厳しい批判が寄せられており、「ひどく設計されており、遅く、非常に重い」と感じるユーザーもいます。オンプレミスでの運用コストが数百万ドルに達する可能性や、そのベンチマーク結果が期待外れであるという意見もあります。また、クラウドサービスの料金が高いこと、そして抽象化が不十分であるという開発者からの不満も聞かれました。</p>
+<p><strong>DBOS</strong> については、AI生成ワークフローやビデオファイル処理などでの活用事例が紹介されています。特に評価されているのは、ビジネスロジックとデータベーストランザクションにアトミックに結びつくメッセージング機能 (<code>dbos.enqueue_workflow!</code>) です。これにより、ワークフローの信頼性と耐久性が大幅に向上し、複雑さが軽減されると評価されています。また、ワークフローの状態がデータベースに保存されるため、ダッシュボードでの可視化が容易であることも利点として挙げられています。ただし、CockroachDBとの互換性に関しては、多くの「serialization_failure」エラーが発生するなど、課題があるとの報告もありました。</p>
+<h2>ワークフローシステム選択の複雑性とトレードオフ</h2>
+<p>コメントでは、自社開発（NIH症候群）と既製ソリューション（Temporal、DBOSなど）の選択に関するトレードオフが繰り返し議論されています。リトライ、バックオフ、タイムアウト、キャンセルなどの高度な機能や長期的な保守が必要な場合は、実績のあるオーケストレーションアプローチを検討すべきだという意見があります。しかし、シンプルな要件であれば、Postgresのような既存のツールで十分な場合もあります。</p>
+<p>ワークフローの「一貫性」と「正確性」は非常に重要であり、簡単な例だけを見て過小評価すべきではないという警告もなされました。特にクラッシュ発生時のデータ正確性の問題が強調されています。</p>
+<p>また、「耐久性のあるワークフロー」のために専用ソフトウェアが必要なのかという疑問も提示されました。RabbitMQやCeleryのようなステートフルなメッセージキュー、あるいはデータベースの既存テーブルに「残りの作業」を示すカラムを追加するだけで十分な場合もあると主張するユーザーもいます。この議論は、スタートアップが過剰なスケーリングにエネルギーを費やし、本質的な製品開発がおろそかになるリスクにも関連付けられています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Postgresを耐久性のあるワークフローエンジンとして利用するアプローチが、シンプルさとデータ一元化の点で魅力的である一方、高度なワークフロー機能や大規模なスケーリングには限界があることを浮き彫りにしました。Temporalは強力なソリューションですが、インフラの複雑さとコストに関する批判があり、DBOSはアトミックなメッセージングとDBトランザクションとの強力な統合が評価されています。最終的には、プロジェクトの特定のニーズ、規模、許容できる複雑性に応じて、自社開発、Postgresの活用、または専用のワークフローソリューション（Temporal, DBOS, PgFlowなど）を選択するというトレードオフが存在することが示されました。特に、ワークフローの正確性と一貫性の確保は、どのようなアプローチを取るにしても重要であると強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
