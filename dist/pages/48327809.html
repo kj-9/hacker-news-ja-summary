@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On Rendering Diffs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">On Rendering Diffs</h1>
+        <div class="meta">
+            投稿日: 2026年05月29日 | ランク: 5
+        </div>
+        <a href="https://pierre.computer/writing/on-rendering-diffs" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、膨大なサイズの差分（diffs）をブラウザで効率的にレンダリングできるコードレビューインターフェース「CodeView」の構築に関する技術的な記事について議論しています。特に、パフォーマンス最適化と、GitHubやGitLabなどの既存のツールに対する改善の可能性に焦点が当てられています。</p>
+<h2>レンダリングパフォーマンスとユーザー体験</h2>
+<p>多くのコメントは、CodeViewのレンダリングパフォーマンスの印象的な側面について触れています。特に、スクロールのスムーズさ、巨大な差分を処理する能力、および開発者やユーザーへの負担軽減に焦点を当てています。</p>
+<ul>
+<li><strong>スムーズなスクロールとパフォーマンスへの言及:</strong> ユーザーはCodeViewのスムーズなスクロール体験を高く評価しており、特にモバイルでの差分のレンダリングが困難であるという一般的な問題と対比させています（[1.9]）。著者は、120Hzのデバイスで120Hzのスクロールを実現することを目標としており、JavaScriptがその速度に追いつく必要がない「Inverse Sticky Technique」と呼ばれる独自の回避策によってこれを達成したと説明しています（[1.9.2]）。</li>
+<li><strong>「巨大な差分」の有用性:</strong> 一部のユーザーは、50万行もの差分を読むシナリオに疑問を呈していますが（[1.7]）、著者は、ツールがより高性能で最適化されていれば、開発者はテストスナップショットの大量の差分を素早く確認したり、特定の変更箇所にジャンプしたりするなど、ツールが提供する機能をより簡単に利用できると説明しています（[1.7.1]）。</li>
+</ul>
+<h2>差分表示のロジックとセマンティック差分</h2>
+<p>パフォーマンスの最適化とは別に、コメントでは差分の背後にあるロジック、特に「セマンティック差分」の必要性について多くの議論がなされています。</p>
+<ul>
+<li><strong>現状の課題:</strong> ユーザーは、空白文字の変更のみの差分や、importリストの変更による不必要な行変更の表示など、GitLabなどの既存ツールにおける差分表示の課題を指摘しています（[1.4]）。彼らは、コードの本当の変更を強調する「クリーンな差分」を求めています。</li>
+<li><strong>今後の展望としてのセマンティック差分:</strong> 著者は、CodeViewの次の大きなプロジェクトの1つが「セマンティック差分」をサポートすることであると述べ、ユーザーの要求に合致すると示唆しています（[1.4.1]）。これは、AST（抽象構文木）ベースの差分や、ツリーシッター（tree-sitter）や言語固有のパーサーを利用して、関数名の変更など、より意味のある変更を識別することを含みます（[1.4.3]）。</li>
+<li><strong>実装の複雑さ:</strong> 著者は、セマンティック差分システムの構築は非常に複雑であり、よりスマートな開発者の専門知識が必要であると謙虚に認めています（[1.4.2.1]）。</li>
+</ul>
+<h2>その他の意見とフィードバック</h2>
+<p>上記以外にも、CodeViewとその記事に関する様々な意見やフィードバックが寄せられています。</p>
+<ul>
+<li><strong>既存のプラットフォームとの比較:</strong> ユーザーは、GitHubやGitLabがCodeViewのような高品質の差分ツールを実装することはないだろうと推測し、Forgejoのようなオープンソースプロジェクトでの可能性に期待を寄せています（[1.3]）。</li>
+<li><strong>WebサイトのレイアウトとCSSの修正:</strong> 記事のWebサイトのレイアウトが中央揃えになっていないことについて、一部のユーザーは不満を表明し、コンソールでCSSを修正するコードを共有しています（[1.2]）。</li>
+<li><strong>Pretextの可能性:</strong> Pretextという技術が巨大な差分のレンダリングに適しているのではないかという質問に対し、著者は部分的に役立つ可能性を認めつつ、CodeViewの現在のバッチ処理と推定に関する最適化が既に良好であると説明しています（[1.8]）。</li>
+<li><strong>ブラウザ拡張機能のアイデア:</strong> CodeViewをブラウザ拡張機能として提供し、プライベートな差分も扱えるようにするという提案も出ています（[1.6]）。</li>
+<li><strong>記事の執筆とASCIIアート:</strong> 記事の明瞭な執筆スタイルと、記事内のASCIIアートが多くのユーザーに高く評価されています（[1.10], [1.11], [1.12]）。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、巨大なコード差分をブラウザでレンダリングするCodeViewの技術的な深掘り記事に対する幅広い反応を示しています。ユーザーは、CodeViewのスムーズなスクロールとパフォーマンスに感銘を受けており、これは既存のコードレビューツールの一般的な不満点（特にモバイルでの利用時）を解決するものとして歓迎されています。また、表面的なテキストレンダリングを超えて、セマンティックなコード変更を識別・強調する「セマンティック差分」の必要性が強く議論されています。著者は、セマンティック差分がCodeViewの将来の主要プロジェクトの一つであると示唆しており、ユーザーの期待に応えようとしている姿勢がうかがえます。全体として、パフォーマンス最適化とよりインテリジェントな差分表示の両方を通じて、コードレビュー体験を向上させることへの強い関心と需要が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

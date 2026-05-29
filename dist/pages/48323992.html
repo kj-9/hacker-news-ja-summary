@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bijou64: A variable-length integer encoding - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bijou64: A variable-length integer encoding</h1>
+        <div class="meta">
+            投稿日: 2026年05月29日 | ランク: 8
+        </div>
+        <a href="https://www.inkandswitch.com/tangents/bijou64/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にBijou64という新しい可変長整数エンコーディングの設計、特にその「単一の正準表現」とLEB128などの既存のエンコーディングとの比較について議論しています。</p>
+<h2>正準表現とセキュリティ上の利点</h2>
+<p>多くのコメントが、Bijou64が各数値を一意に表現する「正準表現」を持つことの利点を強調しています。これは、署名、コンテンツアドレッシング、または「2つの実装がバイトに同意しなければならない」種類のプロパティにとって重要です。LEB128のような非正準エンコーディングは、XML署名ラッピング、ASN.1 BER/DER署名偽造、Bitcoinトランザクションの可塑性攻撃など、セキュリティ上の脆弱性につながる可能性があります。正しく書かれたデコーダーは非正準表現を処理できるはずですが、実際のパーサーでは異なる動作をする可能性があり、攻撃ベクトルとなり得ます。</p>
+<h2>LEB128のオーバーロングエンコーディングの理由</h2>
+<p>なぜLEB128の仕様がオーバーロングエンコーディング（パディングバイトを許可する）を許しているのかという疑問が提起されました。主な理由はいくつかあります。</p>
+<ul>
+<li><strong>攻撃ベクトル:</strong> 意図的に悪意のある入力として利用される可能性があります。</li>
+<li><strong>遅延割り当てと書き込み:</strong> ペイロードのエンコーディング作業が完了するまで長さが不明な場合（例：UTF16からUTF8への変換）、長さを先に固定バイト数で予約し、後で正しい値を埋めることができます。オーバーロング表現を許可すれば、有効なバイトではない「no-op」バイトとして埋めることができます。</li>
+<li><strong>パディング:</strong> バッファのサイズが事前に計算されており、後でペイロードの一部を書き換える必要がある場合、パディングバイトを使うことで、新しいバッファへのmemcpyなしに柔軟な変更が可能になります。これは、Matroskaのようなメディアコンテナで、極めて高いスループットを要するシステムで採用されることがあります。</li>
+<li><strong>リンク時の問題:</strong> DWARFやWASMのように、コンパイラが未解決の参照を含む独立した翻訳単位にコードを生成する場合、最終的な実行可能ファイル内のシンボルの位置が不明なため、その位置を表す数値の可変長エンコーディングの幅も不明です。正準表現の場合、リンク後に幅が変わると周囲のコードを移動させる必要があり、すべての参照を再計算することになります。解決策として、常に最大の幅（LEB128の場合は5バイト）で未リンクのvar intを生成し、リンク時に参照をパッチするときにコードが移動しないようにします。</li>
+</ul>
+<h2>Bijou64とLEB128の比較（パフォーマンスとサイズ）</h2>
+<p>Bijou64は、最初のバイトを読んだ後に長さ（とメモリ割り当て）を判断できるため、デコード速度が速いとされています。また、uint64の全範囲をサポートし、10バイト目を必要としないという利点もあります。しかし、LEB128は2バイトまで急速に成長し、2^14まで2バイトのままですが、Bijou64は500以下の数でしか2バイトを使用できないため、エンコーディングサイズが大きいという欠点も指摘されています。特に、タグや識別子、ネットワークメッセージ長として使用する場合、このサイズの違いは重要になります。</p>
+<h2>SIMD命令との互換性</h2>
+<p>Bijou64のようなエンコーディングは、SIMD（Single Instruction, Multiple Data）命令との相性が悪いという意見もあります。SIMDは、ウィンドウ全体にわたる決定論的な境界からパフォーマンス上の恩恵を受けますが、Bijou64は最初のバイトに基づいて分岐する必要があるため、並列化の機会を破壊する可能性があります。LEB128の継続ビットは固定位置にあるため、データに依存せず、SIMDで効率的に処理できるとされています。しかし、Bijou64のようなエンコーディングでも、特定のCPUアーキテクチャの命令セットによってはSIMDで処理可能であるという反論もあります。</p>
+<h2>その他の関連エンコーディングと懸念</h2>
+<ul>
+<li><strong>SQLiteのvarint:</strong> Bijou64と類似点が指摘されており、最も広く使われているvarint実装の一つです。しかし、パフォーマンスや実装の複雑さに関して、作者自身がSQLite3の実装を後悔しているという意見もあります。</li>
+<li><strong>UTF-8のオーバーロングエンコーディング:</strong> UTF-8も同様に複数の表現が可能な「オーバーロングエンコーディング」の問題を抱えており、Bijou64に似た調整が提案された例が挙げられています。</li>
+<li><strong>攻撃シナリオ:</strong> Bijou64では、悪意のあるパッケージが255タグ付き整数であると主張しながら、実際には後続のバイトがない場合に、ペイロードパーサーを誤ったオフセットに誘導し、後続のメモリを読み取ってしまう可能性が指摘されています。LEB128でも同様の問題はありますが、Bijou64の方がより多くのバイトを読み取ることで、より深刻なバッファオーバーランを引き起こす可能性があるとされています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Bijou64は、特に正準表現という点でセキュリティと信頼性の向上を目指した可変長整数エンコーディングです。LEB128などの既存の方式が抱えるセキュリティ上の脆弱性（非正準表現による攻撃ベクトル）に対処できるという大きな利点があります。また、デコード速度の向上も期待されます。しかし、エンコーディングサイズが大きくなる可能性がある点や、SIMD命令との互換性が低い点が懸念されています。また、可変長エンコーディング全般に言えることですが、悪意のある入力に対する堅牢性（バッファオーバーランのリスクなど）には引き続き注意が必要です。LEB128のオーバーロングエンコーディングが仕様で許容されている背景には、リンク時の柔軟性やデータ書き込みの最適化といった実用的な理由があることも議論されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
