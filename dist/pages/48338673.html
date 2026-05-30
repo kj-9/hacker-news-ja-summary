@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zig ELF Linker Improvements Devlog - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zig ELF Linker Improvements Devlog</h1>
+        <div class="meta">
+            投稿日: 2026年05月30日 | ランク: 2
+        </div>
+        <a href="https://ziglang.org/devlog/2026/#2026-05-30" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメント群は、Zig言語の新しい高速リンカーとコンパイルの改善に関するHacker Newsの投稿について議論しています。特に、LLVMへの依存を減らし、開発のイテレーション速度を向上させるというZigの長期的な目標に焦点が当てられています。</p>
+<h2>Bunの「ドラマ」との関連性</h2>
+<p>一部のコメント投稿者は、Zigの最近の進展が、BunのAIに関連する最近の物議（一部では「ドラマ」と表現されている）への対応ではないかと推測しています。しかし、Zigの開発者であるkristoff_itは、この推測を強く否定しています。彼は、これらの作業は2020年の投稿で発表されたLLVMをデバッグビルドパイプラインから排除するという目標に基づいており、長期間にわたって着実に進められてきたものであると説明しています。むしろ、現在の状況（「ドラマ」）によって、この種の仕事に対する人々の関心が高まっただけだと述べています。他のユーザーも、「Bunドラマ」は存在せず、目標と方法論が異なる2つのプロジェクトがあるだけだと指摘しています。</p>
+<h2>Zigの将来性とC言語の代替としての可能性</h2>
+<p>多くのユーザーが、このコンパイルの改善、特に高速リンカーと他のターゲットでのインクリメンタルコンパイルが実現すれば、Zigが「C言語の代替」として非常に有望になると考えています。ユーザーの一人は、これによりJSやPythonのようなイテレーション速度でCやRustのようなパフォーマンスが得られ、Andrew Kelly氏（Zigの作成者）の夢である妥協のないUXを持つDAWの作成も容易になるだろうと述べています。また、ZigネイティブのUIフレームワークの登場を期待する声もあります。 <code>@cImport</code> の削除については、残念がる意見も見られます。</p>
+<h2>コンパイル性能と他の言語との比較</h2>
+<p>Zigのコンパイル性能の高さに注目が集まっており、他の言語と比較する議論も出ています。Turbo Pascalが同様の高速コンパイルを提供していた言語として挙げられています。また、Go言語（cgoを無効にした場合）も同等かそれ以上のコンパイル速度を持つのではないかという意見もあります。</p>
+<h2>その他</h2>
+<ul>
+<li><strong>Rakuバックエンドの移植の可能性</strong>: Rakuのバックエンド（MOARVM）をCからZigに移植する可能性が議論されており、Zigの幅広いハッシュオプションが最適化に繋がるかもしれないという推測があります。</li>
+<li><strong>Windowsサポート</strong>: これらのコンパイラの改善がWindowsにも適用されるのか、それともLinuxのみなのかという質問が上がっています。</li>
+<li><strong>リンク時最適化との関係</strong>: インクリメンタルリンクはリンク時最適化と両立しないため、リリースビルドでは使用しないと推測する意見があります。</li>
+<li><strong>Zigの流行</strong>: ZigがHacker Newsの開発者の間で「新しいクールなもの」として注目されているか、Rustに代わるものかという疑問も投げかけられています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Zig言語の新しい高速リンカーとコンパイルの改善は、開発イテレーションの速度を大幅に向上させる可能性があり、コミュニティから大きな期待を集めています。これらの進展は、Bunの最近の議論とは無関係に、LLVMへの依存を減らすというZigの長期的な目標に沿って進められてきたものです。多くのユーザーは、この改善によりZigがC言語の強力な代替となり、パフォーマンスを維持しつつJavaScriptやPythonのような迅速な開発が可能になると見ています。また、Zigのコンパイル性能の高さは、他の高速コンパイル言語と比較され、今後の発展が注目されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

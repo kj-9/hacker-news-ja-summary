@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microcode inside the Intel 8087 floating-point chip: register exchange - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Microcode inside the Intel 8087 floating-point chip: register exchange</h1>
+        <div class="meta">
+            投稿日: 2026年05月30日 | ランク: 8
+        </div>
+        <a href="https://www.righto.com/2026/05/microcode-inside-intel-8087-floating.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、8087コプロセッサのマイクロコード設計と浮動小数点演算の課題に関するものです。特に、マイクロコードの採用理由、RISCアーキテクチャとの比較、および浮動小数点精度の問題に焦点が当てられています。</p>
+<h2>マイクロコードの設計と思考</h2>
+<p>8087の著者であるkens氏がコメントスレッドに登場し、マイクロコードの設計に関する質問に答えています。80ビットの浮動小数点表現（16ビットの指数部、64ビットの仮数部）は、理にかなった選択であったとされています。マイクロコードは、開発、テスト、変更の容易さ、およびダイスペースの節約のために選ばれました。一般的に、性能向上のためにマイクロコードをディスクリートロジックに変換する労力は割に合わないとされていますが、IBM System/360のハイエンドモデルやApollo Guidance Computer、NEC V33のように、性能を追求するためにハードワイヤードにされた例外も存在します。</p>
+<h2>RISCとの比較と性能</h2>
+<p>なぜ8087がユーザーがアクセス可能なRAMから命令を読み込むような単純なチップ設計にしなかったのか、という疑問に対し、RISCアーキテクチャの概念が持ち出されています。これは基本的にRISCのアプローチであり、複雑なマイクロコード命令ではなく、単純なワンクロック命令を使用するものです。8087の場合、8086プロセッサと並行して動作するため、RAMからマイクロ命令を常にフェッチすると8086の邪魔になるため、マイクロコードが理にかなっていたと説明されています。RISCチップは後に浮動小数点演算ユニットを追加しましたが、これは厳密なRISCのイデオロギーに反すると指摘されています。RISCが成功したのは、一時的にRAMがコアよりも高速だった時期があったからであり、シングルサイクル命令はフェッチが追いつく場合にのみ意味があるという意見もあります。</p>
+<h2>浮動小数点演算の精度とバグ</h2>
+<p>8087が開発された当時、浮動小数点演算の精度に関する多くのバグレポートがありました。特に、同じ浮動小数点演算でも順序が異なると結果が変わるという問題が頻繁に報告されていました。これは、数学者とコンピューター/システムエンジニアの間の視点の違いを示しており、マシンには限られたスペースしかなく、すべての値にエラー範囲が付随していると考えることが重要であり、そのエラー範囲の拡大を管理することが鍵であると説明されています。エラーバーの結合は直感に反することもあると指摘されています。</p>
+<h2>マイクロコントロールフローの選択</h2>
+<p>マイクロコードの命令形式には、通常のマイクロ命令アーキテクチャに見られるような制御フロービットが含まれていないことが興味深いと述べられています。レジスタ転送後に必要な遅延のために、ほとんどの命令スロットで<code>nop</code>が必要になることがその理由として挙げられています。マイクロコードエンジンの実装者として、特定のマイクロコントロールフローの選択理由（例：プログラムカウンタをインクリメントしない、すべてのマイクロ命令が明示的にジャンプをエンコードするなど）についての質問も提起されています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、8087コプロセッサのマイクロコード設計が、当時の技術的制約（特にコストと性能）と複雑な浮動小数点演算の実装ニーズの中でいかに合理的な選択であったかを深く掘り下げています。マイクロコードは開発の容易さとダイスペースの節約に貢献しましたが、浮動小数点演算の精度問題は当時のエンジニアリングの大きな課題であり、その解決策が現在のRISCアーキテクチャへと繋がる進化の道筋を示唆しています。RAM速度とCPUコアの速度の関係が、RISCの誕生に不可欠であったという洞察も示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
