@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Re: [PATCH] OOM_pardon, a.k.a. don&#x27;t kill my xlock - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Re: [PATCH] OOM_pardon, a.k.a. don&#x27;t kill my xlock</h1>
+        <div class="meta">
+            投稿日: 2026年05月31日 | ランク: 10
+        </div>
+        <a href="https://lwn.net/Articles/104185/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、LinuxのOOM（Out Of Memory）killerの振る舞いと、メモリオーバーコミットの問題点について議論しています。特に、Xロック画面などの重要なプロセスがOOM killerによって終了させられた場合のセキュリティ上の懸念が主な焦点です。</p>
+<h2>OOM killerとメモリオーバーコミットの問題点</h2>
+<p>多くのコメントが、Linuxのメモリオーバーコミット機能とOOM killerの相互作用について問題提起しています。オーバーコミットが有効な場合、システムは実際には利用できないメモリをプログラムに割り当てたと見せかけるため、OOM状態はプロセスがページフォルトを起こしたときに発生し、必ずしもメモリを割り当てようとしたプロセスが原因とは限りません。このため、OOM killerは「ルーレット」のようにランダムなプロセスを終了させる可能性があり、静的に割り当てられたメモリを使用しているプロセスであっても、他のプロセスが原因で終了させられることがあります。OOM killerの挙動は、瀕死の動脈に貼るバンドエイドのようなもので、システムが完全に回復することは稀であるという意見もあります。</p>
+<h2>重要なプロセス（xlock）の扱い</h2>
+<p>Xロック画面（xlock）のようなセキュリティ上重要なプロセスがOOM killerによって終了させられると、認証済みのデスクトップが露出してしまうというセキュリティ上の懸念が繰り返し指摘されています。WindowsやmacOSはこのような状況でもロック画面がクラッシュしないように設計されており、Waylandのディスプレイマネージャーも同様の設計が可能であると推測されています。ロック画面がクラッシュすることでシステムのセキュリティが損なわれるのであれば、そのシステムは安全ではないという意見が述べられています。解決策として、OOM killerが重要なプロセスを終了させないようにする方法や、デスクトップ環境がロック画面の異常終了を検出して対処すべきであるという提案もなされています。</p>
+<h2>OOM killerの制御と設定</h2>
+<p>ユーザーはOOM killerの挙動をより細かく制御したいと考えているようです。特に、特定のアプリケーション（Firefox、Javaプロセス、Python、VSCodeなど）を優先的に終了させたいという願望が多く見られます。<code>/proc/&lt;pid&gt;/oom_score_adj</code> を使用してプロセスのOOMスコアを調整できることは知られていますが、Firefoxのように複数のプロセスを立ち上げるアプリケーションの場合、毎回手動で調整するのは実用的ではないと指摘されています。ブラウザの設定（例: <code>browser.tabs.unloadOnLowMemory</code>）を変更することで、メモリ不足時にタブをアンロードし、OOM killerの介入を防ぐのに役立つという実用的なヒントも共有されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、LinuxのOOM killerとメモリオーバーコミットの仕組みが引き起こす課題、特にセキュリティ上重要なプロセスが予期せず終了させられる問題に焦点を当てています。OOM killerのランダムな挙動に対する不満や、特定のアプリケーションをターゲットにできるようにOOM killerをより細かく制御したいという要望が強く示されています。全体として、OOM killerはシステムの安定性を保つための「バンドエイド」ではあるものの、その設計と制御のしにくさが、現代の多様なワークロードにおいて新たな問題を生み出しているという見方が優勢です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
