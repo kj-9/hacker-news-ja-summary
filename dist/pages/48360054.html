@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should you normalize RGB values by 255 or 256? - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Should you normalize RGB values by 255 or 256?</h1>
+        <div class="meta">
+            投稿日: 2026年06月01日 | ランク: 4
+        </div>
+        <a href="https://30fps.net/pages/255-vs-256-division/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、8ビットカラー値を浮動小数点数に変換する際に、255で割るべきか256で割るべきかという問題について議論しています。</p>
+<h2>255で割る vs 256で割る (と +0.5)</h2>
+<p>多くのコメントは、8ビット値を[0, 255]の範囲として扱う場合、浮動小数点数に変換する際には255で割るべきだと主張しています。これは、0から255までの256個の異なる値を表現するためには255で割るのが論理的であり、0が0.0に、255が1.0に正確にマッピングされるためです。一方で、256で割るアプローチ（記事で提案されている+0.5と組み合わせる方法）は、区間の中心を表現しようとする試みであり、均等なビンを生成するという点で利点があるという意見もありますが、これは浮動小数点数から整数への変換時に0.0と1.0が正確に表現されなくなるという問題を引き起こす可能性があります。</p>
+<h2>浮動小数点演算の速度と最適化</h2>
+<p>シフト演算（<code>&gt;&gt; 8</code>）が除算（<code>/ 256.0</code>）よりもはるかに高速であるという意見があり、ソフトウェアレンダラのようなホットループでは10倍の速度差が出るとの具体的な例が示されました。しかし、他のコメントでは、現代のCPUではメモリ帯域幅がボトルネックになることが多く、マイクロベンチマーク以外ではその差は小さいと反論されています。また、コンパイラは定数による浮動小数点除算を乗算に最適化することが多く、最新のGPUでは浮動小数点乗算は最もレイテンシーの低い操作の1つであると指摘されています。さらに、浮動小数点数での2の累乗による除算は、指数を減算する高速な操作である一方、255のような値による除算はより複雑な演算になるという違いも言及されています。SIMD命令の使用やコンパイラの自動ベクトル化能力もパフォーマンスに影響を与えます。</p>
+<h2>カラーマネージメントと実世界の考慮事項</h2>
+<p>一部のコメントでは、画像処理における色の表現について、理論的な完璧さだけでなく実世界の制約も考慮する必要があるという意見が出ています。例えば、SDR画像におけるRGB値は絶対的な輝度ではなく、適応された状態に対する輝度を表すため、「ゼロ」が厳密なゼロ輝度を意味しないと主張する人もいます。また、歴史的に放送システムが16-235の範囲を使用していたことに言及し、絶対的なゼロは常に必要ではないと述べています。しかし、ゼロが0.0fにマッピングされない場合、マスキングやアルファブレンドなどで0.0fをハードな閾値として使う既存のコードでアーティファクトが生じる可能性があるという指摘もあり、アルファチャンネルは輝度とは異なるため、0.0fと1.0fへの厳密なマッピングが特に重要であるとされます。</p>
+<h2>その他の関連事項</h2>
+<ul>
+<li><strong>オーディオの世界での類推</strong>: 16ビット整数オーディオが非対称な範囲（[-32768, 32767]）を持つ一方、浮動小数点オーディオは対称な範囲（[-1.0, 1.0]）を持つという類似の問題が言及されました。</li>
+<li><strong>既存ライブラリの使用</strong>: 自分で画像ファイル読み書きのロジックを実装する代わりに、OpenImageIOのようなプロフェッショナルなライブラリを使用すべきだと提案する声もありました。OpenImageIOは255で割る標準的な手法を採用していることが指摘されています。</li>
+<li><strong>ビンの混乱</strong>: 記事の著者が「ビン」と「ビンエッジ」を混同しているため、グラフやヒストグラムの表現が誤解を招いているという批判もありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>8ビットカラー値を浮動小数点数に変換する際に255で割るか256で割るかという問題は、単なる数学的な議論に留まらず、パフォーマンス、コンパイラの最適化、実世界のカラーマネージメント、既存のワークフローとの互換性など、多岐にわたる側面から検討されています。多くのHacker Newsのユーザーは、0と255をそれぞれ0.0と1.0に正確にマッピングするため、255で割る「標準的な」アプローチを支持していますが、256で割る方法（+0.5オフセットを伴う）も均等なビン分布という観点から一考の価値があるとの意見もあります。しかし、後者のアプローチは特にアルファチャンネルなどにおいて、既存のシステムとの互換性や視覚的なアーティファクトを引き起こす可能性があると指摘されています。最終的には、パフォーマンス要件、正確性のニーズ、および既存のソフトウェアエコシステムとの統合を考慮して選択する必要がある複雑な問題であることが示唆されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
