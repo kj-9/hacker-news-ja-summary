@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmarks in Leipzig - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Benchmarks in Leipzig</h1>
+        <div class="meta">
+            投稿日: 2026年06月06日 | ランク: 8
+        </div>
+        <a href="https://arxiv.org/abs/2606.05818" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーたちは、LLM（大規模言語モデル）が研究レベルの数学の問題を解決する能力について議論しています。特に、モデルが訓練データに含まれる既知の解決策を持つ問題を解く能力と、真に新しい数学的発見をする能力との区別に焦点が当てられています。</p>
+<h2>既知の問題と訓練データの関係</h2>
+<p>多くのユーザーは、LLMが「既知の答えを持つ数学の問題」を解けることが、訓練データにその解決策が含まれているためではないかと疑問を呈しています。あるユーザーは、これは「文献検索」と「ゼロからの解決」の違いに例え、このベンチマークの目的は、モデルが研究レベルの数学的問題に関連する出力を正確に解釈・統合する能力をテストすることであると指摘しています。研究のリーダーは、提供された問題が訓練データに含まれる可能性は「ゼロ」であり、モデルが既存の研究に基づいて問題解決をする能力が予想以上に優れていると強調しています。</p>
+<h2>問題の難易度と「研究レベル」の定義</h2>
+<p>問題の難易度について、研究のリーダーは「どんな試験のどの試験問題よりもはるかに難しい」と述べており、特定の研究分野の博士課程の学生が問題を理解し解決するのに数日〜数週間かかるレベルだと説明しています。しかし、一部のユーザーは、一部の問題が「研究レベル」と呼ぶには疑問があるとし、高校生レベルのワード問題、ブルートフォースで解ける計算問題、既存のコンピューター代数タスクなどを例に挙げています。これに対し、研究のリーダーは、問題は理論的な性質を持ち、計算能力の不足ではなく理論的な理由で難しいと反論しています。</p>
+<h2>LLMの能力と数学研究における限界</h2>
+<p>コメントの多くは、LLMが既存の数学的問題を解決する能力は印象的であるものの、真の「新しい数学研究の創造」にはまだ程遠いという点で一致しています。LLMは既存の知識を統合し、研究を加速させる可能性はあるが、アインシュタインが相対性理論を発見したような「真に独創的な発見」とは異なるとの見方があります。あるユーザーは、「AIが数学を解ける」と解釈すべきではなく、「既存の研究に基づいた練習形式の問題を解く能力」と「新しい数学の創造」は大きく異なる、と強調しています。</p>
+<h2>モデルの評価と信頼性</h2>
+<p>モデルの評価方法についても議論があり、ユーザーは正答数だけでなく誤答数も重要だと指摘しています。GPT-4.5とOpus 4.7のパフォーマンスを比較し、Opusの正答率が22%と低く、宿題の解答に使用した場合に失敗する可能性が高いことを例に挙げています。研究のリーダーは、これらの問題は宿題と比較すべきではなく、ステージ1のデータに「ワンショット」での性能が含まれていると説明しています。また、OpenAIモデルが数学や数学関連のタスクで他モデルより優れているのは、後処理の違いによるものかという推測も出ています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、LLMが研究レベルの数学的問題を解決する能力が印象的であると評価される一方で、その能力が訓練データからの「文献検索」によるものか、あるいは真の「ゼロからの解決」によるものかという議論が繰り広げられました。多くのユーザーと研究のリーダーは、LLMが既存の知識を統合し複雑な問題を解決する能力は高いものの、真に新しい数学的発見をするレベルには達していないという点で一致しています。また、ベンチマークの問題の「研究レベル」としての妥当性や、モデルの信頼性（正答率と誤答率）についても活発な意見交換が行われました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

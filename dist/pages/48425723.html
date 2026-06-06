@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeroserve: A zero-config web server you can script with eBPF - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zeroserve: A zero-config web server you can script with eBPF</h1>
+        <div class="meta">
+            投稿日: 2026年06月06日 | ランク: 2
+        </div>
+        <a href="https://su3.io/posts/introducing-zeroserve" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>zeroserveは、eBPFとio_uringを活用した高性能なRust製ウェブサーバーで、NginxやCaddyの代替を目指しています。特に静的ファイルの提供に特化しており、パフォーマンスと設定の柔軟性を追求しています。</p>
+<h2>AI生成コンテンツと信頼性</h2>
+<p>プロジェクトの発表ブログ記事やREADME、一部のコードにAIが関与していることについて、コメントで様々な意見が交わされました。</p>
+<ul>
+<li><strong>信頼性への懸念</strong>: AIが生成したコンテンツ（README、ブログ記事）について、「内容が幻覚ではないか」「品質基準が人間のそれと異なるのではないか」といった懸念が表明されました。AIが関与していると明示されない数年前なら疑わずに受け入れたであろう、という意見もあり、AI生成コンテンツに対する一般的な不信感を示しています。</li>
+<li><strong>著者の見解</strong>: 開発者からは、AIアシスタンスを多用しつつも、AIの出力は手動で確認し、責任を負っているとの説明がありました。また、プロジェクトの重要な部分はAIツールが登場する以前から書かれているとも述べられました。</li>
+<li><strong>AI活用の利点</strong>: 一部のユーザーは、LLM（大規模言語モデル）の活用が、このような新しいアイデアの探求を安価かつ迅速にしたと評価しています。また、LLMがプロジェクトの作成やリバースエンジニアリング、思いつきでの探索を容易にするとも指摘されています。</li>
+<li><strong>コーディングエージェントの関与</strong>: GitHubのコミット履歴から、AIコーディングエージェントがかなり関与していることが指摘されました。</li>
+</ul>
+<h2>パフォーマンスと設計</h2>
+<p>zeroserveのパフォーマンスと設計思想についても議論されています。</p>
+<ul>
+<li><strong>ベンチマーク</strong>: 小さな静的ファイル（174B）の提供においては、zeroserveがNginxよりも約17%高速で、よりタイトなテールレイテンシーを示すベンチマーク結果が提示されています。大きな静的ファイル（100KB）でもNginxをわずかに上回ります。</li>
+<li><strong>既存プロジェクトとの比較</strong>: 既存のNginxやCaddyといった、長年の実績と監査、戦場で鍛えられたプロジェクトと比較し、zeroserveのパフォーマンス向上がリスクを正当化するほどではないという意見もあります。</li>
+<li><strong>設計思想</strong>: zeroserveは、NginxやCaddyの「宣言型設定言語＋スクリプティングランタイム」というアプローチに対し、Rustコードで構成されたeBPFプログラムによる柔軟なロジック記述を提案しています。しかし、「人々はコードよりも設定を好む」という意見もあり、この設計思想が受け入れられるか疑問視する声も上がっています。</li>
+<li><strong>改善提案</strong>:<ul>
+<li><code>SO_REUSEPORT</code>を使ったマルチスレッド対応の提案があり、開発者も実装を検討すると回答しています。</li>
+<li><code>io_uring</code>の活用に加え、<code>kTLS</code>の導入も検討すべきという意見がありました。</li>
+<li>eBPFディレクトリに<code>.c</code>ファイルではなく<code>.rs</code>ファイル（Rust）をドロップできるようにする提案がありました。</li>
+</ul>
+</li>
+<li><strong>静的ファイルに特化することへの疑問</strong>: 「現代では静的ファイルをホストするためにサーバーを立てる人は少ない」という意見に対し、「Ghostを静的サイトに変換してホストした」「科学分野で大規模データセットを効率的に提供するために静的ファイル形式が使われる」といった反論もありました。</li>
+</ul>
+<h2>その他の論点</h2>
+<ul>
+<li><strong>機能の欠如</strong>: NginxのLuaモジュールが提供するGeoIPやSSLターミネーション後のリクエストコンテンツマッチングといったL7機能がzeroserveでどのように実装されるのかという疑問が呈されました。</li>
+<li><strong>tarballの利用</strong>: 静的ファイルのバンドルにtarballを使用していることについて、「バイト範囲でのアクセスに適しており、圧縮しないシンプルなフォーマットである」という説明がありました。</li>
+<li><strong>将来性</strong>: 新しいコンセプトであると評価されつつも、CaddyやNginxのような長期的な開発者のコミットメントとコミュニティの支援が不可欠であるという指摘がありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>zeroserveは、eBPFとio_uringを活用し、既存のウェブサーバーよりも高速な静的ファイル提供を目指すRust製プロジェクトです。特に、その開発プロセスにおけるAIの関与がコメントで大きな議論を呼びました。一部のユーザーはAI生成コンテンツへの不信感を表明しましたが、開発者は手動レビューの重要性を強調し、AIが新しいアイデアの探求を加速するという肯定的意見もありました。パフォーマンスは評価されつつも、既存の成熟したサーバーとの比較や、静的ファイルに特化した設計への疑問、将来的なコミュニティサポートへの期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
