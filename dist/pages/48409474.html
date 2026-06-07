@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is the purpose of the lost+found folder in Linux and Unix? (2014) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What is the purpose of the lost+found folder in Linux and Unix? (2014)</h1>
+        <div class="meta">
+            投稿日: 2026年06月07日 | ランク: 7
+        </div>
+        <a href="https://unix.stackexchange.com/questions/18154/what-is-the-purpose-of-the-lostfound-folder-in-linux-and-unix" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「lost+found」ディレクトリが何であるか、その使用状況、および最新のファイルシステムにおけるその関連性について議論しています。</p>
+<h2>lost+foundの目的と歴史</h2>
+<p>「lost+found」ディレクトリは、Unixファイルシステムでfsck（ファイルシステムチェッカー）がスキャン中に発見し、どのディレクトリに属するかわからないファイルを配置する場所として古くから存在します。1980年代から使われており、ジャーナリングされていない古いファイルシステムやextファミリーで特によく使われていました。Eric Foxleyの1985年の著書『Unix for Super-Users』にも記載されており、当時はfsckがディレクトリを自動的に拡張しなかったため、事前にサイズを設定する必要がありました。</p>
+<h2>最新のファイルシステムでの使用状況</h2>
+<p>XFS、Btrfs、ZFSなどの最新のジャーナリングファイルシステムでは、「lost+found」を通常は使用しないと考えられていますが、実際には違いがあります。XFSは「孤児ディレクトリ」として「lost+found」を使用し、<code>xfs_repair</code>が破損したディレクトリの子ファイルをそこに再配置することがあります。ただし、通常の状態では存在せず、修復が必要な場合に作成され、修復後は削除されるべきだとされています。JFSやF2FSのユーザー空間fsckも、場合によっては<code>/lost+found</code>を作成することがあるようです。ZeroFSのような先進的なファイルシステムでも、内部的な一貫性の問題から「lost+found」が必要になる可能性がありましたが、最終的にはアトミックで厳密に順序付けされたコミットによって回避されました。OpenBSDでも、カーネルパニック時などに<code>/lost+found</code>が作成され、fsckがファイルを配置することがあります。</p>
+<h2>lost+foundにファイルが見つかる状況</h2>
+<p>多くのユーザーは、何十年もLinuxを使用しているにもかかわらず、「lost+found」にファイルがあるのを見たことがないと述べています。これは、ジャーナリングファイルシステムの進化やハードウェアの品質向上によるものと考えられます。「lost+found」にファイルが配置されるのは、品質の悪いハードウェア、不良な電源供給、多数の同時書き込み、または古いext2のようなファイルシステムを使用している場合に発生しやすいと指摘されています。特に、古いカーネルとext2を搭載したビジーなシステムで電源障害が発生した場合などに、ファイルがそこに見つかる可能性があります。SDカードでは比較的に頻繁にファイルが見つかるとの報告もあります。fsckが強制実行される頻度が減ったことも、ユーザーが「lost+found」を見る機会が減った要因の一つかもしれません。</p>
+<h2>類似の概念と比喩</h2>
+<p>一部のコメントでは、「lost+found」をWindowsの<code>Thumbs.db</code>やmacOSの<code>.DS_Store</code>と比較していますが、他のユーザーはこれらのファイルが多くのディレクトリに散らばっているのに対し、「lost+found」はファイルシステムごとに1つしかないため、比較は適切ではないと反論しています。より正確な比較として、Windowsの<code>FOUND.000</code>フォルダやルートディレクトリに散らばる<code>.CHK</code>ファイルが挙げられています。</p>
+<h2>まとめ</h2>
+<p>「lost+found」ディレクトリは、Unix系ファイルシステムにおいて、ファイルシステムの破損時にfsckが孤立したファイルを回収するためのメカニズムです。ジャーナリングファイルシステムの進化やハードウェアの信頼性向上により、現代ではファイルが見つかることは稀になっていますが、特定の条件下（古いファイルシステム、電源障害など）では依然として機能します。XFSなどのモダンなファイルシステムでも、修復時に一時的に使用されることがあります。この話題は、ファイルシステムの歴史と進化、およびシステムの堅牢性に関する議論を反映しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

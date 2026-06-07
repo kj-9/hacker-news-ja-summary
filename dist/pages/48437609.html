@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How&#x27;s Linear so fast? A technical breakdown - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How&#x27;s Linear so fast? A technical breakdown</h1>
+        <div class="meta">
+            投稿日: 2026年06月07日 | ランク: 1
+        </div>
+        <a href="https://performance.dev/how-is-linear-so-fast-a-technical-breakdown" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、Linearというタスク管理ツールのフロントエンドがどのように高速なUXを実現しているかについての記事を巡る議論です。特に「楽観的UI更新（Optimistic UI updates）」や「オフラインファースト」といった手法に焦点が当てられています。</p>
+<h2>Linearの高速なUXと技術</h2>
+<p>コメントの多くは、LinearのUXの滑らかさと高速さを高く評価しており、その秘密が記事で紹介されたクライアント側での楽観的UI更新とバックグラウンド同期にあると考えています。
+[1.4] は、そのUXの slick さに感謝しています。
+[1.18] は、Linearを「これまで見た中で最高のウェブアプリ」と絶賛し、そのエンジニアリングとデザインに感銘を受けています。
+記事の著者は、Vue + Pinia を使って同様の同期エンジンとORMを構築した経験を共有し、Linearのアーキテクチャに関するGoogleのビデオ（[1.5.2.2] でリンクが共有されています）を推薦しています。このビデオは、Linearのアーキテクチャをブログ記事よりも詳細に説明しているとのことです。</p>
+<h2>楽観的UI更新と信頼性の課題</h2>
+<p>楽観的UI更新は、ユーザーのアクションを即座にUIに反映させ、サーバーへの同期をバックグラウンドで行うことで、体感速度を向上させる手法です。しかし、この手法には信頼性に関する懸念が多くのコメントで示されています。</p>
+<ul>
+<li>
+<p><strong>データ損失と競合の懸念</strong>:
+    [1.7.1] や [1.7.2] は、UIが即座に更新されても、それがサーバーに確実に保存されたことを意味しないという点に懸念を表明しています。特に、ネットワーク障害時にデータが失われる可能性や、競合が発生した場合の処理について疑問が投げかけられています。
+    [1.11] は、楽観的更新が「悲しいパス」（同期失敗、競合など）に対する計画なしに広まることを懸念しており、新しい競合状態やフラストレーションの時代が来ることを危惧しています。
+    [1.7.2.1.2] は、Google Docsのような完璧な同期を望む一方で、ネットワーク障害時にデータを失わない堅牢な分散システムを構築することの難しさを指摘しています。
+    [1.22] は、Linearが「正しくない」ために速いと主張し、サイレントなデータ損失が許容される代償だと批判しています。</p>
+</li>
+<li>
+<p><strong>Linear開発者からの反論</strong>:
+    Linearの開発者の一人と思われる [1.7.2.1] は、競合は「ほとんど発生しない」と述べ、発生した場合にはほぼリアルタイムで変更がクライアントにロールバックされると説明しています。また、サーバーに到達できない場合は4秒以内に同期バッジが表示されると述べています。
+    [1.19.2] も同様に、操作は平均数百ミリ秒以内に適用され、「ほとんど失敗しない」ため、成功パスをデフォルトとして扱い、オフライン時や4秒以上かかる場合にのみ変更が適用されていないことを示すと説明しています。</p>
+</li>
+<li>
+<p><strong>ブラウザでの永続性の問題</strong>:
+    [1.7.3] と [1.7.3.1.1] は、ブラウザのストレージには保証された永続性がなく、ブラウザがいつでも「永続的」なストレージを削除する可能性があることを指摘しています。ただし、[1.7.3.1.1.1] は <code>navigator.storage.persist()</code> メソッドを使えば永続ストレージをリクエストできると補足しています。</p>
+</li>
+<li>
+<p><strong>同期エンジンの複雑さ</strong>:
+    [1.15] は、Linearが採用しているような高性能な同期エンジンを構築することの非自明性を強調しています。オフラインでの変更、競合解決（「Last Writer Wins」だけでは不十分な場合）、スキーマの変更、ビジネスロジックの変更など、多くの複雑なシナリオを考慮する必要があると述べています。</p>
+</li>
+</ul>
+<h2>パフォーマンスと従来のCRUDアプリ</h2>
+<p>Linearの記事が「従来のCRUDアプリでは同じことをするのに約300msかかる」と主張している点についても議論があります。</p>
+<ul>
+<li>
+<p><strong>300msは長すぎるという意見</strong>:
+    [1.6] は300msは長すぎると感じており、[1.6.2] は100ms程度に速度を落とすことは容易であり、ほとんどのユースケースでクライアントサイドレンダリングは不要だと主張しています。
+    [1.8] は、バックエンドをユーザーの近くに配置し、高速化することで、従来のCRUDアプリでも30ms程度で同等の処理が可能だと指摘しています。</p>
+</li>
+<li>
+<p><strong>遅延の要因</strong>:
+    [1.6.1] は、クライアントとサーバー間の地理的距離によるRTT（Round Trip Time）が300ms程度になることを指摘しており、これが遅延の一因となることを示唆しています。
+    [1.6.3] は、LinearのベンチマークがJIRAのような「苦痛なほど遅い」ソフトウェアと比較されているため、300msが妥当な比較対象であると述べています。</p>
+</li>
+</ul>
+<h2>Linearへの評価と他ツールとの比較</h2>
+<p>Linearは多くのユーザーから高い評価を受けている一方で、批判的な意見や他のツールとの比較も行われています。</p>
+<ul>
+<li>
+<p><strong>高い評価</strong>:
+    [1.18] はLinearを「これまで見た中で最高のウェブアプリ」と評し、[1.18.1] は、最初は他のトラッカーと変わらないと感じたが、実際に使い始めると「人々がすでに働いている場所で働くというUXを見事に実現している」という「アハ体験」があったと述べています。</p>
+</li>
+<li>
+<p><strong>批判的な意見</strong>:
+    [1.10] は、Linearが「かなり遅い」と感じており、[1.10.1] は多くのメモリを消費すると指摘しています。
+    [1.23] は、Linearの「速さ」がキラー機能だとしても、イシュートラッカーは開発者にとって比較的低頻度のアプリケーションであり、他のツールと比べて新しい体験がないと疑問を呈しています。
+    [1.18.2] や [1.19.3] は、LinearがJiraが持つような「運用上の複雑さ」や「異なるビジネスユニットのプロセスをマッピングする」柔軟性には及ばない、「平均的なソフトウェアエンジニアリングチーム向けのおもちゃ」だと批判しています。</p>
+</li>
+<li>
+<p><strong>競合他社との比較</strong>:
+    [1.3] は、Linearが（名指しされていない）大規模な競合他社とは異なり、エージェントを使ったソフトウェアPMの自動化など、クールなことをしていると述べています。</p>
+</li>
+</ul>
+<h2>その他のコメント</h2>
+<ul>
+<li>
+<p><strong>MeteorJSの類似性</strong>:
+    [1.2] と [1.2.1] は、Linearの楽観的UIやブラウザベースのデータベースの利用方法が、MeteorJSとその Minimongo のアプローチに似ていると指摘し、過去の技術の再来に言及しています。</p>
+</li>
+<li>
+<p><strong>IndexedDBのリソース</strong>:
+    [1.9] は、IndexedDBのAPIが扱いにくいため、良いラッパーやリソースを求めています。</p>
+</li>
+<li>
+<p><strong>サービスワーカーの活用</strong>:
+    [1.7.4.1] は、楽観的更新が「ユーザーがタブを閉じても問題ない」ように、変更をローカルストレージに保存し、バックグラウンドワーカーがサーバーに送信し、エラーがあれば通知するなど、より堅牢な実装方法を提案しています。</p>
+</li>
+</ul>
+<h2>まとめ</h2>
+<p>Linearの高速なUIは、クライアントサイドでの楽観的UI更新とバックグラウンド同期によって実現されており、多くのユーザーがその滑らかな体験を高く評価しています。しかし、このアプローチは、ネットワーク障害時や競合発生時のデータの一貫性・信頼性、およびブラウザのストレージの永続性に関する課題を提起しています。Linearの開発者からは、競合は稀であり、万一の場合のロールバックやオフライン時の通知メカニズムが備わっているとの説明があります。また、記事が主張する「従来のCRUDアプリの300ms」という数字については、地理的距離によるRTTやJiraのような既存の遅いアプリケーションとの比較を考慮すると、必ずしも不適切ではないという意見と、バックエンドの最適化で十分高速化可能だという意見が対立しています。Linearは優れたUXを持つ一方で、Jiraのような大規模な運用の複雑さには対応しきれないという意見も見られます。全体として、Hacker Newsのコメントは、革新的なフロントエンド技術の利点と、それに伴うエンジニアリング上の複雑なトレードオフについて活発な議論が交わされています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

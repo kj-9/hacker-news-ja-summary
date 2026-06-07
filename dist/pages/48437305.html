@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My automated doubt development process - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">My automated doubt development process</h1>
+        <div class="meta">
+            投稿日: 2026年06月07日 | ランク: 8
+        </div>
+        <a href="https://www.alexself.dev/blog/automated-doubt" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、AI支援開発、特にLLMを用いた開発の経験と、そのプロセスにおける製品要件定義（PRD）の妥当性、そしてエージェントの活用方法と限界について議論しています。</p>
+<h2>AI支援開発への期待と懸念</h2>
+<p>スレッドの投稿者は、AI支援開発、特にLLMを活用した開発がソフトウェアエンジニアリングにおいて実行可能な道であると考えています。しかし、このアプローチで悪い経験をした人々はコメントしない傾向にあるという「選択バイアス」が指摘されています。また、AIが生成したコードを直接書かなくなることに対する「信頼性」の懸念が共有されており、信頼を取り戻し、AIによるコードベースの改善を支援するための「/assess」のようなカスタムツールの導入事例も挙げられています。</p>
+<h2>PRDの妥当性と「問いかける姿勢」の重要性</h2>
+<p>多くのスペック駆動開発に関する記述が、製品要件定義（PRD）が有効であるという前提に基づいていることに対し、疑問が呈されています。機能の実装に焦点を当てるよりも、「その機能が関連性があるか、実現可能か、妥当な仮定に基づいているか」を問うことの重要性が強調されています。この「問いかける姿勢」（questioning attitude）は、健全な原子力安全文化など、他の分野でも価値のある特性として関連付けられています。</p>
+<h2>エージェントを活用したPRD精緻化プロセス</h2>
+<p>あるユーザーは、自身のPRDプロセスがエージェントを活用したものであり、具体的に以下のステップで進むことを説明しています。
+*   <strong>/understand</strong>: エージェントが問題を詳細に調査します。
+*   <strong>/huddle</strong>: 思考パネル（thinking panel）がPRDを作成し、前提を徹底的に検証します。この段階でPRDが却下されることも頻繁にあります。
+*   <strong>/tm</strong>: 生き残ったPRDは、タスクマスターによって依存関係グラフに分解されます。
+このプロセスは「エージェントが構築を思いとどまらせた」というデモが、「エージェントが構築した」デモほど魅力的ではないため、あまり広く共有されていないという洞察も示されています。</p>
+<h2>エージェントの役割と限界</h2>
+<p>エージェントに何かを思いとどまらせるという考え方に対して、エージェントがアーキテクチャのような分野で真価を発揮するとは限らないという懐疑的な意見も表明されています。しかし、詳細なスペックをインプットとして提供することで、エージェントが計画の欠陥を発見し、アイデアを却下する余地が広がる可能性も示唆されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、AI支援開発の導入がもたらす期待と、それに伴うコードの信頼性や選択バイアスといった懸念が議論されています。特に、製品要件定義（PRD）の妥当性を確保することが重要なテーマとなっており、機能の実装よりも「関連性、実現可能性、妥当性」を問いかける「questioning attitude」が強調されています。一部のユーザーは、エージェントを活用してPRDを精緻化し、不適切なアイデアを初期段階で排除する具体的なプロセスを共有していますが、エージェントに設計判断を任せることへの懐疑的な意見や、その限界についても言及されています。全体として、AIを開発プロセスに組み込む際のベストプラクティスと課題を探る活発な議論が展開されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
