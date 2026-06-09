@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Making Graphics Like it&#x27;s 1993 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Making Graphics Like it&#x27;s 1993</h1>
+        <div class="meta">
+            投稿日: 2026年06月09日 | ランク: 4
+        </div>
+        <a href="https://staniks.github.io/articles/catlantean-3d-blog-1/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、レトロ風FPSゲーム「Catacomb Kitties」の開発者によるHacker Newsの投稿について議論しています。コメントの多くは、このプロジェクトが昔のゲーム開発の手法（特にWolfenstein 3DやDoomのような初期の3Dシューター）を忠実に再現していること、そして制約を設けることで生まれた創造性について賞賛しています。</p>
+<h2>初期FPSエンジンの技術的な議論</h2>
+<p>多くのコメントは、Wolfenstein 3D、Doom、Duke Nukem 3Dといった初期のFPSゲームのレンダリング技術について深く掘り下げています。
+*   <strong>Wolfenstein 3DとDoomの違い:</strong> Wolfenstein 3Dは直交する壁と一定の床/天井の高さを持つレイキャスティングエンジンを使用していたのに対し、Doomはより柔軟なBSPエンジンを採用し、壁が任意の角度で交差し、床と天井の高さが可変であったことが指摘されています。
+*   <strong>Duke Nukem 3D (Buildエンジン):</strong> Duke Nukem 3DがBSPエンジンではなくBuildエンジンを使用していたことが訂正されました。Buildエンジンはポータルベースであり、動的な壁のジオメトリや「room-over-room」のセットアップを可能にしました。
+*   <strong>フロアと天井のテクスチャ:</strong> Wolfenstein 3Dにはなかった床と天井のテクスチャが、Blake StoneやRise of the TriadなどのWolf3Dエンジン後継ゲームで実装されたことが言及されています。
+*   <strong>水面の透明度:</strong> Shadow Warriorがソフトウェアレンダリングで透明な水面を実現したことや、GLQuakeでの透明な水の実装とそれに伴うパフォーマンスの問題、およびユーザーがマップをパッチして対応した歴史が語られています。
+*   <strong>フロアのレンダリング:</strong> Doomのフロアレンダリングがパッチに分割され、コーナーでのみ正確なパースペクティブを行い、その間を補間していた可能性が議論されました。</p>
+<h2>レトロなグラフィック開発と現代技術</h2>
+<p>プロジェクトの制約と、現代のツールやAPIを使用した開発について、様々な意見が交わされています。
+*   <strong>意図的な制約:</strong> 「不合理な制約」を設けることで創造性が高まり、ゲーム全体のスタイルに影響を与えるという意見があります。
+*   <strong>現代APIの使用:</strong> 現代のAPI（OpenGLなど）を使って同様の見た目のゲームを作る方が簡単だという意見がありますが、開発者はソフトウェアラスタライザーにこだわることで、低解像度でのパフォーマンスの問題や、ハードウェアアクセラレーションに移行する際のオクルージョンカリングなどの課題に直面していると述べています。
+*   <strong>ポリゴン数とパフォーマンス:</strong> 現代のGPUでは、このような低ポリゴン数のゲームにおいてオクルージョンカリングがかえってパフォーマンスを低下させる可能性があることが指摘されています。単一のキャラクターモデルがゲーム全体のレベルよりも多くのポリゴンを持つ現代のゲームと比較されています。
+*   <strong>Blenderの使用:</strong> 著者がBlenderを使用してアセットを作成していることに対し、Blenderが1998年まで利用できなかったため、初期90年代の技術を忠実に再現していないという批判がありましたが、これは一人でのプロジェクトにおいては現実的な選択肢であるという反論もありました。</p>
+<h2>ゲームの主人公とテーマ</h2>
+<p>主人公が三毛猫であり、三毛猫がほとんど雌であることから、女性主人公を持つ珍しいシューターではないかという議論が起こりました。
+*   <strong>女性主人公のシューター:</strong> 多くのユーザーは、Perfect Dark、Mirror's Edge、Metroid、そして現代の多くの「ブーマーシューター」など、女性主人公のシューターはそれほど珍しくないという意見を述べています。Steamのタグデータを用いた分析では、「ブーマーシューター」のうち「女性主人公」タグが付いているのは約10分の1程度であり、「稀」という言葉の定義について意見が分かれています。
+*   <strong>著者の認識:</strong> 著者は記事内で主人公が雌であることを認識しつつ、慣習的な理由で「彼（his）」という代名詞を使っていると述べています。これに対し、一部のユーザーは代名詞の使用を批判しています。</p>
+<h2>その他の賞賛と提案</h2>
+<p>多くのユーザーがプロジェクトに感銘を受け、開発者の努力、詳細な説明、そしてゲームのスタイルを高く評価しています。
+*   <strong>称賛:</strong> ポスタリゼーション効果、グラフィック、タイトル、テーマ、創造的なプロセス、自己課せられた制約の中での解決策、アートと技術の融合などが賞賛されています。
+*   <strong>具体的な提案:</strong> プレミアムな箱入り版やKickstarterでの資金調達、シェイプウェアとしてのリリース、MS-DOSでのリリースなどが提案されています。
+*   <strong>内部ツールへの関心:</strong> アセット作成のためのPythonスクリプトなど、内部ツールに関心を示す声も上がっています。
+*   <strong>AI使用への言及:</strong> 著者が「AIによる手抜きなし」と明言していることに対し、一部のユーザーはエポックダッシュの使用や表現の「AIっぽさ」を指摘し、この主張の真偽を疑問視するコメントもありましたが、AIを使わない価値を強調する意見もあります。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、「Catacomb Kitties」というレトロ風FPSゲームの開発における、初期3Dシューターの技術的側面、現代技術とのバランス、そしてゲームデザイン上の制約から生まれる創造性について深く議論しています。Wolfenstein 3DやDoomといった古典ゲームのレンダリング手法に関する詳細な技術的議論が展開され、開発者が意図的に設けた制約がプロジェクトの魅力と独創性を高めていることが広く認識されています。また、ゲームの主人公が女性であることに関する議論は、現代のゲームにおける多様性の表現に関するユーザーの認識の違いを浮き彫りにしました。全体として、このプロジェクトは技術とアートの融合として高く評価され、多くの人々が完成を期待しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
