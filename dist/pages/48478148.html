@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: HelixDB – A graph database built on object storage - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: HelixDB – A graph database built on object storage</h1>
+        <div class="meta">
+            投稿日: 2026年06月10日 | ランク: 9
+        </div>
+        <a href="https://github.com/HelixDB/helix-db/tree/main" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>HelixDBは、グラフ、ベクトル、全文検索機能を統合したOLTPグラフデータベースです。オブジェクトストレージ上に構築されており、特にAI駆動型アプリケーションのメモリシステムや知識グラフの構築を目的としています。</p>
+<h2>HelixDBとは</h2>
+<p>HelixDBは、元々グラフデータベースとして開発されましたが、AIメモリシステム構築の経験から、グラフ、ベクトル、全文検索（FTS）を組み合わせたハイブリッドアプローチに移行しました。これにより、複数の異なるシステムを繋ぎ合わせる必要なく、エンティティ、リレーションシップ、セマンティックな意味、具体的なフィルタリングを一元的に扱えるように設計されています。スケーラビリティの課題に対し、オブジェクトストレージ（S3など）を永続化層として利用することで、大量のデータ（TB規模）を安価に保存し、必要なデータのみをノードにキャッシュすることで、高いスループットと低レイテンシを実現しています。</p>
+<h2>スケーリングとパフォーマンス</h2>
+<p>グラフデータベースのスケーリングは一般的に困難でコストが高いとされています。HelixDBでは、データセット全体を分散マシンに複製したり、リレーショナルデータベースのような明確なパーティションを持たないグラフデータをシャーディングしたりする代わりに、オブジェクトストレージをデータ層として利用しています。これにより、ストレージ容量の制限をなくし、必要なデータだけをキャッシュすることで、ホットデータに対して非常に低いレイテンシ（p99で読み取り約50ms、書き込み約100ms）を提供します。また、コールドストレージからの読み取りでもp99で約50msを達成し、安価なストレージコストも実現しています。ベクトル検索やFTSでも、Warmクエリで約20ms/15ms、Coldクエリで約400ms/250msのp99を報告しており、マルチホップクエリではWarmクエリで10ms未満、Coldクエリでホップあたり約50msのp99を達成しています。</p>
+<h2>ユースケースと将来の展望</h2>
+<p>HelixDBは、AIエージェントが検索・トラバースする膨大なデータ（TB規模）の処理、グラフデータのコストがボトルネックとなっている企業への手頃なストレージ提供、複数のデータベースを統合しAIエージェントの自律性向上、AIメモリ、企業ブレインなどのワークロードをサポートしています。現在、HelixDBを基盤とした汎用AIメモリレイヤーの開発を進めており、これは完全にオープンソースとして提供される予定です。また、ベクトル検索の事前フィルタリング機能（グラフ内の関係、メタデータ、サブグラフに基づく）も開発中であり、GAクラウドも数週間以内に利用可能になる予定です。</p>
+<h2>技術とオープンソース</h2>
+<p>HelixDBはCypherやGremlinのような既存のグラフクエリ言語はサポートしていません。代わりにJSONまたはRust、TypeScript、Go、PythonのSDKを通じてクエリを実行します。AIがSDKやJSONを扱うのに非常に優れているため、開発体験が向上するとされています。一時的にクローズドソースとしていますが、Apache 2.0ライセンスで再びオープンソース化する方針を表明しています。</p>
+<h2>まとめ</h2>
+<p>HelixDBは、グラフ、ベクトル、全文検索を統合したOLTPグラフデータベースであり、特にAI駆動型アプリケーションにおけるデータ管理とAIメモリシステムに焦点を当てています。オブジェクトストレージを基盤とすることで、高いスケーラビリティとコスト効率を実現し、大規模なデータセットと複雑な関係性を低レイテンシで処理できる点が強みです。汎用AIメモリレイヤーのオープンソース化やクラウドGAなど、今後の展開にも期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
