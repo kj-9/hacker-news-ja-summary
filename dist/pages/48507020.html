@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to setup a local coding agent on macOS - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How to setup a local coding agent on macOS</h1>
+        <div class="meta">
+            投稿日: 2026年06月12日 | ランク: 4
+        </div>
+        <a href="https://ikyle.me/blog/2026/how-to-setup-a-local-coding-agent-on-macos" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、MacでローカルLLM（特にコーディングエージェント）をセットアップする方法に関するブログ記事について議論しています。主な焦点は、セットアップの速度、モデルの品質、必要なハードウェア、および代替ツールとアプローチです。</p>
+<h2>リアルタイムパフォーマンスとベンチマーク</h2>
+<p>多くのユーザーは、ローカルLLMのリアルタイムの感触とベンチマーク方法に関心があります。
+記事で示されている動画は、モデルが応答する直前でカットされており、リアルタイムの感触を判断するのには適していません。一部のユーザーは、llama.cppの<code>-hf</code>引数を使ってモデルをダウンロードできることを指摘し、<code>huggingface-cli</code>の使用が必須ではないと述べています。また、ベンチマークにおいては、わずか128トークンの生成では不十分であり、より長いコンテキストとプロンプトで実験する必要があると指摘されています。llama.cppには、ベンチマークのための専用ツールが含まれています。</p>
+<h2>ローカルモデルのツールとセットアップ</h2>
+<p>Ollama、oMLX、LM Studioなど、ローカルLLMを実行するための様々なツールが議論されています。
+OllamaとOpenCodeを使用する同様のセットアップを投稿したユーザーもおり、これがよりシンプルで効果的だと示唆しています。oMLXは、モデルのダウンロード、キャッシュ、推論サーバーの起動を簡単にするためのUIベースのホスティングとして推奨されており、Macでのローカル推論のための「SOTA（現状最高の技術）」であると評価されています。一方、あるユーザーは、64GB M1 MaxでoMLXまたはMLXがllama.cppのGGUFと比較して利点を見つけられなかったと報告しています。LM Studioも同様の目的でうまく機能することが確認されています。</p>
+<h2>ハードウェア要件とパフォーマンス</h2>
+<p>ローカルLLMを実行するためのハードウェア要件、特にRAMの量が議論の的となっています。
+「64GBを超える」という要件は、M4 48GBのユーザーにとっては懸念事項ですが、M4 24GBのユーザーは、プライバシー、信頼性、ネットワーク独立性などの利点から許容できると述べています。M1 Max 64GBで70Bモデルを実行できると報告するユーザーもいます。ただし、多くのユーザーは、たとえハイスペックなMac（M5 MAX 128GBなど）であっても、ローカルモデルはホスト型モデルと比較して「おもちゃ」のようだという意見を共有しています。一方、M3 Air 16GBでもチャットモードで有用な結果を得られるという報告もあり、Qwenバリアントがよく使われています。</p>
+<h2>モデルの品質とMTP/ドラフトモデル</h2>
+<p>モデルの品質と、MTP（Multi-Token Prediction）やドラフトモデルのパフォーマンスへの影響についての議論があります。
+MTP設定は、M1 Maxでの速度向上にあまり貢献しない可能性があるとの意見があり、Gemma 4 MTPヘッドがOpenCodeでマークアップを壊し、停止トークンを見逃すことがあるという問題も報告されています。Qwen 3.6などの最近のモデルは開発者ロールをサポートしており、異なる「性格」を持っていると評価されています。一部のユーザーは、ドラフトモデルの利点は、アクティブなパラメータ数が少ないMOEモデルでは低く、投機的デコーディングを備えた高密度モデルの方が好ましいと述べています。ローカルAIの記事がトークン/秒にしか言及せず、応答の品質について言及しないことに不満を表明するユーザーもいます。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、MacでローカルコーディングLLMをセットアップする際の複雑さと多様なアプローチを浮き彫りにしています。ユーザーは、llama.cpp、Ollama、oMLX、LM Studioなどの様々なツールを比較し、それぞれが異なるセットアップの容易さ、パフォーマンス、機能を提供することを示しています。リアルタイムの感触、モデルの品質、ベンチマーク方法論、およびMTPやドラフトモデルの効果に関する懸念が頻繁に提起されています。特にハードウェア要件に関しては、M1 Max 64GBやM4 48GBなどのハイスペックなMacでも、ホスト型LLMと同等のパフォーマンスを達成することは依然として課題である一方で、プライバシーやネットワーク独立性などの利点からローカルモデルに価値を見出すユーザーもいます。コメント全体を通して、ローカルAIが未来であるという共通認識と、AIがタスクを完了させるための主要なゲートウェイになっているという信念が強く感じられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

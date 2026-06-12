@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift at Apple: Migrating the TrueType Hinting Interpreter - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Swift at Apple: Migrating the TrueType Hinting Interpreter</h1>
+        <div class="meta">
+            投稿日: 2026年06月12日 | ランク: 3
+        </div>
+        <a href="https://www.swift.org/blog/migrating-truetype-hinting-to-swift/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>AppleがmacOSのTrueTypeエンジンを含む、OS全体でSwiftへの移行を進めているというWWDCの発表に関する議論です。WebKitの一部もC++からSwiftに書き換えられているという話がある一方で、新しいSafariのESMローダーがC++で実装されている点や、Appleの開発戦略、コードのライセンス、そしてコードの生成元に関する様々な意見が交わされています。</p>
+<h2>AppleのSwift移行戦略とOS全体への影響</h2>
+<p>WWDCのState of Platformキーノートにて、AppleがmacOS全体でSwiftの採用を進めていることが言及され、特にTrueTypeエンジンがSwiftで書き換えられる例が挙げられました。これはOSレベルで「RIS」（Reduced Instruction Set？）が進んでいることを示唆しているとされています。しかし、WebKitの一部がC++からSwiftに書き換えられているという漠然とした言及がある一方で、Safari 27の新しいECMAScriptモジュール（ESM）ローダーがC++で実装されている点には疑問が呈されています。</p>
+<h2>Appleの開発戦略と優先順位への意見</h2>
+<p>一部のコメントでは、Appleが「中途半端にSwiftUIを推し進め、その過程で言語を壊している」ことよりも、このようなOSレベルの技術改善に注力すべきだと批判的な意見が出ています。それに対し、Appleは両方の取り組みを並行して行っているという反論もあります。</p>
+<h2>技術的背景と類似事例</h2>
+<p>今回のコードがAppleが好むApache 2ではなく、MITライセンスで公開されていることに注目が集まっています。また、過去にはMicrosoftも2023年に同様の理由でフォント関連の処理をRustで書き換える計画があったことが言及されており、他社でも類似の技術移行の動きがあることが示唆されていますが、その後の進捗は不明です。</p>
+<h2>コード品質と生成元に関する懸念</h2>
+<p>コードに「LLM（大規模言語モデル）の匂い」がすると指摘するコメントがあり、重要な部分が依然として人間によって管理されているのか、そしてAppleの安定性が求められるOSにおいてこの傾向がどう影響するのかという懸念が示されています。著者はMastodonでもこの件について議論しているようです。</p>
+<h2>まとめ</h2>
+<p>AppleがmacOSの主要コンポーネント、特にTrueTypeエンジンでSwiftへの大規模な移行を進めているという発表は、コミュニティ内で多岐にわたる議論を巻き起こしました。WebKitにおけるSwiftへの移行とC++での新機能実装の矛盾、SwiftUIに対する批判的な意見、Appleのコードライセンスに関する考察、Microsoftでの類似の技術移行事例、そしてコードにLLM生成の兆候が見られるという現代的な懸念が示されました。全体として、Appleの技術スタックの進化とそれに伴う課題、そして期待が浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
