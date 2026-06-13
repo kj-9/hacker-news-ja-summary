@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The adder at the heart of Intel&#x27;s 8087 floating-point chip - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The adder at the heart of Intel&#x27;s 8087 floating-point chip</h1>
+        <div class="meta">
+            投稿日: 2026年06月13日 | ランク: 8
+        </div>
+        <a href="https://www.righto.com/2026/06/intel-8087-adder-reverse-engineered.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、8087コプロセッサの加算器に関する記事についての議論です。特に、その設計、現代のCPUにおける加算器との比較、クロッキング、トランジスタ数、電力供給、そしてなぜ8087の合成可能なHDL（ハードウェア記述言語）が存在しないのかという点に焦点が当てられています。</p>
+<h2>加算器の設計と進化</h2>
+<p>筆者は、システム性能の鍵であり、システムごとに実装が異なる加算器やALU（演算論理ユニット）に興味を持っていると述べています。初期の8087の加算器は、比較的単純なリップルキャリー型であった可能性が高いですが、Pentiumの時代にはより複雑なKogge-Stone加算器に進化しました。</p>
+<h2>クロックとタイミング</h2>
+<p>8087の加算器が2クロックサイクルかかると述べられている点について、実際には加算器自体はクロック入力を持たない同期回路ではないことが指摘されています。むしろ、マイクロコードエンジンが結果が安定するまでの追加サイクルをブロックすることで、加算の時間を確保しています。クロックサイクル内では、キャリーラインのプリチャージなど、複雑なタイミング調整が行われています。</p>
+<h2>トランジスタ数と電力供給</h2>
+<p>69ビットの加算器には約2014個のトランジスタ（プルアップを含む）が必要であり、4ビットのブロックあたり約117個のトランジスタが使われていると筆者は説明しています。電力供給に関しては、8087は1つの金属層しか持たず、電力とグラウンドのために2本のインターディジット（櫛形に組み合わされた）ツリー構造が使われています。一部で配線が交差する箇所では、短いポリシリコン接続が用いられています。デカップリングキャパシタは存在せず、特定の信号のタイミング調整のためにいくつかのキャパシタが使われているのみです。</p>
+<h2>8087のHDLの不足</h2>
+<p>8086/8088の合成可能なHDLは存在するにもかかわらず、8087のHDLが見当たらないことについて議論されています。これは、8087のROMが異なるサイズのトランジスタを用いて2ビットを格納する純粋なアナログ領域を含んでいるため、一般的なHDLでは扱いが難しいという意見や、現代のFPGA（Field-Programmable Gate Array）の制約とは異なるため、そこまで厳密なレプリケーションは不要という意見もあります。最終的には、現代のFPGA上で8087をエミュレートするニーズが単純に不足していること、そして内部の巧妙なマイクロアーキテクチャまでエミュレートすることが難しいことが主な理由として挙げられています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、8087コプロセッサの加算器の技術的な詳細に深く踏み込んでいます。その設計、現代のCPUとの違い、クロック同期の仕組み、トランジスタ数、電力供給といった具体的な側面が議論されており、特に当時の最先端技術であった8087の巧妙なエンジニアリングが浮き彫りになっています。また、現在に至るまで8087の合成可能なHDLが作られていないという興味深い点についても考察が展開されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
