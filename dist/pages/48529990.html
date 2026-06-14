@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Kage – Shadow any website to a single binary for offline viewing - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Kage – Shadow any website to a single binary for offline viewing</h1>
+        <div class="meta">
+            投稿日: 2026年06月14日 | ランク: 1
+        </div>
+        <a href="https://github.com/tamnd/kage" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主に<code>kage</code>というプロジェクトについての議論です。<code>kage</code>は、ウェブサイト全体をオフラインで閲覧できるようにミラーリングすることを目的としたツールで、特にJavaScriptを使用するモダンなサイトに対応しています。</p>
+<h2><code>kage</code>の目的と類似ツールとの比較</h2>
+<p><code>kage</code>は、ウェブサイト全体をオフラインで閲覧できるようにミラーリングすることを目的としています。これは、ブラウザの「名前を付けて保存」機能や<code>wget --mirror</code>とは異なり、JavaScriptでレンダリングされるサイト（例：Next.jsで構築されたサイト）も保存できる点が特徴です。多くのユーザーは、<code>kage</code>がJavaScriptを剥ぎ取り、静的なスナップショットを保存する点で、<code>SingleFile</code>というツールに似ていると指摘しています。<code>SingleFile</code>は単一ページの保存に優れていますが、<code>kage</code>はサイト全体をミラーリングする点で<code>HTTrack</code>の現代版と見なされています。</p>
+<h2>機能改善とアイデア</h2>
+<p>コメントでは、<code>kage</code>の機能改善に関する様々な提案がなされています。
+*   <strong>SingleFile機能の統合</strong>: <code>SingleFile</code>のように、すべてのコンテンツを単一のHTMLファイルにまとめる機能が提案されています。これを発展させて、クライアントサイドルーティングを可能にするJavaScript（ただし元のJSは除去）を含んだ単一のHTMLファイルにサイト全体をバンドルするアイデアも出ています。これにより、サイトが自己完結的になり、セキュリティも向上するとされています。
+*   <strong>パフォーマンスと制御</strong>: サイトへの負荷を考慮し、クローン速度の設定や画像・動画の除外、ウェブサイトの一部のみをダウンロードする機能の追加が求められています。
+*   <strong>WARC形式との連携</strong>: <code>mitmproxy</code>と組み合わせて、HTTP2やWebSocketのような最新の機能を含む高忠実度なアーカイブ形式としてWARCの代替を模索する意見や、Common CrawlのWARCフォーマットやKiwixのZIMフォーマットとの互換性を保ちつつ、圧縮や高速検索に最適化されたカスタムデータフォーマットの開発への関心が示されています。</p>
+<h2>セキュリティと使いやすさ</h2>
+<ul>
+<li><strong><code>--no-sandbox</code>オプション</strong>: <code>kage</code>がChromeを<code>--no-sandbox</code>オプションで起動することに対し、セキュリティ上の懸念が指摘されており、理由がない場合はサンドボックスを有効にすべきとの意見があります。</li>
+<li><strong>サーバー不要の閲覧</strong>: 現在<code>kage</code>は保存したサイトを閲覧するために<code>kage serve</code>コマンドでサーバーを起動する必要がありますが、サーバーなしでブラウザから直接ローカルファイルとして開けるようにする（<code>firefox $HOME/data/kage/paulgraham.com</code>のように）ことへの要望があります。これにより、<code>kage</code>がインストールされていないマシンでも利用できるようになります。しかし、ファイルプロトコルで開いた場合のJavaScriptの制限やCORSの問題が議論されています。</li>
+<li><strong>ウイルス検出</strong>: Windows環境で<code>leakless.exe</code>がウイルスまたは潜在的に迷惑なソフトウェアとして検出されるという報告がありました。</li>
+</ul>
+<h2>その他の類似ツールと使用事例</h2>
+<ul>
+<li><strong>他のツール</strong>: <code>httrack</code>、<code>pandoc</code>（EPUBへの変換）、<code>mdview.io</code>（HTMLエクスポート）、<code>wget --mirror</code>などが、オフライン閲覧やアーカイブの目的で言及されています。</li>
+<li><strong>使用事例</strong>: 飛行機や長距離列車での移動中など、インターネット接続が不安定な環境で記事やドキュメント（会社のWikiなど）をオフラインで閲覧する用途が挙げられています。</li>
+<li><strong>将来の展望</strong>: 投稿者は、クローラー、インデクサー、ストレージ、配信レイヤーを含む「Googleをゼロから構築する（すべてオープンソース）」という野心的な大規模プロジェクトの一部として<code>kage</code>を位置づけており、将来のリリースに期待が寄せられています。</li>
+</ul>
+<h2>まとめ</h2>
+<p><code>kage</code>は、JavaScriptベースのモダンなウェブサイトをオフラインで閲覧可能にするための、<code>HTTrack</code>の現代的な代替ツールとして注目を集めています。<code>SingleFile</code>のような単一HTMLファイル化、パフォーマンス制御、WARCフォーマットとの連携、サーバー不要のローカル閲覧など、機能強化に関する活発な議論が展開されました。セキュリティや使いやすさに関する懸念も提起されつつ、開発者のより大きな野心的なプロジェクトの一部としての位置づけに、コミュニティは期待を寄せています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

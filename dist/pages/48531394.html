@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yserver: A modern X11 server written in Rust - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Yserver: A modern X11 server written in Rust</h1>
+        <div class="meta">
+            投稿日: 2026年06月14日 | ランク: 5
+        </div>
+        <a href="https://github.com/joske/yserver" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、新しいウィンドウマネージャーにおいて「複数のXスクリーン」がレガシーと見なされていることへの疑問と、その技術的背景について議論しています。</p>
+<h2>「マルチスクリーンがレガシー」という認識への疑問</h2>
+<p>あるユーザーは、近年マルチモニター環境が非常に一般的であるにもかかわらず、なぜ「マルチスクリーン」がレガシーな概念として、新しいウィンドウマネージャーのサポート範囲外とされるのか疑問を呈しています。Xの内部構造に詳しくないため、その理由（例えば、サポートが非常に困難な「ひどい部分」なのかどうか）を知りたいと考えています。</p>
+<h2>「Xスクリーン」と「マルチモニター」の違い</h2>
+<p>コメントでは、「Xスクリーン」と現代の「マルチモニター」設定の違いが説明されています。
+*   <strong>Xスクリーンはレガシー</strong>: かつては、番号を指定して特定のスクリーンに接続し、そのスクリーン上にウィンドウを開くことができました。これは、各モニターに独立したXサーバーが存在しつつ、カーソルやVRAMを共有するようなモデルでした。しかし、現代では一つの大きな仮想スクリーンを使用する方法が主流であるため、このXスクリーンのモデルは時代遅れとされています。
+*   <strong>独立したモニターとしての「マルチスクリーン」</strong>: ここでいう「マルチスクリーン」は、複数のモニターが互いに完全に独立して動作する設定を指し、現代の単一のデスクトップ環境で複数のモニターを使用する「マルチモニター」とは異なる概念であることが強調されています。</p>
+<h2>Xにおけるマルチモニターサポートの歴史的背景</h2>
+<p>XineramaやxrandrといったXのマルチモニター対応機能は、Xの設計において「後付け」であった可能性が高いと指摘されています。これは、Xが元々マルチモニター環境を考慮して設計されていなかったことを示唆しています。</p>
+<h2>まとめ</h2>
+<p>このコメントスレッドでは、新しいウィンドウマネージャーの文脈で「マルチスクリーン」がレガシーとされたことに対し、一般的な「マルチモニター」との混同から疑問が呈されました。これに対し、Xにおける「Xスクリーン」は、複数のモニターがそれぞれ完全に独立した表示領域として機能していた古い概念であり、単一の大きな仮想スクリーン上で複数のモニターを統合する現代のアプローチとは異なることが説明されています。また、Xにおけるマルチモニターのサポート機能は、元々の設計にはなく後から追加されたものであったという歴史的背景も指摘されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

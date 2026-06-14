@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caddy compatibility for zeroserve: 3x throughput and 70% lower latency - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Caddy compatibility for zeroserve: 3x throughput and 70% lower latency</h1>
+        <div class="meta">
+            投稿日: 2026年06月14日 | ランク: 9
+        </div>
+        <a href="https://su3.io/posts/zeroserve-caddy-compat" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>ZeroserveはCaddy互換のWebサーバーとして紹介されていますが、Hacker Newsのコメントではその性能、機能、セキュリティについて活発な議論が交わされています。多くの人が技術的な実現を評価しつつも、実用性や成熟度について疑問を呈しています。</p>
+<h2>性能とベンチマーク</h2>
+<p>コメントでは、Zeroserveの性能とベンチマーク結果について議論されています。</p>
+<ul>
+<li><strong>Nginxとの比較</strong>: Nginxが非常に最適化されたHTTPサーバーであり、Zeroserveのベンチマーク結果がNginxに匹敵することに驚きを示す声がありますが、Nginxは広範な機能とモジュールエコシステムを持つため、わずかな性能差では移行するメリットがないという意見も出ています。</li>
+<li><strong>Caddyとの比較</strong>: ZeroserveはCaddy互換を謳っていますが、ほとんどのアプリケーションではバックエンドがプロキシよりも遅いため、Caddyがボトルネックになることは稀であると指摘されています。TLSハンドシェイクが多い短命な接続や、非常に高いRPSの小さな応答の場合にプロキシがボトルネックになる可能性があります。</li>
+<li><strong>ベンチマークの妥当性</strong>: ベンチマークが非常に合成的なHTTP(S)/1.1テストであり、実際のWebサーバーの用途にはそぐわないという意見もあります。GoのGCを無効にしても性能が劇的に向上するわけではないという指摘もあります。</li>
+<li><strong>eBPFとio_uring</strong>: ZeroserveがeBPF命令セットを使用していることや、io_uringを活用していることについて言及されています。eBPFのTuring完全性に関する誤解や、io_uringのセキュリティリスクについて懸念が示されています。</li>
+</ul>
+<h2>機能と実用性</h2>
+<p>Zeroserveの機能セットと実用性について、以下の点が挙げられています。</p>
+<ul>
+<li><strong>ACMEの欠如</strong>: ACME (Let's Encryptのような証明書自動取得) のサポートがないことが、多くのユーザーにとって「決定的な問題」または「取引を打ち破るもの」として挙げられています。これは「Caddy互換」という主張と矛盾していると見なされています。</li>
+<li><strong>プラグインエコシステム</strong>: Nginxの豊富なモジュールエコシステムと比較して、Zeroserveのプラグインシステムの可能性に言及しつつも、現状での機能の少なさが指摘されています。</li>
+<li><strong>ニッチなユースケース</strong>: ゼロサーバは、非常に高いパフォーマンスが必要な特定のニッチなユースケース（例えばCDNなど）でのみ意味があるかもしれないと示唆されていますが、多くのアプリケーションでは、水平スケーリングや既存の成熟したソリューション（CaddyやNginx）で十分であると考えられています。</li>
+</ul>
+<h2>セキュリティと信頼性</h2>
+<p>プロジェクトのセキュリティと信頼性について、いくつかの懸念が表明されています。</p>
+<ul>
+<li><strong>io_uringのセキュリティ</strong>: io_uringの使用は、過去にセキュリティアドバイザリが出ており、サイバーセキュリティの観点から安全性が低い可能性があると指摘されています。</li>
+<li><strong>JITコンパイルと攻撃面</strong>: WebサーバーでのJITコンパイルは、攻撃面が広大であり、特に小規模なプロジェクトでは恐ろしいことだと考えられています。</li>
+<li><strong>プロジェクトの成熟度とサポート</strong>: 新しい、実績のないプロジェクトであるため、信頼できるサポートやトラックレコードがない点が懸念されています。これは「6ヶ月で死ぬRustプロジェクト」といった見方にもつながっています。</li>
+</ul>
+<h2>不審なChromeのポップアップ（mTLSに関する議論）</h2>
+<p>一部のユーザーが、<code>su3.io:443</code>へのアクセス時にChromeで不審な証明書選択ポップアップが表示されると報告しています。</p>
+<ul>
+<li><strong>mTLSの挙動</strong>: このポップアップは、mTLS (Mutual TLS) をサポートしているWebサイトにアクセスした場合に、ブラウザがユーザーにクライアント証明書の提示を求める通常の挙動であると説明されています。</li>
+<li><strong>ブラウザUXの悪さ</strong>: クライアント証明書に関するブラウザのユーザーエクスペリエンス（UX）が非常に悪いと批判されています。ユーザーが適切な証明書を選択するのが困難であり、エラー処理も不十分である点が問題視されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>ZeroserveはeBPFやio_uringを活用した高性能なWebサーバーとして技術的には興味深いものの、ACMEサポートの欠如や既存の成熟したサーバー（Nginx, Caddy）との比較において、多くの実用的な用途では優位性を見出しにくいという意見が支配的です。性能ベンチマークの妥当性、io_uringのセキュリティ懸念、そしてプロジェクトの長期的な信頼性・サポート不足も課題として挙げられています。また、mTLSの導入は一部のユーザーにとって混乱を招くことが示唆されています。全体として、ニッチな高性能要件を持つ限られたユースケース向けであり、一般的なWebサービスでの採用にはまだ課題が多いと見られています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
