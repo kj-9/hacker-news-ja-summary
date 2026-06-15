@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A backdoor in a LinkedIn job offer - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A backdoor in a LinkedIn job offer</h1>
+        <div class="meta">
+            投稿日: 2026年06月15日 | ランク: 1
+        </div>
+        <a href="https://roman.pt/posts/linkedin-backdoor/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、LinkedInを介した採用詐欺の手口、特に悪意のあるnpmリポジトリやシェルスクリプトを使ったリモートコード実行の試みについて議論しています。求職中の開発者が直面する深刻なセキュリティリスクと、プラットフォーム提供者の責任、サイバー犯罪への対応に関する課題が浮き彫りになっています。</p>
+<h2>LinkedIn採用詐欺の手口と被害</h2>
+<p>多くのコメントで、採用担当者を装った詐欺師が、開発者の求職活動での焦りや絶望感につけ込んでいる実態が報告されています。手口としては、偽の企業アカウントやLinkedInプレミアムアカウントを使用し、一見すると正規の職務記述書やGitHubリポジトリを提供します。しかし、提示されるリポジトリには、<code>npm install</code>実行時に自動的にバックドアを仕込むスクリプトが隠されており、環境変数、SSHキー、パスワードなどの機密情報を盗み出したり、任意のコマンドを実行できる常駐プロセスを確立しようとします。VPNクライアントのインストールを装って悪意のあるスクリプトを実行させようとする事例も報告されています。実際に、同様の詐欺に遭遇し、間一髪で回避したという経験談が複数寄せられています。</p>
+<h2>NPMおよびパッケージマネージャーのセキュリティ問題</h2>
+<p><code>npm install</code>が自動的に任意のコード（<code>prepare</code>スクリプトなど）を実行する仕様は、この種の詐欺を可能にする根本的な脆弱性として批判されています。開発者たちは、NPMや同様のパッケージマネージャーの設計上の問題が、悪用されやすい状況を生み出していると指摘しています。解決策として、PNPMのような安全な代替ツールの利用や、未知のコードを実行する際にはVMなどの隔離された環境を使用することが強く推奨されています。GitHub（およびMicrosoft）がNPMのセキュリティ問題に十分に対応していないことへの不満も表明されており、LLMがNPMコマンドを頻繁に生成する現代において、その危険性がさらに高まっているという懸念もあります。</p>
+<h2>サイバー犯罪への対応とプラットフォームの責任</h2>
+<p>サイバー犯罪に対する効果的な「911」のような報告・執行体制が不足していることが大きな問題として挙げられています。詐欺師が海外（特に北朝鮮など）に拠点を置いている場合が多く、国際的な協力や法的執行が極めて困難であるため、捕まえたり起訴したりすることが非常に難しい現状が指摘されています。LinkedInやGitHubといったプラットフォームが、報告された詐欺や悪意のあるコンテンツに対して、対応が遅い、または全く対応しないことへの批判が多数見られます。過去には、LinkedInが偽の会社プロフィールや詐欺広告を放置した事例も報告されており、プラットフォーム運営側の責任感の欠如が問題の根深さを象徴しています。</p>
+<h2>開発者のための警戒と対策</h2>
+<p>開発者に対しては、この種の詐欺から身を守るための強力な警戒と具体的な対策が呼びかけられています。不審な求人オファーには慎重に対応し、特に不明なコードの実行やパッケージのインストールを求められた場合は、決して応じないことが重要です。仮想環境やサンドボックスを利用して、疑わしいリポジトリやスクリプトを安全にテストすることが推奨されています。また、AIを活用して詐欺師に返信し、複数の検証ステップや企業メールでの確認を要求するといった防御策を講じる開発者もいます。採用プロセスにおける不審な兆候（急なコード実行指示、ビデオ面接要請、不自然なコードテストなど）に注意を払うことや、雇用主への過度な忠誠心を持たないことも、自身の安全を守る上で重要だと指摘されています。</p>
+<h2>まとめ</h2>
+<p>LinkedInを悪用した採用詐欺は、求職中のソフトウェア開発者の脆弱性を狙い、悪意のあるnpmリポジトリやスクリプトを通じてリモートコード実行を試みる深刻なサイバー犯罪です。NPMの自動コード実行機能が悪用されやすく、サイバー犯罪に対する国際的な法執行体制の不備と、LinkedInやGitHub/Microsoftといったプラットフォームが詐欺報告に十分に対応しないことが、この問題の拡大に拍車をかけています。開発者自身が常に最大限の警戒心を持ち、不明なコードは絶対に実行せず、仮想環境を活用するなどの自己防衛策を徹底することが不可欠です。同時に、サイバー犯罪への効果的な「サイバー911」の確立と、プラットフォームがより積極的に詐欺対策に取り組むことが強く求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
