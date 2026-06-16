@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Using JWTs - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Stop Using JWTs</h1>
+        <div class="meta">
+            投稿日: 2026年06月16日 | ランク: 9
+        </div>
+        <a href="https://gist.github.com/samsch/0d1f3d3b4745d778f78b230cf6061452" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、JWT（JSON Web Token）をWebセッション認証に使うべきかどうかという議論に集中しています。FIFAのハッキング事件がきっかけで、一部のユーザーはJWTの使用停止を提唱しましたが、多くのユーザーはJWTの欠点や適切な使用例について異なる見解を示しました。</p>
+<h2>JWTはWebセッション認証に適さないという意見</h2>
+<p>多くのコメントは、WebブラウザベースのユーザーセッションにJWTを使用することに警鐘を鳴らしています。主な理由としては、以下が挙げられます。</p>
+<ul>
+<li><strong>無効化の難しさ</strong>: JWTはステートレスであるため、発行後に個々のトークンをサーバー側から無効化することが困難です。パスワード変更時やアカウント侵害時に攻撃者のセッションを強制終了させるには、別途複雑なステートフルなメカニズム（失効リストや「最低発行時刻」フィールドなど）を導入する必要があり、JWTの「ステートレス」という利点を損ないます。</li>
+<li><strong>セキュリティの脆弱性</strong>: JWTライブラリには、過去に「none」アルゴリズムの受け入れや公開鍵を共有秘密鍵として使用できるなど、不適切なデフォルト設定による脆弱性が存在しました。これにより、トークンの偽造や改ざんが可能になるリスクがありました。</li>
+<li><strong>XSSからの保護</strong>: クッキーに<code>HttpOnly</code>属性を設定することで、クライアント側のスクリプトからトークンにアクセスされるのを防ぎ、XSS攻撃のリスクを軽減できます。JWTを<code>localStorage</code>に保存する場合、この保護が適用されないため、より脆弱になる可能性があります。</li>
+<li><strong>複雑性</strong>: 署名や暗号化のメカニズムが複雑であり、不適切な実装につながる可能性があります。シンプルな不透明なセッションIDとデータベースによるセッション管理の方が、多くの場合でよりシンプルで安全であると主張されています。</li>
+<li><strong>再利用性</strong>: 「ステートレス」なトークンはリプレイ可能であり、その点を考慮しないとセキュリティ上の脆弱性につながることがあります。</li>
+</ul>
+<h2>JWTは有用である、または特定のユースケースでは適切であるという意見</h2>
+<p>一方で、JWTには多くの正当な使用例があるという意見も強く、特にサービス間通信や分散システムでの利用が推奨されています。</p>
+<ul>
+<li><strong>サービス間通信</strong>: サービス間の認証や、システム間でアクセス権限を渡す際には、JWTが非常に効果的です。この場合、トークンがブラウザに保存されることがなく、通常は有効期間が短く設定されるため、Webセッションの問題は該当しません。</li>
+<li><strong>短寿命トークンとリフレッシュメカニズム</strong>: JWTの有効期間を短く（5～15分程度）設定し、認証機関に対してリフレッシュトークンを発行する仕組みを導入することで、漏洩時のリスクを軽減できます。また、JWTに「jti」（JWT ID）を組み込み、その失効をチェックすることも可能です。</li>
+<li><strong>オーディエンス (aud) の設定</strong>: JWTにオーディエンス（対象システム）を設定することで、意図しないシステムでのトークン利用を防ぐことができます。</li>
+<li><strong>負荷分散とスケーラビリティ</strong>: 分散システムにおいて、各ノードが中央のセッションデータベースに問い合わせることなく、自己完結的にトークンの署名を検証できるため、レイテンシの削減やスケーラビリティの向上に貢献します。失効リストの管理も、アクティブセッションリスト全体よりも小さく、複製しやすいという利点があります。</li>
+<li><strong>OIDCトークン</strong>: OpenID Connect（OIDC）のIDトークンはJWTであり、広く利用されています。このことから、JWT自体が本質的に安全でないわけではないことが示唆されます。</li>
+</ul>
+<h2>解決策と代替案</h2>
+<ul>
+<li><strong>HttpOnly CookieにJWTを保存</strong>: JWTを<code>HttpOnly</code>、<code>Secure</code>、<code>SameSite=strict</code>属性を持つCookieに保存することで、XSS攻撃のリスクを軽減し、クライアント側のスクリプトからトークンを保護できます。</li>
+<li><strong>PASETO (Platform-Agnostic Security Tokens)</strong>: JWTの代替としてPASETOが推奨されています。PASETOは、脆弱性の原因となるデザイン上の欠陥（例：「none」アルゴリズムのサポートなど）を排除し、より安全な実装を奨励するように設計されています。ただし、エコシステムのサポートはまだ不十分であるとの指摘もあります。</li>
+<li><strong>セッションデータベース</strong>: 多くのシナリオで、シンプルな不透明なセッションIDをCookieに保存し、サーバー側のデータベースでセッション情報を管理する方法が、JWTよりもシンプルで安全であると推奨されています。セッションデータベースのサイズやルックアップコストは、ほとんどのアプリケーションで懸念するほど大きくないという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>JWTは、Webブラウザベースのユーザーセッション認証の主要な手段としては、無効化の困難さや過去のライブラリの脆弱性、XSSからの保護の課題から、多くのユーザーに推奨されていません。ステートレス性を追求するために、結果的にステートフルな解決策を導入せざるを得なくなることが、JWTの本来の利点を損なうと見られています。</p>
+<p>一方で、サービス間通信や特定の分散システムなど、トークンがブラウザに直接公開されず、有効期間が短い、あるいは厳密なアクセス制御が必要なユースケースにおいては、その暗号学的署名による信頼性とスケーラビリティのメリットから、JWTは依然として強力で有用なツールであると認識されています。適切な実装（短寿命、厳格な検証、HttpOnly Cookieへの保存など）と、その複雑性を理解した上での使用が重要であるという点で、多くのコメントが一致しています。シンプルなセッション管理には不透明なセッションIDとサーバーサイドのデータベースを用いる方が、多くの場合で優れているという結論に傾いています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

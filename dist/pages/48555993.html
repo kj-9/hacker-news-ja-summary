@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running local models is good now - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Running local models is good now</h1>
+        <div class="meta">
+            投稿日: 2026年06月16日 | ランク: 1
+        </div>
+        <a href="https://vickiboykis.com/2026/06/15/running-local-models-is-good-now/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、ローカルで大規模言語モデル（LLM）を実行することの現状と将来について議論しています。多くの人が、特にコストとプライバシーの面で、ローカルモデルがクラウドベースのサービスに代わる有望な選択肢であると指摘していますが、能力、必要なハードウェア、ユーザーエクスペリエンスに関しては意見が分かれています。</p>
+<h2>ローカルモデルの能力と品質</h2>
+<p>Gemma 4とQwen 3.6のような特定のモデル（特に27Bから35Bパラメーターの範囲）は、多くのユーザーからその能力と効率性で高く評価されています。これらのモデルは、特にコーディング支援や自動化タスクにおいて、以前のクラウドベースのモデルに匹敵するか、一部の点で優れていると評価されています。一方で、ローカルモデルは依然としてフロンティアモデル（例: Claude Opus、GPT-4o）に比べて「賢さ」が劣り、複雑なタスクや曖昧な指示には対応しにくいという意見もあります。具体的には、ツール呼び出しの信頼性や、生成されるJSON形式の一貫性に関する課題が挙げられています。MoE（Mixture of Experts）モデルは高速ですが、より多くの間違いを犯す傾向があるとの指摘もあります。</p>
+<h2>ハードウェア要件とコスト</h2>
+<p>ローカルモデルを実行するには、かなりのハードウェア投資が必要です。Mac Studioの64GB RAMや24GB以上のVRAMを搭載したNVIDIA RTX GPUが推奨されていますが、これらは多くの人にとって高価であると認識されています。M2/M5 MacやRTX 3090/4090のようなハイエンドな消費者向けハードウェアでも、快適な速度（30-100トークン/秒）でモデルを実行できることが示されています。しかし、一部のユーザーは、最適化されていない設定や低量子化モデルを使用すると、エクスペリエンスが低下すると警告しています。ローカルモデルのコストは、月額20ドルのクラウドサービスと比べて初期投資が大きいですが、長期的に見ればコスト効率が良いという見方もあります。</p>
+<h2>クラウドとローカルの比較、ビジネスモデルへの影響</h2>
+<p>ローカルモデルの台頭は、AnthropicのようなクラウドベースのAIプロバイダーにとって脅威となりうると考えられています。ローカル実行が容易になるにつれて、多くのユーザーが「レンタル」ではなく「購入」を選択し、コスト削減とプライバシー保護を求めるようになる可能性があります。特に企業にとっては、データのプライバシーやセキュリティ、ベンダーロックイン回避の観点から、オンプレミスでのAIクラスター運用に関心が寄せられています。しかし、クラウドコンピューティングの便利さ、スケーラビリティ、メンテナンス不要という利点を強調し、AIモデルも同様にクラウドが主流になるという意見も根強くあります。ハイブリッドアプローチ（複雑なタスクにはクラウド、小規模でプライベートなタスクにはローカル）を提唱する声も多く聞かれます。</p>
+<h2>ユーザーエクスペリエンスと課題</h2>
+<p>ローカルモデルのユーザーエクスペリエンスは、個人のスキルと期待に大きく依存します。モデルのパフォーマンスを最大限に引き出すためには、ハーネス、AGENTS.md、スキルなどを細かく調整する時間が必要とされます。多くのユーザーは、クラウドモデルが持つ「おしゃべりすぎる」「意見が多すぎる」といった個性に不満を抱いており、ローカルモデルのより道具的な性質を好んでいます。一方、ローカルモデルは、コンテキストウィンドウの制限、過剰な推論、繰り返しの挙動、ツール呼び出しの失敗といった課題に直面することもあります。また、ラップトップで実行すると熱や騒音の問題が発生することもあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、ローカルAIモデルが急速に進化し、特にコストとプライバシーの懸念から、多くの開発者にとって魅力的な選択肢になっていることが示されています。QwenやGemmaのようなモデルは、適切なハードウェア（特に高いRAMとVRAM）と細やかな設定があれば、コーディング支援や自動化などの特定のタスクで十分に実用的です。しかし、フロンティアモデルの持つ複雑な推論能力や、複雑なエージェントワークフローでの信頼性にはまだ及ばないという認識もあります。ローカルモデルの普及は、クラウドAIサービスのビジネスモデルに圧力をかける一方で、オンプレミスAIクラスターやハイブリッドアプローチといった新たな市場の可能性も示唆しています。今後の技術革新とハードウェアコストの低下が、ローカルAIの未来をさらに形作るでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

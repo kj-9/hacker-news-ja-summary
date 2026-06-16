@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIL: You can make HTTP requests without curl using Bash /dev/TCP - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">TIL: You can make HTTP requests without curl using Bash /dev/TCP</h1>
+        <div class="meta">
+            投稿日: 2026年06月16日 | ランク: 5
+        </div>
+        <a href="https://mareksuppa.com/til/bash-dev-tcp-http-without-curl/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、<code>bash</code>の<code>/dev/tcp</code>機能を使って、<code>curl</code>や<code>wget</code>などのツールがないミニマルなDockerコンテナ環境でTCP接続や簡単なHTTPリクエストを行う方法について議論しています。</p>
+<h2><code>/dev/tcp</code>の機能と利用シーン</h2>
+<p>オリジナル投稿者は、<code>curl</code>や<code>wget</code>がないDockerコンテナ内でコンテナ間の接続性を確認する際に<code>/dev/tcp</code>を発見し、これを使ってHTTPリクエストを模倣できることを紹介しています。これは特に、ヘルスチェックやシンプルなHTTP接続のテストに役立つと多くの人が同意しています。過去には<code>telnet</code>で同様のことを行っていた人も多く、特定のツールがない環境での通信手段として認識されています。</p>
+<h2>ツールの必要性とミニマルイメージ</h2>
+<p>一部のコメントでは、<code>curl</code>を標準でサポートするイメージを使うべきではないかという意見も出ましたが、投稿者のケースでは<code>python:3.12.2-slim-bookworm</code>のような非常にミニマルなイメージを使用していたため、<code>curl</code>は含まれていませんでした。これにより、依存関係を最小限に抑えたいというニーズが浮き彫りになりました。</p>
+<h3><code>FROM scratch</code>とセキュリティ</h3>
+<p><code>FROM scratch</code>のような極めてミニマルなイメージの使用を推奨する意見もあり、これによりベースイメージのCVE更新の必要性がなくなり、攻撃対象領域が減少するという利点が挙げられています。しかし、デバッグツールの不足という欠点も指摘されており、Kubernetesのエフェメラルコンテナ（デバッグ用コンテナ）などで対応するアプローチも提案されています。</p>
+<h2>BashによるHTTPの限界と代替手段</h2>
+<p>多くのコメントでは、<code>/dev/tcp</code>はTCPソケットを開くだけであり、Bash自体がHTTPプロトコルを「話す」わけではないと指摘しています。これにより作成されるのは非常にシンプルなHTTPクライアントであり、プロキシ、エンコーディング、リダイレクトなど、HTTPの複雑な側面には対応できないため、実運用での利用には注意が必要だと強調されています。</p>
+<h3>PythonやPerlでの代替</h3>
+<p>Bashが利用できる環境であれば、PythonやPerlの組み込みソケットライブラリを使って同様の接続を行う方が、より簡単で信頼性が高いという意見も多くありました。特にPythonのワンライナーは、ミニマルなイメージで利用可能なより良い代替手段として提案されています。</p>
+<h2>AIによるコメントスタイルへの懸念</h2>
+<p>コメントの中盤で、あるユーザーの丁寧なフィードバックのスタイルがAI（特にClaude）に似ているという指摘があり、それに関する短い議論が巻き起こりました。AIの書き方が主流になりつつあることへの懸念や、人間とAIの境界線が曖昧になることへの戸惑いが示されています。</p>
+<h2>まとめ</h2>
+<p>本コメントスレッドでは、Bashの<code>/dev/tcp</code>機能が、<code>curl</code>や<code>wget</code>がないミニマルな環境でのTCP接続や簡単なHTTPリクエストに有効な手段であることが共有されました。多くのユーザーが、ヘルスチェックやコンテナ間の接続テストといった特定のユースケースでの有用性を認める一方で、Bash単体でのHTTP処理の限界や、実運用にはより堅牢なツール（PythonやPerlのソケット、あるいはデバッグコンテナ）が必要であるという意見が支配的でした。また、ミニマルなコンテナイメージのセキュリティとデバッグのトレードオフ、そしてAIが人間のコミュニケーションスタイルに与える影響についても言及されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
