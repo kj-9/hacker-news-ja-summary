@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFC 10008: The new HTTP Query Method - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">RFC 10008: The new HTTP Query Method</h1>
+        <div class="meta">
+            投稿日: 2026年06月17日 | ランク: 10
+        </div>
+        <a href="https://www.rfc-editor.org/info/rfc10008/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>RFC 10008で定義された新しいHTTPメソッド「QUERY」についての議論は、主にその目的、利点、そして導入に伴う課題に焦点を当てています。これは、GETリクエストのクエリ文字列の長さ制限を回避し、かつPOSTリクエストの非冪等性・非キャッシュ性を解決することを目的としています。</p>
+<h2>QUERYメソッドの目的と利点</h2>
+<p>QUERYメソッドは、リクエストボディにデータを格納できるGETリクエストに似た安全で冪等な（何度実行しても同じ結果になる）操作を可能にします。これにより、GETリクエストのURI長制限を回避しつつ、POSTリクエストでは実現が難しいキャッシュや自動リトライといった機能をHTTPインフラレベルで利用できるようになります。</p>
+<p>具体的には、以下のような利用例が挙げられます。
+*   <strong>大規模なクエリ</strong>：GraphQLのクエリ（ミューテーションではない）のように、データ読み込みのみでURI長制限を超える可能性のあるリクエストに適しています。
+*   <strong>キャッシュとリトライ</strong>：安全で冪等であるため、ブラウザや中間プロキシが応答をキャッシュしたり、失敗時に自動的にリクエストをリトライしたりすることが可能になります。これにより、アプリケーションレベルでキャッシュやリトライのロジックを実装する手間が省けます。
+*   <strong>Webフォームの改善</strong>：POSTフォームの再送信警告を回避できる可能性があります。
+*   <strong>セマンティックな明確さ</strong>：POSTを検索などの読み取り専用操作に使用する現在の慣行に代わり、より適切なHTTPメソッドを提供します。</p>
+<h2>導入と互換性に関する懸念</h2>
+<p>QUERYメソッドの導入には、既存のHTTPインフラとの互換性に関する懸念が指摘されています。
+*   <strong>中間プロキシのサポート</strong>：多くの既存のプロキシ、WAF、ロードバランサーは、認識しないメソッドのボディを削除したり、リクエストを拒否したりする可能性があります。これが解決されない限り、本番環境での信頼性は低いと見られています。
+*   <strong>キャッシュキーとしてのボディ</strong>：リクエストボディをキャッシュキーの一部として使用することによる、キャッシュキーの無制限性やユーザーによる制御可能性、キャッシュバストの容易さなどが懸念されています。ただし、衝突耐性のあるハッシュの使用や、特定のフィルターのみをキャッシュするなどの対策も提案されています。
+*   <strong>既存の解決策</strong>：POSTリクエストで検索機能を実装したり、クエリ文字列のハッシュをURLパラメータとして使用したりするなど、既存の回避策がすでに存在するため、新しいメソッドの導入が本当に必要かという意見もあります。
+*   <strong>名前の混乱</strong>：「QUERY」という名前がHTTPリクエスト全般やクエリ文字列と混同される可能性があるという意見もあります。</p>
+<h2>RFC番号とその他のトピック</h2>
+<p>RFC 10008という5桁の番号に到達したこと自体が注目を集めています。RFC 10000がスキップされたことを巡る予測市場での賭けが話題になりました。また、HTMLフォームがGET/POST以外のメソッドをサポートする可能性についても議論されており、QUERYメソッドのサポートが検討されています。</p>
+<h2>まとめ</h2>
+<p>QUERYメソッドは、HTTPリクエストのボディにデータを格納しつつ、GETリクエストのような安全で冪等なセマンティクスを必要とするユースケース（特に大規模なデータ取得や検索）において、既存の課題を解決する可能性を秘めています。URI長制限の回避、キャッシュ効率の向上、再送信警告の解消といった明確な利点がある一方で、既存のHTTPインフラ（特に中間プロキシ）との互換性、キャッシュ戦略の複雑化、そして広く採用されるための「慣性」といった課題を克服する必要があります。最終的には、現在の「POST /search」のような非標準的な利用をよりセマンティックに正しい方法で置き換えることを目指しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
