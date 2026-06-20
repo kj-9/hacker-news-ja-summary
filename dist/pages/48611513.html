@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Make PDFs look scanned (CLI or in the browser via WASM) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Make PDFs look scanned (CLI or in the browser via WASM)</h1>
+        <div class="meta">
+            投稿日: 2026年06月20日 | ランク: 8
+        </div>
+        <a href="https://github.com/overflowy/make-look-scanned" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、PDFをスキャンしたように見せるツールの作成理由、その主要なユースケース（特に非合理な「印刷・署名・スキャン」要求への対応）、技術的な代替手段、そしてこの種のツールの倫理的側面について議論しています。</p>
+<h2>ツールの作成理由と実用性への疑問</h2>
+<p>作者は、既存のオンラインツールがプライバシー面で不安があり、出力も不満だったため、このツールを自作したと説明しています。一部のユーザーは、PDFの視認性を低下させることの実用性に疑問を呈し、本来はスキャンした文書をきれいにするのが一般的ではないかと問いかけます。また、このようなツールが詐欺行為に利用される可能性を指摘する声もありますが、他のユーザーからは「アナログレコードを好む音楽ファン」のように、スキャンされた文書の見た目を好む人もいるかもしれないとの意見も出ました。</p>
+<h2>「印刷・署名・スキャン」の非合理な要求への対応</h2>
+<p>多くのコメントが、企業や政府機関からいまだに「文書を物理的に印刷し、手書きで署名し、それをスキャンして送り返す」という非合理的な要求があると指摘しています。これは、デジタル署名が広く普及している現代において、特に面倒な手続きであり、古い慣習や特定の国の文化（例：フランスの筆跡学、ポーランドの判読可能な手書き署名へのこだわり）に起因する場合があると説明されています。このツールは、このような要求に対応し、プリンターやスキャン環境がない場合に、コピーセンターに行く手間を省くための実用的な解決策として高く評価されています。</p>
+<h2>技術的アプローチと改善点</h2>
+<p>ImageMagickなどの既存のコマンドラインツールを使って同様の効果を実現する方法が共有されており、具体的な設定例も示されています。出力品質については、一部のユーザーが例示画像のエッジのグラデーションが不自然だと指摘しましたが、作者は<code>--paper-tone</code>などのパラメータで調整可能だと回答しています。また、画像出力オプションの追加や、ランダムな空白ページを挿入する機能の提案もありました。</p>
+<h2>無料・オープンソースであることへの評価と反対のニーズ</h2>
+<p>多くのユーザーが、このツールが無料でオープンソースであることに感謝しており、不必要に有料化されているPDFツールが多い中で、このようなツールの存在は価値があると考えています。一方で、このツールとは反対に、「スキャンされた文書をきれいなPDFに変換する」ツールの需要があることも示されました。</p>
+<h2>まとめ</h2>
+<p>このPDFをスキャン風にするツールは、プライバシー懸念と既存ツールの不満から開発されましたが、その最大の価値は、多くのユーザーが直面する非合理的な「物理的な印刷・署名・スキャン」要求への実用的な対応策を提供している点にあります。無料かつオープンソースであることは高く評価されており、時代遅れの行政・企業文化とデジタル化のギャップを埋める一助となっています。将来的には、出力品質のさらなるリアリティ向上や、スキャン文書をクリーンにする逆方向のニーズにも注目が集まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSSQuake - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">CSSQuake</h1>
+        <div class="meta">
+            投稿日: 2026年06月20日 | ランク: 6
+        </div>
+        <a href="https://cssquake.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、CSSを使ってQuakeを再構築したプロジェクト（CSS Quake）について議論しています。多くのユーザーがその技術的偉業と独創性に感銘を受けている一方で、パフォーマンス、ゲームプレイの挙動、CSSの適切な用途についての議論も交わされています。</p>
+<h2>技術的な側面と実装</h2>
+<p>ユーザーは、CSS Quakeがどのように動作しているかについて興味を持っています。レンダリングにCSSを使用しているものの、ゲームロジックはTypeScriptで実装されていることが複数回指摘されています。これは、純粋なCSSのみでゲームが作られているわけではないことを意味します。一部のユーザーは、CSSがこのような複雑なレンダリングに使用できることに驚きを示しています。また、プロジェクトがCSS Doomなどの先行プロジェクトからインスピレーションを受けている可能性や、オリジナルのQuakeエンジンとの違い（例えば、ボタンの起動方法など）についても言及されています。</p>
+<h2>パフォーマンスとバグ</h2>
+<p>多くのユーザーがCSS Quakeのパフォーマンスといくつかのバグについて報告しています。オリジナルのQuakeが90年代のPentium-133 PCでよりスムーズに動作したという意見があり、現代のM1 Macでもカクつきが見られるという指摘もあります。これは、CSSレンダリングがゲームのようなリアルタイム3D用途には最適化されていないためと考えられています。具体的なバグとしては、メニューが消える、画面のクリッピング、キャラクターが障害物に引っかかる、斜面での移動の困難さ、一部のオブジェクト（撃たれた犬）が浮いている、などが挙げられています。開発者からの迅速な修正報告もありました。ブラウザやOSによるパフォーマンスの違い（Chrome/M2 Macではスムーズ、Safari/WebKitではカクつくなど）も指摘されています。</p>
+<h2>CSSの哲学と用途</h2>
+<p>CSSでQuakeを再現できることについて、CSSという言語の「正しい」または「間違った」使い方に関する哲学的議論が展開されています。「科学は行き過ぎたのか？」という問いや、「宣言的なスタイルシート言語でこれが可能であるべきではない」という意見もあります。しかし、一方で「これはCSSの良い、そして正当な使用例だ」と評価する声もあり、CSSの可能性を示す「ハックの上のハック」と捉える人もいます。CSSが汎用的なレンダリングソリューションであり、3Dゲームのために最適化されていないことが、そのパフォーマンスの理由として説明されています。</p>
+<h2>ノスタルジアと感情的な反応</h2>
+<p>CSS Quakeは、多くのユーザーに強いノスタルジアを呼び起こしています。Quakeをプレイした昔の思い出や、オリジナルのゲームのエンジニアリングの素晴らしさに改めて感銘を受けるコメントが多数見られます。このプロジェクトが「本当に笑顔にさせてくれた」と感謝する声や、「これはすごい」「素晴らしい」といったポジティブな感想が溢れています。中には、現在もQuakeをプレイし続けているというファンもいます。</p>
+<h2>まとめ</h2>
+<p>CSS Quakeは、Hacker Newsのコミュニティに強い衝撃と感動を与えました。CSSを使ったレンダリングという独創的なアプローチは、その技術的偉業で多くの人を魅了し、CSSの可能性と限界について活発な議論を巻き起こしました。パフォーマンスの問題やゲームプレイの挙動に関するバグは指摘されつつも、多くのユーザーは昔懐かしいQuakeの世界をブラウザ上で体験できることに大きな喜びとノスタルジアを感じています。このプロジェクトは、単なる技術デモを超え、ウェブ開発の創造性と限界を再認識させる刺激的な作品として受け入れられました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

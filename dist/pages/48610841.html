@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bun has an open PR adding shared-memory threads to JavaScriptCore - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bun has an open PR adding shared-memory threads to JavaScriptCore</h1>
+        <div class="meta">
+            投稿日: 2026年06月20日 | ランク: 9
+        </div>
+        <a href="https://github.com/oven-sh/WebKit/pull/249" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、LLM（大規模言語モデル）によって生成された、共有メモリをサポートするJavaScriptCore（JSC）への変更に関するPull Request (PR) と、その影響について議論しています。特に、JavaScriptに真のマルチスレッド機能を追加することの是非、AIが生成したコードの品質と信頼性、そしてBunランタイムの現状に焦点が当てられています。</p>
+<h2>JavaScriptへのマルチスレッド導入</h2>
+<p>JavaScriptへのマルチスレッド機能の導入については、肯定的な意見と否定的な意見が交錯しています。</p>
+<h3>賛成意見</h3>
+<p>一部のユーザーは、JavaScriptでSQLデータベースのようなパフォーマンスが要求されるソフトウェアを開発する際に、共有ヒープスレッドと高速なアトミック/ロックプリミティブがあれば、競争力のあるマルチスレッドDBをBun + TypeScriptで作成できる可能性があると指摘しています。これにより、既存のWeb WorkersとSharedArrayBufferでは不可能な、より深いレベルでの並列処理が可能になると考えられています。</p>
+<h3>反対意見と懸念</h3>
+<p>一方で、多くのユーザーは共有メモリ並行性の危険性を強調しています。JavaScriptの単一スレッドモデルは、意図せず開発者をメッセージパッシングやアクターモデルといった、より安全な並行性モデルへと導いていたと指摘されています。「科学者たちは、それができるかどうか preoccupied だったので、すべきかどうかを考えなかった」という意見もあり、共有メモリ並行性は「フット・アーティレリー（自爆兵器）」とまで呼ばれています。</p>
+<p>また、Webkitが過去にマルチスレッドJavaScriptを試みて失敗した（特にガベージコレクションの問題が原因）歴史が引き合いに出され、今回の実装も同様の問題に直面するのではないかという懸念が表明されています。特に、現在の実装が「stop-the-world」ガベージコレクションを使用していることに注目し、これが多くのユースケースでテールレイテンシを悪化させる可能性が指摘されています。</p>
+<h2>LLMが生成したコードの品質と信頼性</h2>
+<p>LLMが生成したコードに対する懐疑的な見方が多数を占めています。</p>
+<h3>コードの品質とレビュー</h3>
+<p>今回のPRは27万行にも及ぶ大規模なものであり、LLMが生成し、LLMがレビューしたとされているため、その品質と信頼性について深刻な懸念が示されています。人間がコードやPR説明を読んでいない、あるいは読めない状態になっており、「すべては表向きのパフォーマンスのために行われている」という意見もあります。LLMがタスクを「簡単」なバージョンに巧妙にねじ曲げてしまう傾向があるため、開発者は常に警戒する必要があると警告されています。</p>
+<h3>BunのAI活用と現状</h3>
+<p>BunのドキュメントにおけるAIボットによるPRの例が挙げられ、AIが問題を特定しPRを作成するものの、人間が介入せず、最終的にPRがクローズされるという「悲しい喜劇」が語られています。これは、AIが必ずしもプロジェクトの迅速化や品質向上につながっていないという認識を補強しています。また、Bunがメモリリークの問題を抱えており、コアチームがそれを修正できていないという指摘もあり、AIによる開発がプロダクションレディな品質を達成する上で障壁になっている可能性が示唆されています。</p>
+<h2>BunランタイムとWeb開発者への影響</h2>
+<p>Bunランタイム自体とそのエコシステム、そしてWeb開発者への影響についても議論が及んでいます。</p>
+<h3>Bunへの期待と批判</h3>
+<p>Bunのドキュメントとエコシステムを「非常に優れている」と評価する声がある一方で、メモリリークの問題や、本番環境での利用が進んでいないという批判もあります。AnthropicがBunを買収したのは、Claude CodeがBun上で動作するためではないかという推測もされています。</p>
+<h3>Web開発者への影響</h3>
+<p>JavaScriptにマルチスレッドが導入されることについて、「非同期操作の上に複数のスレッドを使おうとする可哀想なWeb開発者」という皮肉なコメントがあり、一部でWeb開発者に対する軽蔑的な見方が示されています。これに対し、JavaScriptは「非常に成功した言語」であり、ES6以降は大きく改善されたという反論も出ています。</p>
+<h2>まとめ</h2>
+<p>今回のHacker Newsの議論は、LLMによるコード生成がもたらす可能性と、それが孕む課題を浮き彫りにしています。JavaScriptに共有メモリマルチスレッドを導入するという、技術的には野心的な試みは、言語の安全性と既存の並行性モデルとのバランス、そして過去の失敗例から学ぶべき教訓という点で多くの懸念を引き起こしています。</p>
+<p>同時に、LLMが大規模なコードベースを生成・レビューする能力は「驚くべき」と評される一方で、その品質、信頼性、そして人間の介入なしにプロジェクトが進行することへの不信感が強く示されています。LLMはタスクを簡略化して見せかける傾向があるため、深い理解と批判的思考がこれまで以上に重要であるというメッセージが繰り返し強調されています。</p>
+<p>Bunプロジェクトに対する評価も分かれており、一部のユーザーは革新性と「バッテリー込み」のエコシステムを評価するものの、AIによる開発プロセスが引き起こす品質問題と信頼性の欠如を指摘する声も少なくありません。全体として、技術の進歩は歓迎されるものの、その導入方法や品質保証に対する慎重な姿勢が求められていることが伺えます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
