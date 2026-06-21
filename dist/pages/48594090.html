@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An Embedded Linux on a Single Floppy - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">An Embedded Linux on a Single Floppy</h1>
+        <div class="meta">
+            投稿日: 2026年06月21日 | ランク: 8
+        </div>
+        <a href="https://github.com/w84death/floppinux" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、2000年代初頭のフロッピーディスクベースのLinuxディストリビューション、特にルーターやリカバリツールとしての利用について議論しています。</p>
+<h2>フロッピーディストリビューションの時代</h2>
+<p>多くのユーザーが、2000年代初頭にフロッピーディスク1枚で動作するLinuxディストリビューション（fli4l、LRP、Freesco、Coyote Linux、BrazilFW、muLinux、tomsrtbtなど）を自宅ルーターやテスト環境で利用していたことを思い出しています。これらのシステムは、当時のHDDの騒音を避けるため、また低消費電力であるため、RAMディスクに展開されて動作していました。特に、QNXのようなOSが1.44MBのフロッピーにフルネットワークスタックやWebサーバー、さらにはGUIデスクトップまで搭載していたことに驚きと懐かしさを覚える声があります。</p>
+<h2>特殊な用途と工夫</h2>
+<p>ユーザーは、フロッピーベースのディストリビューションを様々な目的で活用していました。</p>
+<ul>
+<li><strong>ディスクイメージングツール:</strong> あるユーザーは、学校のWindows 9X PCのネットワークベースのディスクイメージングを行うために、独自のフロッピーベースのLinuxディストリビューションを作成しました。最初は<code>dd</code>コマンドでFAT32ボリュームをイメージングし、後に<code>ntfsprogs</code>ツールを使ってNTFSをサポートし、より効率的なイメージングを実現しました。PXEブートが普及してからは、フロッピーイメージをPXE経由で起動させ、HTTPやローカル光学ドライブ、udpcastからイメージを取得するように改良しました。AHCIの登場と様々なPCモデルへの対応の困難さから、最終的にはWindows PEベースのツールに移行しました。</li>
+<li><strong>リカバリ・セキュリティツール:</strong> tomsrtbtやQNXのフロッピーは、サイバーカフェや友人のPCでキーロガーやマルウェアを回避するためのリカバリディスクとして重宝されました。</li>
+</ul>
+<h2>小容量でのOS動作</h2>
+<p>当時のLinuxカーネルやX11の軽量性についても言及されています。Linux 2.0や2.2の時代には、X11を含むGUI環境が4MBや8MBのRAMでも動作したという記憶が共有されています。現在のカーネルがより大きくなっているのは、汎用性を高めるために多くのドライバーを組み込んでいるためではないかという推測もされています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、2000年代初頭におけるフロッピーディスクベースのLinuxディストリビューションが、いかに多様な用途で活用され、当時の技術的制約の中で創意工夫が凝らされていたかを生き生きと伝えています。騒音の少ないルーター、効率的なディスクイメージング、セキュリティ確保のためのリカバリツールなど、限られたリソースの中で最大限の機能を引き出すための挑戦が、多くのユーザーの記憶に深く刻まれていることが伺えます。QNXのような驚異的な軽量OSの存在も、当時の技術水準の高さを象徴しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

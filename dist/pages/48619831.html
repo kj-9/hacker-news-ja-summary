@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(How to Write a (Lisp) Interpreter (In Python)) (2010) - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">(How to Write a (Lisp) Interpreter (In Python)) (2010)</h1>
+        <div class="meta">
+            投稿日: 2026年06月21日 | ランク: 4
+        </div>
+        <a href="https://norvig.com/lispy.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Peter Norvig氏の「How to Write a (Lisp) Interpreter (In Python)」という記事についてのものです。多くのコメントがLispの括弧（S式）の見た目や実用性、Lispインタープリターの実装経験、そしてAIが学習リソースに与える影響について語っています。</p>
+<h2>Lispの括弧（S式）と可読性</h2>
+<p>多くの人がLispのS式（括弧）の見た目について議論しています。括弧が多すぎると感じる人もいれば、Lispを学ぶことで括弧に対する見方が変わったと語る人もいます。C言語のような中括弧形式を好む意見や、インデントでブロックを示すことで多数の括弧が許容できるようになったという意見もあります。S式の括弧は、構文解析器がシンプルになるという利点があるものの、人間がネストの深さを理解しにくかったり、<code>x</code>と<code>(x)</code>のような区別が直感的でなかったりするという意見も挙げられています。</p>
+<h2>Lispインタープリター実装の経験</h2>
+<p>Norvig氏の記事は、Lispインタープリターを実装するための優れた入門リソースとして広く認識されています。多くのユーザーが、Lispインタープリターを自作することが学びの多い経験であると述べており、毎年違うアプローチでLispインタープリターを実装しているという人もいます。Norvig氏の記事の他にも、MAL (Make-A-Lisp) のような言語に依存しないリソースや、Raku言語がLispのような印象を与えるという言及もありました。</p>
+<h2>AIが学習リソースに与える影響</h2>
+<p>一部のコメントでは、AIの登場がNorvig氏の記事のような伝統的な学習リソース（ブログ、ガイド、書籍、YouTubeチュートリアルなど）を「時代遅れ」あるいは「無関係」にする可能性があるという懸念が表明されています。AIが「パーソナルチューター」としてあらゆる詳細を説明できるようになることで、これらのリソースの価値が低下すると主張する人もいます。一方で、AIは既存の知識を基に構築されており、元の情報源がなければAIの能力も成り立たない、という反論も出ています。</p>
+<h2>まとめ</h2>
+<p>Norvig氏のLispインタープリター記事は、プログラミング学習における古典的な名作として広く認識されており、多くの開発者がLispのS式とインタープリター実装について深い洞察を得るきっかけとなっています。特に、Lispの括弧の多さに関する長年の議論や、Lispインタープリターを自作することの教育的価値が強調されています。一方で、AIの台頭により、このような古典的な学習リソースの将来的な関連性について、興味深い議論が巻き起こっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
