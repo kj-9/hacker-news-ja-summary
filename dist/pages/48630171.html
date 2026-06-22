@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moebius: 0.2B image inpainting model with 10B-level performance - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Moebius: 0.2B image inpainting model with 10B-level performance</h1>
+        <div class="meta">
+            投稿日: 2026年06月22日 | ランク: 6
+        </div>
+        <a href="https://hustvl.github.io/Moebius/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にAIによる画像生成モデル「Moebius」について議論しており、特にそのインペインティング機能、品質、実用性、およびAIアート全般に対する感情に焦点を当てています。</p>
+<h2>Moebiusの品質と実用性</h2>
+<p>Moebiusモデルは、その小ささ（0.2Bパラメータ）にもかかわらず、印象的な性能を持つと評価されています。特にそのサンプルギャラリーは高く評価されています。しかし、いくつかの制限も指摘されています。出力解像度が512x512に制限されていること、インペイントされた領域が周囲に比べて滑らかすぎる場合があること、新しいオブジェクトに対してはうまく機能しないことなどです。また、展示されている例の品質が、より大規模な10BモデルやPhotoshopの「コンテンツに応じた塗りつぶし」機能と比較して、見劣りすると感じる人もいます。</p>
+<h2>AIアートと「スロップ」に関する議論</h2>
+<p>AIによって生成されたアートに対する一般的な感情についても活発な議論が交わされています。あるコメントでは、AIが著名なアーティストの作品を模倣してプロモーションに利用されることへの懸念が表明されました。これに対し、別のコメントでは、それによってより多くの人々がその芸術を鑑賞する機会を得るかもしれないというポジティブな側面も示唆されています。</p>
+<p>「スロップ」（質の悪い、または価値のないAI生成物）という言葉の定義についても議論があり、AI自体が問題なのではなく、マーケティング目的で大量生産される安価な「スロップ」に人々がうんざりしているという意見が出されました。AIによって生成コストが劇的に低下したことで、この「スロップ」が以前にも増して大量に生成されるようになったという指摘もあります。</p>
+<h2>インペインティングの用途とSOTAモデル</h2>
+<p>インペインティング機能の具体的なユースケースとして、eコマースで家の外装に日よけをインペインティングするプロジェクトが挙げられています。これに対し、日よけが単に追加される構造物である場合、必ずしも完全なインペインティングモデルは必要なく、アフィン変換とシャドウマップを組み合わせて直接画像をブレンドするアプローチも考えられるという提案がありました。</p>
+<p>現在のインペインティングのSOTA（最先端）モデルについても議論され、プロプライエタリなモデルとしてはGPT-Image-2やNano Banana 2（NB2）が挙げられています。ローカルでホスト可能なモデルとしては、Flux.2 KleinやQwen-Edit、そして最近リリースされたBoogu-Imageの編集バリアントが非常に優れていると評価されています。</p>
+<h2>技術的要件とデモの利用可能性</h2>
+<p>MoebiusのRAM要件は、モデルサイズが1.2GB（UNet + SDXL VAEを含む）であるため、約3GBと推定されています。多くのユーザーがモデルを試す場所や方法を尋ねており、Hugging Face Spaces上でいくつかのデモが公開されていますが、機能しない、または処理が遅いといった問題も報告されています。</p>
+<h2>その他</h2>
+<ul>
+<li>Moebiusの論文のキャッチーなタグライン（例：「Synergy × (Architecture + Distillation) = Shattering the "Impossible Triangle"」）について、科学的な著作物としては異様にクリックベイト的だと感じるという意見がありました。</li>
+<li>既存のモバイル向け写真編集アプリにも同様の機能があるという指摘や、macOSのOCRのように、ローカルで目的別に構築された高品質なモデルが多数のユースケースで役立つだろうという意見もありました。</li>
+<li>漫画の翻訳用途や、アニメーションプログラムのインペインティング・アップスケーリングに特化したモデルの必要性も述べられています。</li>
+<li>以前のインペインティングプロジェクトで、意図しない人物が画像に追加されたり、入力解像度の制限で苦労したりした経験が共有されました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Moebiusモデルの登場を歓迎しつつも、その品質、制限、そしてAIアートの倫理的側面や実用性について深く掘り下げています。AIによる画像生成、特にインペインティング技術は、個人的な用途からプロフェッショナルなアプリケーションまで幅広い可能性を秘めている一方で、その品質、信頼性、およびそれが社会に与える影響について、まだ多くの議論と改善の余地があることが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
