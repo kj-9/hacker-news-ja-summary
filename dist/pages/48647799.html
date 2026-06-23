@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F3 - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">F3</h1>
+        <div class="meta">
+            投稿日: 2026年06月23日 | ランク: 7
+        </div>
+        <a href="https://github.com/future-file-format/f3" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主に「F3」という新しいデータファイル形式について議論しています。この形式はParquetのような既存の列指向ストレージ形式の欠点を改善し、特に効率性、相互運用性、拡張性を重視していると主張されています。F3の最大の特徴は、データデコーダをWasmバイナリとしてファイル自体に埋め込むというアイデアです。</p>
+<h2>プロジェクトの目的とREADMEの欠点</h2>
+<p>多くのコメントが、プロジェクトのREADMEが不十分であると指摘しています。プロジェクトの目的（何のファイル形式なのか）、Parquetに対する具体的な利点、使用例などが明確に説明されていないため、読者がF3の必要性や有用性を理解しにくいと感じています。一部のユーザーは、READMEだけでなく、関連する学術論文を読むことで初めてF3の背景や目的が理解できると述べています。</p>
+<h2>Wasmデコーダの埋め込み</h2>
+<p>F3の最も議論された特徴は、データデコーダをWebAssembly（Wasm）バイナリとしてファイルに埋め込むことです。
+*   <strong>利点:</strong>
+    *   <strong>将来性/相互運用性:</strong> ネイティブデコーダが利用できない場合でも、ファイルが自己記述的であるため、どのプラットフォームでも互換性が確保されると主張されています。これにより、新しいエンコーディングへの対応が容易になり、フォーマットの将来性が高まります。
+    *   <strong>ポータビリティ:</strong> デコーダがファイルに含まれるため、外部のプログラムを持ち運ぶ必要がないという意見もあります。
+*   <strong>懸念点:</strong>
+    *   <strong>セキュリティリスク:</strong> 実行可能なコードをファイルに埋め込むことによるセキュリティリスクが懸念されています。Wasmのサンドボックス機能によってリスクは最小化されるという反論もありますが、DoS攻撃（リソース枯渇攻撃）や、Wasmエンジン自体や影響可能な他の攻撃対象領域を悪用したRCE（リモートコード実行）のリスクはゼロではないと指摘されています。
+    *   <strong>パフォーマンス:</strong> Wasmデコーダの実行が、ネイティブデコーダと比較して遅くなる可能性が懸念されています。特に「ビッグデータ」のシナリオでは、高速なデータ処理が求められるため、パフォーマンスが重要視されます。
+    *   <strong>デバッグの複雑さ:</strong> 他のパーティーが追加したWasmデコーダにバグがあった場合、デバッグが困難になる可能性があります。
+    *   <strong>複雑性:</strong> 既存のファイル形式と比較して、このアプローチは多くの複雑性を導入すると見られています。</p>
+<h2>Parquetとの比較と市場の課題</h2>
+<p>F3はParquetの代替を目指していますが、既存のParquetの広範なツールサポートとエコシステムが大きな障壁であると多くのコメントで指摘されています。
+*   <strong>Parquetの優位性:</strong> Parquetは、最初に登場したことによる広範な採用と互換性により、非常に強力な地位を確立しています。新しいフォーマットがParquetに取って代わるには、非常に大きな利点が必要です。
+*   <strong>F3の利点（主張）:</strong> F3はParquetのレイアウトの欠点を改善し、ランダムアクセス性能を向上させると言及されています。これは、バッチ処理だけでなく、MLワークロードなどで必要とされるランダムアクセスを伴うワークロードで重要になる可能性があります。
+*   <strong>新興フォーマット:</strong> F3、Vortex、Lanceなどの新しいフォーマットは、Parquetの欠点（特にメタデータのグローバル性やハードウェア非依存性）を解決しようとしています。これらのフォーマットは、単なる分析ジョブだけでなく、大規模なシステム構築を行う際に重要な役割を果たす可能性があります。
+*   <strong>長期保存の懸念:</strong> Wasmデコーダに依存する形式は、10年、50年といった長期的なデータアーカイブにおいて、将来的にWasmインタプリタが利用可能でかつ高性能であるかを懸念する声があります。CSVやJSONのような単純で文書化されたバイト仕様の方が、長期保存には適していると考える人もいます。</p>
+<h2>プロジェクトの現状とその他</h2>
+<ul>
+<li><strong>活動の停止:</strong> 8ヶ月間コミットがないことから、F3が研究プロジェクトであり、実用化や採用が進んでいない可能性が指摘されています。</li>
+<li><strong>命名の課題:</strong> 「Future-proof File Format」という名前は、将来的に陳腐化する可能性や、既存の「F3」という名称と重複する点が指摘されています。</li>
+<li><strong>xkcdの言及:</strong> 「標準が多すぎるから新しい標準を作った」という状況を風刺するxkcdのコミック（927番）が複数回引用され、新しいファイル形式が乱立する現状を皮肉るコメントが見られました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>F3は、Wasmデコーダをファイルに埋め込むことで、列指向データフォーマットの将来性と相互運用性を高めようとする革新的な試みです。しかし、READMEの不十分さ、Wasmによるセキュリティリスクとパフォーマンスへの懸念、そしてParquetが持つ強力なエコシステムと市場支配力といった課題に直面しています。そのアイデアは「天才的」と評される一方で、「馬鹿げている」と批判されることもあり、データファイル形式の進化における複雑なトレードオフを浮き彫りにしています。多くのユーザーは、F3が研究プロジェクトの域を出て、実用的な大規模採用に至るには、まだ多くの課題を解決する必要があると考えているようです。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

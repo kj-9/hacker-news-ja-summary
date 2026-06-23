@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlimited OCR: One-shot long-horizon parsing - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Unlimited OCR: One-shot long-horizon parsing</h1>
+        <div class="meta">
+            投稿日: 2026年06月23日 | ランク: 10
+        </div>
+        <a href="https://github.com/baidu/Unlimited-OCR" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、大規模言語モデル（LLM）の新しいアプローチを用いてOCR（光学文字認識）の性能を向上させるという論文「Unlimited OCR Works」について議論しています。特に、長い文書を処理する際のメモリ消費と速度の課題を解決する手法が注目されています。</p>
+<h2>OCRの現状と課題</h2>
+<p>多くのコメントは、OCRが「解決済み」という意見に強く反論しています。特に、複雑な文書、非英語のスクリプト、手書き文字、低品質な入力、多様なレイアウト（多段組、ヘッダー/フッター、広告など）において、既存のOCRは依然として不十分であると指摘されています。
+*   <strong>「解決済みではない」という声</strong>: 多くの経験者が、OCRはまだ「解決済み」とは程遠いと主張しています。特に、学術論文のLaTeX変換やデータシートの表の抽出など、人間による手入力の品質には及ばないとのことです。
+*   <strong>従来のOCRの限界</strong>: CJK文字、アラビア文字、ベトナム語、タイ語など、非英語のスクリプトでは従来のOCRは信頼性が低いという指摘があります。また、手書き文字や古い文書の認識も課題です。
+*   <strong>商用ツールの性能</strong>: Amazon TextractやAzure Document Intelligenceのような商用ソリューションはかなり良い性能を持つものの、高価であり、依然として約15%の確率で予測不能なエラーが発生すると報告されています。
+*   <strong>LLMベースOCRのメリット</strong>: 入力品質が低い場合や、多様な文書レイアウト、複雑なスクリプト（筆記体、日本語の混在、数式、古い手書き文字など）を扱う場合、LLMベースのOCRは大きな進歩をもたらす可能性があります。LLMが持つ言語の事前分布を活用することで、コンテキストに応じた認識精度向上が期待されています。</p>
+<h2>新しいアプローチ「Reference Sliding Window Attention」</h2>
+<p>本論文の主要な革新は、「Reference Sliding Window Attention (R-SWA)」というアーキテクチャのハックです。これにより、LLMが長い文書を処理する際のメモリ（KVキャッシュ）消費の問題を解決し、パフォーマンスを向上させると説明されています。
+*   <strong>従来のLLMの問題点</strong>: 通常、LLMは長い文書を読み込むと、これまでに処理した全ての情報を短期記憶（KVキャッシュ）として保持しようとするため、メモリ消費が線形に増加し、VRAM不足や処理速度の低下を招きます。このため、開発者は文書をページごとに分割して処理し、後で結合するような「手抜き」コードを書かざるを得ない状況でした。
+*   <strong>R-SWAの仕組み</strong>:
+    *   <strong>Global Reference（グローバル参照）</strong>: AIは元の文書画像を常に参照し続け、全体のコンテキストを見失いません。
+    *   <strong>Local Generation（ローカル生成）</strong>: AIは自身の生成したテキストの記憶を、狭く移動するウィンドウ（例えば直近の128語）に制限し、それ以外の記憶は安全に忘れます。
+*   <strong>期待される効果</strong>: このアプローチにより、AIが長い文書を読んでもメモリを過剰に消費せず、OCRの安定性と速度が向上すると期待されています。これは特にローカルAIにとって非常に興味深い進展と見られています。</p>
+<h2>応用可能性と関連技術</h2>
+<p>この新しいアプローチは、OCR以外にも応用できる可能性が議論されています。
+*   <strong>長期的な会話の管理</strong>: 長い会話のコンテキストを維持しつつ、短期的な詳細と長期的な背景を区別する「記憶」管理のアイデアとして、R-SWAが適用できる可能性があります。これはTransformerモデルにLSTMの要素を組み込むようなものだと指摘されています。
+*   <strong>音楽認識 (OMR) の課題</strong>: コメントでは、OCRの進歩とは対照的に、光学式音楽認識 (OMR) の現状が「悲惨」であると多くのユーザーが同意しています。MusicXMLやABC notationのようなデジタルフォーマットは存在するものの、質の高い訓練データセットの不足が大きな課題です。音楽学や音楽研究におけるAIの活用は「グリーンフィールド」であり、この分野での進展を望む声が多く上がっています。
+    *   <strong>既存のOMRツール</strong>: Soundsliceが比較的良いソリューションとして挙げられていますが、MEIフォーマットやVerovioのような研究用ツールも紹介されています。
+    *   <strong>ジャズ譜面とフォント</strong>: ジャズの楽譜における独特の「ジャズフォント」の美学や、楽器間の移調の必要性など、OMRが直面する具体的な課題が議論されています。
+*   <strong>オープンソースと企業戦略</strong>: Baiduのような大企業がこのような技術をオープンソースにする理由について、コミュニティへの貢献、採用力強化、競合他社への戦略的撹乱といった動機が推測されています。</p>
+<h2>まとめ</h2>
+<p>本論文「Unlimited OCR Works」は、LLMのメモリ管理を革新する「Reference Sliding Window Attention」という手法を導入することで、これまでOCRが苦手としてきた長い文書や複雑なレイアウトの処理における性能向上を目指しています。多くのユーザーがOCRの現状に課題意識を持っており、特に非英語圏のスクリプトや多様な文書タイプにおいて、LLMベースのOCRが大きな可能性を秘めていると認識されています。この技術は、OCRだけでなく長期的なコンテキストを必要とするAIアプリケーション全般に応用できる可能性があり、今後の発展が期待されています。一方で、音楽認識（OMR）のような隣接分野では、AIの活用が依然として初期段階にあり、データセットとツールの開発が強く望まれています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
