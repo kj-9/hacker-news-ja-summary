@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroVMs: Run isolated sandboxes with full lifecycle control - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">MicroVMs: Run isolated sandboxes with full lifecycle control</h1>
+        <div class="meta">
+            投稿日: 2026年06月26日 | ランク: 3
+        </div>
+        <a href="https://aws.amazon.com/blogs/aws/run-isolated-sandboxes-with-full-lifecycle-control-aws-lambda-introduces-microvms/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、AWSが提供する新しい「MicroVMs」サービスについて議論しています。特に、このサービスが他の既存のサービスや製品とどう違うのか、GPUサポート、コスト、用途、そして自己ホストの可能性について意見が交わされています。</p>
+<h2>GPUサポート</h2>
+<p>コメントでは、このAWS MicroVMsサービスがGPUをサポートしているかどうかが疑問視されています。ドキュメントには見当たらないとの指摘があり、基本的にはコンピューティング専用のようです。しかし、<code>smol-machines/smolvm</code>というプロジェクトがVulkanによるGPUサポートを予定しており、一部のユーザーはすでにテストで良好な結果を得ていると述べています。理想的なMicroVMは、GPUをVM間で適切に共有できるものだと考えられていますが、NVIDIAやAMDといったベンダーがエンタープライズ顧客に限定しているため、コンシューマ向けGPUでのSR-IOVサポートの普及が課題となっています。</p>
+<h2>既存サービスとの比較</h2>
+<p>AWS MicroVMsは、様々な既存サービスと比較されています。</p>
+<ul>
+<li><strong>Google Cloud Run Gen2</strong>: ユーザーは、GoogleのCloud Run Gen2インスタンスタイプに似ていると感じています。どちらもコンテナイメージから起動されるマイクロVMを使用しているとの理解です。</li>
+<li><strong>E2B</strong>: E2Bと比較する声も多く、E2BはUDPをサポートし、価格体系が異なると指摘されています。また、E2Bはスナップショット、ネットワーキング、統合など、より高レベルのスタックを提供し、オープンソースで任意のクラウドでホスト可能、より大きなインスタンス、高い同時実行性、長いタイムアウト（24時間）をサポートしているという意見もあります。</li>
+<li><strong>Firecracker</strong>: AWS MicroVMsがFirecracker上で動作していることが、記事の最初の段落で言及されているため、多くのユーザーが「Firecrackerとどう違うのか？」と質問しています。本質的には、Firecrackerは基盤となる技術であり、AWS MicroVMsはその上に構築された「異なる形状のサービス提供」であると理解されています。</li>
+<li><strong>Fargate</strong>: 一部のユーザーは、AWS MicroVMsがFargateと競合していると見ています。FargateもFirecrackerを利用していると言われていますが、Fargateの起動時間がLambdaよりも長いことなどから、その情報が古いという反論もあります。しかし、Agent/Sandboxのユースケースにおいては、Fargateではセキュリティ境界が不十分であり、より厳格なハイパーバイザーレベルの分離が必要な場合にMicroVMsが有効であるという意見もあります。</li>
+<li><strong>Fly.io</strong>: Fly.ioとの比較では、AWS MicroVMsに8時間の実行時間制限があること、Webに直接公開できないこと、認証トークンが必要なAPI呼び出しでしか実行できない点が指摘されています。Fly.ioは、より予測可能な固定料金と、ウェブサービスに直接公開できるという利点があるとのことです。</li>
+</ul>
+<h2>用途と制限</h2>
+<p>AWS MicroVMsの主な用途としては、AIエージェントのサンドボックス、インタラクティブなコード環境、データ分析プラットフォーム、脆弱性スキャナー、ユーザー提供スクリプトを実行するゲームサーバーなど、<strong>「エンドユーザーごとに独自の実行環境を提供し、信頼できないコードを安全に実行する必要がある」</strong>マルチテナントアプリケーションが挙げられています。</p>
+<p>最大の制限は、<strong>合計実行時間が8時間まで</strong>である点です。これにより、長期実行が必要な開発環境としては不向きであるという意見が多く出ています。8時間後に再起動する必要がある、または重要なデータを保存しない一時的な計算用途に適しているとされています。ただし、スナップショットやS3へのデータ移動といった回避策も提案されています。</p>
+<h2>コストと自己ホスト</h2>
+<p>AWS MicroVMsのコストについては、その複雑な従量課金モデルが趣味で利用する人には不親切だと指摘されています。同程度のスペックのGravitonオンデマンドEC2インスタンスと比較すると、MicroVMsの方が約4倍高価になるという試算もあります。</p>
+<p>多くのユーザーが、コスト削減とベンダーロックイン回避のために、Firecrackerなどの技術を<strong>自己ホスト</strong>することに関心を持っています。HetznerのようなVPSプロバイダーは、AWSと比較して依然として大幅に安価であるとの意見が多いです。自己ホストの代替案として、libkrun、smolmachines、microsandbox、Mitosといったオープンソースプロジェクトや、Daytona、E2B、OpenComputer、Freestyle、Blaxel、Vercel、Modal、Cloudflare、Tensorlake、Superserve、InstaVM、Railway Sandboxesなどの様々なサードパーティ製サンドボックスプロバイダーも紹介されています。</p>
+<h2>まとめ</h2>
+<p>AWSの新しいMicroVMsサービスは、Firecrackerを基盤とし、AIエージェントのサンドボックスや信頼できないコードの安全な実行といった特定のマルチテナントアプリケーションのユースケースをターゲットにしています。高速起動とVMレベルの強力なセキュリティ分離が特徴ですが、8時間という実行時間制限があり、長期的な開発環境には適していません。GPUサポートは現時点では提供されていないようです。価格は複雑な従量課金モデルであり、既存のLambdaやFargate、Google Cloud Run Gen2、E2B、Fly.ioといった類似サービスとの比較が盛んに行われています。特に、コストとベンダーロックインの観点から、多くのユーザーがFirecrackerやQEMU MicroVMsなどを自己ホストすることに関心を示しており、多数のオープンソースプロジェクトや商用サンドボックスプロバイダーが議論されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

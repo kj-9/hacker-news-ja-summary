@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gossamer: a Rust-flavoured language with real goroutines and pause-free memory - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Gossamer: a Rust-flavoured language with real goroutines and pause-free memory</h1>
+        <div class="meta">
+            投稿日: 2026年06月26日 | ランク: 8
+        </div>
+        <a href="https://gossamer-lang.org/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、新しいプログラミング言語であるGossamerとそのデザイン上の選択（特にメモリ管理と並行性）についての議論、そしてそのウェブサイトのデザインに関する意見が中心となっています。</p>
+<h2>メモリ管理とGCの「一時停止なし」問題</h2>
+<p>多くのコメントが、自動メモリ管理、特にガベージコレクション（GC）の「一時停止なし（pauseless）」という概念に集中しています。
+<code>quotemstr</code>は、Gossamerがサイクルコレクターとイースター参照カウントを使用しているため「一時停止なし」のメモリを持っていないと主張し、最新のVMのZGCなどの現代的なGCを推奨しています。彼は、過去30年間の自動メモリ管理研究を無視する言語の風潮を批判しています。
+これに対し、<code>platinumrad</code>は、実用的な意味で「一時停止なし」が本当に意味があるのか疑問を呈し、CrystalやDのような言語がいまだにBoehm GCを使っている理由を尋ねています。<code>quotemstr</code>は、それは開発者が最新のGCにリベースする時間がないからだという慈善的な説明をしています。
+さらに、<code>lstodd</code>は「制御不能なレイテンシが許容できないからこそ、GCが許容できないと主張する」と述べ、<code>LoganDark</code>は「一時停止なしGCの全概念は、制御不能なレイテンシがないこと」だと反論しています。
+<code>adastra22</code>は、ZGCが誇る1ミリ秒の一時停止でもゲームにおいては「永遠」であると指摘していますが、<code>quotemstr</code>はOSやハードウェアが課すレイテンシに比べれば1ミリ秒は些細なものであり、本当にリアルタイム要件が厳しいならOSレベルでの対策（mlock、RTスレッドなど）をしているはずだと反論しています。
+<code>iyn</code>が「一時停止なしの奇跡的なGC」の例を求めたところ、<code>quotemstr</code>はZGC、GoのGC、V8のOrinoco、そしてMPSを挙げています。
+<code>gomoboo</code>は、D言語がBoehmではなく自社製のGCを使用していると訂正しています。</p>
+<h2>言語のデザインとウェブサイトの印象</h2>
+<p>Gossamerのウェブサイトのデザインについても意見が交わされています。
+<code>throwrioawfo</code>は、洗練されたウェブサイトがかつては素晴らしいプロジェクトの証だったが、今はそうではないか、むしろ少しネガティブな兆候だと感じています。特にLLMが作成したような印象を受けると指摘しています。
+<code>klardotsh</code>は、ウェブサイトが「LLMが超高速でまとめた」ように見えると述べ、コード例も彼には魅力的ではないと感じています。彼は、最近の言語が似たような「雰囲気重視」のデザインに傾倒していることに失望を表明しています。
+<code>Zak</code>も、カードグリッドやダークなテーマが「Claudeによってデザインされた」ように見え、品質のシグナルにはならないとコメントしています。</p>
+<h2>M:NスケジューリングとGoroutine</h2>
+<p>新しい言語がM:Nスケジューリングの軽量スレッド（ゴルーチン）を採用していることについてもコメントがあります。
+<code>samuell</code>は、より多くの言語がM:Nスケジューリングの軽量スレッドを採用していることを歓迎しており、コンパイル言語ではGoとCrystalしか知らなかったと述べています。
+<code>kccqzy</code>は、HaskellがGoよりはるかに前からこの機能を持っており、「goroutine」と呼ぶのは奇妙だと指摘しています。彼は、これは言語機能というよりもライブラリ機能に近いと考えています。
+<code>lstodd</code>は、M:Nスケジューリング自体は2000年代の技術であり、Python 2.6にもパッチを当てて導入した経験があると述べています。</p>
+<h2>その他の類似プロジェクト</h2>
+<p>いくつかのコメントでは、Gossamerに興味がある人向けの関連プロジェクトが紹介されています。
+<code>rsyring</code>は、Rust風でGoにコンパイルされるLisette（Lis）を紹介しています。
+<code>etaioinshrdlu</code>は、自身のプロジェクトOmnivmもGoとRustのパッケージを混合できると宣伝しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、新しい言語Gossamerを巡り、主に自動メモリ管理における「一時停止なし」GCの実現可能性と必要性について活発な議論が展開されました。ZGCやGoのGCなどの現代的なGCが高速化している一方で、リアルタイム要件の厳しさから1ミリ秒の停止も許容できないとする意見もあり、GCの許容レイテンシに関する認識の違いが浮き彫りになりました。また、ウェブサイトのデザインがAI生成されたような印象を与え、プロジェクトの品質信号として機能しないという意見も複数見られました。加えて、M:Nスケジューリングの軽量スレッド（ゴルーチン）が言語に採用されていることへの言及や、類似の言語プロジェクトの紹介もありました。全体として、言語デザインにおけるメモリ管理と並行性の選択、そしてプロジェクトのプレゼンテーション方法が議論の主な焦点となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
