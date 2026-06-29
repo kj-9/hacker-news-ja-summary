@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WATaBoy: JIT-Ing Game Boy Instructions to WASM Beats a Native Interpreter - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">WATaBoy: JIT-Ing Game Boy Instructions to WASM Beats a Native Interpreter</h1>
+        <div class="meta">
+            投稿日: 2026年06月29日 | ランク: 6
+        </div>
+        <a href="https://humphri.es/blog/WATaBoy/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、WebAssembly（Wasm）上でGame BoyエミュレータをJITコンパイルするというプロジェクトに関するもので、特にiOSのJIT制限を回避する clever な方法として注目されています。</p>
+<h2>プロジェクトの評価と技術的側面</h2>
+<p>多くのコメントは、このプロジェクト、特に学部生によるものとしては「非常に印象的」と評価しています。Wasmのオーバーヘッドは20%程度であるのに対し、ネイティブインタープリタのオーバーヘッドは1000%にもなると指摘されており、WasmベースのJITがネイティブインタープリタを上回るのは当然であるという意見があります。また、「JIT-in-JIT」という構造も話題になっています。FirefoxがChrome/Safariより25%遅い点について疑問を持つ声もありました。</p>
+<h2>iOSのJIT制限と回避策</h2>
+<p>記事のハイライトの一つは、iOSにおけるJITコンパイルの制限をWebブラウザの例外（JavaScriptCore、WebKitのJSエンジンがJITを利用できる）を介して回避するという「美しい方法」についてです。Wasmもこの例外の恩恵を受けるため、iOS上で高性能なエミュレータを実現できる点が注目されています。これは他のプロジェクトにも応用可能かという興味が示されています。</p>
+<h2>パフォーマンスと旧式ハードウェアへの配慮</h2>
+<p>一部のコメントでは、現代の高速なハードウェアでは問題ないものの、旧式ハードウェアではパフォーマンスが大幅に低下する可能性が指摘されています。これに対し、「他人のハードウェアでコードを実行するのは特権であり、尊重すべきだ」という意見や、皮肉交じりに「最新のPCを買え」というコメントも出ています。しかし、ネイティブコードで書かれたエミュレータの方が、現代のCore Ultra i9よりも古い166MHz Pentiumで速く動作すると主張するユーザーもおり、WasmベースのJITが必ずしも最速ではないという視点も提供されています。</p>
+<h2>既存ソリューションとの比較</h2>
+<p>プロジェクトの動機付けについて、一部のコメントは懐疑的です。特に、作者が既存のiOS上でのJITデバッガ（例：StephenDev0/StikDebug）の存在を「都合よく忘れている」と指摘し、学部生のプロジェクトとしては許容されるものの、この分野に既存のソリューションが存在することを忘れてはならないという意見があります。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、WebAssembly上でGame BoyエミュレータをJITコンパイルするという画期的なプロジェクト、特にiOSのJIT制限を回避する独創的なアプローチに焦点を当てています。多くのユーザーは学部生によるこの成果を高く評価し、Wasmの技術的な優位性や「JIT-in-JIT」構造に興味を示しています。一方で、旧式ハードウェアでのパフォーマンスや既存のJITソリューションの存在についても議論が交わされ、技術的な賞賛と現実的な視点の両面からプロジェクトが評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
