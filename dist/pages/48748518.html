@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How We Made IPFS Content Publishing 10x Faster - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How We Made IPFS Content Publishing 10x Faster</h1>
+        <div class="meta">
+            投稿日: 2026年07月01日 | ランク: 10
+        </div>
+        <a href="https://probelab.io/blog/optimistic-provide/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、IPFSのパフォーマンス改善に関する記事に対して、主にIPFSの現状、特にその速度、コンテンツ削除の可能性、プロダクションでの採用状況、そしてWeb3エコシステムとの関連性について議論しています。</p>
+<h2>ルックアップ速度の改善</h2>
+<p>以前はCIDのルックアップに数分かかるとの指摘がありましたが、コメントでは現在のルックアップは200ms未満と非常に速くなっていることが強調されています。これは、古いレコードやNAT配下のピアの問題が解消されたことによるものです。ただし、ベンチマークグラフだけでなく、実際のコンテンツのルックアップ例を求める声もありました。</p>
+<h2>コンテンツ提供の「高速化」と非同期処理</h2>
+<p>記事で説明されている「高速化」は、PUT RPCの一部が成功した時点でユーザーに制御を返し、残りをバックグラウンドで処理するという非同期化によるものであるという意見があります。これにより、ユーザー体験は向上するものの、実際にコンテンツが完全に公開されるまでの時間は変わらない可能性が指摘されています。しかし、Kademlia DHTの設計上、20ノード中15ノードへの公開でも十分な冗長性が確保されるため、問題は少ないという見方もあります。また、システムの多くがフォールバック戦略を欠いており、単一の応答しないピアによって全体が滞る問題が挙げられています。</p>
+<h2>プライバシーとセキュリティ</h2>
+<p>IPFSのデフォルト設定が内部および外部IPアドレスをDHTに漏洩させているというセキュリティ上の懸念が指摘されています。また、FileCoinのような「糞コイン」が組み込まれていることへの不満も表明されています。</p>
+<h2>コンテンツの削除可能性</h2>
+<p>IPFS上のコンテンツ削除について、「BitTorrentでファイルを共有し、その後シードを停止するようなもの」という説明がなされています。つまり、人気があれば残り続けるし、そうでなければやがて消えるという、分散型ネットワークならではの性質が再確認されています。インターネット上のあらゆる公開コンテンツと同様に、一度公開されたものは完全に削除するのが難しいという認識です。</p>
+<h2>プロダクションでのIPFSの採用状況</h2>
+<p>IPFSが実際にプロダクション環境で使用されているかについて疑問が呈されており、Wikipedia-on-IPFSのようなデモ以外での事例が求められています。NFTアートワークの保存や、Meta社内部でのバイナリ配信プロジェクトでの利用事例が挙げられましたが、全体としては広く普及しているとは言えないようです。海賊版コンテンツの分野でもBitTorrentに比べて浸透していないこと、Bad Bits Denylistの導入が一部の利用を妨げたとの指摘もあります。また、ウェブブラウザでネイティブに動作しない点も大きな欠点として挙げられています。</p>
+<h2>まとめ</h2>
+<p>IPFSはルックアップ速度の顕著な改善が見られ、コンテンツ提供もユーザー体験を向上させる方向で非同期化が進んでいます。しかし、プライバシーとセキュリティに関する懸念、コンテンツ削除の難しさ、そしてプロダクションでの広範な採用の欠如が、いまだに主要な課題として残っています。Web3エコシステムとの関連性や、特定のニッチなユースケースでの採用は進んでいるものの、BitTorrentや従来のHTTPサーバーに対する明確な優位性が広く認識されているわけではないようです。ネットワークトポロジーをDHTに組み込むことで、さらなるパフォーマンス向上が可能になるという提案も示されており、今後の技術的な進化に期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
