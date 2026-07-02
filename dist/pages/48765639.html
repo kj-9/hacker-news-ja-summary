@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postgres transactions are a distributed systems superpower - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Postgres transactions are a distributed systems superpower</h1>
+        <div class="meta">
+            投稿日: 2026年07月02日 | ランク: 8
+        </div>
+        <a href="https://www.dbos.dev/blog/co-locating-workflow-state-with-your-data" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、PostgreSQLを分散システムにおけるワークフローのオーケストレーションと状態管理に利用するというアイデアについて議論しています。特に、単一のデータベースを集中管理ポイントとして使用しつつ、分散システムの利点を維持する方法に焦点を当てています。</p>
+<h2>分散システムにおける中央データベースの役割</h2>
+<p>多くのユーザーは、分散システムであっても単一の中央データベースを調整ポイントとして使用することは有効であると考えています。これは、完全に非中央集権的なシステムを構築するよりも、強力な整合性とシンプルさの点でメリットがあるためです。重要なのは、その中央コンポーネントを最小限に抑え、最も堅牢な部分にすることです。</p>
+<p>例えば、DucklakeやWarpstreamのようなプロジェクトでは、S3をデータボリュームに、PostgreSQLをメタデータカタログやコントロールプレーンに利用し、整合性の必要な部分に集中管理を採用していることが挙げられています。</p>
+<h2>UDF（ユーザー定義関数）とトランザクション整合性</h2>
+<p>PostgreSQLのUDFを利用して、データベースの更新とワークフローへのジョブのエンキューをトランザクションとして結合するというアイデアが議論されています。これにより、「データベースに新しい注文が挿入されれば、その処理ジョブも確実にエンキューされる」という強い保証が得られます。これは、データが失われたり、処理がスキップされたりするリスクを排除するのに役立ちます。</p>
+<h2>PostgreSQLを分散アプリケーションの状態ストアとして使用する</h2>
+<p>PostgreSQLを分散アプリケーションの一般的な状態ストアとして使用できるか、という問いに対しては、「可能であり、多くの場合推奨される」という意見が出ています。特に、PostgreSQLをラッパーアプリケーションで包み、一貫性のあるインターフェースを提供することで、データの整合性における権威あるノードとして機能させることができます。ただし、処理するデータ量やスケールによっては、他の技術（Valkey/Redisなど）とのトレードオフも考慮する必要があります。</p>
+<h2>ワークフローとデータベースの密結合</h2>
+<p>このアプローチは、ワークフローの進行単位とデータベースのコミット単位を密接に連携させることを意味します。これにより、アウトボックスパターンが簡素化される一方で、データベースがワークフローに強く結合されることになります。コメントでは、この密結合が将来的なアーキテクチャの分離を困難にする可能性があると指摘されていますが、実際にはメッセージブローカーやワークフローエンジンは交換されても、データベースは変更されないことが多いという意見も出ています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、PostgreSQLを分散システムの集中管理ポイントとして活用し、ワークフローのオーケストレーションと状態管理を行うという考えを探求しています。特に、データベースの更新とワークフローへのジョブエンキューをトランザクション的に結合することで、データ整合性の強力な保証を得る利点が強調されています。このアプローチは、システムのシンプルさと整合性を向上させる可能性がある一方で、ワークフローとデータベースの密結合というアーキテクチャ上のトレードオフも伴います。しかし、多くのユーザーは、分散システムにおいて中央集権的なコンポーネントを賢く利用することが、堅牢で信頼性の高いシステム構築に繋がるという見方を支持しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Since Linux 6.9, LUKS suspend stopped wiping disk-encryption keys from memory - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Since Linux 6.9, LUKS suspend stopped wiping disk-encryption keys from memory</h1>
+        <div class="meta">
+            投稿日: 2026年07月02日 | ランク: 2
+        </div>
+        <a href="https://mathstodon.xyz/@iblech/116769502749142438" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Linuxカーネル6.9で導入されたバグにより、<code>cryptsetup luksSuspend</code>コマンドを使用しても暗号化キーがメモリから正しく消去されず、サスペンド状態のラップトップを物理的に取得した攻撃者によって取得される可能性があったという記事について議論しています。</p>
+<h2>Linuxのキー消去バグ</h2>
+<p>Debianの<code>cryptsetup-suspend</code>アドオンは、サスペンド時にLUKSキーをメモリから消去し、復帰時にパスフレーズの再入力を求めることを目的としていました。しかし、カーネル6.9以降、この機能がサイレントに機能しなくなり、キーがメモリに残存する状態になりました。これは、ユーザーがパスワードの再入力を求められるため、キーが消去されたと誤解を招く点が特に問題視されています。このバグは、カーネルのキーリング関連の変更が原因で発生した回帰です。</p>
+<h2>BitLockerとエンタープライズでの暗号化</h2>
+<p>コメントでは、WindowsのBitLockerがエンタープライズ環境での標準的な暗号化ソリューションであるかどうか、またそのセキュリティについて活発な議論が展開されています。</p>
+<ul>
+<li><strong>BitLockerの普及と利便性</strong>: 多くのユーザーは、特にエンタープライズ環境ではBitLockerが管理しやすく、ユーザーに意識させずに導入できるため「素晴らしい」と評価しています。</li>
+<li><strong>BitLockerの懸念</strong>:<ul>
+<li><strong>クローズドソース</strong>: Microsoftが回復キーを提供できる可能性がある点や、クローズドソースであることへの不信感が挙げられています。</li>
+<li><strong>回復キーの管理</strong>: 回復キーの保存場所（Microsoftアカウント、Active Directory、物理的な記録など）とその脆弱性について議論されています。Microsoftがユーザーを「オンラインアカウント」に誘導し、ドライブを自動的に暗号化して回復キーをアップロードする「ダークパターン」を指摘する声もあります。</li>
+<li><strong>UXの悪さ</strong>: 回復モードに陥った際のユーザー体験の悪さ（長いパスフレーズの入力、コピー＆ペースト不可など）が批判されています。</li>
+<li><strong>TPMのみの運用</strong>: TPM（Trusted Platform Module）のみに依存する設定（PINなし）では、特定の攻撃に対して脆弱であるという指摘があります。ただし、PINと組み合わせることでセキュリティは向上すると考えられています。</li>
+</ul>
+</li>
+<li><strong>FileVault（macOS）との比較</strong>: FileVaultも回復キーをiCloudにエスクローできる（オプション）点が指摘され、BitLockerと同様の問題を抱えている可能性が示唆されています。ただし、FileVaultはユーザーのログインパスワードを使用するため、日常的な使用における利便性が高いと評価されています。</li>
+<li><strong>VeraCrypt</strong>: Windowsのデフォルト暗号化ソフトではないという指摘があり、また過去にドライバーライセンス問題があったものの、数日で解決されたことが共有されています。</li>
+</ul>
+<h2>コールドブート攻撃と物理的アクセス</h2>
+<p>キーがメモリに残存することのリスクとして、「コールドブート攻撃」が挙げられています。</p>
+<ul>
+<li><strong>コールドブート攻撃</strong>: 物理的にアクセス可能な攻撃者が、PCのRAMを冷却し、再起動してライブシステムからメモリダンプを取得することで、暗号化キーを抽出する手法です。</li>
+<li><strong>DMA攻撃</strong>: ThunderboltやUSB-Cを介して直接メモリにアクセスする攻撃も言及されています。</li>
+<li><strong>脅威モデル</strong>: 「誰でも」簡単にできる攻撃ではないとの意見もあり、FBIのような専門的なツールと経験を持つ攻撃者や、主要な犯罪者、ビットコイン保有者、情報機関のターゲットでなければ、学術的な懸念に過ぎないという見方もあります。</li>
+<li><strong>ハイバネート</strong>: メモリの内容をディスクに書き出し、RAMをクリアするハイバネート（サスペンド・トゥ・ディスク）は、コールドブート攻撃に対する最も確実な対策であるとされています。復帰時にはパスフレーズの再入力が必要です。</li>
+<li><strong>CPUのメモリ暗号化</strong>: Intel/AMDのCPUが提供する透過的メモリ暗号化（TME/TSME）を有効にすることで、コールドブート攻撃を防ぎ、メモリの内容がCPUパッケージ外に出るのを防ぐことができるという意見もあります。ただし、これが本件のバグのようなキー残存問題そのものを解決するかは議論があります。</li>
+</ul>
+<h2>オープンソースとセキュリティ</h2>
+<p>Linuxカーネルのバグ発生を受けて、オープンソースのセキュリティに関する議論も行われています。</p>
+<ul>
+<li><strong>巨大なコードベースの複雑性</strong>: Linuxのような巨大なオープンソースのCコードベースは、多くの人々によって異なる優先順位で開発されているため、複雑で全体像を把握するのが困難であり、バグが発生しやすいという意見があります。</li>
+<li><strong>オープンソースの利点</strong>:<ul>
+<li><strong>検証可能性</strong>: 誰でもコードをチェックできるため、バグやバックドアが発見されやすいという点が強調されています。</li>
+<li><strong>修正可能性</strong>: 問題が見つかった場合に、コミュニティが修正できる迅速性があります。</li>
+</ul>
+</li>
+<li><strong>「Million eyeballs」の神話</strong>: 「多くの目があればバグが見つかる」という意見に対して、監査されることと実際に監査されることとは異なり、スキルと時間を持った十分な数の人々が関与しない限り、必ずしもそうではないという反論もあります。</li>
+<li><strong>テストの重要性</strong>: このようなセキュリティバグは「サイレント」であるため、統合テストや回帰テストが非常に重要であるという点が繰り返し強調されています。コードだけでは保証できないセキュリティ特性を、テストによって保証できるという考え方です。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Linuxカーネル6.9で発生したバグにより、<code>cryptsetup luksSuspend</code>コマンドがメモリから暗号化キーを正しく消去しない問題が明らかになりました。これは、ユーザーがパスフレーズの再入力を求められるにもかかわらず、キーがメモリに残留することで、物理的アクセスを持つ攻撃者によるコールドブート攻撃に対してシステムが脆弱になるという、ユーザーを誤解させるセキュリティ上の回帰です。この問題は、巨大なオープンソースプロジェクトにおけるコードベースの複雑性、テストの不足、およびセキュリティ特性を維持することの難しさを示しています。議論では、BitLockerなど他のOSの暗号化ソリューションとの比較、コールドブート攻撃に対する現実的な脅威モデル、そしてハイバネートやCPUのメモリ暗号化といった対策の有効性が検討されました。最終的には、このようなバグを防止するためには、強固な回帰テストとセキュリティ関連機能の厳密な検証が不可欠であるという点で意見が一致しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
