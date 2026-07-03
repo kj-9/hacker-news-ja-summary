@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamesob&#x27;s guide to running SOTA LLMs locally - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Jamesob&#x27;s guide to running SOTA LLMs locally</h1>
+        <div class="meta">
+            投稿日: 2026年07月03日 | ランク: 1
+        </div>
+        <a href="https://github.com/jamesob/local-llm" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、ローカルLLMを動かすための費用対効果、ハードウェアの選択肢（特にMacとNVIDIA GPU）、モデルの性能と量子化の影響、そしてクラウドサービスとの比較について活発な議論が展開されています。</p>
+<h2>ハードウェアの選択とコスト</h2>
+<p>ユーザーは48GB/$2kから384GB/$40kまでのVRAM要件の中間を求めており、GMKtec EVO-X2（96GB/$3,399）やデュアルRTX 3090（合計48GB）などが検討されています。MacBook ProのMシリーズチップも選択肢として挙がっており、特にM5チップは48GBの共有メモリを持ちコンパクトですが、NVIDIA GPUと比較してメモリ帯域幅が低い点が指摘されています。RTX 3090は高いメモリ帯域幅（デュアルで1.87 TB/s）が評価されており、MacBook Pro（0.3-0.63 TB/s）よりも高速なトークン生成を可能にすると言われています。Intel Arc B70のような低価格で大容量VRAMを持つGPUも選択肢として紹介されていますが、設定が難しい場合があります。</p>
+<h2>モデルの性能、量子化、および「SOTA」の定義</h2>
+<p>多くのユーザーは、GLM 5.2やQwen 3.6などのモデルをローカルで実行することについて議論しています。「SOTA（State of the Art）」という言葉の使われ方についても意見が分かれており、特に量子化やREAP（一部の専門家を削除する技術）によってモデルの品質が低下する可能性が指摘されています。量子化モデルはベンチマーク上の元のモデルほど性能が出ないことが多く、特に長文のコーディングタスクなどでは顕著な品質劣化が見られるとのことです。また、不適切なサンプリング設定が原因でモデルがループする問題は、特定のペナルティ（例：DRYペナルティ）で解決できる可能性があります。</p>
+<h2>ローカルLLMのメリットとデメリット</h2>
+<p>ローカルLLMの最大のメリットは、プライバシー、トークン制限やリモートAIの可用性への懸念がない点です。特に機密性の高い情報を扱う場合に有効とされています。一方で、クラウドサービスと比較して初期費用が高く、性能も劣る場合が多いことが指摘されています。特に$40k規模のローカル環境は、同等のクラウドサービス利用料（月額$200のClaude Opusで16.8年分に相当）と比較して割高であり、投資回収は難しいとの意見もあります。ただし、API利用料が高額な「エンタープライズ」企業にとっては、ローカル環境が数ヶ月で元を取れる可能性も示唆されています。また、LLMをバックドアされるリスクや、ハードウェアの陳腐化も懸念されています。</p>
+<h2>その他のポイント</h2>
+<ul>
+<li><strong>STT（Speech-to-Text）</strong>：Whisper v3 largeの代わりにParakeet TDT v3やVoxstralといった、より小さく高速で高精度なモデルが登場しており、Parakeet v3はMacWhisperアプリで利用可能で高品質と評価されています。</li>
+<li><strong>隔離システム</strong>：LLMエージェントの安全な実行のため、VMやマイクロVMが推奨されています。GPUパススルーを使用しないVMでLLMサーバーとエージェントを分離するアプローチも提案されています。</li>
+<li><strong>将来性</strong>：Apple Mシリーズチップの将来性や、AMD MI350Pのような新GPUがローカルLLM環境に与える影響に期待が寄せられています。ローカルオープンウェイトモデルは将来のトレンドと見られており、フロンティアモデルが計画を立て、ローカルモデルが実行するようなマルチモデルアーキテクチャの可能性も議論されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、ローカルLLMの構築と運用に関する費用対効果、パフォーマンス、モデル品質のトレードオフについて詳細な議論が展開されています。NVIDIA GPUは高いメモリ帯域幅で高速なトークン生成を実現し、MacBook Proはコンパクトさと統合されたエコシステムが魅力ですが、パフォーマンスでは劣る場合があります。量子化モデルは元のモデルのベンチマーク性能とは異なる場合があり、特に長文タスクでは品質劣化が見られる可能性があります。プライバシーはローカルLLMの大きな利点である一方、費用対効果はクラウドサービスと比較して低く、多くのユーザーにとって投資回収は難しいという見方が支配的です。しかし、将来的な技術進歩や特定のニーズ（極端なプライバシー要件やハードウェアの改造を楽しむ趣味）を考慮すると、ローカルLLMは依然として魅力的な選択肢であり、特に中小規模のモデルであれば有用であるとの意見も多く見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

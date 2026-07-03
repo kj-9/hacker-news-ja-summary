@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostgreSQL and the OOM killer: Why we use strict memory overcommit - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">PostgreSQL and the OOM killer: Why we use strict memory overcommit</h1>
+        <div class="meta">
+            投稿日: 2026年07月03日 | ランク: 10
+        </div>
+        <a href="https://www.ubicloud.com/blog/postgresql-and-the-oom-killer-why-we-use-strict-memory-overcommit" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Linuxカーネルのメモリオーバーコミット（特に<code>vm.overcommit_memory</code>設定）とOOM (Out-Of-Memory) キラーの挙動について議論しています。多くのユーザーがLinuxのデフォルトのメモリ管理戦略に不満を表明し、PostgreSQLなどのデータベースシステムにおける具体的な課題と解決策に焦点が当てられています。</p>
+<h2>Linuxのメモリ管理とOOMキラーの課題</h2>
+<p>多くのユーザーは、Linuxのデフォルトのメモリオーバーコミット戦略とOOMキラーの挙動に不満を持っています。OOMキラーは、システムがメモリ不足になった際にプロセスを強制終了しますが、「ランダムなプロセスを殺す」「発動までに時間がかかり、システムがフリーズする」「デスクトップ環境では機能しない」といった批判があります。
+これにより、システムが「メモリ圧力下で死ぬ」「ディスク圧力下で死ぬ」「技術的には死なないがOOMキラーによって使い物にならなくなる」といった問題が指摘されています。特に、WindowsやmacOSと比較して、Linuxのデフォルト設定が「あらゆるワークロードに対して劣っている」と感じる声が多く聞かれます。</p>
+<h2>strict overcommitの使用とデータベース</h2>
+<p>記事の元のタイトルが示唆するように、PostgreSQLのようなミッションクリティカルなデータベースでは、<code>vm.overcommit_memory</code>をstrict overcommit (モード2) に設定することが推奨されています。これは、PostgreSQLがENOMEM (メモリ不足) エラーを適切に処理し、クラッシュリカバリよりもロールバックを選ぶためです。しかし、多くのコメントはこのアプローチにも注意が必要だと指摘しています。</p>
+<ul>
+<li><strong>過剰な仮想メモリ割り当て</strong>: Go言語などのマネージド言語や多くのデータベースは、実際に使用するよりもはるかに多くの仮想メモリを割り当てがちです。これにより、strict overcommitを設定すると、システムがまだメモリに余裕があるにもかかわらず、ENOMEMエラーでアプリケーションがクラッシュする可能性があります。</li>
+<li><strong>複雑な設定</strong>: <code>vm.min_free_kbytes</code>、<code>vm.admin_reserve_kbytes</code>、<code>vm.user_reserve_kbytes</code>などのパラメータを適切に設定する必要があり、さらにOOMスコア調整 (<code>oom_score_adj</code>) を使用して重要なプロセスを保護することが提案されていますが、これらの設定は複雑でエラーが発生しやすいとされています。</li>
+<li><strong>分離の重要性</strong>: データベースのようなミッションクリティカルなサービスは、独自の計算ノード（またはVM、コンテナ）に隔離し、メモリリソースを明示的に制限することが最良の解決策であるという意見もあります。cgroupやGoの<code>GOMEMLIMIT</code>のようなツールも、メモリ使用量を制御するのに役立ちます。</li>
+</ul>
+<h2>Windowsのメモリ管理</h2>
+<p>Windowsはデフォルトでオーバーコミットを行わない（あるいは限定的に行う）ため、LinuxのようなOOMキラーの問題が発生しにくいと多くのユーザーが指摘しています。Windowsは、仮想メモリ空間がRAMまたはページファイルによって常にバックアップされることを保証します。
+しかし、Windowsでページファイルを完全に無効にすると、アプリケーションがクラッシュしたり、Photoshopのような一部のアプリケーションが起動しなくなる可能性があります。ページファイルは「保険」として機能し、メモリ不足の状況をより長く乗り切ることができます。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Linuxのデフォルトメモリ管理（特にオーバーコミットとOOMキラー）が多くの課題を抱えていることを浮き彫りにしています。PostgreSQLのような特定のアプリケーションでは、strict overcommitが有効な場合もありますが、これは慎重なテストと設定、そしてアプリケーションやシステム全体への影響を考慮する必要があります。多くのユーザーは、メモリ管理のデフォルト設定がより賢明であるWindowsやmacOSの挙動を評価しています。理想的には、アプリケーションがOOMを適切に処理し、メモリを効率的に利用することが望ましいとされていますが、これは多くのプログラムにとって難しい課題です。データベースなどの重要なサービスを個別に隔離し、メモリリソースを厳密に制御することが、多くの問題を回避する現実的な解決策として提案されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
