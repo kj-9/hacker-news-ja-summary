@@ -1,6 +1,7 @@
 import httpx
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone
+from email.utils import format_datetime
 import subprocess
 from pathlib import Path
 import argparse
@@ -17,6 +18,15 @@ from string import Template
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
+RSS_ITEM_LIMIT = 50
+
+
+def format_rss_datetime(value: datetime) -> str:
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+    return format_datetime(value.astimezone(timezone.utc), usegmt=True)
+
 
 class HnLink(BaseModel):
     comments_id: str
@@ -173,26 +183,32 @@ def summaries_to_rss():
     SubElement(channel, "title").text = "Hacker Newsのコメント要約"
     SubElement(channel, "link").text = "https://github.com/kj-9/hacker-news-ja-summary"
     SubElement(channel, "description").text = "Hacker Newsのコメント要約"
+    SubElement(channel, "lastBuildDate").text = format_rss_datetime(
+        datetime.now(timezone.utc)
+    )
 
     # load all json files in out directory
     out_dir = Path("out")
-    json_files = sorted(out_dir.glob("*.json"), key=lambda x: x.name, reverse=True)
-    for json_file in json_files:
-        with json_file.open("r") as f:
+    links = []
+    for json_file in out_dir.glob("*.json"):
+        with json_file.open("r", encoding="utf-8") as f:
             link = HnLink.model_validate_json(f.read())
-            item = SubElement(channel, "item")
-            SubElement(item, "title").text = link.title
-            SubElement(item, "link").text = link.link
-            
-            # Add page link to description
-            page_link = f"https://kj-9.github.io/hacker-news-ja-summary/pages/{link.comments_id}.html"
-            description_with_link = f"<p><a href=\"{link.link}\">元の投稿を読む</a></p><p><a href=\"{page_link}\">日本語要約ページを読む</a></p>\n\n{markdown(link.comments_summary)}"
-            SubElement(item, "description").text = description_with_link
-            
-            SubElement(item, "pubDate").text = link.created_date.strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-            SubElement(item, "guid").text = link.comments_id
+        if link.comments_summary:
+            links.append(link)
+
+    links.sort(key=lambda link: (link.created_date, -link.rank), reverse=True)
+
+    for link in links[:RSS_ITEM_LIMIT]:
+        item = SubElement(channel, "item")
+        SubElement(item, "title").text = link.title
+        SubElement(item, "link").text = link.link
+
+        page_link = f"https://kj-9.github.io/hacker-news-ja-summary/pages/{link.comments_id}.html"
+        description_with_link = f"<p><a href=\"{link.link}\">元の投稿を読む</a></p><p><a href=\"{page_link}\">日本語要約ページを読む</a></p>\n\n{markdown(link.comments_summary)}"
+        SubElement(item, "description").text = description_with_link
+
+        SubElement(item, "pubDate").text = format_rss_datetime(link.created_date)
+        SubElement(item, "guid", isPermaLink="false").text = link.comments_id
 
     # Save the combined RSS feed
     output_file = Path("dist/rss.xml")
@@ -235,4 +251,3 @@ if __name__ == "__main__":
     summaries_to_rss()
     generate_html_pages()
     logging.info("Script completed successfully.")
-
