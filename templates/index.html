@@ -162,7 +162,7 @@
             background: rgba(255, 255, 255, 0.86);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 14px;
+            padding: 12px;
             margin-bottom: 18px;
             box-shadow: var(--shadow-sm);
             display: flex;
@@ -189,46 +189,94 @@
             background: #d0d5dd;
             cursor: not-allowed;
         }
-        .date-picker-container {
+        .date-control {
+            min-width: min(100%, 320px);
+            display: grid;
+            gap: 4px;
+        }
+        .date-label {
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+        .date-picker {
             position: relative;
         }
-        .current-date {
-            font-size: clamp(1.05rem, 3.5vw, 1.35rem);
-            font-weight: bold;
-            color: var(--accent);
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 6px;
-            transition: background 0.2s;
-            user-select: none;
-        }
-        .current-date:hover {
-            background: var(--accent-soft);
-        }
-        .date-selector {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
+        .date-trigger {
+            width: 100%;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 6px;
-            box-shadow: var(--shadow-md);
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font: inherit;
+            font-size: clamp(1rem, 3vw, 1.15rem);
+            font-weight: 800;
+            line-height: 1.2;
+            padding: 11px 14px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.46);
+        }
+        .date-trigger:hover,
+        .date-trigger:focus,
+        .date-trigger[aria-expanded="true"] {
+            background: var(--accent-soft);
+            border-color: rgba(255, 102, 0, 0.36);
+            outline: none;
+        }
+        .date-trigger-icon {
+            color: var(--accent);
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .date-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
             display: none;
+            max-height: min(360px, 58vh);
+            overflow-y: auto;
+            padding: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            z-index: 30;
+        }
+        .date-menu.is-open {
+            display: block;
         }
         .date-option {
-            padding: 10px 15px;
+            width: 100%;
+            background: transparent;
+            border: 0;
+            border-radius: 6px;
+            color: var(--text);
             cursor: pointer;
-            border-bottom: 1px solid var(--border);
+            display: block;
+            font: inherit;
+            font-weight: 700;
+            padding: 10px 12px;
+            text-align: left;
         }
-        .date-option:hover {
+        .date-option:hover,
+        .date-option:focus {
             background: var(--accent-soft);
+            outline: none;
         }
-        .date-option:last-child {
-            border-bottom: none;
+        .date-option.is-selected {
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+        }
+        .date-meta {
+            color: var(--muted);
+            font-size: 0.82rem;
         }
         .article-summary {
             color: var(--muted);
@@ -272,6 +320,15 @@
                 position: sticky;
                 top: 8px;
                 z-index: 10;
+                justify-content: stretch;
+                gap: 8px;
+            }
+            .nav-btn {
+                flex: 0 0 44px;
+            }
+            .date-control {
+                min-width: 0;
+                flex: 1;
             }
             .article-card {
                 padding: 15px;
@@ -309,7 +366,7 @@
         }
         body.dark-mode .header h1,
         body.dark-mode .date-header,
-        body.dark-mode .current-date {
+        body.dark-mode .date-trigger-icon {
             color: var(--accent);
         }
         body.dark-mode .header p,
@@ -348,15 +405,20 @@
             background: #343b49;
             color: #737d8c;
         }
-        body.dark-mode .current-date:hover {
-            background: var(--accent-soft);
-        }
-        body.dark-mode .date-selector {
+        body.dark-mode .date-trigger,
+        body.dark-mode .date-menu {
             background: var(--surface);
             border-color: var(--border);
+            color: var(--text);
         }
-        body.dark-mode .date-option:hover {
+        body.dark-mode .date-trigger:hover,
+        body.dark-mode .date-trigger:focus,
+        body.dark-mode .date-trigger[aria-expanded="true"],
+        body.dark-mode .date-option:hover,
+        body.dark-mode .date-option:focus,
+        body.dark-mode .date-option.is-selected {
             background: var(--accent-soft);
+            border-color: rgba(255, 154, 77, 0.44);
         }
     </style>
 </head>
@@ -369,12 +431,19 @@
     </div>
     
     <div class="date-navigation">
-        <button class="nav-btn" id="prevBtn" onclick="navigateDate(-1)">←</button>
-        <div class="date-picker-container">
-            <div class="current-date" id="currentDate" onclick="toggleDatePicker()">2025年07月30日</div>
-            <div class="date-selector" id="datePicker"></div>
+        <button class="nav-btn" id="prevBtn" onclick="navigateDate(-1)" aria-label="前の日付">←</button>
+        <div class="date-control">
+            <div class="date-label" id="dateLabel">表示日</div>
+            <div class="date-picker" id="datePicker">
+                <button class="date-trigger" id="dateTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="dateLabel dateTriggerText">
+                    <span id="dateTriggerText">日付を選択</span>
+                    <span class="date-trigger-icon" aria-hidden="true">⌄</span>
+                </button>
+                <div class="date-menu" id="dateMenu" role="listbox" aria-label="表示する日付を選択"></div>
+            </div>
+            <div class="date-meta" id="dateMeta"></div>
         </div>
-        <button class="nav-btn" id="nextBtn" onclick="navigateDate(1)">→</button>
+        <button class="nav-btn" id="nextBtn" onclick="navigateDate(1)" aria-label="次の日付">→</button>
     </div>
     
     <div class="articles" id="articlesContainer"></div>
@@ -383,7 +452,7 @@
         const articlesData = ${articles_data};
         const sortedDates = ${sorted_dates};
         let currentDateIndex = 0;
-        let datePickerVisible = false;
+        let datePickerOpen = false;
         
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -425,13 +494,22 @@
             
             container.innerHTML = html;
             
-            // Update current date display
-            document.getElementById('currentDate').textContent = data.formatted_date;
+            // Update date control
+            const dateTriggerText = document.getElementById('dateTriggerText');
+            const dateMeta = document.getElementById('dateMeta');
+            dateTriggerText.textContent = data.formatted_date;
+            dateMeta.textContent = data.articles.length + '件の記事';
             
             // Update navigation buttons
             currentDateIndex = sortedDates.indexOf(dateKey);
             document.getElementById('prevBtn').disabled = currentDateIndex === 0;
             document.getElementById('nextBtn').disabled = currentDateIndex === sortedDates.length - 1;
+
+            document.querySelectorAll('.date-option').forEach(option => {
+                const selected = option.dataset.date === dateKey;
+                option.classList.toggle('is-selected', selected);
+                option.setAttribute('aria-selected', String(selected));
+            });
         }
         
         function navigateDate(direction) {
@@ -441,47 +519,61 @@
             }
         }
         
-        function toggleDatePicker() {
-            const picker = document.getElementById('datePicker');
-            datePickerVisible = !datePickerVisible;
-            
-            if (datePickerVisible) {
-                picker.style.display = 'block';
-            } else {
-                picker.style.display = 'none';
-            }
-        }
-        
         function selectDate(dateKey) {
             showDate(dateKey);
-            toggleDatePicker();
+            setDatePickerOpen(false);
+        }
+
+        function setDatePickerOpen(open) {
+            const dateTrigger = document.getElementById('dateTrigger');
+            const dateMenu = document.getElementById('dateMenu');
+            datePickerOpen = open;
+            dateTrigger.setAttribute('aria-expanded', String(open));
+            dateMenu.classList.toggle('is-open', open);
+        }
+
+        function toggleDatePicker() {
+            setDatePickerOpen(!datePickerOpen);
         }
         
         function initializePage() {
-            const pickerContainer = document.getElementById('datePicker');
+            const datePicker = document.getElementById('datePicker');
+            const dateTrigger = document.getElementById('dateTrigger');
+            const dateMenu = document.getElementById('dateMenu');
             
             // Populate date picker with options
             sortedDates.forEach(dateKey => {
                 const data = articlesData[dateKey];
-                const option = document.createElement('div');
+                const option = document.createElement('button');
+                option.type = 'button';
                 option.className = 'date-option';
+                option.dataset.date = dateKey;
+                option.setAttribute('role', 'option');
+                option.setAttribute('aria-selected', 'false');
                 option.textContent = data.formatted_date;
-                option.onclick = () => selectDate(dateKey);
-                pickerContainer.appendChild(option);
+                option.addEventListener('click', () => selectDate(dateKey));
+                dateMenu.appendChild(option);
+            });
+
+            dateTrigger.addEventListener('click', toggleDatePicker);
+
+            document.addEventListener('click', (event) => {
+                if (!datePicker.contains(event.target) && datePickerOpen) {
+                    setDatePickerOpen(false);
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && datePickerOpen) {
+                    setDatePickerOpen(false);
+                    dateTrigger.focus();
+                }
             });
             
             // Show latest date by default
             if (sortedDates.length > 0) {
                 showDate(sortedDates[0]);
             }
-            
-            // Close picker when clicking outside
-            document.addEventListener('click', (e) => {
-                const pickerContainer = document.querySelector('.date-picker-container');
-                if (!pickerContainer.contains(e.target) && datePickerVisible) {
-                    toggleDatePicker();
-                }
-            });
         }
         
         // Initialize when page loads
