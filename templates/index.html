@@ -5,30 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker News日本語要約</title>
     <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --surface-soft: #fffaf5;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 1000px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 1080px;
             margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
+            padding: 28px 20px 40px;
+            line-height: 1.65;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 42%, #fff 100%);
         }
         .header {
             position: relative;
-            text-align: center;
-            padding: 40px 0;
-            background: white;
+            overflow: hidden;
+            padding: 44px 72px 40px 40px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
             border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .header::after {
+            content: "";
+            position: absolute;
+            right: -80px;
+            bottom: -120px;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(255, 102, 0, 0.10);
+            pointer-events: none;
         }
         .dark-mode-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: transparent;
-            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -39,81 +70,83 @@
             justify-content: center;
             padding: 0;
             line-height: 1;
+            box-shadow: var(--shadow-sm);
+            z-index: 1;
         }
         .header h1 {
-            color: #ff6600;
-            font-size: 2.5em;
+            color: var(--accent);
+            font-size: clamp(2rem, 5vw, 3.1rem);
+            letter-spacing: 0;
+            line-height: 1.12;
             margin: 0;
         }
         .header p {
-            color: #666;
-            font-size: 1.1em;
-            margin: 10px 0 0 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+            margin: 14px 0 0 0;
+            max-width: 38rem;
         }
         .rss-link {
             display: inline-block;
-            background: #ff6600;
+            background: var(--accent);
             color: white;
-            padding: 10px 20px;
+            padding: 11px 18px;
             text-decoration: none;
-            border-radius: 4px;
-            margin-top: 20px;
+            border-radius: 999px;
+            margin-top: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
         }
         .rss-link:hover {
-            background: #e55a00;
+            background: var(--accent-strong);
         }
         .articles {
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 24px;
         }
         .date-section {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .date-header {
-            color: #ff6600;
-            font-size: 1.5em;
-            margin: 0 0 25px 0;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ff6600;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
         }
         .articles-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         .article-card {
-            background: #f9f9f9;
+            background: var(--surface);
             border-radius: 8px;
-            padding: 20px;
-            border-left: 4px solid #ff6600;
+            padding: 18px;
+            border: 1px solid var(--border);
             transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
             align-items: flex-start;
-            gap: 15px;
+            gap: 14px;
         }
         .article-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 28px rgba(31, 41, 51, 0.10);
+            border-color: rgba(255, 102, 0, 0.36);
         }
         .article-title {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            color: #000;
-            line-height: 1.4;
+            font-size: 1.05rem;
+            margin: 0 0 10px;
+            color: var(--text);
+            line-height: 1.45;
         }
         .article-title a {
             text-decoration: none;
             color: inherit;
         }
         .article-title a:hover {
-            color: #ff6600;
+            color: var(--accent);
         }
         .article-meta {
-            color: #666;
+            color: var(--muted);
             font-size: 0.9em;
             margin-bottom: 10px;
         }
@@ -122,26 +155,27 @@
         }
         .article-rank {
             flex-shrink: 0;
-            margin-right: 10px;
             align-self: flex-start;
             margin-top: 2px;
         }
         .date-navigation {
-            background: white;
+            background: rgba(255, 255, 255, 0.86);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 14px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-sm);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            backdrop-filter: blur(8px);
         }
         .nav-btn {
-            background: #ff6600;
+            background: var(--accent);
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 10px 14px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 1em;
@@ -149,19 +183,19 @@
             min-width: 40px;
         }
         .nav-btn:hover {
-            background: #e55a00;
+            background: var(--accent-strong);
         }
         .nav-btn:disabled {
-            background: #ccc;
+            background: #d0d5dd;
             cursor: not-allowed;
         }
         .date-picker-container {
             position: relative;
         }
         .current-date {
-            font-size: 1.4em;
+            font-size: clamp(1.05rem, 3.5vw, 1.35rem);
             font-weight: bold;
-            color: #ff6600;
+            color: var(--accent);
             cursor: pointer;
             padding: 8px 15px;
             border-radius: 6px;
@@ -169,17 +203,17 @@
             user-select: none;
         }
         .current-date:hover {
-            background: #f8f8f8;
+            background: var(--accent-soft);
         }
         .date-selector {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
-            border: 1px solid #ddd;
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 6px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-md);
             max-height: 200px;
             overflow-y: auto;
             z-index: 1000;
@@ -188,106 +222,141 @@
         .date-option {
             padding: 10px 15px;
             cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--border);
         }
         .date-option:hover {
-            background: #f8f8f8;
+            background: var(--accent-soft);
         }
         .date-option:last-child {
             border-bottom: none;
         }
         .article-summary {
-            color: #555;
-            font-size: 0.95em;
+            color: var(--muted);
+            font-size: 0.95rem;
             line-height: 1.5;
         }
         .rank-badge {
-            background: #ff6600;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            padding: 5px 9px;
+            border: 1px solid rgba(255, 102, 0, 0.22);
+            border-radius: 999px;
+            font-size: 0.78em;
             font-weight: bold;
         }
         .footer {
             text-align: center;
-            margin-top: 50px;
-            padding: 30px;
-            background: white;
+            margin-top: 32px;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            color: #666;
+            color: var(--muted);
+        }
+        .footer a {
+            color: var(--accent);
         }
         .loading {
             text-align: center;
             padding: 50px;
-            color: #666;
+            color: var(--muted);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 20px 28px;
+            }
+            .date-navigation {
+                position: sticky;
+                top: 8px;
+                z-index: 10;
+            }
+            .article-card {
+                padding: 15px;
+            }
         }
 
         /* Dark Mode */
         body.dark-mode {
-            background-color: #121212;
-            color: #e0e0e0;
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --surface-soft: #202631;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
         }
         body.dark-mode .header,
         body.dark-mode .date-section,
         body.dark-mode .date-navigation,
         body.dark-mode .footer {
-            background: #1e1e1e;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            background: rgba(23, 27, 35, 0.88);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
         }
         body.dark-mode .dark-mode-toggle {
-            border-color: #444;
-            color: #e0e0e0;
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
         }
         body.dark-mode .header h1,
         body.dark-mode .date-header,
         body.dark-mode .current-date {
-            color: #ff8c42;
+            color: var(--accent);
         }
         body.dark-mode .header p,
         body.dark-mode .article-meta,
         body.dark-mode .loading,
         body.dark-mode .footer {
-            color: #b0b0b0;
+            color: var(--muted);
         }
         body.dark-mode .article-card {
-            background: #2a2a2a;
-            border-left-color: #ff8c42;
+            background: var(--surface);
+            border-color: var(--border);
         }
         body.dark-mode .article-card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            border-color: rgba(255, 154, 77, 0.44);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.30);
         }
         body.dark-mode .article-title {
-            color: #e0e0e0;
+            color: var(--text);
         }
         body.dark-mode .article-title a:hover {
-            color: #ff8c42;
+            color: var(--accent);
         }
         body.dark-mode .article-summary {
-            color: #b0b0b0;
+            color: var(--muted);
         }
         body.dark-mode .rss-link,
         body.dark-mode .nav-btn {
-            background: #ff8c42;
+            background: var(--accent);
             color: #121212;
         }
         body.dark-mode .rss-link:hover,
         body.dark-mode .nav-btn:hover {
-            background: #e67e3a;
+            background: var(--accent-strong);
         }
         body.dark-mode .nav-btn:disabled {
-            background: #555;
-            color: #888;
+            background: #343b49;
+            color: #737d8c;
         }
         body.dark-mode .current-date:hover {
-            background: #333;
+            background: var(--accent-soft);
         }
         body.dark-mode .date-selector {
-            background: #2a2a2a;
-            border-color: #444;
+            background: var(--surface);
+            border-color: var(--border);
         }
         body.dark-mode .date-option:hover {
-            background: #333;
+            background: var(--accent-soft);
         }
     </style>
 </head>
