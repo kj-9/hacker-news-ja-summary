@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatto is now open source - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Chatto is now open source</h1>
+        <div class="meta">
+            投稿日: 2026年07月08日 | ランク: 3
+        </div>
+        <a href="https://www.hmans.dev/blog/chatto-is-open-source" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、新しいオープンソースの自己ホスト型チャットアプリケーション「Chatto」に関するものです。投稿者は、ChattoがDiscordやSlackのような一般的なチャットツールと似ているが、パフォーマンス、自己ホスティングの容易さ、そしてオープンソースのアプローチを強調しています。</p>
+<h2>Chattoとは何か、類似ツールとの比較</h2>
+<p>Chattoは、DiscordやSlackに似たチャットアプリケーションですが、特にパフォーマンスと自己ホスティングの容易さを重視しています。多くのコメントで、既存のチャットツール（特にSlack）が「非常に動作が重い」と感じられているのに対し、Chattoは「飛ぶように速い」と評価されています。また、一般的なエンタープライズ機能はまだ不足しているものの、基本的なアーキテクチャはSlackの完全な代替となる可能性を秘めていると指摘されています。</p>
+<h2>自己ホスティングとライセンス</h2>
+<p>Chattoの大きな特徴の一つは、自己ホスティングの容易さです。単一のバイナリで提供され、NATS（メッセージブローカー）やLiveKit（ビデオ通話）といった依存関係も簡単に導入できると説明されています。また、SSO（シングルサインオン）が最初から利用可能である点も評価されています。</p>
+<p>ライセンスに関しては、Go製のバックエンドはAGPLv3、TypeScript製のフロントエンドはApache 2.0というデュアルライセンスモデルを採用しています。AGPLv3は、サービスとして提供する際にコードの公開を義務付けることで、クラウドプロバイダーが自由にカスタマイズして競合サービスを構築することを抑制する狙いがあります。これに対して、一部のユーザーはAGPLv3がビジネスに反する、あるいは企業ユーザーを遠ざける可能性があると批判していますが、一方で「寄付されたものを金儲けのために使っておいて、何の還元も義務付けられないのはおかしい」という意見も出ています。</p>
+<h2>モバイルサポートとエンドツーエンド暗号化</h2>
+<p>現在のところ、Chattoの公式なモバイルアプリケーションはまだリリースされていません。しかし、Tauriベースのデスクトップアプリケーションは存在し、モバイル版も概念実証段階にあるとのことです。公式のロードマップにはモバイルサポートが計画されていますが、iOSでのプッシュ通知などには、MattermostやMatrixのようなリレーサービスが必要になるという技術的な課題が指摘されています。</p>
+<p>また、エンドツーエンド暗号化（E2EE）はビデオ通話には適用されていますが、チャットメッセージについては明示されていません。多くのユーザーがE2EEの有無に関心を示しており、自己ホスト型であるためデータがサーバー管理者によって管理されるという点で、Discordのような外部サービスとは異なる信頼モデルが構築されると考えられています。</p>
+<h2>AI活用に関する議論</h2>
+<p>開発者が「agentic coding」（AIを活用したコーディング）を用いて単独で開発したというコメントに対して、一部のユーザーからAI技術に対する倫理的な懸念が表明されました。特に、「盗用されたコンテンツで学習したAIの使用」「環境への影響」「AIによるホワイトカラー労働者の代替」といった点について激しい議論が交わされました。この議論は、AIがオープンソースプロジェクト開発に利用されることの是非、およびAIの広範な社会・倫理的影響に対するコミュニティ内の意見の対立を示しています。</p>
+<h2>その他</h2>
+<p>Chattoという名前は、ポルトガル語で「退屈な」という意味があることから、一部のユーザーから微笑ましい反応がありました。また、一般的なチャットアプリに比べて、よりシンプルな機能セットとパフォーマンスを求める声が多く見られます。既存のオープンソースチャットアプリ（Matrix、Zulip、Mattermostなど）との比較や、チャットアプリにおけるネットワーク効果の重要性についても議論されています。</p>
+<h2>まとめ</h2>
+<p>Chattoは、DiscordやSlackのオープンソース代替として注目されており、特にその優れたパフォーマンスと自己ホスティングの容易さが評価されています。AGPLv3とApache 2.0のデュアルライセンスモデルは、開発者の意図とビジネスモデルに関する議論を巻き起こしました。モバイルサポートとエンドツーエンド暗号化は今後の主要な課題ですが、自己ホスト型という特性から、データ管理の透明性を求めるユーザーには魅力的な選択肢となる可能性があります。開発にAIを活用したという点については、コミュニティ内で倫理的な是非が問われ、活発な議論が展開されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

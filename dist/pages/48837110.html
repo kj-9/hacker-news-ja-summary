@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turning a pile of documents into a searchable useable knowledge base - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Turning a pile of documents into a searchable useable knowledge base</h1>
+        <div class="meta">
+            投稿日: 2026年07月08日 | ランク: 9
+        </div>
+        <a href="https://github.com/linuxrebel/DocuBrowser" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーが、ローカルに散らばったファイルを整理し、検索可能にするためのFOSS（GPL-3）ツール「DocuBrowser」を発表しました。このツールは、完全にローカルで動作し、プライバシーを重視した設計がコミュニティから高く評価されています。</p>
+<h2>DocuBrowserの紹介と機能</h2>
+<p>投稿者であるlinuxrebe1は、12,000以上のファイルが混在する「ごみ箱」のようなドキュメントフォルダの問題を解決するためにDocuBrowserを開発したと説明しています。このツールは以下の機能を目的としています。
+1.  データをローカルに保持する。
+2.  PII（個人を特定できる情報）などのデータをフィルタリングする。
+3.  重複ファイルを検索し削除する。
+4.  ドキュメントの短い要約を提供する。
+5.  セマンティック検索およびキーワード検索。
+これらの機能はすべて、インターネットアクセスなしでローカルに実行され、外部のAIモデルにデータを送信する必要はありません。UIはブラウザベースで、使用されるAIモデルは小型でローカルに保持されます。Linux、Windows、Macに対応しており、FOSS (GPL-3) ライセンスで提供されています。</p>
+<h2>ローカル実行とプライバシー重視</h2>
+<p>多くのコメントが、DocuBrowserが完全にローカルで動作し、インターネット接続や外部AIへのデータ送信が不要である点を高く評価しています。
+*   NKosmatosは「完全にローカルで作成されたものに特に感謝している。このようなプロジェクトがもっと必要だ」と述べています。
+*   asciimooも「このようなプロジェクトが必要だ」と同意しています。
+投稿者自身も、プライバシーを重視し、他人のAIをトレーニングするためにトークンを使う必要がないことを強調しています。</p>
+<h2>機能拡張の提案と類似プロジェクト</h2>
+<p>ユーザーからはDocuBrowserに対する機能拡張の提案や、類似のプロジェクトとの比較が寄せられています。
+*   bobimは、pptxやxlsxファイルから画像を抽出し、視覚認識によって説明を追加してインデックス化する機能の拡張を提案しています。
+*   toomuchtodoは、S3互換ストレージのサポートを機能リクエストとして提案しています。
+*   asciimooは、自身も同様のアプリケーション「Hister」を開発しており、DocuBrowserのアイデアを取り入れたいと述べています。
+*   aucisson_masqueは「Recallの大ファンなので、これを試してみる」と興味を示しています。</p>
+<h2>まとめ</h2>
+<p>DocuBrowserは、個人データのプライバシーを重視しつつ、ローカルファイルを効率的に整理・検索する画期的なFOSSツールとしてHacker Newsコミュニティから大きな注目と肯定的な反応を受けています。そのローカル実行能力と多機能性が高く評価されており、今後の機能拡張や類似プロジェクトとの連携が期待されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

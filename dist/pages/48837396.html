@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Separating signal from noise in coding evaluations - Hacker News日本語要約</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            position: relative;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .original-link {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .original-link:hover {
+            background: #e55a00;
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h2 {
+            color: #ff6600;
+            border-left: 4px solid #ff6600;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header {
+            border-bottom-color: #ff8c42;
+        }
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .title {
+            color: #e0e0e0;
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: #b0b0b0;
+        }
+        body.dark-mode .original-link {
+            background: #ff8c42;
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: #e67e3a;
+        }
+        body.dark-mode .content h2 {
+            color: #ff8c42;
+            border-left-color: #ff8c42;
+        }
+        body.dark-mode .footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Separating signal from noise in coding evaluations</h1>
+        <div class="meta">
+            投稿日: 2026年07月08日 | ランク: 1
+        </div>
+        <a href="https://openai.com/index/separating-signal-from-noise-coding-evaluations/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にSWE-Bench Proベンチマークの限界と、AIの現状および将来のAGI開発におけるベンチマークの役割について議論しています。</p>
+<h2>SWE-Bench Proの限界と進化</h2>
+<p>多くのコメントがSWE-Bench Proの欠陥について言及しており、他の研究室がこのベンチマークで「ベンチマックス（高得点化）」する方法を学習したため、もはや真の能力を測るものではないという見方が示されています。SWE-Benchの初期バージョンから問題が指摘されており、SWE-Bench Verifiedが、そしてSWE-Bench Proがそれらの問題を修正するために作成されましたが、SWE-Bench Pro自体もまた欠陥があることが示されています。</p>
+<h2>新しいベンチマークと「現実世界」の課題</h2>
+<p>現在のSWEベンチマークのSOTAとしては、DeepSWEやFrontierCodeが挙げられています。特にFrontierCodeは、「マージの容易さ」、つまり生成されたコードがレビューしやすく、開発者がマージしたいと思えるかどうかに焦点を当てている点が評価されています。
+しかし、コメントでは、LLMが現実世界の物理的な問題や空間的推論において苦戦していることが指摘されています。例えば、Super Soakerのプロトタイプ設計や、build123dを使った機能部品の生成といった課題で、LLMはPVC部品、トリガー、空間的推論などを理解できないようです。これは、テキストデータがLLMに空間的な問題を教えるのに特に不向きであるか、あるいは人間の脳が何億年もの進化を通じて空間的問題解決に最適化されてきたことの現れかもしれません。</p>
+<h2>AGIとベンチマークの役割</h2>
+<p>AGI（汎用人工知能）の達成は、すべてのベンチマークを通過するだけでは不十分であり、「未知の未知」の問題にも対処できる必要があるという意見が多数を占めています。現在のLLMはトークン予測以上のことをしておらず、AGIとは根本的に異なるという認識があります。ベンチマークは、モデルが特定の課題を記憶したり、ベンチマークを「ゲーム化」したりしないように、より小さく、かつ同等の性能を持つLLMを開発する方法を見つけるか、すべての現実世界のデータに対して包括的なベンチマークを構築する必要がある、というバイアス-バリアンスのトレードオフが指摘されています。</p>
+<h2>ベンチマーク生成の課題とモデルの賢さへの期待</h2>
+<p>ベンチマーク自体が不完全であったり、矛盾していることが多いという意見も出ています。約800のタスクしかないSWE-Bench Proのようなベンチマークは、少数のエンジニアが短期間で手作業で解決できてしまうため、真のテストとして機能しにくいと指摘されています。モデルが常に「正しいこと」をするとは限らないため、エージェントを良い結果に導くための制約を強制する足場やハーネスを作成することが賢明であると提案されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、SWE-Bench Proベンチマークは既にその限界が露呈しており、AIの真の能力、特にAGIへの道のりを示すには不十分であると広く認識されています。議論は、より現実世界の課題や「マージの容易さ」を重視するDeepSWEやFrontierCodeといった新しいベンチマークへと移行しています。また、LLMが現実世界の物理的・空間的推論において依然として大きな課題を抱えていることが強調され、AGI達成にはベンチマークの単純なクリア以上の「未知の未知」への対応能力が不可欠であるという認識が示されています。ベンチマーク自体の設計や検証の不完全さも指摘されており、AIの進化を適切に評価するための、より堅牢で現実的なテスト手法が求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
