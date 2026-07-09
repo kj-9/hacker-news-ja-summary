@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: 18 Words - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: 18 Words</h1>
+        <div class="meta">
+            投稿日: 2026年07月09日 | ランク: 4
+        </div>
+        <a href="https://18words.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、アナグラムの単語ゲーム「18 Words」について議論しています。多くのユーザーがこのゲームを楽しんでいますが、いくつかの改善点や機能追加の提案も行われています。</p>
+<h2>タイマーについて</h2>
+<p>多くのユーザーがタイマーの存在について意見を述べています。</p>
+<ul>
+<li><strong>タイマーを好む意見:</strong> タイマーはゲームに挑戦と競争の要素を与え、短時間でゲームを終わらせるのに役立つと感じている人もいます。「ThruLine」のようなゲームと比較して、その強度を楽しんでいます。</li>
+<li><strong>タイマーに否定的な意見:</strong> タイマーが不必要なプレッシャーとストレスを与え、楽しさを損なっていると感じるユーザーも多くいます。特に、英語を母国語としない人や、リラックスしてパズルを楽しみたい人にとって、タイマーは不快です。LinkedInのパズルや一部の新聞のクロスワードアプリのタイマーも同様に不評だと指摘されています。</li>
+<li><strong>「リラックスモード」や「カジュアルモード」の提案:</strong> タイマーなし、またはタイマーがカウントアップする、あるいはタイマーが切れてもゲームが続行するモードを求める声が多数あります。これにより、プレイヤーはストレスなくすべての単語を解くことができます。</li>
+<li><strong>タイマーの調整提案:</strong> 各単語の文字数に応じて時間を調整する、速く解いた単語の余剰時間を後の難しい単語にプールする、タイマーが赤くなるのをやめる、などの提案があります。</li>
+</ul>
+<h2>単語リストと正解の許容範囲</h2>
+<p>ユーザーは、ゲームが受け入れる単語の範囲について議論しています。</p>
+<ul>
+<li><strong>辞書サイズの調整:</strong> 開発者は当初、20,000語のリストを使用しており、一部の一般的な単語が受け入れられないというフィードバックを受けて、300,000語の大きな辞書に戻しました。</li>
+<li><strong>不満の原因:</strong> プレイヤーが正しいと信じる単語が拒否されることは、非常に不満を感じるという意見があります。特に「tase」「sate」（seatの代わりに）、「egret」（アーカイブの単語）、「braze」（zebraの代わりに）、「earls」（laserの代わりに）、「baith」（habitの代わりに）、「later」（alertの代わりに）などの例が挙げられています。</li>
+<li><strong>一般的な単語の優先:</strong> 一部のユーザーは、より一般的で広く知られている単語を正解として期待しています。</li>
+<li><strong>スペルミス/タイプミス:</strong> 最初の試行でのスペルミスやタイプミスが多いため、1回限りの試行は現実的ではないという開発者のコメントがあります。</li>
+<li><strong>米国英語 vs. 英国英語:</strong> 「color」や「humor」のような単語の綴りの違いが問題となる場合があります。</li>
+</ul>
+<h2>ユーザーインターフェースとゲームプレイの改善提案</h2>
+<p>ゲームプレイをよりスムーズで楽しいものにするための多くの提案があります。</p>
+<ul>
+<li><strong>シャッフルボタン:</strong> 文字の配置に固執するのを避けるため、文字を再配置する「シャッフル」ボタンを求める声が多くあります。</li>
+<li><strong>全単語をプレイ可能に:</strong> 失敗してもゲームを最後まで続け、最終的なスコア（例: 13/18）を表示してほしいという意見があります。現在の「一度失敗したら終わり」という形式は、一部のプレイヤーにとって非常に不満です。</li>
+<li><strong>進捗表示:</strong> 達成度を示すために、18個の円/図形が埋まっていくような視覚的な進捗表示の提案があります。</li>
+<li><strong>キーボード入力:</strong> キーボード入力はすでに機能していますが、それが可能であることをより明確に表示すべきだという指摘があります（一部のユーザーはマウスで操作しようとしていました）。</li>
+<li><strong>行き詰まった時の対応:</strong> タイマーなしモードで単語に行き詰まった場合、ヒントとして文字を明らかにする、単語をスキップする、または「諦める」ボタンを提供するなどの提案があります。</li>
+<li><strong>アーカイブUI:</strong> アーカイブを閲覧するためのカレンダーベースのUIの提案があります。</li>
+<li><strong>モバイルでの問題:</strong> iPhoneの二重タップによるズームバグ（修正済み）、Firefox Androidでのスクロール問題などが報告されています。</li>
+<li><strong>説明:</strong> ランディングページに短い「仕組み」の説明を追加すべきだという意見があります。</li>
+</ul>
+<h2>その他のコメント</h2>
+<ul>
+<li><strong>ゲーム名に関する懸念:</strong> 「18 Words」という名前が、白人至上主義のスローガン「Fourteen Words」を連想させると指摘する声がありました。開発者はこれを認識しておらず、意図的なものではないと回答しています。</li>
+<li><strong>中毒性:</strong> 多くのユーザーがゲームのシンプルさと楽しさを称賛し、中毒性があると評価しています。</li>
+<li><strong>ソースコード/多言語対応:</strong> ソースコードの共有を求める声があり、開発者は単一のHTMLファイルなので自由にダウンロードして適応できると回答しています。ポーランド語などの他の言語リストをプラグインする可能性も議論されています。</li>
+<li><strong>類似ゲーム:</strong> 他のアナグラムゲーム（Zanagrams、WordNerd、Text Twistなど）との比較や、開発者自身の別ゲームへの言及もありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>「18 Words」はシンプルで楽しいアナグラムゲームとして多くのHacker Newsユーザーに好評ですが、特にタイマーの厳しさ、不完全な単語リスト、そして一度失敗するとゲームが終了するという点が課題として挙げられています。多くのユーザーは、リラックスモード、シャッフルボタン、および失敗してもゲームを続けられるオプションの追加を強く求めています。開発者はフィードバックに積極的に対応しており、今後の改善が期待されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
