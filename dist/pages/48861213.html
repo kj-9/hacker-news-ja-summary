@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computation as a universal and fundamental concept - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Computation as a universal and fundamental concept</h1>
+        <div class="meta">
+            投稿日: 2026年07月10日 | ランク: 9
+        </div>
+        <a href="https://ergo.org/courses/computation-as-a-universal-and-fundamental-concept" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、<strong>宇宙が計算可能であるか、そして「計算」とは何か</strong>という深遠な問いを中心に展開されています。特に、物理的なプロセスにおける「決定不能性」の概念とその解釈、そして人間が宇宙を理解するためのモデルとして計算を用いることの妥当性について、活発な議論が交わされています。</p>
+<h2>宇宙の計算可能性と決定不能性</h2>
+<p>宇宙が計算可能であるかという問いに対し、一部のユーザーは物理的な決定不能なプロセスが存在するという最近の研究結果を指摘します（例：原子の格子がスペクトルギャップを持つか、液体の流れで粒子が特定の場所に到達するか、光線が特定の標的に到達するか）。しかし、Maxatarは、これらの例は物理システムが普遍的なチューリングマシンをモデル化できることを示しているに過ぎず、「決定不能性」は問題の無限に広いクラス全体に適用されるものであり、特定の問題のインスタンスには適用されないと主張します。つまり、特定の構成の光線や原子格子について、その結果が「決定不能」であるということはない、という見解です。jerfやmondrianも、決定不能性はプロセスからの「解答抽出」の問題であり、プロセスが決定論的に実行されることを妨げるものではないと付け加えています。</p>
+<h2>「計算」の定義と宇宙との関係</h2>
+<p>「計算」という概念が本当に普遍的で根本的なものなのか、それとも人間が作り出したモデルに過ぎないのかという疑問が提起されています。jerfは、各時代において当時の技術の最高峰が宇宙のメタファーとして使われてきた歴史（古代ギリシャの数学、ニュートンの時計仕掛け、19世紀の熱機関、そして現代のコンピュータ）に触れ、計算による宇宙の理解は、以前のメタファーよりもより洗練された限界を提示すると述べます。しかし、jdw64は、チューリングマシンなどの計算モデルは人間が作った形式であり、それらのモデルに存在する決定不能性の限界が、現実世界にそのまま存在するかは疑問だと提起します。彼は、「計算とは、ある状態がルールに従って別の状態に変化するプロセス」と広く定義すれば何でも計算に見えるが、それで計算が根本的であると主張できるのかと疑問を呈します。</p>
+<h2>チューリングの停止問題と有限メモリ</h2>
+<p>停止問題について、jojogeoは、ソフトウェアが内部メモリのみで動作し、外部デバイスに触れない場合、停止するかどうかを解決できるのではないかと疑問を呈します。makerofthingsは、円周率を生成するプログラムを例に挙げ、あらゆるアルゴリズムについて停止を決定することは不可能だと説明します。trompとanon291は、メモリが有界であれば停止問題は解決可能だが、無限メモリが絡むと未決定問題が生じると指摘します。jerfは、有限のメモリを持つシステムでも、状態空間が膨大であるため、実際に実行するか、すべての過去の状態をデータベースに記録してループをチェックする以外に予測する方法はないと説明し、実用的な意味では解けないと強調します。</p>
+<h2>AI生成テキストに関する懸念</h2>
+<p>Maxatarのコメントに対して、eth0upがLLM（特にClaude）によって書かれたものではないかと疑義を呈し、AI生成テキストの増加に対する懸念が示されます。Maxatarはこれを否定し、多くのコメントがLLMの使用を問うことにうんざりしていると表明します。helterskelterとjojogeoは、AIが特定の言い回しや構造を頻繁に使うため、人間による記述との区別が難しくなっている現状と、それが「本物らしさ」を伝えることを難しくしていることへの不満を共有します。</p>
+<h2>まとめ</h2>
+<p>本スレッドでは、宇宙の計算可能性と物理的な決定不能性、そして「計算」という概念そのものの本質について、Hacker Newsのユーザー間で多角的な議論が展開されました。特に、決定不能性の概念が「問題のクラス全体」に適用されるものであり、「特定のインスタンス」には適用されないというMaxatarの指摘は、議論の重要な論点となりました。また、人間が宇宙を理解するために用いる「計算」というモデルが、現実の根本的な性質を表しているのか、それとも人間の認知の限界から生まれたメタファーに過ぎないのか、という哲学的な問いも深く掘り下げられました。さらに、チューリングの停止問題に関する具体的な疑問や、AI生成テキストの増加に対するコミュニティの懸念も示され、現代のテクノロジーと哲学が交差する興味深い対話が展開されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

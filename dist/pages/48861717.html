@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuadRF can spot drones and see WiFi through my wall - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">QuadRF can spot drones and see WiFi through my wall</h1>
+        <div class="meta">
+            投稿日: 2026年07月10日 | ランク: 1
+        </div>
+        <a href="https://www.jeffgeerling.com/blog/2026/quadrf-can-spot-drones-and-see-wifi-through-my-wall/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、QuadRFと呼ばれるオープンソースのソフトウェア定義無線（SDR）デバイスと、それを用いたRF拡張現実（AR）アプリケーションが議論されています。このデバイスは、電波源の方向をリアルタイムで視覚化できる点が特徴です。</p>
+<h2>EMCコンプライアンス試験への応用</h2>
+<p>EMC/EMI（電磁両立性/電磁干渉）試験への応用について意見が分かれています。プロのエンジニアは既存の専門機器を使用するだろうという意見がある一方で、高価で時間のかかる正式な試験の前に、自社で初期のスクリーニングテストを行うことで、多くの問題を解決しコストを削減できるというメリットが指摘されています。しかし、伝統的なシグナルアナライザーの方が、単一デバイスのテストにはより情報量が多く精密である可能性も示唆されています。QuadRFは、建物全体や車、航空機のような大規模なアセンブリで、未知のRF源を探すのに役立つかもしれません。また、特定のアンテナが正しく機能しているかを遠隔で確認する用途にも有効との見方があります。ただし、現在のQuadRFの周波数帯域がEMC問題が頻繁に発生する帯域とは異なるため、EMC試験には不向きだという意見もあります。</p>
+<h2>ドローン検出</h2>
+<p>ドローン検出への応用可能性についても活発な議論が交わされています。このツールが、特に空港などで問題となっているドローンの監視に役立つ可能性があるという意見があります。しかし、主要な空港では既に高度な対UAS（無人航空機システム）システムが導入されており、レーダーが鳥や風船とドローンを区別するのが難しいという課題も指摘されています。さらに、多くのドローンは妨害を避けるために光ファイバーケーブルで制御されているか、広帯域ジャミングに対抗するために周波数ホッピング技術を使用しており、QuadRFが対応する5.8GHz帯以外の周波数を使用するドローンや自律飛行ドローンは検出が困難です。既存のRemote IDシステムも簡単に偽装できるため、効果は限定的との見方もあります。QuadRFのようなパッシブシステムは、ドローンの送信機を検知することでオペレーターの追跡に役立つ可能性が指摘されていますが、能動的なレーダーシステムとは異なる特性を持ちます。</p>
+<h2>価格と開発の経緯</h2>
+<p>QuadRFの価格設定については、当初の目標価格（タイルあたり50〜100ドル）から500ドルへと大幅に上昇したことに驚きの声が上がっています。しかし、製品が4つのタイルで構成されていることや、昨今の電子部品価格の高騰（特にRaspberry Pi 5の価格上昇が例として挙げられる）を考慮すると、それほどかけ離れてはいないという意見もあります。実際には、Crowd Supplyでは4アンテナRFタイルが99ドルで販売されており、複数のタイルを組み合わせることで、より大規模なシステムを構築できるようになっています。</p>
+<h2>規制とオープンソースへの影響</h2>
+<p>過去に類似の技術（Kraken SDRのパッシブレーダー機能など）が輸出管理規制（ITARなど）によって開発中止や機能制限を受けた事例が挙げられ、QuadRFも同様の規制に直面するのではないかという懸念が表明されています。関係者からは、輸出管理規制の解釈が厳しすぎると感じていることや、企業が過度に自主規制する傾向があるとの意見も出ています。しかし、QuadRFは「レーダー」ではなく「レシーバー」であるため、輸出規制の対象外である可能性も指摘されています。</p>
+<h2>その他の応用と将来性</h2>
+<ul>
+<li><strong>秘密の無線デバイス検出</strong>: テレビなどに組み込まれた秘密の5Gセルアップリンクなどの未申告の無線デバイスを検出するツールとしての可能性が言及されています。ただし、そのようなデバイスの存在やFCCの規制遵守に関する議論も行われています。</li>
+<li><strong>音響カメラとの比較</strong>: その視覚化アプリが音響カメラのUI/出力に似ているという指摘があり、音源の方向と距離を特定する音響版のニーズも示唆されています。実際に、産業用途の音響カメラは既に市場に存在し、漏水検出などに利用されています。</li>
+<li><strong>オープンソースと政府の技術発展</strong>: オープンソースコミュニティがこのようなデバイスを開発できることから、政府機関の技術力についても言及されています。近年の傾向として、政府が民間やオープンソースの最先端技術に遅れをとっているという意見や、オープンソースが将来の経済を形作る上で重要な役割を果たすという楽観的な見方も示されています。</li>
+<li><strong>技術的な詳細</strong>: RP1チップを介したRaspberry Pi 5のMIPIプロトコルをリバースエンジニアリングしたことや、カスタムADCの採用、複数のQuadRFモジュールをデイジーチェーン接続して位相シフトを計算する技術などが、その技術的革新性として注目されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>QuadRFは、RF信号源をリアルタイムで視覚化する革新的なオープンソースSDRデバイスであり、EMC試験の事前スクリーニング、ドローン検出、秘密の無線デバイスの発見など、幅広い潜在的用途が議論されています。価格設定や輸出管理規制に関する懸念もあるものの、その技術的進歩とオープンソースコミュニティによる開発は高く評価されています。特に、趣味家向け手頃な価格で高度なRF技術が利用可能になったことは、多くのコメントで驚きと興奮を持って受け止められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The tech of &#x27;Terminator 2&#x27; – an oral history (2017) - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The tech of &#x27;Terminator 2&#x27; – an oral history (2017)</h1>
+        <div class="meta">
+            投稿日: 2026年07月10日 | ランク: 4
+        </div>
+        <a href="https://vfxblog.com/2017/08/23/the-tech-of-terminator-2-an-oral-history/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主に映画「ターミネーター2」（T2）の文化的インパクト、革新的な特殊効果、そして現代の映画との比較について議論しています。</p>
+<h2>文化的影響と映画館体験</h2>
+<p>多くのコメントが、T2が公開された当時の映画界において「いかに大きな出来事だったか」を強調しています。特に、45〜50歳未満の世代にはその真のインパクトを理解しにくいと指摘されています。MCUやスターウォーズの続編でさえ、T2の文化的意義には及ばないと論じる声もあります。T2は数週間経っても連日多くのセッションで満席となり、観客がアーノルド・シュワルツェネッガーの登場に歓声を上げるなど、熱狂的な反応が記憶されています。また、リンダ・ハミルトン演じるサラ・コナーが、当時のハリウッド映画における女性の描写を変えた画期的なキャラクターであったことも挙げられています。</p>
+<h2>特殊効果の革新と実用性</h2>
+<p>T2のCGIは当時画期的であり、多くの人々を驚かせましたが、同時に実写効果（プラクティカル・エフェクト）の巧みな使用も評価されています。液体金属の弾丸の着弾、T-1000が変身したキャラクターと同時に画面に現れるシーン（双子の俳優を使用）、ヘリコプターがアンダーパスの下を実際に飛行したスタントなど、多くの印象的な場面がCGIと実写の組み合わせによって実現されたことが語られています。初期のCGI技術の限界を逆手に取り、アナログな手法と組み合わせることで、信じられないほどのリアリティを生み出したことが賞賛されています。</p>
+<h2>現代の映画とCGI</h2>
+<p>今日の「無限のCGI」が、かつてのT2のような「すごい！」という驚きを薄れさせてしまった、という意見が多く見られます。現在のCGIは「どうやってやったの？」という疑問に対し「CGIを使った」という答えで終わってしまい、実写効果が持っていたような「魔法」の感覚や現実との接地感が失われていると感じる人もいます。また、T2やジュラシック・パークのような90年代の映画が、現在のCGIよりも「古くならない」と評価する声もあります。</p>
+<h2>その他</h2>
+<ul>
+<li>T2のATMハッキングプログラムについて言及され、そのクローンが作成されたこと。ジョン・コナーが使用していたデバイスはAtari Portfolioというラップトップであることが特定されました。</li>
+<li>映画の4Kリマスター版が劇場で公開されることへの期待と、一部のマスターの品質に対する懸念（ノイズ除去による画質の劣化など）。</li>
+<li>T2の制作にはSoftimageというソフトウェアが使用されていたこと。</li>
+<li>ドキュメンタリー「Jurassic Punk」がT2のVFXについても触れていること。</li>
+</ul>
+<h2>まとめ</h2>
+<p>「ターミネーター2」は、その公開当時、比類なき文化的インパクトと革新的な特殊効果で映画界に大きな足跡を残しました。特に、CGIと実写効果の巧妙な融合、リンダ・ハミルトン演じるサラ・コナーによる女性キャラクター描写の変革は特筆すべき点です。多くの人々が、現代のCGIが主流となった映画では失われた、当時の「魔法のような」驚きを懐かしんでいます。T2は単なるエンターテイメントを超え、映画製作の技術と物語の両面で時代を画し、その後の映画に多大な影響を与えた作品として記憶されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

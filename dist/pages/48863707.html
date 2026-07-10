@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How the terrorist group Boko Haram uses frontier AI - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How the terrorist group Boko Haram uses frontier AI</h1>
+        <div class="meta">
+            投稿日: 2026年07月10日 | ランク: 8
+        </div>
+        <a href="https://casp.ac/reports/ai-enabled-terrorism" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、テロリストグループがAIをどのように使用しているか、特に爆弾製造や戦術の改善、そしてその情報の信頼性についての議論が展開されています。</p>
+<h2>AIによる爆弾製造と安全性</h2>
+<p>コメントでは、テロリストがAIを使って爆弾の製造方法を学んだという主張について、懐疑的な見方が多く示されています。
+- <strong>情報の信憑性への疑問:</strong> AIが、他の情報源では得られないような、実行可能で実践的な「禁断の知識」を提供しているという主張に対し、懐疑的な意見が多いです。既存の書籍や特許、Wikipediaなどでも同様の情報は入手可能であり、AIが効率性や効果を劇的に向上させている証拠が不足していると指摘されています。
+- <strong>AIの安全性対策の迂回:</strong> AIの安全性対策をどのように迂回しているのかという疑問が提起されています。一般的なチャットボットは穏やかな質問に対しても安全対策を発動することが多いため、爆弾製造のような内容でAIが協力するとは考えにくいという意見があります。一部のコメントでは、特定の「映画の脚本を書くための手助け」のようなフレーズを使ったり、「アフリカにいると伝える」などのトリックで迂回しているという報告もありますが、それらの方法は主流のモデルではすでに機能しないか、効果が薄いとされています。
+- <strong>オープンソースAIの利用:</strong> 一方で、制限のないオープンソースAIモデル（"heretic"や"uncensored"といった名前のモデル）をローカルで実行すれば、いかなる質問にも制限なく回答すると指摘する声もあります。ChatGPTのような主流モデルを「ジェイルブレイク」するよりも、最初から制限のないモデルを使う方が効率的だという意見です。
+- <strong>爆発物製造の合法性:</strong> 米国では非商業目的の爆発物製造が合法である場合があるため、米国でホストされているAIには法的な問題がない限り、そもそも安全対策が設けられていない可能性があるという見解も提示されています。</p>
+<h2>戦術の改善と現実離れした訓練</h2>
+<p>AIが戦術の改善に役立っているという主張、特にバイクでの橋越え訓練で多数の死者が出たという話にも、多くの疑問や皮肉が寄せられています。
+- <strong>非現実的な訓練:</strong> バイクで橋を飛び越える訓練で18人が死亡したという話について、「最初の死者が出た後も誰も止めなかったのか？」「なぜ動画がないのか？」など、その信憑性に疑問を投げかける意見が多数あります。テロリストグループはプロパガンダ映像を好むため、そのような離れ業は宣伝されるはずだという指摘です。
+- <strong>戦術的洞察への懐疑:</strong> 「200人の兵士を送って60人死んだが、AIの助けで20人だけを送るのが理にかなっていると学んだ」という主張についても、研究者が都合の良いように解釈している可能性や、基本的な常識に過ぎないという意見があります。しかし、少数精鋭部隊の重要性や協調攻撃の有効性は、歴史的に実証されている戦術であるという反論もあります。
+- <strong>テロリストの知性:</strong> 多くのコメントは、テロリストは概して「愚か」であり、AIの些細な洞察でも彼らの行動を改善させる可能性がある、という「ホットテイク」を表明しています。彼らが本や特許から情報を合成する能力に欠けている場合、AIが「親切で忍耐強いエージェント」として機能し、より効果的な計画や武器の製造に役立つかもしれないという見方です。</p>
+<h2>AI規制とプロパガンダ</h2>
+<p>これらの情報が、AI規制の議論にどう影響するかについても言及されています。
+- <strong>KYC（本人確認）の導入:</strong> AIサービスへのKYC導入の可能性や、オープンソースAIの一般市民への禁止といった過度な規制への懸念が表明されています。
+- <strong>「規制の取り込み」の疑い:</strong> NYTの記事や今回の報告は、大手AI企業が望むAI規制を推進するための「プロパガンダ」であると指摘する意見もあります。AIのインパクトを核兵器と比較するような議論は、規制強化への説得力のある議論として使われる可能性があるという見方です。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、テロリストグループがAIを利用しているという報告に対し、多くの懐疑的な視点を示しています。AIが爆弾製造や戦術改善に提供する情報の信頼性、AIの安全対策の迂回方法、そして報告されている訓練内容の現実性について、活発な議論が展開されました。特に、AIの能力が過度に誇張されている可能性や、この情報がAI規制を推進するためのプロパガンダとして利用される可能性に懸念が示されています。一方で、オープンソースAIの利用や、テロリストの基礎的な知識不足をAIが補う可能性も指摘されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
