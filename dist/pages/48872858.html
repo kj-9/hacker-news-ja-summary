@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The early History of the Singular Value Decomposition (1993) [pdf] - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The early History of the Singular Value Decomposition (1993) [pdf]</h1>
+        <div class="meta">
+            投稿日: 2026年07月11日 | ランク: 6
+        </div>
+        <a href="https://www.math.ucdavis.edu/~saito/courses/229A/stewart-svd.pdf" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、特異値分解（SVD）の広範な応用、AIによるコード生成の課題、および関連する数学的概念について議論しています。</p>
+<h2>SVDの応用と重要性</h2>
+<p>SVD（特異値分解）は、コンピュータビジョンや画像処理、圧縮アルゴリズム、量子情報など、様々な分野で非常に強力なツールとして広く使われています。特に、データ内の相関構造を扱う際に有用であり、画像処理では空間的相関を抽出し、ノイズを除去するのに役立ちます。具体例として、Perspective-n-Point（PNP）問題の解決におけるDirect Linear Transform (DLT) メソッドで、AX=0の解をSVDで求める方法が挙げられています。SVDは、行列の「基底周波数」のようなものであり、その分解を通じて行列の最も重要な特徴を捉えることができます。また、低ランク近似の文脈では、SVDがフロベニウスノルムを最小化する最適な近似を提供することがEckart–Young–Mirskyの定理によって示されています。</p>
+<h2>AIによるコード生成と品質問題</h2>
+<p>AIツール（ClaudeやCodexなど）がSVDコードを頻繁に生成することが言及されていますが、その品質には課題があることが指摘されています。AIが生成したコードには、ピボットロジックの誤りなど、人間がレビューして修正する必要があるケースが発生しています。あるコメントでは、AIにテストコードも生成させ、自己検証させるべきだと提案されていますが、これに対し、レビュー担当者が提出者の責任（テスト作成）まで負うべきではないという反論や、AI生成コードに対するテストがないPRを拒否できない組織的課題が提起されています。</p>
+<h2>SVDと関連する数学的概念の議論</h2>
+<p>特異値は、正方行列にのみ存在する固有値の一般化された概念として説明されています。また、RGBと色空間の類推が提示され、それが不完全であることについて活発な議論が展開されました。特に、RGBモデルが人間が知覚できる色空間のすべてを捉えているわけではないこと、そしてCIEのようなより包括的な色空間や「想像上の原色」の概念が関連して議論されています。</p>
+<p>さらに、最適化アルゴリズム（MuonやAdam）とSVDの関係についても誤解が指摘され、AdamがSVDや特異値に直接関連するわけではないこと、および勾配の二次モーメントとヘッセ行列の関連性について議論が深められました。</p>
+<h2>SVDとニューラルネットワーク（VAE）の関連性</h2>
+<p>SVDとニューラルネットワーク、特に変分オートエンコーダー（VAE）との間に強い関連性があることが示されています。非線形性を持たないニューラルネットワークでMSEを損失関数として再構成誤差を最小化する場合、その結果はSVDと一致すると説明されています。VAEは、このSVDの概念に非線形性とKLダイバージェンスの正則化項を加えたものと捉えることができ、このつながりを理解することで、SVDが有用なあらゆる場面でニューラルネットワークを代替として構築したり、特定のニーズに合わせてカスタマイズしたりする可能性が広がると述べられています。</p>
+<h2>まとめ</h2>
+<p>このスレッドは、SVDの基礎的な数学的重要性から、コンピュータビジョンにおける具体的な応用、AIによるコード生成の最新動向とその課題、そしてSVDと最先端の機械学習モデル（VAE）との意外な繋がりまで、多岐にわたる議論を展開しています。SVDがいかに多様な分野で不可欠なツールであるか、そしてその概念がどのように他の数学的・計算科学的アプローチの理解を深めるかを示しています。また、AIがコード生成の効率を高める一方で、その信頼性と品質確保には人間の介入と適切なプロセスが依然として重要であることも浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

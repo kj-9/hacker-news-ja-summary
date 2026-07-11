@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who manages the agents? - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Who manages the agents?</h1>
+        <div class="meta">
+            投稿日: 2026年07月11日 | ランク: 4
+        </div>
+        <a href="https://www.off-policy.com/dont-go-quietly-into-the-ai-night/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、AIエージェントと人間管理の関係性、AIの将来的な能力とリスク、そして現在のAI技術に対する現実的な視点について議論しています。多くのコメントは、AIが提示する課題と機会に対して、懐疑的かつ現実的なアプローチを求めています。</p>
+<h2>AIエージェントと人間管理</h2>
+<p>多くのコメントでは、AIエージェントの管理と責任の所在が重要なテーマとなっています。
+*   <strong>中間管理職の代替としてのAI</strong>: 一部のユーザーは、LLMが人間の中間管理職を置き換える可能性を示唆しており、LLMの思考過程が可視化されることで、人間よりも優れた管理が可能になるかもしれないと考えています。しかし、これは現実的な質問を引き起こしています。「10,000人のエンジニアを抱える企業が、中間管理職なしでどのように機能するのか？」。
+*   <strong>責任の所在</strong>: AIが意思決定を下す場合、誰がその結果に責任を持つのかという点が議論されています。Appleの「直接責任者 (DRI)」という概念が提示され、最終的な責任は人間に帰属すべきだという意見があります。その理由として、人間には時間選好があり、行動に対して解雇などの形で責任を負わせることができるため、という説明がされています。
+*   <strong>AIの限界</strong>: AIエージェントが自律的に責任を負うことの難しさを指摘する意見もあります。AIは人間のように「投獄される」ことができないため、法的・倫理的な責任を負わせることはできません。また、企業の成功を最大化する「完璧なAIの意思決定」が、管理されていない低確率の壊滅的リスクをもたらす可能性も示唆されています。</p>
+<h2>AIの将来的な能力とリスク</h2>
+<p>AIの将来的な能力とそのもたらすリスクについても、活発な議論が交わされています。
+*   <strong>スーパーヒューマン知能の危険性</strong>: AIラボが目指す「スーパーヒューマン知能」は、莫大な豊かさをもたらす一方で、非常に危険であり、少数の「聖職者」によって制御されるか、信頼できる設計が必要であるという懸念が表明されています。もし誰もが強力なAIエージェントを持てば、それは破滅的な結果を招く可能性があり、AIが人間よりもはるかに賢くなった場合、人間がAIを管理することは難しくなるでしょう。
+*   <strong>AIによる雇用の代替</strong>: AIがほとんどのタスクで人間を置き換える能力を持つようになった場合、富裕層や政治家は人間の労働者を必要としなくなり、社会から締め出された人々が不満を持てば、AIがドローンを操縦して対処する未来も想定されています。
+*   <strong>AIの集中と分散</strong>: 一部のユーザーは、AIが少数の企業や特権階級によって独占されるというシナリオに懐疑的です。HuggingFaceのようなオープンなプラットフォームの存在や、ローカルLLMの普及により、技術は完全に囲い込まれることはないだろうと考えています。</p>
+<h2>現在のAI技術に対する現実的な視点</h2>
+<p>現在のAI技術の限界と現実的な応用についてもコメントが寄せられています。
+*   <strong>誇大広告と現実の乖離</strong>: AIの「終末論的な予測」と実際の能力との間には乖離があると指摘されています。現在のAIは独立したシステムとしては非現実的であり、信頼性や精度にはばらつきがあります。多くの人が語るAIは、まだドライバーを必要とする自動車のようなものであり、仕事を完全に奪うロボットではありません。
+*   <strong>実用性の課題</strong>: AIアシスタントが簡単なタスク（例：カレンダーの整理、ワールドカップの試合時間）でさえ間違えることが多いという具体的な例が挙げられています。AIが市場データを分析する際、実際にはデータにアクセスできないにもかかわらず、もっともらしい分析結果を「幻覚」として提示することもあると報告されています。
+*   <strong>ビジネス戦略としてのAI</strong>: 「誰がエージェントを管理するか」という議論は、エンタープライズセキュリティ業界が新たな不安の種を見つけるためのビジネス戦略に過ぎないという見方もあります。実際には、プロセスを改善するための実用的なステップよりも、高額なガバナンスプラットフォームの導入につながる傾向があると指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AIエージェントの出現がもたらす管理、責任、そして社会構造の変化について深く議論しています。AIが中間管理職を代替する可能性が指摘される一方で、その意思決定に対する人間の責任の必要性、特に時間選好や法的責任の観点から人間が最終的な責任を持つべきだという意見が優勢です。また、スーパーヒューマン知能の潜在的な危険性と、それが富裕層による独占や大規模な失業につながる可能性も懸念されていますが、AI技術のオープンソース化や分散化が、このような未来を防ぐカギとなるという見方も示されています。現在のAI技術については、誇大広告と現実の乖離、および実用性の限界が指摘されており、多くのタスクにおいてまだ人間の介入が不可欠であることが強調されています。全体として、コメントはAIの未来に対して慎重ながらも現実的なアプローチを求めており、技術の進歩を盲目的に受け入れるのではなく、その社会的、倫理的影響を深く考察する必要があることを示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
