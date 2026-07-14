@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to stop Claude from saying load-bearing - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How to stop Claude from saying load-bearing</h1>
+        <div class="meta">
+            投稿日: 2026年07月14日 | ランク: 6
+        </div>
+        <a href="https://jola.dev/posts/how-to-stop-claude-from-saying-load-bearing" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、LLM（特にClaude）が繰り返す特定のフレーズや表現（「load-bearing」、「belt-and-suspenders」、「smoking gun」、「honest」、「surface」など）に対するユーザーの苛立ちを中心に展開されています。これらの「Claude-ism」は、一見すると無害であったり、以前から存在していたりする表現であるにもかかわらず、その過剰な使用がユーザー体験を損ね、AIの出力の品質や信頼性に対する懸念を引き起こしています。</p>
+<h2>AIの定型表現（Claude-ism）への不満</h2>
+<p>多くのユーザーが、LLMが特定のフレーズを過剰に使用することに不満を表明しています。これらのフレーズは、本来は特定の分野の専門用語であったり、比喩表現であったりするものの、LLMが文脈を無視して繰り返し使用することで、その出力が「AIによるもの」とすぐに識別できるようになり、読みにくく、信頼性に欠けるものになっています。</p>
+<ul>
+<li><strong>「Load-bearing」</strong>: 特に不満の多い表現で、本来は工学的な意味合いを持つにもかかわらず、LLMが重要性や不可欠性を表すために多用します。</li>
+<li><strong>「Smoking gun」</strong>: 決定的証拠を意味しますが、LLMがしばしば不正確な文脈で使用し、ユーザーを困惑させます。</li>
+<li><strong>「Honest/Honestly」</strong>： 率直さや正直さを強調する言葉ですが、過剰に使用されると、それ以外の情報が不正直であるかのような印象を与えます。</li>
+<li><strong>「Belt-and-suspenders」</strong>: 複数の解決策やバックアップを意味する比喩ですが、これも過剰使用されます。</li>
+<li><strong>「Surface」</strong>: 「表面化する」という意味で、特にビジネスやセキュリティの文脈で使われますが、LLMはこれを動詞として多用します。</li>
+<li><strong>その他のフレーズ</strong>: 「landed」、「spine」、「spike」、「cutover」、「bake」、「sprint, epic, story points (Agile vocabulary)」、「paper-cuts」、「amazing, incredible, perfect」、「gate」、「canonical」、「blast radius」、「production ready」、「genuinely」、「tightening」、「wiring」、「reconciling」、「different not in degree, but in kind」、「ironically」なども挙げられています。</li>
+</ul>
+<h2>定型表現が生まれるメカニズムと影響</h2>
+<p>LLMがこれらの定型表現を多用する理由については、いくつかの仮説が挙げられています。</p>
+<ul>
+<li><strong>RLHF（人間によるフィードバックからの強化学習）の副作用</strong>: 人間が「良い」と評価した回答にこれらのフレーズが含まれていたため、AIがそれらを過学習してしまった可能性があります。</li>
+<li><strong>モード崩壊</strong>: モデルが訓練データ内の特定のパターンに収束しすぎて、多様な表現を失ってしまう現象です。</li>
+<li><strong>トークン化と確率</strong>: 特定のトークン（単語やフレーズ）が、特定の文脈で高い生成確率を持つため、繰り返し出力されます。</li>
+<li><strong>マーケティング戦略</strong>: LLMをより「賢く」見せるために、専門用語や比喩表現を多用する傾向が訓練で強化されているという意見もあります。</li>
+<li><strong>企業の専門用語の学習</strong>: トレーニングデータに企業文書や技術文書が多く含まれるため、その中で頻繁に使われる専門用語を学習し、一般化して使用するようになった可能性もあります。</li>
+</ul>
+<p>これらの定型表現は、LLMの出力が退屈で予測可能になるだけでなく、時には情報伝達の正確性を損ない、ユーザーの認知負荷を高める原因ともなっています。特に、人間が書いたと想定されるブログ記事やメールでこれらの表現を見つけると、ユーザーはAIが書いたものだと認識し、そのコンテンツの信頼性を疑う傾向があります。</p>
+<h2>解決策と回避策</h2>
+<p>ユーザーは、LLMの定型表現に対処するために様々な方法を試みています。</p>
+<ul>
+<li><strong>プロンプトエンジニアリング</strong>: <code>CLAUDE.md</code>のような設定ファイルや、会話中の明示的な指示を通じて、特定のフレーズの使用を避けるようLLMに指示します。例：「smoking gun」の代わりに「found an issue」を使うように指示する。</li>
+<li><strong>後処理ツール</strong>: <code>debabel.py</code>や<code>caveman</code>のようなツールを使って、LLMの出力から定型表現を自動的にフィルタリングしたり、簡潔にしたりします。</li>
+<li><strong>スタイルの調整</strong>: Flesch-Kincaidの可読性スコアを指定したり、「ELI5（5歳児にもわかるように説明）」スタイルを要求したりして、より平易な言葉遣いを促します。</li>
+<li><strong>人間による修正</strong>: LLMの出力をそのまま使わず、必ず人間がレビューし、必要に応じて修正を加えます。</li>
+<li><strong>LLMの「個性」を逆利用</strong>: あえてAIに特定の「キャラクター」（例：Clodという一人称を使う、ランダムな擬音語で褒める）を持たせることで、不快な定型表現を避けようとする試みもあります。</li>
+</ul>
+<h2>人間とAIの言語の融合</h2>
+<p>AIが生成する言語は、人間の言語にも影響を与え始めています。一部のユーザーは、無意識のうちにAIの定型表現を日常生活や仕事で使い始め、それが「Claudism」として指摘されるという現象を報告しています。これは、AIの出力に大量に触れることで、人間の思考や書き方が変化する「情報ハザード」の一種として捉えられています。</p>
+<p>一方で、LLMの定型表現が、特定のセマンティクス（意味合い）を簡潔に表現する上で有用であると考える人もいます。例えば、「load-bearing」は「重要性」を伝える良い比喩であり、人間の言語にはそのニュアンスを完全に代替する単一の言葉がない、と主張する意見もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、LLM（特にClaude）が特定のフレーズや表現を過剰に使用することに対する広範なユーザーの不満を浮き彫りにしています。これらの「Claude-ism」は、AIの出力の品質を低下させ、信頼性を損ない、時には人間のコミュニケーションスタイルにも影響を与えています。ユーザーは、プロンプトの調整や後処理ツール、人間によるレビューを通じてこれらの問題を軽減しようと試みていますが、根本的な解決はモデルのトレーニングプロセスの改善にかかっていると考えられています。AIの出力が人間の言語に与える影響は、今後のデジタルコンテンツの品質と人間のコミュニケーションのあり方を考える上で重要な課題となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

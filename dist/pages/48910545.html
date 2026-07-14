@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonsai 27B: A 27B-Class Model that runs on a phone - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bonsai 27B: A 27B-Class Model that runs on a phone</h1>
+        <div class="meta">
+            投稿日: 2026年07月14日 | ランク: 1
+        </div>
+        <a href="https://prismml.com/news/bonsai-27b" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、PrismMLが開発した「Bonsai 27B」という1ビットモデルが、スマートフォンなどのエッジデバイスで高性能を発揮する点について議論されています。特に、その革新的な量子化手法、実際のビット数、および既存のモデルとの比較に焦点が当てられています。</p>
+<h2>1ビットモデルの定義と技術的詳細</h2>
+<p>多くのコメントが、Bonsai 27Bが「1ビットモデル」と称されているにもかかわらず、実際には1.58〜1.71ビット/重み、あるいは1.125ビット/重みであるという点に疑問を呈しています。これは、重みを{-1, 0, +1}（三元）または{-1, +1}（二元）で表現し、さらにグループ単位のスケーリングファクターを適用することで実現されています。</p>
+<ul>
+<li><strong>三元表現と実効ビット数</strong>: 初期には「1ビットモデル」と呼ばれたものの、実態は{-1, 0, +1}の三値を使用しており、これにより1.58ビット（Bonsai 27B）や1.71ビット（Ternary Bonsai 27B）という実効ビット数になると指摘されています。</li>
+<li><strong>二元表現と実効ビット数</strong>: Bonsaiには、{-1, +1}の二値を使用する「実際の1ビット」バリアントも存在し、こちらは1.125ビット/重みになると説明されています。</li>
+<li><strong>パッキングと表現</strong>: -1がどのように表現されるかという疑問に対しては、複数の三値（trits）をバイトにパッキングする（例: 5 tritsを1バイトにパッキングして1.6ビット/trit）方法や、Q2_0（2ビット/重み）を使用するが、不要なビットパターンを浪費している可能性が指摘されています。</li>
+<li><strong>スケーリングの役割</strong>: 重み自体はバイナリまたはターナリ値であるが、グループ単位でスケーリングファクターを適用することで、実効的な情報量を増やしていることが説明されています。</li>
+</ul>
+<h2>パフォーマンスと実用性</h2>
+<p>Bonsai 27Bは、その小さいサイズにもかかわらず、高いパフォーマンスを維持していると評価されていますが、既存のモデルや量子化手法との比較、および実際の使用シナリオにおける課題も議論されています。</p>
+<ul>
+<li><strong>小型モデルの可能性</strong>: Bonsai 27Bが27Bモデルに匹敵する性能をスマートフォンで実現できることは「素晴らしい研究」と評価されています。</li>
+<li><strong>ツール呼び出しの性能低下</strong>: UnslothのUD_Q2バリアントを使用した場合、ツール呼び出しにおいて5%の性能低下が見られ、これが実用上はより大きな問題となる可能性があると指摘されています。</li>
+<li><strong>KVキャッシュの効率性</strong>: KVキャッシュのメモリ使用量が著しく低いことも利点として挙げられており、マルチエージェントのコーディングワークフローで特に有用である可能性が示唆されています。</li>
+<li><strong>既存モデルとの比較</strong>: Gemma 4 12BやQwen 27B（非量子化版）と比較して、Bonsai 27Bがどの程度の性能を発揮するのか、より公平な評価を求める声があります。Qwenの量子化モデルでは、過度な量子化が「!!!!!!」のような意味不明な出力につながる問題も報告されています。</li>
+<li><strong>インストールと実行の課題</strong>: LM StudioやUnslothなどの既存ツールではすぐには動作しないことが報告されており、カスタムフォークが必要である可能性が示唆されています。macOS環境での依存関係の問題も挙げられています。</li>
+<li><strong>「無用」論争</strong>: 一部のユーザーは「おそらく全く役に立たない」とコメントしていますが、これに対しては「期待以上に良い性能」と反論があり、日々の利用にはGPT-4oレベルの知能が最低限必要という意見も出ています。</li>
+</ul>
+<h2>ビジネス戦略と将来性</h2>
+<p>小型AIモデルを開発する企業がどのようなビジネス戦略を持っているか、そしてエッジAI市場の将来性についても言及されています。</p>
+<ul>
+<li><strong>資金調達とパートナーシップ</strong>: PrismMLはSamsungなどから資金提供を受けており、Samsungが将来のスマートフォンに高性能なAIシステムを搭載し、Appleと競合することを目指しているという推測があります。</li>
+<li><strong>オープンソース戦略</strong>: フロンティアモデルをリリースできない限り、オープンソースとして公開することで競合を出し抜くという戦略が一般的になっていると考えられています。</li>
+<li><strong>Appleとの交渉の噂</strong>: AppleがPrismMLとAI圧縮技術について交渉しているという報道があり、これが真実であれば、エッジAI分野での大きな動きを示唆しています。ただし、CEOがリークしたことで関係が断たれる可能性も指摘されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>PrismMLのBonsai 27Bは、その革新的な1ビット（実効的には1ビット以上）量子化技術により、27Bクラスのモデルをスマートフォンなどのエッジデバイスで動作させる可能性を示しています。実際のビット定義の複雑さ、ツール呼び出し性能の課題、実行環境の互換性といった議論があるものの、小型モデルにおけるKVキャッシュ効率の高さや、Samsungなどの大手企業からの資金提供、Appleとの交渉の噂などは、この技術がエッジAI分野において重要な進歩であることを示唆しています。今後のさらなる最適化と公平なベンチマークが待たれます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

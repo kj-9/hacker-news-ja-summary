@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Tower Keeps Rising - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The Tower Keeps Rising</h1>
+        <div class="meta">
+            投稿日: 2026年07月14日 | ランク: 2
+        </div>
+        <a href="https://lucumr.pocoo.org/2026/7/13/the-tower-keeps-rising/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、AIによるプログラミング、特に「エージェント」がソフトウェア開発に与える影響について深く掘り下げています。聖書のバベルの塔の物語をメタファーとして使い、共有された理解なしにコードベースが急速に成長する可能性と、それが長期的に引き起こす課題に焦点を当てています。</p>
+<h2>AIによる大規模なリファクタリングと品質の低下</h2>
+<p>多くのコメント投稿者は、AIエージェントがコードベースを迅速に書き換える能力について懸念を表明しています。以前は大規模なリファクタリングはバグのリスクや既存エコシステムとの互換性の問題を最小限に抑えるため、慎重に行われていました。しかし、AI時代では、これらの懸念が軽視される傾向にあると指摘されています。AIが頻繁に大規模な変更を加えることで、テストスイートがすべてのワークフローやユーザーのアクションをカバーしきれず、結果としてソフトウェアが「がたつき、使い物にならないもの」になる可能性があります。</p>
+<h2>複雑性の増大と理解の欠如</h2>
+<p>AIを活用したプログラミングは、個人の開発者の能力を劇的に向上させますが、大規模なソフトウェアプロジェクトは、個人のコード生産速度だけでなく、システムへの理解をいかにうまく調整できるかによって制限されます。AIの導入は、既存の複雑なソフトウェアの上にさらに複雑さを追加するだけであり、全体的なシステムへの理解が不足したままプロジェクトが進むことへの懸念が示されています。また、かつては簡単なツールで作成できたアプリケーションが、現在では圧倒されるほどの複雑さになっている現状をAIがさらに悪化させる可能性があると指摘されています。</p>
+<h2>協調と共有された理解の重要性</h2>
+<p>ソフトウェア開発における「共有された言語」は、英語やPythonだけでなく、概念の意味、境界、不変条件、所有権、システムの形状に関する共通の理解であると強調されています。これはドキュメント、コードレビュー、会話、議論などを通じて形成されます。AIエージェントを使用する場合でも、この共有された理解を維持することが不可欠であり、これが欠如すると、個々の変更が合理的であっても、全体として一貫性のない、保守困難なソフトウェアが生み出される危険性があります。特に、AIエージェントが「ショートターム」のタスク解決に最適化されているため、クリーンなアーキテクチャや長期的な展望といった「味」が欠如しやすいという指摘もあります。</p>
+<h2>人間の役割の変化：プログラマーからマネージャーへ</h2>
+<p>AIエージェントがプログラミングタスクの多くを担うようになるにつれて、ソフトウェアエンジニアの役割は、実際のコーディングよりも管理的なものに移行すると示唆されています。マネージャーが個々の貢献者の作業内容を大まかに把握し、詳細まで理解する時間がないように、AIエージェントを監督するエンジニアも同様の状況になる可能性があります。この変化は、エンジニアがAIのコードレビューを行い、見落としがないかを確認する「ジュニアデベロッパーのコードレビュー」のような状況を生み出すと表現されています。しかし、自分の専門分野でAIを操縦できる熟練したエンジニアは、生産性を劇的に向上させることができる一方で、知識のない分野でAIを使用すると、あっという間に「技術的負債」を積み上げることになるとも言われています。</p>
+<h2>AIによるプログラミングへの適応と未来</h2>
+<p>一部のコメント投稿者は、AIによるプログラミングを避けるのではなく、適応することが重要だと考えています。AIが大規模なコードベースを管理し、エラーを回避するための新しい方法論が必要になると指摘されています。彼らは、AIが「偶発的な複雑さ」（本質的ではない複雑さ）を大幅に削減すると信じていますが、「本質的な複雑さ」（問題のモデリング）は依然として人間が行う必要があると考えています。AIが「バイブコーディング」と呼ばれる、必ずしも深い理解に基づかないコーディングスタイルを可能にすることについて、批判がある一方で、これを「もう一つのアプローチ」として受け入れ、AIから高品質なコードを得るためのルール（ゲートやCIなど）を構築することに時間を費やすべきだと主張する声もあります。</p>
+<h2>まとめ</h2>
+<p>このコメントスレッドは、AIがソフトウェア開発にもたらす深いパラダイムシフトについて、多角的な視点から議論しています。AIによる迅速なコード生成とリファクタリングの能力は、生産性向上の可能性を秘めている一方で、共有された理解の喪失、システムの複雑化、品質の低下、および技術的負債の増加といった重大な課題を提起しています。プログラマーの役割が「マネージャー」へと変化する可能性や、AIが生成するコードの「味」や長期的な保守性の欠如が懸念されています。しかし、これらの課題に対して、AIを単なるツールとして捉え、その限界を理解した上で、いかにうまく活用し、新しい開発プラクティスを確立していくかという前向きな議論も展開されています。最終的には、AIによる開発が「タワーが落ちることなく、ただ上昇し続ける」という、以前にはなかった形の複雑性とリスクを生み出す可能性が示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
