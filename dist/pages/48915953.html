@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe and Advent have made a joint offer to acquire PayPal – sources - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Stripe and Advent have made a joint offer to acquire PayPal – sources</h1>
+        <div class="meta">
+            投稿日: 2026年07月15日 | ランク: 3
+        </div>
+        <a href="https://www.reuters.com/business/finance/stripe-advent-offer-buy-paypal-more-than-53-billion-sources-say-2026-07-15/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、StripeがPayPalを買収するという噂について議論しており、主に独占、反トラスト法、決済市場の競争、消費者の信頼、および地理的な差異に焦点が当てられています。</p>
+<h2>独占と反トラスト法</h2>
+<p>多くのコメント投稿者は、この買収が独占を生み出し、決済市場の競争を低下させることを懸念しています。特に、Stripe、PayPal、Venmo、Braintree、Xoomがすべて1つの傘下に入る場合、HHI（ハーフィンダール・ハーシュマン指数）が異常に高くなり、反トラスト当局を納得させるのが困難になると指摘されています。現在の米国には、企業結合を阻止するための反トラスト執行が不足しているという見方がある一方で、州レベルでの訴訟（例：パラマウント・ワーナー取引に対する12州の訴訟）によって阻止される可能性があるとの意見もあります。しかし、過去の事例から、州による訴訟が実際に合併を阻止する可能性は低いと考える人もいます。また、政治的背景（賄賂や文化戦争の視点）が反トラストの決定に影響を与えているとの指摘もあります。</p>
+<h2>決済市場の競争と代替手段</h2>
+<p>コメントでは、現在の決済市場の競争状況や代替手段についても活発に議論されています。</p>
+<ul>
+<li><strong>PayPalの市場地位</strong>: PayPalは、特に米国以外で依然として広く利用されており、消費者の信頼を得ていると認識されています。しかし、米国ではVisaやMastercardのような既存のカードネットワークが規制によって支配的な地位を維持しているとの指摘もあります。</li>
+<li><strong>新興の決済システム</strong>: 中国のWeChat Pay、南米のPix、ヨーロッパのWeroのような地域固有の決済システムがVisaやMastercardの代替として台頭しており、特にPixはブラジルで驚異的な成功を収めていると評価されています。これらのシステムは、取引手数料を自国経済内に留め、電話を介した低摩擦な決済方法として注目されています。しかし、Weroはまだ発展途上であり、B2Cでの利用は限られているとの意見もあります。</li>
+<li><strong>クレジットカードと直接決済</strong>: 多くの人が、VisaやMastercardの取引手数料が非常に高く、特にカード不提示取引ではベンダーにリスクを負わせていると指摘しています。直接決済システム（RTPやFedNow）は手数料が低く、将来有望とされていますが、詐欺に対する保護が不十分であるという懸念も挙げられています（Zelleの例が引用されています）。</li>
+<li><strong>StripeとBraintree</strong>: BraintreeはStripeの有力な競合他社と見なされていましたが、StripeがPayPalを買収すれば、Braintreeもその傘下に入るため、競争がさらに減少するとの懸念があります。</li>
+</ul>
+<h2>消費者の信頼と企業倫理</h2>
+<p>PayPalとStripeの買収は、消費者にとっていくつかの懸念点も浮上させています。</p>
+<ul>
+<li><strong>独占による手数料上昇</strong>: 競争の減少により、手数料が上昇する可能性があるという懸念が複数回表明されています。</li>
+<li><strong>アカウントの停止</strong>: PayPalとStripeの両方で、正当な理由なくアカウントが停止されたり、資金が保留されたりした経験を持つユーザーがおり、このような企業の統合が「アンバンキング」（金融サービスから排除されること）のリスクを高めるという声があります。</li>
+<li><strong>ユーザーサポートと企業方針</strong>: PayPalのカスタマーサポートの質、不透明な通貨換算レート、保証問題への対応、および「誤情報」に関する規約変更の試みなど、過去の企業行動に対する不信感が表明されています。Stripeも特定の業界（大麻関連、アダルト関連）に対する制限があり、これが「モラルの警察」として機能しているとの批判もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>StripeによるPayPalの買収は、多くのHacker Newsユーザーにとって、決済市場における競争と消費者の選択肢を減少させる可能性のある懸念材料として捉えられています。特に、独占の形成、反トラスト法の執行の有効性、手数料の上昇、および両社の過去の企業行動に対する不信感が主な議論の焦点です。一方で、地域固有の決済システムが台頭していることや、Visa/Mastercardといった既存のネットワークに対する交渉力を高める可能性に言及する意見もあり、今後の決済業界の動向が注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

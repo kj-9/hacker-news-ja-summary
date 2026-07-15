@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysteries of Telegram Data Centers (2022) - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Mysteries of Telegram Data Centers (2022)</h1>
+        <div class="meta">
+            投稿日: 2026年07月15日 | ランク: 7
+        </div>
+        <a href="https://dev.moe/en/3025" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Telegramのデータセンターインフラストラクチャと、それに関連するセキュリティ、プライバシー、そしてアプリケーションの機能性についての議論に集中しています。特に、データセンターの地理的な配置、TelegramのE2E暗号化の主張の有効性、そして競合するメッセージングアプリ（主にSignalやWhatsApp）と比較した場合のTelegramの長所と短所が主な話題となっています。</p>
+<h2>データセンターの構成とインフラストラクチャ</h2>
+<p>ユーザーはTelegramのインフラストラクチャ設定に奇妙さを感じつつも、電話番号の国コードに基づいてユーザーを最も近いデータセンターに割り当てるというロジックは理解できるとしています。この「カスタムコード」は、国とデータセンターをマッピングする単純なものだと指摘されています。一部のユーザーは、これが技術的負債となる可能性を懸念していますが、Telegramの従業員が少ないことから、新規開発者が多数オンボーディングされるわけではないと反論されています。データセンターの構成が、Five Eyes同盟の諜報機関の地理的分割に沿っているのではないかという憶測も出ています。また、DC3のギャップ（データセンター3がないこと）や、メディア専用のデータセンターの存在など、特定のデータセンターに関する謎も議論されています。</p>
+<h2>セキュリティとプライバシーの懸念</h2>
+<p>コメントでは、Telegramのセキュリティとプライバシーに対する懸念が繰り返し表明されています。特に、デフォルトでエンドツーエンド暗号化（E2EE）ではないこと、グループチャットでE2EEが提供されないこと、デスクトップクライアントでシークレットチャットが利用できないことなどが指摘されています。Telegramが「重く暗号化された」と主張するデータの保管方法についても疑問が呈されており、「重く」がマーケティング用語に過ぎないとの見方もされています。一部のユーザーは、Telegramが「FSB（ロシア連邦保安庁）のハニーポットと区別がつかない」とまで主張し、過去の暗号化の実装における問題点や、創設者パベル・ドゥーロフの信頼性についても議論されています。これに対し、Telegramはロシアとは無関係であり、ウクライナ軍も利用しているとして、批判はロシア人に対する人種差別だと反論する意見もありますが、技術的な批判は残されています。</p>
+<h2>Telegramの機能とユーザーエクスペリエンス</h2>
+<p>多くのユーザーが、Telegramの優れたユーザーエクスペリエンス（UX）と機能性を強調しています。特に、アプリの高速性、安定したパフォーマンス（特にネットワーク状態が悪い場合）、ネイティブクライアントの品質、そして「キャットステッカー」のような楽しい要素が評価されています。SignalやWhatsAppと比較して、Telegramは以下のような利点が挙げられています。
+- <strong>高速性</strong>: アプリの起動、メッセージの読み込み、送受信が非常に速い。
+- <strong>クライアント</strong>: ネイティブクライアントの品質が高く、多くのプラットフォームで利用可能。
+- <strong>匿名性</strong>: ユーザー名を使用することで、電話番号を共有せずにチャットできる。
+- <strong>デバイス対応</strong>: 複数のデバイスで同時にクライアントを開ける。
+- <strong>メッセージ機能</strong>: メッセージの編集、送信予約、サイレント送信、多様な書式設定（引用ブロック、インラインリンクなど）、画像編集機能。
+- <strong>グループ/チャンネル</strong>: 大規模なグループチャットやチャンネルのサポート、柔軟なモデレーター機能。
+- <strong>ボット</strong>: ボットAPIが優れており、簡単にボットを作成できる。
+- <strong>クラウドストレージ</strong>: 無制限のクラウドストレージと大容量ファイルの送信。
+- <strong>その他</strong>: ミニアプリ、自動翻訳・文字起こし、ギフト送信、緊急時にインターネット接続を確認するツールとしての利用。</p>
+<p>一方で、Signalユーザーは、E2EEがデフォルトであることや、より高いプライバシー保護を重視しています。しかし、Signalの機能不足（例：公式CLIがない、ボットサポートがない、ライブロケーション共有がない）が指摘され、それがユーザーをTelegramのような「安全ではない」アプリに流させているという見解もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Telegramのデータセンターインフラストラクチャが、国コードに基づいたユーザー割り当てやFive Eyes同盟の地理的配置を反映している可能性を示唆しています。セキュリティとプライバシーに関しては、デフォルトのE2EEの欠如や過去の暗号化実装の問題、創設者の信頼性に関する疑問から、Telegramに対する深い不信感が表明されています。しかし同時に、Telegramはその優れたユーザーエクスペリエンス、高速なパフォーマンス、豊富な機能、そして広範なコミュニティ機能によって、多くのユーザーにとって魅力的な選択肢であり続けています。これらの機能は、SignalのようなE2EEに特化したアプリと比較して、利便性と多機能性を優先するユーザーに支持されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

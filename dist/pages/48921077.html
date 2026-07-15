@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Towards a harness that can do anything - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Towards a harness that can do anything</h1>
+        <div class="meta">
+            投稿日: 2026年07月15日 | ランク: 10
+        </div>
+        <a href="https://eardatasci.github.io/c/ambiance/index.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、LLMエージェントのための「ハーネス」と、特にUnixの原則を活用することについて議論しています。</p>
+<h2>簡素化と決定論</h2>
+<p>多くのコメントは、LLMエージェントを開発する上で簡素化と決定論が重要であると強調しています。
+*   <strong>簡素化:</strong> 「疑問に思ったら、簡素化する。取り除き、削減し、最小化する。」(embedding-shape)
+*   <strong>決定論的なコード:</strong> LLMは非決定論的な能力が必要な場合にのみ使用し、可能な限り決定論的なコード（スクリプトやツール）を使うべきだという意見が多く見られます。(brainless, alexpotato, vishvananda)
+*   <strong>「マニュアル作業はバグ」:</strong> 自動化できるものはすべてコードで自動化すべきであり、LLMはスクリプト/ツールの作成やエッジケースの処理に活用されるべきという考え方が共有されています。(alexpotato)
+*   <strong>テストの重要性:</strong> エージェントが問題をすぐに認識できるよう、テスト、特にコード化されたテストの作成に多大な労力を費やすことが推奨されています。(visarga, brainless, no_wizard)</p>
+<h2>LLMとUnixの原則</h2>
+<p>Unixの「すべてはファイルである」という哲学をLLMエージェントに適用することの妥当性が議論されています。
+*   <strong>Unixネイティブ:</strong> LLMが既に「Unixネイティブ」であるという考え方（<em>superposition</em>）や、Unix環境へのマッピングが優れたアイデアであるという意見（inferhaven）があります。
+*   <strong>FUSEの活用:</strong> ファイルシステムイベントを利用するFUSEのアイデアが言及されており、これによりポーリングよりも効率的な応答が可能になる可能性があります。(esafak, ardatasci)
+*   <strong>批判:</strong>
+    *   <strong>FHSへの疑問:</strong> 既存のファイルシステム階層（FHS）を新しいシステムに適用することへの疑問があり、NixやPlan 9のようなより現代的なアプローチが示唆されています。(chuckadams)
+    *   <strong>「ファイル」メタファーの不適切さ:</strong> LLMにとってファイルが適切なメタファーではないという意見もあります。LLMはシークやバイトストリームを必要とせず、ベクトルデータベースやキーバリューストアの方が適していると指摘されています。(guardiangod)
+    *   <strong>プレーンテキスト vs. 型付けされたデータ:</strong> 決定論性を追求するなら、プレーンテキストよりもJSONのような型付けされたデータの方が望ましいという意見もあります。(wyre)</p>
+<h2>ハーネスの定義と目的</h2>
+<p>「ハーネス」という言葉の適切性や、その機能と目的について様々な見解が述べられています。
+*   <strong>言葉への疑問:</strong> 「ハーネス」という言葉の採用に疑問を呈する声や、より良い用語（例：bridle）を提案する声があります。(rob, smartmic, dexwiz)
+*   <strong>一般的な定義:</strong> ハーネスは、LLMの出力からツール呼び出しを解析し、コマンドを実行し、その出力をLLMの入力に戻すソフトウェアであると説明されています。(Legend2440)
+*   <strong>目的:</strong> LLMの強力な能力を制御し、構造を与えるためのフレームワークとして捉えられています。(ambicapter, simlevesque)
+*   <strong>「エージェントのエクソスケルトン」:</strong> 決定論的なゲートとワークフローでエージェントをラップする「外側の層」の必要性が議論され、「エージェントのエクソスケルトン」などの名称が提案されています。(vishvananda)
+*   <strong>汎用 vs. ドメイン固有:</strong> ドメイン固有のハーネスが汎用ハーネスを凌駕しているという意見があり、ソフトウェア開発も独自のドメインであると指摘されています。(ChicagoDave)
+*   <strong>危険性:</strong> ハーネスなしでLLMを動かすことは、「ブレーキもハンドルもない車を運転するようなもの」と表現されています。(ChicagoDave)</p>
+<h2>その他の論点</h2>
+<ul>
+<li><strong>OSとしてのエージェント:</strong> OSが新しい種類のエージェントとなり、LLMは特定のエッジケースハンドラとして軽く組み込まれるべきというビジョンが語られています。(brainless)</li>
+<li><strong>Mac OS依存性:</strong> プロジェクトがMac OS依存であることへの批判があり、Unix精神に反するという指摘や、他のプラットフォームへの対応の要望が出されています。(<em>superposition</em>, ardatasci)</li>
+<li><strong>Zombo.com現象:</strong> 「何でもできる」という謳い文句は懐疑的に見られ、特定のことをうまくこなすシステムの方が関心を引くという意見があります。(skybrian)</li>
+<li><strong>モデルトレーニングへの影響:</strong> ハーネスの入力と出力がラボでどの程度後学習されているかが、汎用ハーネスの可能性を理解する上で重要であると指摘されています。(shay_ker)</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、LLMエージェントの「ハーネス」設計において、決定論的なコードと簡素化が最も重要であるという共通認識を示しています。Unixの原則、特に「すべてはファイルである」という考え方を適用することについては、そのメリット（透明性、監査可能性、既存のツールの活用）を評価しつつも、LLMの性質に本当に適しているか、また既存のFHSが現代のシステムに適しているかという点で、様々な議論が交わされています。多くの人が、LLMの力を制御し、構造化し、特定のタスクで効果的に機能させるための、より洗練された決定論的な「ハーネス」（または「エージェントのエクソスケルトン」）の必要性を感じています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
