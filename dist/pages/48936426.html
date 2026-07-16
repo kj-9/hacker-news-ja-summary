@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Comic Chat is now open source - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Microsoft Comic Chat is now open source</h1>
+        <div class="meta">
+            投稿日: 2026年07月16日 | ランク: 2
+        </div>
+        <a href="https://opensource.microsoft.com/blog/2026/07/16/microsoft-comic-chat-is-now-open-source/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Microsoft Comic Chatがオープンソース化されたことについてのものです。多くのユーザーがこのソフトウェアに対する懐かしい思い出を共有し、その影響や歴史について議論しています。</p>
+<h2>懐かしい思い出とインターネットの入り口</h2>
+<p>多くのコメントが、Microsoft Comic Chat（MS Comic Chat）がユーザーにとってインターネット、特にIRC（Internet Relay Chat）の最初の体験であったことを強調しています。
+* <strong>[1.5], [1.6], [1.11], [1.34]</strong>：多くのユーザーがMS Comic ChatをIRCやインターネットへの「初めての紹介」として挙げており、子供の頃に偶然見つけて新しい世界が開けたという体験が語られています。
+* <strong>[1.4], [1.26]</strong>：Win95/98時代のPentium IIで動作させていた思い出や、ダイヤルアップ接続の時代を懐かしむ声もあります。
+* <strong>[1.27]</strong>：プエルトリコで家族が使っていたパックベルコンピュータでダイヤルアップ接続し、姉がComic Chatを使っていた鮮明な記憶が共有されています。</p>
+<h2>プロジェクトの起源と技術的側面</h2>
+<p>Comic Chatの開発者や、今回のオープンソース化を実現した人物についても言及されています。
+* <strong>[1.7.1.2], [1.7.1.2.1], [1.7.1.2.2], [1.29]</strong>：オリジナル開発者はDJ Kurlanderであり、今回のオープンソース化はRobert Standefer（コメント投稿者「outintospace」）が多くの協力のもと実現したことが明確にされています。Kurlanderは20年以上前にMicrosoftを退職しており、このプロジェクトを支援していました。
+* <strong>[1.15]</strong>：Comic Chatのレイアウトエンジン設計に関する論文も紹介されており、技術的な関心も寄せられています。
+* <strong>[1.13], [1.13.1], [1.13.1.1], [1.13.1.2], [1.13.1.3]</strong>：当時のMicrosoftのバージョン管理システム（SLMやSourceSafe）についての議論があり、SourceSafeの欠点や、Comic Chatが複数のシステムを跨いで管理されていた可能性が指摘されています。</p>
+<h2>IRCプロトコルと文化への影響</h2>
+<p>Comic ChatがIRCコミュニティに与えた影響、特にそのプロトコル拡張が議論されています。
+* <strong>[1.14], [1.14.1], [1.14.2], [1.14.3], [1.14.4]</strong>：Comic Chatは、キャラクターの外見や感情表現を明示的に示すためにIRCプロトコルを拡張しましたが、これによりComic Chatユーザー以外からはメッセージにノイズが混じるように見え、当時のIRCコミュニティでは嫌われることがありました。一部のサーバーでは、Comic Chatユーザーを自動キック/バンする設定もあったようです。
+* <strong>[1.20]</strong>：このプロトコル拡張は、Microsoftの「Extend, embrace」戦略の一例として捉えられています。</p>
+<h2>将来性と現代への適応</h2>
+<p>このオープンソース化されたプロジェクトの将来的な可能性についても言及されています。
+* <strong>[1.3], [1.4]</strong>：このプロジェクトにはまだ「可能性」があり、楽しいスピンオフを期待する声があります。
+* <strong>[1.17]</strong>：元のC++とMFCコードを現在のVisual Studioでビルドし、現代のIRCサーバーに接続し、高解像度ディスプレイで動作するようにした「AI-powered modernization attempts」が言及されており、RustやWinUIへの完全なポーティング、またはCopilotを使ったAIによる移植の可能性が示唆されています。
+* <strong>[1.31]</strong>：AIビデオ作成のパイプラインとしての利用も期待されています。
+* <strong>[1.33], [1.37]</strong>：Rust/GoへのリライトやDiscordクライアントへの変換を求める声も上がっています。</p>
+<h2>その他の関連事項</h2>
+<ul>
+<li><strong>[1.2], [1.2.1], [1.2.2], [1.18], [1.19], [1.29.1]</strong>：JerkcityやBonequestといった、Comic Chatスタイルのウェブコミックへの言及があります。</li>
+<li><strong>[1.10], [1.10.1], [1.10.2], [1.32]</strong>：Comic Chatと関連して、Comic Sansフォントの利用や、その派生であるComic Monoがコードフォントとして優れているというユーモラスな主張も見られます。Vincent Connare（Comic Sansの作成者）をGoogle検索するとイースターエッグが発動するという情報も共有されています。</li>
+<li><strong>[1.21]</strong>：Comic Chatに触発されて、コミック作成Webアプリ「Chogger」を開発したユーザーの経験が語られています。</li>
+<li><strong>[1.23], [1.23.1], [1.23.1.1]</strong>：当時のMicrosoftの企業文化についての議論があり、「ソフトウェア開発が楽しかった時代」という意見に対し、90年代のMicrosoftが「企業指標に忠実」であったことを指摘する反論もあります。ただし、Comic ChatはMicrosoft Researchから生まれたものであり、当時の社内環境とは少し異なる文脈で開発された可能性も示唆されています。</li>
+<li><strong>[1.28], [1.28.1], [1.28.1.1]</strong>：ブログ記事に掲載されたコミックのセリフがAI生成に見える、または人間的でないという批判に対し、記事の著者（Robert Standefer）が自分で書いたものであり、制作時間の制約があったためであると説明しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Microsoft Comic Chatのオープンソース化は、多くのユーザーにインターネットの初期の思い出と郷愁を呼び起こしました。特に、IRCへの初めての接点であったという声が多く、その革新性と、IRCプロトコルに独自の拡張を加えたことで引き起こされた当時のコミュニティでの反応が議論されています。また、オリジナル開発者と今回のオープンソース化を実現した人物が明確にされ、当時のMicrosoftのバージョン管理システムに関する技術的な議論も展開されました。将来的には、RustやWinUIへのポーティング、AIによるモダン化、さらにはDiscordクライアントとしての利用など、この歴史的なソフトウェアの新たな可能性に対する期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

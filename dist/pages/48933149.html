@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Our Rust-to-Zig Rewrite Is Going - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How Our Rust-to-Zig Rewrite Is Going</h1>
+        <div class="meta">
+            投稿日: 2026年07月16日 | ランク: 8
+        </div>
+        <a href="https://rtfeldman.com/rust-to-zig" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Roc言語のRustからZigへの移行に関する記事について議論しています。主なテーマは、RustとZigのコンパイル速度、メモリ安全性、Goのランタイムに関する主張、そしてコンパイラ開発における「unsafe」コードの必要性についてです。</p>
+<h2>Rustのコンパイル時間とZigの高速性</h2>
+<p>多くのコメントは、Rustのコンパイル時間が遅いことに不満を表明しており、Zigの速いインクリメンタルビルド（35ms）に大きな魅力を感じています。特にRustで大規模なプロジェクト（例：GraphQLバックエンド）に取り組んでいる開発者は、1分を超えるインクリメンタルリビルドに悩まされています。一部のユーザーは、Rustのコンパイル時間が将来的に改善されることを期待しており、Rustチームもこれに取り組んでいることを指摘しています。一方、Zigに借りチェッカーを追加するアイデアも提案されていますが、Rustの借りチェッカーが言語設計の根本的な部分であるため、既存の言語に後付けすることは不可能だという意見もあります。</p>
+<h2>Goのランタイムとスループットに関する議論</h2>
+<p>あるユーザーが、Goのランタイムは「世界で最も洗練されたスケジューリングエンジン」であり、理論上の不利な点にもかかわらず、Rustよりも高いスループットを達成できると主張しました。この主張は多くの疑問と反論を呼びました。他のユーザーは、これが彼らの実体験や人工的なベンチマークの結果と一致しないと指摘し、GoのGCを持つシステムでも最終的にはメモリ管理の最適化が必要になると述べています。また、Erlang、JVM、CLRなどのランタイムに触れ、Goのスケジューラが「世界で最も洗練されている」という主張に異議を唱えています。</p>
+<h2>コンパイラにおける「unsafe」コードの役割</h2>
+<p>記事中の「マシンコードを出力するコンパイラにとって、メモリ安全でないことを行うことは仕事の大部分である」という記述について、多くのユーザーが疑問を呈しました。コメントでは、通常のコンパイル作業では「unsafe」コードはほとんど必要なく、言語のランタイムやホットバイナリパッチ/コードリロード機能のような特殊なケースで必要になると指摘されています。コンパイラ自体は、抽象的なデータ構造を扱うため、メモリ安全であるべきだという意見が優勢です。一方で、「unsafe」コードが生成されることによるコンパイラバグと、生成されたバイナリの脆弱性との区別についても議論されています。</p>
+<h2>Zigの「pre-1.0」ステータスとメモリ安全性</h2>
+<p>Zigが「pre-1.0」であることについて、開発者がプロダクション準備ができていないと考えているのか、それとも単に破壊的な変更を可能にするためなのかという議論があります。一部のユーザーは、後者の理由であってもプロダクションには適さないと主張し、Rustのエディションシステムのような解決策を提案しています。また、Zigの「ReleaseSafe」ビルドモードがuse-after-freeエラーを捕捉するという記事の主張に対し、Zigのドキュメントや実体験からはその証拠がないという疑問も呈されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Roc言語がRustからZigに移行する決定を巡り、システムプログラミング言語の選択における主要なトレードオフについて活発な議論を繰り広げています。中心的な論点は、コンパイル速度（特にRustの遅さとZigの速さへの魅力）、メモリ安全性の保証（Rustの借りチェッカーの重要性 vs. Zigのランタイムチェックの限界）、そしてコンパイラ開発における「unsafe」コードの使用の適切性でした。Goのランタイム性能に関する一部の誇張された主張は、広範な反論を招きました。また、Zigの未熟なエコシステムと「pre-1.0」というステータスが、その実用性に関する懸念材料として挙げられています。全体として、言語選択はプロジェクトの具体的な要件と開発チームの優先順位に深く依存するという認識が共有されていますが、記事の一部の主張については詳細な検討と訂正が求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
