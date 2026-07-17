@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The state of open source AI - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The state of open source AI</h1>
+        <div class="meta">
+            投稿日: 2026年07月17日 | ランク: 8
+        </div>
+        <a href="https://stateofopensource.ai/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Mozillaの「The State of Open Source AI 2026」レポートに対するコミュニティの反応を議論しています。特に、ウェブサイトのデザインとアクセシビリティ、オープンソースAIモデルの将来性、およびMozilla自身の役割と資金源に焦点が当てられています。</p>
+<h2>ウェブサイトのデザインとアクセシビリティ</h2>
+<p>多くのコメントは、Mozillaのレポートウェブサイトのデザインとアクセシビリティに批判的です。
+- ユーザーは、スクロールするとコンテンツが表示される「新しいトレンド」がアクセシビリティの点でひどいと指摘しており、Mozillaのような組織が採用したことに驚きを表明しています（hypfer）。
+- 「prefers reduced motion」設定が尊重されているという反論もありますが、この設定を有効にすると多くのウェブサイトが壊れるため、選択的に有効にする方法がないと指摘されています（azangru, hypfer）。
+- フォントの選択が「攻撃的」または「読みにくい」と感じられ、主要なテキストにディスプレイフォントが使用されていることが問題視されています（Cuuugi, hungryhobbit, input_sh）。
+- ページのオープニング部分の理解が難しく、記事が「Open ships easy. Open deploys hard.」のような不可解な表現で満たされていることが指摘されています（marcuskaz）。
+- 一部のグラフがスクロールしても成長しない、または表示がずれているといった技術的な問題も報告されています（azangru, sippeangelo）。
+- 全体として、UIが「目に優しくない」と感じられ、フォントサイズが大きすぎ、アニメーションのタイミングがおかしいと評されています（jdw64）。
+- モバイル向けウェブサイトがデスクトップ用に最適化されていないように感じられるという意見もあります（farmerbb）。
+- AI開発者のウェブサイトはデザインがひどいという一般論も述べられています（100percentjake）。
+- 一部のユーザーは、記事の文章スタイルがAIによって書かれたもののように感じられ、信頼性を損ねていると指摘しています（Catloafdev, s3p, docheinestages）。</p>
+<h2>オープンソースAIモデルの将来性</h2>
+<p>オープンソースAIモデルがクローズドなフロンティアモデルを「殺す」かどうかについて、活発な議論が交わされています。
+- オープンモデルはライセンス料なしで実行でき、オンデバイスでより小さく動作させることができるため、AnthropicやOpenAIを脅かす可能性があるという憶測があります（babblingfish）。
+- フロンティアモデルは訓練に莫大な費用がかかる一方で、オープンモデルはコストをかけずに実行できるという見方があります（babblingfish）。
+- しかし、モデルの違いは大きく、ハーネス（ツール）だけではモデルの基本的な性能差は埋まらないという反論もあります（cma, Zababa）。
+- オープンソース検索エンジンがGoogleを「殺せなかった」ように、オープンモデルもフロンティアモデルを置き換えるのは難しいという意見もあります（fnord77）。
+- オープンモデルの訓練も高コストであり、無償での提供が永続するかは疑問視されています。中国からのオープンモデルは、地政学的な武器として利用されている可能性が指摘されています（mft_, sph）。
+- オープンルーターのデータによると、オープンモデルの利用は急増しており、クローズドモデルのシェアを上回っていますが、これは市場全体の傾向を反映していない可能性も指摘されています（GodelNumbering, jjice）。
+- フロンティアモデルの「真の堀」はモデル自体ではなく、特定のタスクを達成するためのツールやハーネスにあるという意見もあります（braiamp）。
+- しかし、LLMがソフトウェア開発を容易にするという主張を考慮すると、ツールが堀になるとは限らないという反論もあります（lelanthran）。
+- 将来的に、ハードウェアコストがオープンソースモデルを非現実的にし、フロンティア企業がハードウェアへのアクセスで優位性を保つという予測もあります（root_axis）。
+- しかし、ハードウェアコストの低下や、企業が異なるタスクに異なるティアのモデルを使用するようになることで、オープンモデルの採用が進むという見方も存在します（repeekad, Vespasian）。
+- 「オープンモデルが勝利する」という見方に対し、オープンモデルはまだクローズドなフロンティアモデルと「実用性」の点で比較にならないと主張する意見もあります（brunooliv）。
+- オープンモデルが「オープンソース」という言葉に合致しない（訓練コードやデータが公開されていない）という議論もあります。「オープンウェイト」という言葉がより適切とされています（inigyou, GuB-42）。</p>
+<h2>Mozillaの役割と資金源</h2>
+<p>Mozilla自身の位置付けと、オープンソースAIへの関わり方についてもコメントが寄せられています。
+- MozillaはGoogleからの資金援助に依存しており、これが彼らを「独占規制を避けるための防衛論」として利用されているという批判があります（jdw64, victor9000, bel8）。
+- Mozillaはかつてのウェブのオープン性を追い求めているが、現代の市場支配はGoogleやAppleなどの「3つのC」によるもので、Mozillaの成功とは直交するという見方もあります（positron26）。
+- Mozillaは「プライバシー重視のウェブブラウザ」という本来の役割を十分に果たしていないという意見も散見されます（bityard）。
+- FirefoxのAIチャットボット機能がオープンモデルプロバイダーを1社（Mistral）しか提案せず、ローカルオプションがないことに対して、「言葉と行動が伴っていない」という批判もあります（mtone）。
+- 一部のユーザーは、MozillaがオープンソースAIに対して「正しい視点」を持っていると評価し、垂直統合されたAIの世界を避けるために彼らの役割に期待を寄せています（AstralSerenity）。
+- Mozillaのレポートが「自己賛美」のためであり、ユーザーの監視やGoogleへのデータ提供といった、彼らの「偽善」を覆い隠そうとしているという非常に批判的な意見もあります（einpoklum）。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコミュニティは、MozillaのオープンソースAIレポートに対して、そのウェブサイトの<strong>デザインとアクセシビリティの欠陥</strong>（読みにくいフォント、奇妙なアニメーション、AIが書いたような文章）について厳しい批判を浴びせています。同時に、<strong>オープンソースAIモデルの将来性</strong>については活発な議論が交わされており、一部のユーザーはフロンティアモデルを「殺す」可能性を指摘し、オープンルーターの利用増加をその証拠として挙げています。しかし、多くのユーザーはオープンモデルの訓練コスト、性能差、クローズドモデルのツールエコシステムによる「堀」、そしてオープンモデル提供企業の<strong>ビジネスモデルの持続可能性</strong>について疑問を呈しています。また、<strong>Mozilla自身の役割と資金源</strong>についても、Googleからの資金援助に依存していることや、ウェブブラウザとしての本来のミッションを見失っているのではないかという懐疑的な見方が示されています。全体として、レポートの内容そのものよりも、その提示方法、Mozillaの信頼性、そしてオープンAIエコシステムの現状と将来における課題に焦点が当てられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

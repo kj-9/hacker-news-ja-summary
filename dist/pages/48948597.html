@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frame – Linux X server in Assembly - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Frame – Linux X server in Assembly</h1>
+        <div class="meta">
+            投稿日: 2026年07月17日 | ランク: 5
+        </div>
+        <a href="https://isene.org/2026/07/Frame.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Claudeを使用してAIによって生成されたX11サーバー「frame」に関するものです。特に、アセンブリ言語で書かれたこのサーバーの実装、およびそれがLinuxシステムにおけるバッテリー寿命の最適化に与える影響、そしてAIによるコード生成の可能性と課題について議論されています。</p>
+<h2>AIによるアセンブリ言語でのX11サーバー実装</h2>
+<p>コメントの多くは、AI（特にClaude）がX11サーバーをアセンブリ言語で実装したこと自体に驚きと感銘を受けています。一部のユーザーは、X11の巨大で複雑な性質から「再実装は不可能」という見方が変わってきたことを指摘しています。
+著者がX11プロトコルについて深い理解を持っていることが、AIの生成能力と組み合わさって機能しているという見方もあります。
+Rubyで同様のX11サーバーを開発しているユーザーもおり、Xサーバーが実際には「比較的シンプルで、ほとんどが面倒な作業」であり、LLMがプロトコル処理を容易に扱えることを示唆しています。</p>
+<h2>Linuxにおけるバッテリー最適化とデフォルト設定</h2>
+<p>Linuxにおけるバッテリー寿命の最適化について多くの議論が交わされています。多くのユーザーは、Linuxのデフォルト設定がバッテリーに優しくない傾向があり、最適なパフォーマンスを得るためには手動で多くの調整が必要であると指摘しています。
+具体的には、以下のような最適化が挙げられています。
+*   <strong>TLP</strong>: Gnome/KDEの電源管理パネルの基盤となっており、バッテリーモード時にスクリプトを実行してサービスを停止したり、リフレッシュレートを下げたりできる。
+*   <strong>GPUドライバー</strong>: Intel GPUの場合、GuC/HuCファームウェアをロードするための<code>modprobe</code>フラグを追加することで、ハードウェアビデオデコーディングを有効にし、パフォーマンス向上と消費電力削減を実現できる。
+*   <strong>ディスクリートGPUのオフ</strong>: 特定のドライバーをロードすることで、ディスクリートGPUをオフにし、アイドル時のバッテリー寿命を3倍にできるケースがある。
+*   <strong>カーネルオプション</strong>: <code>nohz_full</code>、ハードウェアSMTの無効化、<code>noatime</code>（ext4オプション）などがバッテリー寿命に影響を与える。
+*   <strong>デスクトップ環境</strong>: XFCEとX11の組み合わせが、Wayland+GNOMEよりもバッテリー寿命を大幅に向上させることがある。
+これらの設定の多くはユーザーが自ら発見し、設定する必要があるため、「LLMにシステム設定を最適化させたい」という声も上がっています。</p>
+<h2>LLMによるアセンブリコード生成の評価</h2>
+<p>LLMがアセンブリコードを生成することの有効性については意見が分かれています。
+*   <strong>肯定的な意見</strong>:
+    *   LLMはコンパイラよりも効率的なアセンブリを生成する能力があるという証拠がある。
+    *   静的コンパイラでは検出できない、コードの意図に基づいた多くの最適化機会をLLMは捉えることができる。
+    *   LLMはアセンブリコードの扱いに優れており、コンパイルやデコンパイルも容易に行える。
+*   <strong>懐疑的な意見</strong>:
+    *   「コンパイラの再実装だ、しかも遅く、信頼性が低く、完全にプロプライエタリで、使用には費用がかかる」という批判がある。
+    *   コンパイラの目的は「効率的なアセンブリを生成しつつ、プログラムの観察可能な論理的セマンティクスを自信を持って保持すること」であり、LLMが推論に基づいた非構造化アセンブリを生成することは最悪のアイデアの一つだという意見もある。
+    *   人間が書く場合、マクロアセンブラを使ってボイラープレートをカプセル化することで、アセンブリコードをCプログラムと同程度にコンパクトで読みやすくできるが、LLMが生成する「生の」アセンブリはそうではない。
+    *   AIによって「完璧なツール」が作られるという見方がある一方で、AIが「書いた」という表現に対して「AIが書いた」と修正するコメントも複数見られ、「書いた」という言葉の意味が失われつつあることへの懸念も示されている。</p>
+<h2>まとめ</h2>
+<p>今回のHacker Newsの議論は、AIがアセンブリ言語でX11サーバーを生成したという驚くべきプロジェクトを中心に展開されました。多くのユーザーは、AIによるこのような低レベルなコード生成の可能性に感銘を受けていますが、その品質、効率性、およびレビューの困難さについては懐疑的な意見もあります。また、このプロジェクトをきっかけに、Linuxシステムにおけるバッテリー最適化の複雑さと、それに伴う多くの手動設定の必要性が改めて浮き彫りになりました。AIがコンパイラのように、あるいはそれ以上に効率的なコードを生成できるのか、そしてそれが将来のソフトウェア開発にどのような影響を与えるのかが、今後の重要な議論となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
