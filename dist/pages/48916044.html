@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is this the end of the once-mighty GoPro? - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Is this the end of the once-mighty GoPro?</h1>
+        <div class="meta">
+            投稿日: 2026年07月18日 | ランク: 6
+        </div>
+        <a href="https://amateurphotographer.com/latest/photo-news/going-going-gone-is-this-the-end-of-the-once-mighty-gopro/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、GoProが財政的に苦境に立たされており、共同創設者のニコラス・ウッドマン氏が2000万ドルの自己資金を融資してつないでいるというニュースについて議論しています。</p>
+<h2>GoProが直面する課題</h2>
+<p>GoProの苦境には複数の要因が挙げられています。財務状況を見ると、粗利益率が以前の約31%から4.5%へと大幅に低下しており、最近の四半期で5700万ドルの営業損失を出しています。これは、メモリコストの上昇が直接的な原因として指摘されていますが、メモリの問題が深刻化する以前から営業利益は低迷していました。</p>
+<p>多くのコメントは、GoProのハードウェアが高価で「印象的でない」こと、そして「ひどい」ソフトウェアを挙げています。特に、モバイルアプリ優先でPCソフトウェアが劣っている点や、HyperSmooth Proなどの機能がサブスクリプション制であること、またカメラの過熱問題や信頼性の低さが繰り返し指摘されています。</p>
+<h2>競合と市場の変化</h2>
+<p>Insta360やDJI Osmoといった競合他社がGoProの市場を急速に奪っていることが議論の中心です。これらの競合は、より優れた画質、ハードウェアの品質、機能性、そして手頃な価格を提供していると多くのユーザーが評価しています。特にInsta360は、積極的なYouTube広告や、360度カメラとしての革新性でGoProを凌駕しているとの意見が多く見られます。</p>
+<p>また、スマートフォンカメラの進化もGoProにとって大きな逆風となっています。数年前までは専用のアクションカメラが必要だったようなシーンでも、現在のスマートフォンは十分な品質の動画を撮影できるようになり、多くの一般ユーザーにとってはGoProの必要性が低下しています。一方で、アクションカメラならではの耐久性、小型さ、マウントの柔軟性、そして特殊な撮影条件（水中、高速移動体など）における優位性を認める声もありますが、これはニッチな市場であると指摘されています。</p>
+<h2>中国企業の台頭と産業政策</h2>
+<p>GoProの苦境は、EV、ドローン、ロボット掃除機、ソーラーパネルなど、様々な分野でアメリカ（または欧米）の技術ブランドが中国企業に市場を奪われている広範なトレンドの一部であるとの指摘が多くあります。中国企業は、政府による大規模な補助金、産業スパイの可能性、影響力のあるマーケティングキャンペーン、そしてほぼゼロの資本コストによって、欧米企業を圧倒しているという主張が展開されています。これにより、多くの産業が「コモディティ化」し、競争が激化しています。</p>
+<p>この現象に対して、アメリカの産業政策の欠如を嘆く声や、消費者が個人レベルで「より高価で品質の劣る自国製品」を選ぶことを期待するのは無理があるという意見も出ています。しかし、航空宇宙分野など、国家安全保障上の理由から中国製製品への依存を避けるべきだという意見も存在します。</p>
+<h2>まとめ</h2>
+<p>GoProの苦境は、メモリコスト上昇による粗利益率の低下、競合他社（特にInsta360とDJI）による製品力と価格競争力の向上、スマートフォンカメラの進化による市場の縮小、そして全体的な中国企業の技術・価格優位性という複合的な要因によるものです。かつてアクションカメラ市場のパイオニアとしてブランドを確立したGoProは、その優位性を維持できず、高価で信頼性に欠ける製品、使いにくいソフトウェア、そして革新性の不足が指摘されています。一部のコメントでは、GoProが「アクションカメラ」というカテゴリーを一般化させたものの、最終的には競合にその地位を奪われるという「iRobot（Roomba）」のような状況に例えられています。GoProが今後生き残るためには、戦略の大きな転換か、他社による買収が必要であるという見方が優勢です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
