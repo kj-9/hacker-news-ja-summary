@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: I replaced a $120k bowling center system with $1,600 in ESP32s - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: I replaced a $120k bowling center system with $1,600 in ESP32s</h1>
+        <div class="meta">
+            投稿日: 2026年07月19日 | ランク: 1
+        </div>
+        <a href="https://news.ycombinator.com/item?id=48968606" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsの投稿とコメントは、SREのsection33が、自身の家族が購入した地方のボウリング場を現代化するために、高価でベンダーロックインされた既存のスコアシステムをオープンソースのハードウェアとソフトウェアで置き換えるプロジェクト「OpenLaneLink」について議論しています。</p>
+<h2>ボウリング場の現代化の動機</h2>
+<p>投稿者は、家族でミッドウェストの放棄された8レーンのボウリング場を購入しました。その町の娯楽の選択肢が少ないこと（R&amp;Rデザート）が背景にあります。ボウリング場は屋根の雨漏り、電気系統のサージ、70年前のボウリング設備など、多くの問題を抱えていました。特に、2008年に導入されたスコアシステムは高価で、交換には8万～12万ドルかかり、わずかな修理部品でも4000ドルもするといったベンダーロックインの問題に直面しました。オープンハードウェア、コンピュータビジョン、リアルタイムイベントストリーミング、オープンソースの進歩を背景に、投稿者は自力でより安価なシステムを構築することを決意しました。</p>
+<h2>OpenLaneLinkプロジェクトの詳細</h2>
+<p>投稿者は、ESP32とRaspberry Piを使って、1レーンあたり約200ドルの費用で既存のシステムと同等のプロトタイプを構築しました。このシステムは、ESPNowスター型トポロジーのメッシュネットワークを使用し、各ノードがセンサーからのイベントを送信し、コントロール用のコマンドを受け付けます。データはRedisに送られ、一般的なミドルウェア、React、WebSocket、Pub/Subのスタックで処理されます。これにより、任意のReact開発者がUIやアニメーションを構築できます。全てが市販のハードウェアで動作するため、運営者は自由にカスタマイズでき、データも完全に所有できます。修理も迅速に行え、既存のボウリング場でも短時間で導入できると期待されています。</p>
+<h2>今後の展望と追加機能</h2>
+<p>投稿者は「OpenLaneLink」としてハードウェア、ファームウェア、ソフトウェアスタックをオープンソース化する予定です。これにより、他のボウリング場も手頃な価格でシステムを維持できるよう支援したいと考えています。現在、LEDとDMX DJ照明の制御を追加しており、ボールの動きに合わせてレーンを追いかけるようなライティングや、レーザーライトショーなどを計画しています。将来的には、顧客がレーンに近づいてタップ支払いし、すぐにボウリングを開始できるようなキオスク化も目指しています。</p>
+<h2>コミュニティの反応</h2>
+<p>コメント欄では、このプロジェクトに対する大きな興奮と支持が示されています。多くの人々が、この取り組みが「ベンダーロックイン」に対する戦いとして、また地域社会に娯楽を提供する手段として素晴らしいと評価しています。特に、ESP32のようなコモディティハードウェアを活用してレガシーシステムを現代化するアプローチは、他の分野（小売業、ピンボール機、古い工作機械など）での応用可能性についても議論されています。ブログやYouTubeでの詳細な技術的な解説、さらにはボウリング場の運営やビジネスモデルに関する情報公開を求める声も多く上がっています。一部では、組織犯罪との関連を尋ねるユニークな質問もありましたが、投稿者はニッチなレガシー産業であるため、そのような問題はないと回答しています。</p>
+<h2>まとめ</h2>
+<p>section33氏のOpenLaneLinkプロジェクトは、地方のボウリング場を現代化するという個人的なニーズから生まれましたが、その解決策は、高価なレガシーシステムとベンダーロックインの問題に直面する他の多くのニッチ産業にも適用可能な、オープンソースハードウェアとソフトウェアの力を示す強力な事例です。ESP32とRaspberry Piを活用したコスト効率の高いソリューションは、修理の容易さ、カスタマイズの自由度、そしてコミュニティへの貢献という点で高く評価されており、ボウリング業界の未来に新たな可能性を提示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

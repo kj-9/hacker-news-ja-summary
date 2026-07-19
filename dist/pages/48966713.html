@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What I learned selling 2,500 MIDI recorders: Hardware is not so hard - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What I learned selling 2,500 MIDI recorders: Hardware is not so hard</h1>
+        <div class="meta">
+            投稿日: 2026年07月19日 | ランク: 7
+        </div>
+        <a href="https://chipweinberger.com/articles/20260719-hardware-is-not-so-hard" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、Hacker Newsの投稿者であるchipweinbergerが開発したMIDIレコーダー「Jamcorder」に関するもので、ハードウェア製品開発の経験と洞察を共有しています。</p>
+<h2>コードベースの規模と開発</h2>
+<p>著者は、Jamcorderの開発に約20万行のコード（アプリ8.5万行、ファームウェア11万行、製造ツールを含む）を要したと述べています。これは、デバイス接続、MIDI再生、ライブラリ管理、OTA更新、組み込みウェブインターフェースなど、多機能な製品を実現するために必要でした。ESP-IDFライブラリは含まれていないとのことです。開発者はファームウェアに時間をかけすぎたことが最大の失敗だったと反省しており、クロスプラットフォームでの開発や機能削減の重要性を強調しています。</p>
+<h2>著作権侵害対策</h2>
+<p>著作権侵害対策については、STSAFEチップ（StarLink端末と同じIC）の使用、デバイスごとのランダムな128ビットID/プロダクトキーの採用、ファームウェアの暗号化、およびアプリによる認証を行っていると説明しています。これにより、製品の真正性を確認し、クローン品の流通を防ぐ狙いがあります。将来的にはこれに関する記事を執筆する意向も示しています。</p>
+<h2>認証とコンプライアンス</h2>
+<p>著者はFCC認証とCE自己認証を選択し、費用は約5,000ドルで済んだと述べています。これは、事前に認証された無線モジュールを使用し、テストラボに過剰なサービスを売り込まれないようにすることで実現可能でした。多くの安価な中国製品が認証を受けていない現状と比較し、最低限の認証でも優位性があると指摘しています。ただし、一部のコメントでは、小規模なプロジェクトでは見過ごされがちなコンプライアンスの重要性や、成功した場合の法的リスクについて懸念が示されています。</p>
+<h2>ハードウェア開発の難易度</h2>
+<p>著者は、ソフトウェアと比較してハードウェア開発は「滑らかな航海」であり、「困難であるという評判は誇張されている」と述べています。しかし、多くのコメントはこの見解に異議を唱え、Jamcorderが比較的シンプルなハードウェア構成（既製のMCUモジュール、標準的なMIDI回路など）であることを指摘しています。真に複雑なハードウェア製品（多数の部品、カスタムツール、厳格なテスト、サプライヤー管理など）では、ハードウェアは非常に難しいという意見が多数を占めました。ただし、「シンプルに保てばハードウェアはそれほど難しくない」という視点は多くの共感を呼んでいます。</p>
+<h2>LLMとプログラミングの楽しみ</h2>
+<p>LLM（大規模言語モデル）の登場がプログラミングの楽しみを奪ったという意見に対し、一部のユーザーは反対意見を述べています。彼らは、プログラミングの楽しみは「問題を解決し、物を作る」ことであり、LLMが定型的な作業を肩代わりすることで、より高度な設計やアーキテクチャに集中できるようになったと主張しています。一方で、コードを書くこと自体や、思考とタイピングが一体となった問題解決のプロセスに喜びを感じるプログラマーもおり、LLMがその側面を奪うと感じています。</p>
+<h2>その他の重要な論点</h2>
+<ul>
+<li><strong>製造ツール:</strong> フラッシング、キーのプロビジョニング、ハードウェアテストの3つの主要コンポーネントがある。ほぼすべての部品がテストされる。</li>
+<li><strong>MIDI互換性:</strong> 他のMIDI機器（電子ドラム、パッドコントローラーなど）も「そのまま動作する」と回答。</li>
+<li><strong>顧客獲得:</strong> 顧客獲得やハードウェア設計の検証方法について質問があった。</li>
+<li><strong>アプリのプラットフォーム:</strong> iOSだけでなくAndroid版もFlutterで開発されており、Flutterを高く評価している。</li>
+<li><strong>最大の間違い:</strong> ファームウェアに時間をかけすぎたこと。機能削減とクロスプラットフォーム開発の重要性。</li>
+<li><strong>製造とサプライチェーン:</strong> 3PL（サードパーティロジスティクス）との連携はまだ難しい段階だが、自分で対応している。初期ロットは500台で、サプライヤーからの問題はなかった。</li>
+<li><strong>学習とインスピレーション:</strong> EEVBlogやPhil's Labなどの動画を見て学んだ。</li>
+<li><strong>USBコネクタ:</strong> USB-Bを電源入力に、USB-Aをデータポートに採用したのは意図的。堅牢性やユーザーの誤接続防止のためで、特に高齢のユーザーが多いことが理由。USB-Cは電力供給には専用ICが必要で、ユーザーの混乱を避けるためにも採用しなかった。</li>
+<li><strong>SDカード:</strong> microSDカードは「標準」にもかかわらず、バリエーションや信頼性の問題、スロットの設計の悪さから扱いにくいコンポーネントだという意見が複数出ている。</li>
+<li><strong>射出成形:</strong> 2500台というロット数でも射出成形は可能であり、ProtoLabsなどが初期段階では有用であるという情報が共有された。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Jamcorderは、そのシンプルながら完成度の高い機能性により、多くのユーザーから好評を得ています。著者はハードウェア開発が「思ったより難しくない」と主張していますが、これは「シンプルに保つ」戦略と、既成モジュールの活用、そしてソフトウェア開発の大きな努力によって実現されたものです。著作権侵害対策や認証プロセス、製造サプライチェーンにおける課題も認識されており、今後の成功にはこれらの側面への対応が重要となります。また、LLMがプログラミングにもたらす変化に関する議論では、開発者の個々の経験や哲学によって意見が分かれる興味深い結果となりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

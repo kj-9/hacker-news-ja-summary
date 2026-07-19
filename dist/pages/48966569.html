@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code uses Bun written in Rust now - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Claude Code uses Bun written in Rust now</h1>
+        <div class="meta">
+            投稿日: 2026年07月19日 | ランク: 3
+        </div>
+        <a href="https://simonwillison.net/2026/Jul/19/claude-code-in-bun-in-rust/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメント群は、BunがAIによってZigからRustに書き換えられ、AnthropicのClaude Codeで先行使用されている件について、多角的な議論が展開されています。主に、AIによるコード生成の技術的側面、オープンソースプロジェクトのガバナンス、コミュニティへの影響、そしてAnthropic製品の品質に関する懸念が中心となっています。</p>
+<h2>AIによる書き換えの是非と技術的評価</h2>
+<p>AIによるBunのZigからRustへの書き換えは、ソフトウェア開発の新しいフェーズを示唆するものとして、一部で「驚くべき成功」と評価されています。特に、既存のメモリリークの解消やパフォーマンスの改善が期待されています。しかし、多くのコメントは、生成されたRustコードが「非イディオム的」「多数の<code>unsafe</code>ブロックを含む」「忌まわしいもの」であると厳しく批判しています。これにより、Rust本来のメモリ安全性のメリットが十分に活かされていないという指摘や、コードの保守性、拡張性に対する懸念が表明されています。AIによる書き換えの動機としては、Zigの不安定性やメモリ管理の難しさ、AnthropicのAIツールとの親和性が挙げられています。</p>
+<h2>Bunのガバナンスとオープンソースの原則</h2>
+<p>Anthropicによる買収後、Bunのガバナンス構造が不透明になったことに対し、強い懸念が示されています。特に、Claude Codeが公式リリースされていないBun v1.4.0（Rust版）を先行して使用していたことは、「FOSS（Free and Open Source Software）の精神に反する」と批判されました。後にcanary版として公開されましたが、その対応の遅さや、コミュニティへの説明不足が信頼を損ねたとの意見があります。また、AIによる書き換えが、Zigコミュニティからの既存のプルリクエストやIssueを無効化し、貢献意欲を喪失させたことも問題視されています。</p>
+<h2>Claude Codeの品質とAIツールの実用性</h2>
+<p>AnthropicのAIプログラミングツールであるClaude Code自体が、TUI（テキストユーザーインターフェース）のバグ、パフォーマンスの悪さ、メモリの大量消費といった品質問題を抱えていることが多くのユーザーから報告されています。このような製品で、AIによって書き換えられたBunの先行版を使用していることに対し、「責任あるソフトウェア展開ではない」「AI生成コードの信頼性に疑問」との声が上がっています。AIがソフトウェア開発を「民主化」し、誰もがソフトウェアを自由に作成できるようになるといった楽観的な見方がある一方で、閉鎖的なモデル、高額な利用料、AIが正確な要求を理解できないという現在の限界を指摘する現実的な意見も多く見られます。</p>
+<h2>言語選択とコミュニティへの影響</h2>
+<p>BunのZigからRustへの移行は、Zigコミュニティに大きな失望をもたらしました。BunがZigの代表的なプロジェクトの一つであったため、多くのZig開発者がプロジェクトの方向転換に不満を表明しています。しかし、一方で「JavaScriptツールがどの言語で書かれているかは、ほとんどのエンドユーザーにとって重要ではない」という意見もあります。Rustの支持者は、メモリ安全性や（AIによる）開発の容易さをメリットとして挙げていますが、現在のBunのRustコードにおける大量の<code>unsafe</code>ブロックは、これらのメリットが十分に享受されていないことを示唆しています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、AIがソフトウェア開発にもたらす変革の可能性と、それに伴う倫理的・技術的課題を浮き彫りにしています。AIによる書き換えの成功を未来の兆候と捉える意見がある一方で、AI生成コードの品質、オープンソースの精神、コミュニティの役割、そしてAnthropicの製品戦略とコミュニケーションに対する深い懸念が表明されています。特に、透明性の欠如とコミュニティへの配慮不足は、技術的な革新がもたらすメリットを相殺するほどの信頼問題を引き起こしており、Bunの将来はこれらの課題にいかに向き合うかにかかっていると言えるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

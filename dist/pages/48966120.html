@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 3.8 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Qwen 3.8</h1>
+        <div class="meta">
+            投稿日: 2026年07月19日 | ランク: 2
+        </div>
+        <a href="https://twitter.com/Alibaba_Qwen/status/2078759124914098291" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、アリババが「Qwen 3.8」モデル（2.4兆パラメータ）をオープンウェイトとしてリリースするというアナウンスについて、興奮と憶測が混じり合っています。このモデルは、AnthropicのFable 5に次ぐ最も強力なモデルの1つとして宣伝されており、中国のAI企業が大規模なオープンモデルをリリースする傾向の一部と見られています。</p>
+<h2>中国のAI企業の戦略と動機</h2>
+<p>多くのコメンターは、アリババのQwen 3.8のオープンウェイトリリースが、Moonshot AIのKimi K3（2.8兆パラメータ）の発表に続くものであることに注目しています。これは中国のAI企業間の競争、特に米国企業との差別化戦略の一環と見られています。
+中国企業がオープンウェイトモデルをリリースする動機については、いくつかの説が挙げられています。</p>
+<ul>
+<li><strong>市場のコモディティ化</strong>: AIモデルがコモディティ化し、その上に構築されるアプリケーションやクラウドサービス（アリババクラウドなど）に価値を見出す戦略。これはオープンソースの「オープンコア」モデルに似ています。</li>
+<li><strong>競争優位性</strong>: 米国企業がAPIベースのクローズドモデルに注力する中、オープンウェイトモデルは世界的な採用を促進し、米国企業に挑戦する手段となる。</li>
+<li><strong>政策誘導</strong>: 習近平国家主席がAIのオープンソースリリースへのコミットメントを言及したことが、企業戦略に影響を与えている可能性。</li>
+<li><strong>国内市場のニーズ</strong>: 中国では米国製APIが使用できないため、オープンウェイトモデルは国内企業にとって不可欠。</li>
+<li><strong>過剰生産と価格競争</strong>: 中国産業の「内巻（インボリューション）」現象の一環として、企業が利益度外視の価格競争で市場を支配しようとしている可能性。</li>
+<li><strong>ソフトパワーと技術的独立性</strong>: AIを共通の利益と見なし、新興国へのAI能力構築支援を公約することで、ソフトパワーを拡大し、世界が米国の技術に依存しないようにする狙い。</li>
+</ul>
+<p>しかし、中国企業の動機については「単純に世界に貢献したいというOSS精神と類似している」という見方から、「データへのアクセスや潜在的なプロパガンダ」を懸念する声まで、様々な意見があります。</p>
+<h2>オープンウェイトモデルとAI開発の減速論</h2>
+<p>オープンウェイトモデルの増加は、AI開発の減速を引き起こすという「減速論」についての議論も交わされています。</p>
+<ul>
+<li><strong>減速論の主張</strong>: オープンモデルはフロンティアラボの訓練費用をゼロに近づけることで、大規模な研究開発への投資意欲を削ぎ、全体的な進歩を遅らせる。</li>
+<li><strong>反論</strong>:<ul>
+<li>オープンモデルは競争を促し、効率化や革新（DeepSeekの効率性改善など）につながる。</li>
+<li>フロンティアモデルがクローズドである場合、特定の国や企業が技術を独占し、他国の訓練能力を低下させるリスクがある。複数の地政学的地域からのオープンウェイトモデルが望ましい。</li>
+<li>AIの進歩はオープンな研究と成果物の爆発的な増加によってもたらされてきた。</li>
+<li>小規模なモデルでも十分な性能を発揮できるユースケースが多く、すべてのAI開発を少数のクローズドなプレイヤーに限定する必要はない。</li>
+<li>特定の企業が「AI安全規制」を通じて市場を独占しようとしているという見方。</li>
+</ul>
+</li>
+</ul>
+<h2>Qwenモデルの性能と課題</h2>
+<p>Qwen 3.8は2.4兆パラメータという規模から「QwenはGLMやKimiよりもはるかに優れている」という期待がある一方で、既存のQwenモデルに関する様々な意見が寄せられています。</p>
+<ul>
+<li><strong>Qwen 3.8への期待</strong>: Fable 5に次ぐ性能を持つと宣伝されており、そのオープンウェイトリリースへの期待は高い。</li>
+<li><strong>既存モデルの評価</strong>:<ul>
+<li>Qwen 3.6は、約30Bパラメータ帯では最良のエージェント型オープンウェイトLLMと評価されている。</li>
+<li>DeepSeek V4 Proの方がQwen 3.7 Maxよりも速く、安価で、一部のテストでは優れているという意見もある。しかし、DeepSeekの幻覚（ハルシネーション）率が高いという指摘もある。</li>
+<li>Qwen 3.7 Proは「使い物にならない」「デバッグ不可能」との厳しい意見もあれば、Qwen 3.7 Maxは「Opusレベルを上回る」「Fableよりは少し劣る」という評価もある。</li>
+<li>Qwenモデルは「過剰に饒舌（verbose）」で、簡潔な回答をしないという不満も聞かれる。</li>
+<li>Qwenのベンチマークスコアは信頼できないという意見もある。</li>
+<li>Qwenは中国モデルの中で最も検閲されているという指摘もあり、オープンウェイトであっても内部の「妥協点」を懸念する声がある。</li>
+</ul>
+</li>
+<li><strong>ローカル実行の要望</strong>: 多くのユーザーが、Qwen 3.8のより小さなサイズ（例：35Bや80B MoE）がローカルハードウェアで実行できることを望んでいる。特に、Strix Haloのような128GB RAMを搭載したPCでの実行に期待が集まっている。</li>
+<li><strong>パフォーマンスの比較</strong>: DeepSeek V4 Flashの価格対性能比を高く評価する声が多い。Kimi K3は「遅く、トークン消費が激しい」という意見もある。</li>
+</ul>
+<h2>まとめ</h2>
+<p>アリババの「Qwen 3.8」モデルのオープンウェイトリリースは、中国のAI企業が大規模なフロンティアモデルをオープン化する傾向を加速させ、AI市場に大きな競争圧力をかけると見られています。その動機については様々な憶測がありますが、この競争が結果としてユーザー（人間）にとって有益であるという見方が優勢です。一方で、オープンモデルの信頼性、検閲、およびAI開発全体への影響については議論が続いています。多くのユーザーは、この大規模モデルがローカル環境で利用可能な小規模バージョンとしてリリースされることを期待しており、特に高い性能を持つDeepSeek V4 Flashのようなモデルと競合することになるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
