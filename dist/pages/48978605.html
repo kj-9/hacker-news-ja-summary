@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker wipes Romania&#x27;s land registry database - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Hacker wipes Romania&#x27;s land registry database</h1>
+        <div class="meta">
+            投稿日: 2026年07月20日 | ランク: 4
+        </div>
+        <a href="https://news.risky.biz/risky-bulletin-hacker-wipes-romanias-entire-land-registry-database/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ルーマニアの土地登記機関へのサイバー攻撃に関するもので、同様の事件（特にスロバキアの例）やデジタル記録の信頼性、バックアップ戦略、そしてシステムにおける汚職や能力不足の役割について議論しています。</p>
+<h2>スロバキアの土地登記ハック</h2>
+<p>ルーマニアのケースと非常に似た形で、スロバキアの土地登記も2025年1月にランサムウェア攻撃を受けました。データベースは暗号化され、数百万ドルの身代金が要求されました。これにより、国の不動産市場は約1ヶ月間麻痺し、完全な復旧には数ヶ月を要しました。復旧にはバックアップと紙の記録が使用されました。この攻撃はスロバキア史上最大のものでしたが、犯人に関する情報はいまだに不明で、調査は進行中です。一部の政府関係者は証拠もなくウクライナを非難しましたが、ロシアのランサムウェアグループが関与していたと指摘する声もあります。古いバックアップからの復旧には、関係者や公証人が取引記録を保管していたこと、および紙の記録との照合が必要だったため、時間がかかりました。</p>
+<h2>バックアップの重要性と課題</h2>
+<p>コメントでは、オフラインバックアップの重要性が強調されています。ハッカーがシステムと一緒にバックアップも消去したという主張があったため、オフラインのコピーがなければ事態はさらに深刻になっていたでしょう。多くのユーザーは「オフラインバックアップ」が文字通り物理的な紙の記録を指していると推測しています。オフラインバックアップは、火災金庫に保管されたテープカートリッジなど、ネットワークから隔離された場所に保管されるべきだと主張されています。回復には数時間、あるいは数百時間を要し、特にシステムの整合性検証が最も時間のかかる部分であることが指摘されています。コードとしてのインフラ（IaC）とオフラインバックアップがあれば、回復時間を短縮できるという意見もありますが、定期的なテストと、侵害の原因特定と修正が必須であると指摘されています。</p>
+<h2>紙の記録とデジタル化の議論</h2>
+<p>多くのユーザーは、不動産所有権の最終的な真実の源として紙の記録の重要性を主張しています。ルーマニアのような国では、デジタル記録よりも紙の記録が優先されるという意見があります。過去の火災や洪水で紙の記録が失われた事例がある一方で、デジタルデータはハッキング、データの改ざん、古い形式でのアクセス性の問題など、異なるリスクに直面しています。デジタル化推進の動きがある一方で、それが伝統的な手段の排除とセットになっていることへの懸念も表明されており、特に東欧諸国では共産主義の経験から政府への懐疑的な見方が根強く、拙速なデジタル化が全体主義を助長する可能性も指摘されています。</p>
+<h2>汚職と能力不足</h2>
+<p>ルーマニアのIT/データ契約は、縁故主義や汚職によってセキュリティが軽視されているという見方が多数を占めています。政府がITプロジェクトを利権者に発注し、彼らが適切なセキュリティ対策を怠ることで、今回のような事件が発生すると指摘されています。また、IT分野における能力のある人材が民間部門に流出し、政府機関には非IT出身者や能力不足の人材しか残らないことも問題として挙げられています。このため、システムの仕様策定、設計、テスト、展開が適切に行われず、プロジェクトのコストが高騰し、品質が低下する結果となっています。</p>
+<h2>ブロックチェーンの可能性と批判</h2>
+<p>一部のコメントでは、土地登記のようなシステムにおいてブロックチェーン技術が有効な解決策となり得るかどうかが議論されています。不変性を持つ公開台帳として、ブロックチェーンはデータ損失や改ざんに対する耐性を提供できるという主張があります。しかし、同時にブロックチェーンは「鍵を紛失した場合に土地を取り戻すのが不可能になる」といった問題や、分散型システムにおいて信頼できない当事者間の合意形成を目的とするため、中央集権的な政府機関には不向きであるといった批判も挙がっています。ブロックチェーンのメリットを享受するだけであれば、単にデータを公開し、署名付きの更新を提供するだけで十分であるという意見もあります。</p>
+<h2>まとめ</h2>
+<p>ルーマニアの土地登記機関へのサイバー攻撃は、スロバキアの類似事例と並行して議論され、バックアップの重要性、特にオフラインかつネットワークから隔離されたバックアップの必要性が浮き彫りになりました。デジタル化の進展と同時に、紙の記録の永続性と信頼性に関する議論が再燃し、両者のリスクとメリットが比較検討されました。また、東欧諸国の政府機関における汚職とIT人材の能力不足が、今回のインシデントの根本原因であるという見方が強く示されました。ブロックチェーン技術が土地登記の解決策となり得るかについても言及がありましたが、その適用性には賛否両論がありました。全体として、今回の事件は、政府システムのセキュリティ、データ保全、そして信頼性の確保における多面的な課題を提示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

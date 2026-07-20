@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corners Don&#x27;t Look Like That: Regarding Screenspace Ambient Occlusion (2012) - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Corners Don&#x27;t Look Like That: Regarding Screenspace Ambient Occlusion (2012)</h1>
+        <div class="meta">
+            投稿日: 2026年07月20日 | ランク: 8
+        </div>
+        <a href="https://nothings.org/gamedev/ssao/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Hacker Newsの記事（リンクは提供されていませんが、SSA0（Screen Space Ambient Occlusion）がテーマ）に対するものです。記事の主張は、SSA0が現実のコーナーの暗さの表現と一致しないというもので、コメントではSSA0の有効性、代替技術、そしてゲームグラフィックにおけるリアリズムと美学のバランスについて議論されています。</p>
+<h2>SSAOの評価と代替技術</h2>
+<p>多くのコメント投稿者は、SSA0が物理的に不正確であることを認めつつも、その実用性を強調しています。SSA0は、長い間、パフォーマンスの良いアンビエントオクルージョン（AO）の最良の選択肢であり、ゲーム内でジオメトリを理解しやすくするために重要な役割を果たしてきました[1.1, 1.3, 1.5]。しかし、「じゃみじゃみ」としたちらつきや不自然な影の動きなど、スクリーン空間での計算に起因する問題点も指摘されています[1.10, 1.10.1.1]。</p>
+<p>新しいAOソリューションとして、RTGI/PT（レイトレーシングによるグローバルイルミネーション/パストレーシング）やFidelityFX CACAOが挙げられており、これらはより現実的な結果をもたらすとされています[1.1]。また、動的なオブジェクトにも対応した「ベイクドアンビエントオクルージョン」や、エリプソイドを用いたキャラクターのオクルージョン近似など、より高度な技術も存在します[1.10.2.1]。</p>
+<h2>ゲームグラフィックにおけるリアリズムと美学</h2>
+<p>コメントの大きなテーマの一つは、ゲームグラフィックにおける「リアリズム」と「見た目の良さ（美学）」のどちらが重要かという点です。多くの投稿者は、「リアリズム」そのものよりも「見た目の良さ」が重要だと考えています。現実世界のほとんどは退屈に見えるため、ゲームでは美学や情報伝達のために「現実を歪める」ことが必要になるという意見があります[1.4, 1.4.3]。</p>
+<p>一方で、物理的に正確なモデルが最も美しい結果を生み出すと主張する声もあります。特に、空や自然の風景のレンダリングにおいて、物理ベースのモデルは非常に魅力的であるとされています[1.4.4, 1.4.4.1]。しかし、最終的にはゲームの目的や美的スタイルによって、リアリズムを追求するか、様式化されたグラフィックを選ぶかが決まると考えられています[1.4.4.1, 1.4.4.1.1.1]。</p>
+<p>また、人間が2D画像から奥行きを認識する能力は、通常の立体視が欠如しているため、ゲームでは奥行きの錯覚を補うための工夫が必要であるという指摘もあります[1.2.1, 1.2.1.2.2]。このため、写真家や映画製作者も、奥行き感を伝えるために被写体や照明を慎重に選ぶことで、視覚的な補償を行っていると述べられています[1.2.1.2.2]。</p>
+<h2>SSAOの役割と限界</h2>
+<p>SSAOは、特に光の配置やより複雑なレイトレーシングが不要な場合に、3D形状を良く見せるための手法として広く利用されてきました[1.5]。これは、グローバルイルミネーションの高速で一般的な近似であり、特に通常のライティングが世界の光と矛盾する問題を解決するために役立ちました[1.5.1]。しかし、SSA0が物理的に根拠のない「ごまかし」であるという認識は共有されており、過度な適用は不自然に見えるという批判もあります[1.8, 1.9, 1.12]。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、SSA0が物理的な正確性よりも実用性と美的効果のために広く使われてきた技術であることを示しています。技術の進歩により、レイトレーシングなどのより正確なAOソリューションが登場していますが、ゲームグラフィックにおけるリアリズムと美学のバランスは、依然として活発な議論の対象です。多くの人は、必ずしも完璧なリアリズムではなく、「見た目の良さ」や「没入感」を追求するために、物理法則から逸脱した表現を用いることの価値を認めています。しかし、物理的に正確なレンダリングがもたらす「本物の美しさ」を評価する声も根強く、今後のグラフィック技術の進化が期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airport Simulator - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Airport Simulator</h1>
+        <div class="meta">
+            投稿日: 2026年07月20日 | ランク: 9
+        </div>
+        <a href="https://airport.apunen.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsの投稿は、ユーザーが作成した航空管制（ATC）シミュレーションゲーム「ATC Simulator」に関するもので、特にゲームプレイ体験、過去の類似ゲームとの比較、および機能改善の提案に焦点を当てています。</p>
+<h2>楽しさと中毒性</h2>
+<p>多くのユーザーがこのゲームを「楽しい」「中毒性がある」「素晴らしい」と評価しています。特に、シンプルな操作性（手で飛行経路を描く）や、指示なしでプレイできる直感性が好評です。一部のユーザーは、初めてのATC（航空管制官）として4回の着陸に成功したことを報告したり、数分で33秒で墜落したと述べたりと、その挑戦的な性質も楽しんでいます。</p>
+<h2>Flight Controlとの類似と懐かしさ</h2>
+<p>このゲームは、2009年にリリースされた人気モバイルゲーム「Flight Control」へのオマージュであると多くのユーザーが指摘しています。Flight ControlがiOSでプレイできなくなったことを惜しむ声や、現代版のFlight Controlのようなゲームを求めていたという意見が多く見られます。また、「Mini Metro」や「Mini Motorways」といった類似ジャンルのゲームを連想するユーザーもいました。
+さらに、「Aerobiz」（Sega Genesis）、「Heathrow ATC」（ZX Spectrum）、「Kennedy Approach」（C64）、「Airport Mania」など、さらに古い時代のATCゲームや空港シミュレーションゲームへの言及もあり、このジャンルの歴史の深さを感じさせます。</p>
+<h2>機能改善の提案とゲームプレイの課題</h2>
+<p>ユーザーからは、ゲームをより良くするための具体的な提案がいくつか寄せられています。</p>
+<ul>
+<li><strong>UI/UXの改善</strong>: スコアボードが画面を遮る問題（開発者によってデスクトップ版では非表示ボタンが追加された）、モバイルでのズームアウトや操作性の悪さ、色覚異常オプションの追加、離着陸機の視覚的な区別（着陸機をグレー表示にするなど）が挙げられています。</li>
+<li><strong>ゲームプレイのリアルさ</strong>: 飛行機が急旋回して着陸することや、滑走路のどちら側からでも着陸できることが非現実的だという意見（ただし、現実の管制では片方向が指定されることが多いとの反論も）、最小旋回半径の導入、滑走路を横断する航空機との衝突回避（垂直分離の考慮）などが提案されています。</li>
+<li><strong>難易度と戦略</strong>: 混雑が増すと航空機をクリックしにくくなる問題、出発機の経路を制御できないことによる課題が指摘されています。開発者は、ゲームの進行とともに航空機の出現率が上がり、航空機の上限数が増え、離陸という予測可能な混雑要素を加えていると説明しています。</li>
+<li><strong>その他の提案</strong>: キーボード操作での自動経路設定、実際の空港モデルの追加、航空機の動きのアニメーション改善、音量スライダー、着陸エリアの判定の改善、リーダーボードの不正スコアの削除（開発者によって対応済み）などがあります。</li>
+</ul>
+<h2>その他の関連ゲームやプロジェクト</h2>
+<p>コメント欄では、今回のゲーム以外にも多くの航空管制・空港関連のゲームが紹介されています。</p>
+<ul>
+<li><strong>OptiFlight</strong>：Mini Metroに似た航空機版</li>
+<li><strong>Mini Airways - ATC simulator</strong>：Mini MetroのUIを模倣しているが独自の要素がある</li>
+<li><strong>Final Approach</strong>：VR版のATCゲーム</li>
+<li><strong>OpenScope</strong>：オープンソースのより複雑なキーボードベースのATCシム</li>
+<li><strong>Endless ATC</strong>：AndroidとSteamで利用可能</li>
+<li><strong>Auto Traffic Control</strong>：GRPCサーバーベースのプログラミングチャレンジとしてATCをシミュレートするユニークなプロジェクト</li>
+<li><strong>Planes Control</strong>：Flight Controlの忠実なリメイク版</li>
+<li><strong>Air Traffic Controller (シリーズ)</strong>：日本の人気ATCゲームシリーズ</li>
+<li><strong>airpordle.com</strong>：Wordleに似た空港当てゲーム</li>
+</ul>
+<h2>まとめ</h2>
+<p>この「ATC Simulator」は、シンプルながらも中毒性のあるゲームプレイでHacker Newsコミュニティに好評を博しています。特に、人気を博した「Flight Control」のような昔のATCゲームを彷彿とさせる点が、多くのユーザーの懐かしさを刺激しました。ゲームプレイの楽しさが評価される一方で、UI/UXの改善、現実性の向上、そして難易度曲線に関する具体的な提案が多数寄せられており、今後の発展に期待が持たれています。また、コメント欄では過去から現在に至るまで、様々なATC関連ゲームが紹介され、このジャンルの根強い人気が示されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

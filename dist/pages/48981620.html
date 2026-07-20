@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelly UI: Soft-body physics for native HTML form controls - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Jelly UI: Soft-body physics for native HTML form controls</h1>
+        <div class="meta">
+            投稿日: 2026年07月20日 | ランク: 3
+        </div>
+        <a href="https://jelly-ui.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、「Jelly UI」という新しいUIコンポーネントライブラリについてのものです。このライブラリは、要素に柔らかな物理ベースのアニメーションを追加するもので、ボタンや入力フィールドなどがゼリーのように動きます。</p>
+<h2>全体的な評価と意見の分かれ</h2>
+<p>Jelly UIに対する意見は大きく分かれています。一部のユーザーは「楽しい」「クール」「素晴らしい」と肯定的に捉え、UIに楽しさを取り戻す良い試みだと評価しています。特に、アニメーションによる視覚的なフィードバックがUX価値を持つと指摘する声もあります。一方で、多くのユーザーは「気が散る」「過剰」「パフォーマンスが悪い」と批判的で、実用性やUX上の問題点を指摘しています。特に、スクロールジャッキングの挙動については強い不満が表明されています。</p>
+<h2>動作とパフォーマンスに関する問題</h2>
+<p>多くのユーザーが、Jelly UIのデモサイトが期待通りに動作しない、あるいはパフォーマンスが悪いと報告しています。</p>
+<ul>
+<li><strong>「動作軽減」設定の影響</strong>: 多数のユーザーが、OSの「動作軽減（prefers-reduced-motion）」設定がオンになっているためにアニメーションが見られないことに気づかず、最初はデモが壊れている、あるいは単に角丸なだけだと誤解していました。これは、意図的な設計ですが、ユーザーに混乱を与えました。デモサイトでこの設定を上書きできるオプションや、通知が必要だという提案もあります。</li>
+<li><strong>ブラウザ互換性とパフォーマンス</strong>: Firefox（iOS、Android、Windows）やChrome（デスクトップ）でアニメーションが見られない、または動作が遅い、カクカクするという報告が多数あります。一部のユーザーは、Chrome on Androidでは動作するものの、デスクトップではしないと報告しています。</li>
+<li><strong>「物理ベース」の定義</strong>: 一部のユーザーは、「物理ベース」という説明に対し、実際の物理シミュレーションが見られないと疑問を呈しています。要素の変形や弾性衝突の物理がないと感じており、AIが「JellyCar」ゲームの影響で誤って名付けた可能性を指摘する声もあります。</li>
+<li><strong>アニメーション実装の効率</strong>: あるユーザーは、パフォーマンスプロファイルの結果、ライブラリがページ上の全コンポーネントで8msごとにRAFアニメーションループを実行し、ドキュメント全体を再描画していると指摘し、これは非効率だと批判しています。ただし、これに対し、パフォーマンスプロファイルでは問題が見られず、アイドル時には更新するコンポーネントを限定しているようだと反論する声もあります。</li>
+</ul>
+<h2>UXとアクセシビリティに関する懸念</h2>
+<p>Jelly UIのUXとアクセシビリティに関する懸念が複数挙げられています。</p>
+<ul>
+<li><strong>スクロールジャッキング</strong>: デモサイトのスクロールスナップ機能は、多くのユーザーから「苛立たしい」「最悪の体験」と強く批判されています。スクロールの挙動がユーザーの期待と異なり、コンテンツが見えにくくなったり、特定の入力方法（ミドルクリック、スクロールバーのドラッグ、精密なトラックパッド操作）を妨げたりするため、ユーザーの操作感を著しく損なうと指摘されています。これは、物理的なインタラクションとの乖離を生み、不快感や吐き気を催すことさえあるとまで言及されています。</li>
+<li><strong>アニメーションの過剰さ</strong>: アニメーションが気が散る、過剰である、実用性がないと感じるユーザーもいます。特に、入力時のキータイピングにまでアニメーションが適用されることに違和感を覚える声もあります。</li>
+<li><strong>アクセシビリティとターゲットサイズ</strong>: フォームコントロールのヒートターゲット（クリック可能な領域）が小さすぎる、またはスイッチとラベルの間にクリックできない隙間があるなどの問題が指摘されています。また、細かな運動制御が難しいユーザーにとっては、ターゲットが変化してクリック領域が広がるような機能は有益かもしれないという提案もあります。</li>
+<li><strong>ネイティブHTMLフォームコントロールからの乖離</strong>: JSが必須である点や、ラジオボタンやチェックボックスのマークアップ・挙動が標準的でない点、OTP入力フィールドが単一入力ではなく複数文字入力になっている点など、ネイティブHTMLフォームコントロールのベストプラクティスから外れている点が批判されています。</li>
+</ul>
+<h2>その他のコメント</h2>
+<ul>
+<li><strong>デザインと応用</strong>: 「デザインが素晴らしい」「ウェブコンポーネントライブラリとして実装されているのが良い」という肯定的な意見もあります。SplatoonやRobloxのようなゲームサイトでの利用が想定されています。</li>
+<li><strong>懐かしさ</strong>: Compiz（Linuxのデスクトップエフェクト）や、Flash時代のPaul Neaveのウェブサイトを思い出すユーザーもいます。</li>
+<li><strong>カスタマイズ性</strong>: 入力フィールドやボタンのウィグリーな「膜」のようなエフェクトよりも、全体が揺れる方が良いという意見や、アニメーションをタイピング中にオフにするオプションなど、カスタマイズの要望も出ています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Jelly UIは、そのユニークな「ゼリーのような」アニメーションで注目を集めましたが、Hacker Newsのコメントでは賛否両論が激しく分かれました。肯定的な意見としては、UIに楽しさをもたらす可能性や、アニメーションによるフィードバックのUX価値が挙げられています。しかし、最も多くのコメントは、<strong>パフォーマンス問題、多くの環境での動作不良、そして特にデモサイトのスクロールジャッキングによる深刻なUX上の問題点</strong>を指摘しています。また、OSの「動作軽減」設定との意図的な連携がユーザーを混乱させたこと、そして「物理ベース」という言葉の誤解釈も議論の焦点となりました。今後の改善には、アクセシビリティの向上、パフォーマンスの最適化、標準的なUI/UXベストプラクティスへの準拠、そして特にスクロールジャッキングの廃止が不可欠であると考えられます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
