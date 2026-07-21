@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Private Cloud Compute SoC 3 audit reports - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Apple Private Cloud Compute SoC 3 audit reports</h1>
+        <div class="meta">
+            投稿日: 2026年07月21日 | ランク: 8
+        </div>
+        <a href="https://support.apple.com/guide/certifications/apple-private-cloud-compute-soc-3-audit-apc95a31b9d8/web" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>AppleがiCloud KeychainのSOC3監査結果を公開したというHacker Newsの議論は、その内容とSOCレポート全般の有効性に焦点を当てています。</p>
+<h2>SOCレポート全般への懐疑的な見方</h2>
+<p>多くのコメントは、SOC（System and Organization Controls）レポート、特にSOC2とSOC3の有効性に対して懐疑的な見方をしています。</p>
+<ul>
+<li><strong>形だけのコンプライアンス</strong>: SOC2は「形だけ」「ロゴウェア」であり、企業が調達プロセスでチェックボックスを埋めるためのものでしかないという意見が多く見られます。監査人は技術を理解しておらず、企業側の言い分を鵜呑みにすることが多いと指摘されています。</li>
+<li><strong>柔軟なコントロール選択</strong>: 企業は監査対象とするコントロールを自ら選択できるため、簡単に合格できる基本的なコントロールを選びがちであり、異なる企業のSOCレポートは比較できないとされています。</li>
+<li><strong>SOC3の性質</strong>: SOC3はSOC2から監査詳細を削除したものであり、企業（Apple）と監査人（EY）からの概要声明しか含まれていないため、特に興味を引くものではないと批判されています。</li>
+<li><strong>取得の容易さ</strong>: SOC2は「5万ドルかかる」という考え方も否定され、実際の監査費用はもっと安く、さらにType 1はコントロールを宣言するだけで取得できるため、取得が非常に容易であると指摘されています。中には、SOC2がいかに簡単に偽装できるかを示す記事も共有されています。</li>
+<li><strong>虚偽報告のリスク</strong>: 監査人が嘘を見破る義務があるとはいえ、企業が監査人に対して虚偽の報告をする可能性も指摘されており、監査人が嘘に加担した場合、免許を失うリスクがあるとの意見もあります。</li>
+</ul>
+<h2>AppleとiCloud Keychainへの言及</h2>
+<p>Appleの具体的な取り組みとiCloud Keychainへの評価に関するコメントもあります。</p>
+<ul>
+<li><strong>監査の意義</strong>: 監査は不完全ながらも、企業がベストプラクティスに従うインセンティブになるため、Appleが監査を実施していること自体は良いことだと評価されています。</li>
+<li><strong>セキュリティへの投資</strong>: Appleがセキュリティとプライバシーに多大な投資をしていることは広く認識されていますが、SOC2のようなレポートは「5万ドルを払える」という程度の意味しかなく、特に目新しい情報ではないとされています。</li>
+<li><strong>M3とM5</strong>: 一部のユーザーは、AppleがすでにM5について作業しているのに、なぜ今M3の監査を行っているのか疑問を呈しています。</li>
+<li><strong>「低価値製品」のセキュリティ</strong>: iCloud Keychainのような製品のセキュリティの高さに対し、「低価値製品に高セキュリティ」という皮肉なコメントがあり、それに対し「高価値製品にはどれほどのセキュリティが？」という返答が続くやり取りもありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AppleがiCloud KeychainのSOC3監査結果を公開したこと自体よりも、SOCレポートの制度とその有効性に対する広範な懐疑論が中心でした。多くのユーザーは、SOCレポート、特にSOC2やSOC3が、企業が「チェックボックスを埋める」ための形式的なコンプライアンス手段であり、実際のセキュリティ体制を正確に反映しているとは限らないと考えています。一方で、監査を実施すること自体は企業がより良い慣行に従うインセンティブになるという前向きな意見も存在します。Appleがセキュリティに多大な投資をしていることは認められつつも、このレポートがその事実を特筆するものではないという見方が示されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

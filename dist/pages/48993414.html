@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber</h1>
+        <div class="meta">
+            投稿日: 2026年07月21日 | ランク: 3
+        </div>
+        <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Gemini 3.6 Flash、3.5 Flash-Lite、および3.5 Flash Cyberの発表は、Hacker Newsコミュニティで複雑な感情を呼び起こしました。多くのユーザーは、Googleが競合他社と比較してAIのフロンティアで遅れをとっているという懸念を表明していますが、一方でGoogleのフラッシュモデルラインの特定の使用事例における実用的な価値を評価する声も上がっています。</p>
+<h2>ベンチマークとパフォーマンスへの疑問</h2>
+<p>多くのコメントは、Googleが自社の過去のモデルとの比較のみに焦点を当て、競合他社（特に中国のモデル）とのベンチマークを提示していないことに失望を示しています。ベンチマーク自体の数値（例えば、トークン効率の65%向上とDeepSWEでの精度49%向上の混同）についても混乱があり、一部のユーザーは説明の明確さを求めています。
+しかし、Artificial Analysisなどの独立したベンチマークでは、Gemini 3.6 FlashはGLM 5.2と同程度のインテリジェンスとコスト効率を持ちながら、大幅に高速であると指摘されています。特に、CodingやTool usageのカテゴリでは高い評価を得ています。</p>
+<h2>価格設定とコスト効率</h2>
+<p>価格設定は議論の大きなポイントとなっています。3.6 Flashは3.5 Flashよりも出力トークンあたりのコストが低いものの、一部のテストではトークン効率が低下しているため、タスクあたりの総コストは増加する可能性があります。多くのユーザーは、Gemini Flashモデルの価格が、DeepSeek V4 FlashやGLM 5.2などの競合するオープンウェイトモデルと比較して高すぎると感じています。しかし、Geminiのモデルはマルチモーダル機能を備えている点が価格に反映されているという意見もあります。</p>
+<h2>GoogleのAI戦略と課題</h2>
+<p>Googleがより大規模なフロンティアモデル（3.5 ProやGemini 4）のリリースを遅らせていることに対する懸念が表明されています。一部のユーザーは、Googleがフロンティア競争から一歩引き、高速でコスト効率の良い、比較的インテリジェントなモデルを大規模に展開することに注力しているのではないかと推測しています。これは、Google検索のAI概要など、自社製品の改善にAIを活用することに重点を置いているためと考えられています。
+また、Googleの製品戦略に対する不満も多く見られます。特に、Antigravity IDEの利用に関する問題、Workspaceアカウントでの機能制限、モデルの頻繁な廃止とそれに伴う価格上昇、そしてモデルの命名規則の複雑さなどが挙げられています。これらの問題は、ユーザーがGoogleのAI製品を信頼し、複雑なワークフローを構築するのを妨げていると指摘されています。</p>
+<h2>マルチモーダル機能と特定のユースケースでの価値</h2>
+<p>マルチモーダル機能（画像・音声分析）は、Geminiモデルの重要な差別化要因として挙げられています。多くのユーザーは、汎用的なコーディングタスクでは競合モデルの方が優れているとしながらも、画像分析や特定のデータ抽出タスクにおいてはGemini Flash Liteモデルがその速度、精度、コスト効率のバランスで「キング」であると評価しています。また、Googleのモデルは多言語での校正能力に優れているという意見もあります。</p>
+<h2>まとめ</h2>
+<p>Gemini 3.6 Flashのリリースは、GoogleのAI戦略における継続的な課題と機会の両方を浮き彫りにしました。競合他社に比べてフロンティアモデルのリリースが遅れていることや、製品提供における混乱に対しては多くの批判と懸念が寄せられています。一方で、特定のタスク（特にマルチモーダル分析や高速なデータ処理）においては、そのコストパフォーマンスが評価されており、実用的な価値を見出しているユーザーもいます。Googleが今後、主要なフロンティアモデル（3.5 ProやGemini 4）でどのような戦略を打ち出すかが注目されますが、現時点では、その強みと弱みが明確に表れたリリースと言えるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
