@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everyone Should Know SIMD - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Everyone Should Know SIMD</h1>
+        <div class="meta">
+            投稿日: 2026年07月22日 | ランク: 7
+        </div>
+        <a href="https://mitchellh.com/writing/everyone-should-know-simd" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、コンパイラの自動ベクトル化の限界と、手動でのSIMD最適化の必要性、そしてデータ構造設計（特にAoCとSoA）がパフォーマンスに与える影響について議論しています。</p>
+<h2>自動ベクトル化の限界</h2>
+<p>多くのコメントで、コンパイラの自動ベクトル化が期待するほど効果的ではないことが指摘されています。<code>gcc -O3</code>のような最適化フラグだけでは十分ではなく、特にデータ構造の変更（AoSからSoAへ）が必要な場合にその効果は限定的です。また、記事の著者であるMitchell氏も、自身の投稿の例がLLVMやGCCで最高レベルの最適化をしても自動ベクトル化されないことを挙げています（特に早期ループブレイクがある場合）。コンパイラ開発の経験者も、自動ベクトル化が機能するのは「小さな奇跡」であると述べています。コンパイラはデータ構造を決定論的に再現する必要があるため、データ構造やアルゴリズムの抜本的な変更を行うことはできません。</p>
+<h2>AoSとSoA</h2>
+<p>SIMD最適化において重要な概念として、AoS (Array of Structs) とSoA (Struct of Arrays) が挙げられています。SoAは、データキャッシュの局所性と分岐予測の排除に優れており、コンパイラやプログラマがSIMDの恩恵を最大限に受けるために役立ちます。Mike ActonやAndrew Kelleyのデータ指向設計（Data-Oriented Design, DoD）に関する講演が参考資料として紹介されており、アクセスパターンを考慮したデータモデリングの重要性が強調されています。SoAは万能ではありませんが、最適化ツールキットに追加すべき強力な手法とされています。</p>
+<h2>データ指向設計の重要性</h2>
+<p>SIMDによるスーパー最適化を考える前に、データ構造とアクセスパターンを徹底的に見直すことが非常に重要であると強調されています。データ指向設計は、SQLテーブルのようにデータをモデル化し、アクセスパターンに基づいてデータ構造を構築することで、大幅な速度向上とコードの簡素化をもたらします。これにより、データが均質な配列/ベクトルに格納されるため、コンパイラのSIMDマジックが機能しやすくなり、CPUのキャッシュ効率も向上します。割り当ての回避、vtableルックアップ、間接参照の排除もパフォーマンス向上に不可欠です。</p>
+<h2>ZigとSIMD</h2>
+<p>Zig言語におけるSIMDの現状についても議論があります。ZigではSIMDがかなり書きやすい一方で、いくつかの課題も指摘されています。例えば、一部の組み込み関数（<code>@sin()</code>など）がSIMDベクトルに対して要素ごとに処理を行うため、期待されるSIMD効果が得られない場合があります。また、ランタイムでのCPUIDによる最適化されたSIMDモジュールのロード（Google Highwayのようなライブラリが提供する機能）がZigのベクターでは直接サポートされておらず、再配布されるソフトウェアの最適化に制約がある点が挙げられています。</p>
+<h2>その他</h2>
+<ul>
+<li><strong>コンパイラオプション</strong>: 自動ベクトル化を支援するために<code>-march=native</code>や<code>-march=x86-64-v3</code>などのコンパイラオプションの利用が推奨されています。</li>
+<li><strong>明示的なSIMDの利点</strong>: コードが重要である場合、明示的で予測可能なSIMDベクトル化は、コンパイラの更新によって予期せずスカラーループに戻されるリスクを回避するために望ましいとされています。</li>
+<li><strong>Go言語のSIMD</strong>: Go言語でのSIMDは以前は複雑でしたが、現在は実験的な公式ライブラリが登場し、状況が改善しつつあることが示されています。</li>
+<li><strong>SIMDの学習</strong>: SIMDを自分で書かないとしても、データ依存性、ベクター要素の幅、条件分岐のマスクへの変換、「除算が存在しない」といった概念を理解することは、アルゴリズムやコード構造を設計する上で重要であると指摘されています。</li>
+<li><strong>SIMDの不要論</strong>: 大多数の開発者はSIMDを無視すべきであり、多くのプロジェクトにはより簡単にパフォーマンスを向上できる「低い成果」が存在すると主張する意見もあります。</li>
+<li><strong>RustのSIMD</strong>: Rustでは<code>fearless_simd</code>などのクレートがSIMD導入の出発点として推奨されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、コンパイラの自動ベクトル化だけではSIMDの恩恵を十分に受けられない場合が多く、手動での最適化が依然として重要であることを強調しています。特に、<strong>データ構造の設計（データ指向設計、AoCからSoAへの変換）がSIMD最適化の成否を分ける鍵である</strong>という点が繰り返し指摘されています。SIMDを最大限に活用するには、アルゴリズムとデータアクセスパターンを深く理解し、それに応じてコードを構造化する必要があり、これは単にコンパイラフラグを立てるだけでは達成できません。Zigのような現代的な言語でもSIMDは書きやすくなっていますが、ランタイムでのハードウェア固有の最適化といった高度な機能には課題が残っています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

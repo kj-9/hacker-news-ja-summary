@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Bento - An entire PowerPoint in one HTML file (edit+view+data+collab) - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Bento - An entire PowerPoint in one HTML file (edit+view+data+collab)</h1>
+        <div class="meta">
+            投稿日: 2026年07月22日 | ランク: 4
+        </div>
+        <a href="https://bento.page/slides/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、<a href="https://bento.page/">Bento</a>という、すべての機能が単一のHTMLファイルに収められたスライド作成ツールの発表について議論されています。このツールはインストール不要でオフラインでも動作し、共有編集も可能です。コメントは、その革新的なアプローチ、特にAIの利用と自己完結型である点に集中しています。</p>
+<h2>単一ファイルWebアプリとしての概念と利便性</h2>
+<p>Bentoの最大の魅力は、その自己完結性、つまりすべての機能が単一のHTMLファイルに収められている点にあります。ユーザーはインストールやクラウドログインなしで、オフラインで編集、プレゼンテーション、印刷、保存が可能です。ファイルサイズも約560KBと小さく、一度ロードすれば外部ファイルをフェッチする必要がありません。このアプローチは、TiddlyWikiやmdwikiなどの他の単一ファイルWebアプリと比較され、現代の「すべてをレンタルし、何も所有しない」という傾向に対する「新鮮な空気」だと評価されています。開発者（starfallg）は、このモデルが大規模企業には適さない可能性があるとしつつも、多くの人にとって有用であることを期待しています。</p>
+<h2>AIによる開発と将来性</h2>
+<p>Bentoは、Claude CodeのようなAIツールを多用して開発された点が注目されています。開発者は、本業と育児の合間を縫って短期間でプロジェクトを立ち上げたことを明かしており、AIがソフトウェア開発の効率を劇的に向上させる可能性を示しています。一部のコメントでは、AIによって大規模なソフトウェアが短期間で無料再構築される事例が少ないことへの驚きや、AIがHacker Newsで評価される「野心的で印象的なプロジェクト」の基準を変えつつあるという意見も出ています。AIによる既存のPPTXファイルからのBentoスライドへの変換機能も、その有用性が期待されています。</p>
+<h2>共同編集機能とその技術的側面</h2>
+<p>Bentoは共有編集機能を備えており、暗号化されたブラインドリレーを通じて実現されています。このリレーはCloudflare Durable Objects上で動作し、クライアントからの暗号化されたデータのみを処理するため、データの内容を閲覧することはありません。CRDT（競合レプリカデータ型）がシームレスに機能することに開発者は満足しており、リアルタイムの共同作業が可能となっています。しかし、多くのユーザーが同時に編集する際のフォーカス喪失やパフォーマンスに関する問題も指摘されており、改善の余地があることが示唆されています。</p>
+<h2>PowerPointとの比較と名称に関する議論</h2>
+<p>「PowerPointキラー」的な立ち位置として、BentoはMicrosoft PowerPointの代替として言及されています。開発者は、多くの人がPowerPointをスライドショーの一般的なブランドとして認識しているため、この名称を使用していると説明しています。しかし、一部のユーザーはPowerPointという用語を使うことに疑問を呈し、よりシンプルな形式が標準になることを望んでいます。また、「Bento」という名前については、既にChef社のBentoやBentoPDFなど、他のプロジェクトや製品で使用されていることを指摘するコメントもあり、混乱を避けるための検討を促しています。</p>
+<h2>その他の機能と改善提案</h2>
+<ul>
+<li><strong>アニメーション:</strong> Reveal.jsをベースにGSAP/Flipでアニメーションを実装。一部のユーザーからは、すべてのアニメーションをオフにする設定を求める声があり、開発者は前向きに検討しています。</li>
+<li><strong>垂直スライド:</strong> Reveal.jsの魅力的な機能である垂直スライドについて、Bentoでの採用を提案する意見があり、開発者は同様のユースケースを処理するために検討する意向を示しています。</li>
+<li><strong>閲覧モードとモバイルUX:</strong> 共有されたスライドを開いた際に、デフォルトで編集モードではなく閲覧モードで始まるべきという提案や、タブレットでのスピーカーノート表示に関する改善案が出されています。</li>
+<li><strong>「フォンホームしない」問題:</strong> ウェブサイトで「何もフォンホームしない」と謳っているにもかかわらず、Cloudflare Insightsのビーコンが含まれているという指摘があり、開発者は調査と対応を約束しています。</li>
+<li><strong>モノタイゼーション:</strong> 開発者は現時点での収益化は考えておらず、GitHubのスターが集まることが重要だと述べています。バックエンド処理を伴う場合は収益化の可能性もあるが、Bentoのコンセプトはバックエンドを不要にすることにあると説明しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Bentoは、単一HTMLファイルとして自己完結し、AIを活用して迅速に開発された、インストール不要でオフラインでも動作する革新的なスライド作成ツールです。その最大の魅力は、その利便性と共有編集機能にあります。AIによる開発は、現代のソフトウェアプロジェクトにおける新しい可能性を示唆しており、Hacker Newsコミュニティから高い評価と多くの改善提案が寄せられています。特に、企業環境におけるPowerPointからの脱却や、単一ファイルWebアプリとしての概念の普及に貢献する可能性を秘めています。共同編集のUXやモバイル対応、そして名称の問題など、いくつかの課題は残されていますが、開発者は積極的にフィードバックを取り入れ、継続的な改善に意欲を見せています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

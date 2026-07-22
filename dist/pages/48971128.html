@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nvidia DGX Spark as a daily driver - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Nvidia DGX Spark as a daily driver</h1>
+        <div class="meta">
+            投稿日: 2026年07月22日 | ランク: 9
+        </div>
+        <a href="https://daniel.lawrence.lu/blog/2026-07-15-dgx-spark-as-daily-driver/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にDGX Sparkというデバイスについて議論しています。特に、そのLinux上での互換性、性能、そして価格対効果について様々な意見が交わされています。</p>
+<h2>Linux互換性とNVIDIAドライバ</h2>
+<p>多くのコメントが、DGX SparkのLinux上でのNVIDIA GPUドライバに関する懸念に触れています。
+*   一部のユーザーは、NVIDIA GPUがLinuxで問題を抱えがちであるという一般的な認識を共有しています。
+*   しかし、x86_64環境ではNVIDIAドライバが非常に安定しているという反論もあります。
+*   DGX SparkがNVIDIA独自のLinuxディストリビューションに依存しているのではないかという懸念が表明されましたが、これは誤解であることが指摘されています。実際には、DGX Sparkは標準のUbuntu 24.04をベースにしており、Fedoraなどの他のLinuxディストリビューションも問題なく動作することが可能です。NVIDIAカーネルのパッチは、主に非クリティカルなバグ（Realtek Ethernetドライバの問題など）に対処するためのものです。</p>
+<h2>性能と用途</h2>
+<p>DGX Sparkの性能と、それがどのような用途に適しているかについて、意見が分かれています。
+*   あるユーザーは、DGX SparkをLLMや拡散モデルに使うと性能が不十分で、「コーヒーをたくさん飲むことになる」と述べています。特に、推論用の最適化が訓練には利用できないため、訓練速度が非常に遅いと指摘しています。
+*   これに対し、DGX Sparkは推論ではなくモデルの訓練や機械学習の実験に適していると反論するユーザーもいます。推論目的であればMacの方が良いと提案されています。
+*   別のユーザーは、DGX Sparkが汎用コンピューティングと趣味の範囲でのLLM推論を両立できる「スイートスポット」に位置すると評価しています。特に、Mac StudioやStrix Haloといった他の128GBユニファイドメモリデバイスと比較して、価格が適正であると考えています。</p>
+<h2>価格と代替品</h2>
+<p>DGX Sparkの価格と、他の代替製品に関する議論も行われています。
+*   DGX Sparkを「高価すぎる」と感じる意見がある一方で、「夢のようなデバイス」と評する声もあります。
+*   一部のコメントでは、AI愛好家にとってはRTX 6000 Blackwellの方が良い投資であり、一般的なコンピューティングにはもっと安価な選択肢があると示唆しています。しかし、RTX 6000 BlackwellはDGX Sparkの2倍以上の価格であり、PC全体を構築する費用も考慮すると比較対象として不公平だという意見もあります。
+*   初期に購入したDGX Sparkの市場価格が上昇していることが指摘されており、これによりMacなどのより高価なデバイスを購入する資金を調達できる可能性が示唆されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、DGX SparkがLinux環境での互換性、特にNVIDIAドライバの安定性において、初期の懸念とは異なり、多くのLinuxディストリビューションで比較的良好に動作する汎用性の高いデバイスであることを示しています。性能に関しては、LLMや拡散モデルの「訓練」には適しているものの、「推論」には不十分であるという意見と、趣味レベルのLLM推論と汎用コンピューティングのバランスが取れた「スイートスポット」を突くデバイスであるという意見に分かれています。価格については高価であるとの認識がある一方で、代替製品との比較では適正な位置にあると見なされることもあります。全体として、DGX Sparkは特定のニッチな用途（特にML訓練と汎用ARMコンピューティング）において価値を持つデバイスと評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

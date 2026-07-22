@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GigaToken: ~1000x faster Language model tokenization - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">GigaToken: ~1000x faster Language model tokenization</h1>
+        <div class="meta">
+            投稿日: 2026年07月22日 | ランク: 2
+        </div>
+        <a href="https://github.com/marcelroed/gigatoken/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーたちは、LLMのトークナイザーを1000倍高速化するというプロジェクト「Gigatoken」について議論しています。多くのユーザーがその技術的な功績を称賛しつつ、トークン化速度の向上が実際にどのようなシナリオで重要になるのか、具体的なユースケースについて意見を交わしています。</p>
+<h2>トークン化の高速化が重要なユースケース</h2>
+<h3>事前学習とデータ処理</h3>
+<p>作者であるmarcelroed氏によると、主なユースケースは事前学習の実験です。データ混合、フィルタリング、処理の変更を行う際に、分割は通常テキストレベルではなくトークンレベルで行われます。DCLMのような大規模なデータをトークン化するために、数日間CPUを大量に使用する場合があります。この段階での高速化は、全体の開発サイクルを大幅に短縮します。</p>
+<h3>推論時のTime-to-First-Token (TTFT)</h3>
+<p>高速なトークン化は、推論におけるTime-to-First-Token（最初のトークンが出力されるまでの時間）の短縮にも役立ちます。特に、システムプロンプトのような長いプレフィックスがKVキャッシュに存在する場合、トークン化にかかる時間はTTFTの大部分を占めることがあります。</p>
+<h3>入力トークン使用量のチェックとバッチ処理</h3>
+<p>モデルに送信する前に入力トークンの使用量をチェックし、特定のトークン制限を超える呼び出しを防いだり、リクエストをバッチにまとめたりするのに役立ちます。</p>
+<h3>AIプラットフォームにおける意思決定とルーティング</h3>
+<p>AIプラットフォームを運営するユーザーは、ルーティング、レート制限など、その後のステップに関する多くの意思決定を行うために、高速かつ早期にトークン化する必要があると述べています。これは、エンドツーエンドのリクエスト全体時間における割合は小さくても、効率的に行うことが非常に重要である「レイテンシがクリティカルな」部分です。</p>
+<h3>オンザフライでの埋め込みとセマンティック検索</h3>
+<p>セマンティック検索のためにオンザフライでデータを埋め込む場合、トークン化がCPU時間の99%以上を占めることがあり、ここでの高速化が非常に効果的です。</p>
+<h2>技術的な側面と最適化手法</h2>
+<p>Gigatokenは、特定のCPUとトークナイザーの組み合わせに限定されず、現代のx86およびARM CPU、および特定のトークナイザー間で一貫して高速化を実現しています。主な改善点は以下の通りです。</p>
+<ul>
+<li><strong>SIMDを利用したプレトークン化の最適化</strong>: 通常Regexエンジンに委ねられるプレトークン化をSIMD（Single Instruction, Multiple Data）命令を活用して大幅に最適化し、分岐を最小限に抑えています。</li>
+<li><strong>プレトークンマッピングのキャッシュ</strong>: 過去に処理された単語とそのエンコードされたトークンを効率的にルックアップするためのキャッシュを最適化しています。このドメインではキャッシュがすぐに肥大化し、プレトークンの分布が非常にロングテールであるため、キャッシュは難しい問題です。</li>
+<li><strong>Pythonとのインタラクションの最小化とスレッド間の相互作用</strong>: Pythonとの連携コストを削減し、スレッド間の相互作用を最小限に抑えています。</li>
+</ul>
+<h2>トークン化の重要性と価値</h2>
+<p>一部のユーザーは、トークン化が推論時間全体の0.1%未満であるため、1000倍の最適化が「過剰最適化」ではないかと疑問を呈しています。しかし、多くのユーザーは以下の理由でその価値を強調しています。</p>
+<ul>
+<li><strong>大規模における影響</strong>: 推論の規模を考慮すると、0.1%であっても無視できないワークロードとなり、数百万ドルのコスト削減につながる可能性があります。</li>
+<li><strong>レイテンシの重要性</strong>: 「時間・第一トークンまで」の短縮は、特にGroqやCerebrasのような推論プロバイダーにとって、全体のスループットと同じくらい重要です。</li>
+<li><strong>CPUリソースの活用</strong>: トークン化はCPUリソースを使用するため、GPUクラスターでGPUが計算を行っている間にCPUがより効率的に作業できる利点があります。</li>
+<li><strong>「追求すること自体が目的」</strong>: 興味深い問題をコンピュータで高速に解決すること自体が目標であるという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Gigatokenは、LLMにおけるトークナイザーを1000倍高速化するという驚異的な成果を達成しました。この高速化は、事前学習データ処理、推論時のTime-to-First-Tokenの短縮、AIプラットフォームでのリアルタイムな意思決定、オンザフライでのセマンティック検索など、多岐にわたるユースケースで具体的なメリットをもたらします。推論時間全体における割合は小さいものの、大規模な運用におけるコスト削減や、レイテンシがクリティカルなアプリケーションでのユーザー体験向上に大きく貢献する可能性を秘めています。また、RustのSIMDや効率的なキャッシングといった技術的な最適化手法が、このような劇的な性能向上を可能にしていることが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
