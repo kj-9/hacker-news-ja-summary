@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software rendering in 500 lines of bare C++ - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Software rendering in 500 lines of bare C++</h1>
+        <div class="meta">
+            投稿日: 2026年07月23日 | ランク: 7
+        </div>
+        <a href="https://haqr.eu/tinyrenderer/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ソフトウェアレンダラーの構築に関する記事についての議論です。特に、三角形のクリッピング、Rustでの実装、既存のリソースへの言及、そして記事の古さについてコメントしています。</p>
+<h2>三角形のクリッピング</h2>
+<p>多くのコメントが、ソフトウェアレンダラーで最も難しい課題の一つである三角形のクリッピングについて議論しています。</p>
+<ul>
+<li>あるユーザーは、チュートリアルがクリッピングの懸念を適切にカバーしてほしいと述べています。これは、実用的なレンダラーを作る上で避けられない問題であり、ビューフラスタムとジオメトリが交差するたびに三角形をクリッピングする必要があるからです。</li>
+<li>別のユーザーは、自身のウェブサイトでクリッピングに関する章があることを共有し、他のユーザーはその記事が優れていると評価しています。</li>
+<li>あるコメントは、三角形のクリッピングは非常に大きな三角形に対する属性補間を懸念する場合にのみ必要であると説明しています。これには、(1)破棄（高速だがユーザーエクスペリエンスが良くない）または(2)プリミティブ合成の2つの方法があるとしています。また、レンダラー「OpenSWR.org」のオープンソース版に例があるとも述べています。</li>
+<li>このコメントに対し、別のユーザーは用語の不明瞭さについて多数の質問を投げかけ、破棄するもの、プリミティブ合成、逆変換されたクリッピング矩形、固定小数点数、Z値/1/Z値の再生、および遅延属性合成ラスタライザーについて詳細を求めています。</li>
+<li>これに対し、元のユーザーはより詳細な説明を提供し、ラスタライズ表面は矩形であり、タイル内のサンプリングによってクリッピングが「無料で」行われることを説明しています。しかし、非常に大きな三角形の場合にはガードバンドが必要となり、破棄するか、プリミティブを合成する必要があるとしています。プリミティブ合成は最大5つの三角形を生成する可能性があり、それぞれのZおよび1/Z値の正確な計算が必要になると述べています。「遅延属性合成」とは、頂点シェーダーで属性を計算せず、必要な時にオンザフライで計算することを意味します。</li>
+<li>別のユーザーは、自身もクリッピングの実装で苦労したが、最終的にSutherland-Hodgmanアルゴリズムを独自に「再発見」して解決したと述べています。このアルゴリズムは理解しやすく、特に同次座標と投影空間での作業について、クリッピングがどのように機能するかを詳細に説明しています。</li>
+<li>この説明に対し、ユーザーは「w」による除算前後のクリッピングについてさらに詳しい説明を求めています。</li>
+</ul>
+<h2>Rustでの実装とパフォーマンス</h2>
+<p>ソフトウェアレンダラーをRustで実装した経験と、そのパフォーマンスに関するコメントがあります。</p>
+<ul>
+<li>あるユーザーは、数ヶ月前にLLMを使わずにRustでソフトウェアレンダラーを構築し、小さなゲームとピクセル化シェーダーや色収差などの特殊効果を追加した経験を共有しています。そのリポジトリには、開発中のスクリーンショットやバグの画像が多数含まれています。このユーザーは、最新のCPUが非常に高速であり、シングルスレッドのCPUレンダラーでもインタラクティブな3Dゲームを特殊効果付きで実行できることを最大の教訓として挙げています。</li>
+<li>なぜソフトウェアレンダラーなのにwgpuを使用しているのかという質問に対し、wgpuは単にソフトウェアレンダリングされたピクセルを表示するための表面テクスチャを提供しているだけであり、現代のアーキテクチャではGPUを介さずに画面にピクセルを表示するのが難しいからだと説明されています。</li>
+<li>デスクトップOSのコンポジターは、GPUハードウェアアクセラレーションを介するものの、D2D/GLUT/GLEW/GLFW/SDL/WGPUに依存せずにバッファを画面に表示する手段を提供している可能性についても言及されています（WindowsのCreateDIBSectionとBitBlt、macOSのCALayerとCATransaction commitを例に挙げています）。</li>
+</ul>
+<h2>既存のリソースと記事の評価</h2>
+<p>記事の参照元や、その内容に関する評価についての意見が見られます。</p>
+<ul>
+<li>あるユーザーは、記事で最初の画像がロードされたときに驚いたと述べていますが、別のユーザーはそれがどの画像だったか不明であり、個人的にはティーポットをデモに使用しただろうとコメントしています。</li>
+<li>記事は、nkanaevが自身のソフトウェアレンダラーを開発する際に、「Mathematics for Computer Graphics by John Vince」と共に非常に役立ったリソースとして挙げられています。この開発はLLMが登場する前で、数ヶ月かかり、主に数学の理解とC言語のセグメンテーションフォールトの追跡に時間を費やしたとのことです。</li>
+<li>あるコメントは「ついにRustで構築されていないエンジニアリングの偉業だ」と皮肉を込めています。</li>
+<li>記事が「ssloyのtinyrenderer」と同じものであり、古すぎるため日付を記載すべきだと指摘するコメントもあります。しかし、別のユーザーは、初めて見る読者にとっては新しい発見だと反論しています。</li>
+<li>記事を「非常に良い記事」と評価するコメントや、自身もこのような記事を書きたかったと述べるコメントもあります。</li>
+<li>POVRayとの違いを尋ねる質問に対し、POVRayがレイトレースシーンをレンダリングするための宣言型言語であるのに対し、この記事はラスタライゼーション技術がプログラム的にどのように機能するかを示すチュートリアルであると説明されています。</li>
+<li>記事が生成するTGAファイルをWindowsで開けないという問題提起に対し、Irfanviewの使用が提案されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、ソフトウェアレンダラーの構築に関する記事を巡る活発な議論です。中心的なテーマは、ソフトウェアレンダリングにおける最も複雑な部分の一つである「三角形のクリッピング」について、そのアルゴリズム（Sutherland-Hodgmanなど）や実装の難しさ、そして異なるアプローチ（プリミティブ合成、サンプリングによるクリッピングなど）に関する詳細な技術的議論が繰り広げられました。また、Rustで実装したソフトウェアレンダラーのパフォーマンスが現代のCPUで十分に実用的であるという経験談や、表示のためにGPUコンテキスト（wgpuなど）が必要になるという実用的な側面についても語られました。記事自体については、その価値を認める声がある一方で、既存の有名な「tinyrenderer」の再掲であり、日付が古いため混乱を招くという批判的な意見も上がりました。全体として、ソフトウェアレンダリングの技術的な深さと、その実装における課題、そして現代のツールスタックとの関連性を示す多角的な議論となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
