@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nvidia, Microsoft, Meta warn against overregulating open-weight models - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Nvidia, Microsoft, Meta warn against overregulating open-weight models</h1>
+        <div class="meta">
+            投稿日: 2026年07月24日 | ランク: 2
+        </div>
+        <a href="https://www.cnbc.com/2026/07/24/nvidia-microsoft-meta-open-weight-ai-models.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>NVIDIA、Microsoft、Metaなどの大手テクノロジー企業が、AIにおけるオープンウェイトモデルの重要性を訴える共同書簡を発表しました。これは、アメリカのAI技術的リーダーシップを維持し、イノベーションを促進するために、オープンモデルが不可欠であると主張するものです。この書簡は、政府によるAI規制、特に中国製モデルの規制の可能性が議論される中で発表されました。</p>
+<h2>オープンウェイトモデルの意義と懸念</h2>
+<p>コメントでは、オープンウェイトモデルがソフトウェアのコストを下げるだけでなく、知識の共有基盤を作り出し、アメリカのエンジニアや起業家が制度的優位性を築くのに貢献したという書簡の主張に賛同する意見が多く見られます。しかし、NVIDIAがLinuxドライバーを完全にオープンソース化していない点や、Microsoftなどが過去にオープンソースに対して敵対的だった歴史から、これらの企業の「オープンネス」への姿勢を疑問視する声もあります。</p>
+<h2>規制と中国モデルの影響</h2>
+<p>書簡が発表された背景には、政府によるAIモデル規制、特に中国製モデルの禁止の可能性への懸念があります。一部のコメンターは、OpenAIやAnthropicのようなクローズドモデル企業がオープンモデルの減速主義的、管理不能な性質を主張していることを指摘し、政府がこれらの企業からのロビー活動に耳を傾けていると見ています。しかし、中国モデルを禁止しても、中国は自国でモデルを開発し続けるため、その影響は限定的だという意見や、アメリカが中国モデルを制裁対象にすれば、実質的に世界中でその利用を制限できるという見方もあります。また、「中国モデル」の定義の曖昧さも指摘されています。</p>
+<h2>企業の動機と市場競争</h2>
+<p>共同書簡の署名企業、特にNVIDIA、Microsoft、Metaの動機について様々な憶測が飛び交っています。NVIDIAはGPUの販売を主要ビジネスとしており、オープンモデルが普及すれば、より多くのAI開発者がハードウェアを必要とするため、売上が増えるという指摘があります。MicrosoftはAzureのクラウドサービス提供者として、モデル層のコモディティ化がAzureの利益につながると考えている可能性があります。Metaはオープンモデルの開発に注力しており、他社との競争力を高めるため、この動きを支持しています。</p>
+<p>一方で、OpenAI、Anthropic、Googleといった主要なクローズドモデル企業が署名していないことは注目に値します。これらの企業は、オープンモデルが彼らの「フロンティア」開発を遅らせ、市場での優位性を失わせる可能性があると懸念していると見られています。これは、市場における「勝者総取り」の状況を防ぎたい企業と、それを維持したい企業の間の対立として捉えられています。</p>
+<h2>オープンソースコミュニティとの比較</h2>
+<p>オープンウェイトモデルが「オープンソース」であるかどうかの議論も行われています。一部のコメンターは、モデルが「ソース」（学習データや訓練プロセス）からコンパイルできない場合、「オープンソース」とは言えないと主張します。しかし、これは技術的な議論であり、現在の文脈では政治的な議論として捉えるべきだという意見もあります。また、過去のオープンソースソフトウェアに対する反論（イノベーションには利益動機が必要など）が、現在のオープンウェイトモデルに対する議論と酷似しているとの指摘もあります。</p>
+<h2>まとめ</h2>
+<p>NVIDIA、Microsoft、MetaなどがAIにおけるオープンウェイトモデルの重要性を訴える共同書簡を発表したことは、AI業界における規制、市場競争、そしてオープンネスの定義を巡る複雑な議論を浮き彫りにしています。この書簡は、クローズドモデル企業とオープンモデル支持企業の間で深まる対立、政府の政策決定への影響、そしてそれぞれの企業の経済的動機が絡み合っていることを示しています。アメリカのAIリーダーシップを維持するという大義名分のもと、各社が自社の利益を最大化しようとする「パワープレイ」と見る向きが強く、今後の政府の対応が注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

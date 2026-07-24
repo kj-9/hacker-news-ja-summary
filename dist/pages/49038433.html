@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Opus 5 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Claude Opus 5</h1>
+        <div class="meta">
+            投稿日: 2026年07月24日 | ランク: 1
+        </div>
+        <a href="https://www.anthropic.com/news/claude-opus-5" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Anthropicが最新モデル「Claude Opus 5」を発表したことに対するHacker Newsのコメントは、その性能、コスト、市場での位置付け、そしてAnthropicの製品戦略や既存インフラに対する懸念に集中しています。特に、Opus 5がFable 5と同等かそれ以上のベンチマークスコアを示しながら、価格が低い点が議論の的となっています。</p>
+<h2>性能とFable 5との比較</h2>
+<p>Opus 5は、いくつかのベンチマークでFable 5を上回る、あるいは同等の性能を示しており、特にARC-AGI-3スコア30.2%という驚異的な数値が注目されています。これは、流動的知能における大きな進歩を示すものと評価されています。ユーザーは、Opus 5がAgentic Codingのような特定のタスクでFable 5に肉薄または凌駕していることに驚きを示しています。一方で、Anthropic自身が「Opus 5は全体としてFable 5よりも優れていない」と述べているため、その意図やベンチマークの信憑性について疑問を呈する声もあります。一部のユーザーは、Fable 5がより大規模なモデルであり、特定の困難なタスクでは依然として優れていると考えています。また、Fable 5がUI実装にやや劣るという意見もありますが、Opus 5は画像からHTMLへの変換タスクでより忠実な再現性を示したという具体的なテスト結果も共有されています。</p>
+<h2>コストと利用可能性</h2>
+<p>Opus 5の最も魅力的な点の一つは、Opus 4.8と同じ価格でありながら、Fable 5に近い性能を提供していることです。Fable 5の価格がOpus 5の2倍であることから、多くのユーザーはOpus 5がコストパフォーマンスに優れていると評価しています。特に、サブスクリプションプランにおいてFable 5の利用が制限される中で、Opus 5がより多くの利用枠で提供されることは歓迎されています。しかし、「コストあたりのタスク完了」という観点では、Opus 5が必ずしも他社のモデル（特にGPT-5.6 SolやKimi K3）より安いわけではないという分析もあります。</p>
+<h2>セキュリティガードレールと規制</h2>
+<p>Opus 5のサイバーセキュリティに関するガードレールは、Fable 5よりも緩和されており、ソースコードの脆弱性発見がすべてのアクセスレベルで許可されるようになりました。これは防御的なサイバーセキュリティ作業を支援するためと説明されています。しかし、コンパイル済みバイナリの脆弱性発見など、悪意のある行為につながる可能性のある機能は引き続きブロックされています。この変更は、過去にAnthropicが政府からの規制を受けた経験（Fableが軍事利用の可能性で問題視された件）を踏まえたものと見られています。これにより、バイオセキュリティやリバースエンジニアリングなど、特定の専門分野でモデルを利用できないという既存の課題が、Opus 5でも続くのではないかという懸念も示されています。</p>
+<h2>Anthropicのインフラと製品戦略</h2>
+<p>一部のユーザーは、新モデルのリリースは歓迎しつつも、Anthropicの既存のインフラストラクチャにおけるバグ、セッションの切断、HTTPエラーなどの安定性に関する問題に不満を述べています。これらの問題が、特にチーム/エンタープライズユーザーにとって、製品の使い勝手を著しく損ねているとの声が上がっています。また、Anthropicのモデル命名体系（Haiku, Sonnet, Opus, Fable）や、ベンチマーク結果と公式声明の間の矛盾（Opus 5がFable 5より優れていると示唆されつつも、全体能力では劣るとされる点）についても混乱や不信感が表明されています。</p>
+<h2>まとめ</h2>
+<p>Claude Opus 5は、Fable 5に匹敵する、あるいはそれを上回る性能をより手頃な価格で提供するモデルとして、Hacker Newsコミュニティで大きな注目を集めています。特に、コーディングや代理タスクにおけるその能力は高く評価されています。しかし、Anthropicのベンチマーク発表における情報の一貫性の欠如、特定のタスクにおけるモデルのガードレール、そして既存のインフラストラクチャの安定性に関する課題は、ユーザーからの批判や懸念の対象となっています。これらの問題が改善されれば、Opus 5は市場において非常に競争力のある選択肢となる可能性を秘めていると見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
