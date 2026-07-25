@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How My Images Are Dithered - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How My Images Are Dithered</h1>
+        <div class="meta">
+            投稿日: 2026年07月25日 | ランク: 9
+        </div>
+        <a href="https://dead.garden/blog/how-my-images-are-dithered.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主に記事の主題が「ディザリング」ではなく「ハーフトーン処理」であること、そしてディザリングが画像処理において、特に8ビット画像でバンディングアーティファクトを防ぐために重要であることについて議論しています。</p>
+<h2>ディザリング vs. ハーフトーン処理</h2>
+<p>コメント欄では、記事のタイトルが示唆する「ディザリング」ではなく、実際に記事で紹介されている手法は「ハーフトーン処理」であるという指摘が多数ありました。
+*   多くのユーザーが、記事のコンテンツはハーフトーン処理（印刷されたページのように見える効果）であり、ディザリングとは異なる、あるいはディザリングの一種であると説明しています。
+*   一部のユーザーは、印刷業界ではこれらの用語が同義とされる場合もあると指摘し、ウィキペディアの関連箇所を引用しています。</p>
+<h2>ディザリングの必要性と重要性</h2>
+<p>多くのコメントは、特に8ビット/コンポーネント以下の画像でバンディングアーティファクトを防ぐためにディザリングが不可欠であるという点に集中しています。
+*   <strong>印刷における重要性</strong>: 印刷時にモニターでは見えないバンディングアーティファクトが現れるため、ディザリングが重要であると指摘されています。過去のPhotoshopとオープンソースツールの違い（Photoshopはデフォルトでディザリングを行うが、GIMPやImageMagickは行わない、または行いにくかった）が挙げられています。
+*   <strong>デジタル領域での必要性</strong>: 8ビット/コンポーネントでは256段階しか表現できないため、デジタル画像においてもディザリングが必要であると述べられています。特にHDRディスプレイの登場により、8ビット画像でもディザリングの必要性が増したという意見も出ました。
+*   <strong>高解像度での視認性</strong>: 720p以下の低解像度ではピクセレーションが目立つためディザリングに気づきにくいが、1080p以上ではバンディングがより顕著になるという見解もありましたが、解像度はバンディングの有無とは無関係だという反論も出ました。</p>
+<h2>その他の話題</h2>
+<p>ディザリングに関連して、以下のような多様なトピックが議論されました。
+*   <strong>圧縮とファイルサイズ</strong>: ディザリングは、PNGやGIFのような可逆圧縮でパレットの色の数を減らすことでファイルサイズを小さくするのに役立つが、JPEGやWebPのような非可逆圧縮では、ディザリングが画像にノイズを加えるため、かえって圧縮効率が悪くなる可能性があるという議論がありました。
+*   <strong>AIとディザリング</strong>: ディザリングされた画像は、一般的な深層学習ネットワークのデータ拡張にはあまり使われないが、最近のAIモデルはディザリングされた画像を正しく分類できる可能性があることが示されました。
+*   <strong>逆ディザリング（アンディザリング）</strong>: ディザリングは情報が失われるため完全に可逆ではないが、AIを用いたデノイザーのように、アンディザリングも高い精度で可能になる可能性があるという見解が示されました。アンハーフトーン処理（デスクリーニング）のためのツールも紹介されました。
+*   <strong>ツールの紹介</strong>: Didder (6色e-inkディスプレイ用)、Image-to-Pixel (ディザリング/ピクセル化)、dithering-sigma.vercel.app (Webアプリ)、Rasterbator (ポスター作成)、ascii-magic.com (ウェブツール) など、様々なディザリングツールが共有されました。
+*   <strong>Hacker Newsのタイトル変更</strong>: 元記事のタイトルがHacker Newsのフィルターによって短縮され、「How」が欠落したため、より好奇心をそそるタイトルになったという指摘がありました。
+*   <strong>懐かしさと美学</strong>: 昔の印刷技術（ロートグラビア印刷）に言及するコメントや、ディザリングを美的な選択として楽しむ声が多く見られました。</p>
+<h2>まとめ</h2>
+<p>この記事に対するHacker Newsのコメントは、主に記事で示された画像処理技術が「ディザリング」ではなく「ハーフトーン処理」であるという点に集中しています。しかし、その違いを明確にした上で、ディザリングが特に低ビット深度の画像におけるバンディングアーティファクトを防ぐ上で重要であるという認識が共有されました。印刷物からデジタルディスプレイ、さらにはAIの領域に至るまで、画像処理におけるディザリングとハーフトーン処理の技術的な側面、歴史的背景、そして美的価値について活発な議論が展開されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

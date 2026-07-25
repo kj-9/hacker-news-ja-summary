@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android May Soon Restrict On-Device ADB - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Android May Soon Restrict On-Device ADB</h1>
+        <div class="meta">
+            投稿日: 2026年07月25日 | ランク: 3
+        </div>
+        <a href="https://kitsumed.github.io/blog/posts/android-may-soon-restrict-on-device-adb/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、GoogleがAndroidのADB（Android Debug Bridge）機能を制限しようとしていることについて議論しています。特に、ADBをループバックインターフェース（デバイス自身）で使用することを禁止するという提案が中心的なテーマです。コメントは、この変更がユーザーの自由、セキュリティ、およびプラットフォームのオープン性に与える影響について様々な見解を示しています。</p>
+<h2>ADB機能の制限とユーザーの自由</h2>
+<p>多くのコメントは、ADBを制限するGoogleの動きが、Androidの「オープン性」という主要な魅力と矛盾すると指摘しています。Shizukuなどのツールを使って、標準APIでは不可能な高度な機能（通話録音、詳細なプライバシー設定など）を実現しているパワーユーザーや開発者にとって、この変更はデバイスの制御を奪うものと見られています。ユーザーは、デバイスを所有している以上、そのデバイスで何をしたいかを決定する権利があると主張しています。</p>
+<h2>セキュリティ対コントロール</h2>
+<p>Googleはセキュリティ上の理由を挙げていますが、コメントの多くは、この動きが実際にはユーザーのセキュリティよりもGoogleのビジネス上の利益（広告やトラッキング、アプリストアの独占など）に対する「コントロール」を優先しているものだと見ています。例えば、悪質なアプリがADBを悪用する可能性が指摘されていますが、多くのユーザーは、ADBを有効にするには複数の複雑な手順が必要であり、一般的なユーザーが意図せず脆弱になる可能性は低いと反論しています。一部では、これがコンテンツの不正利用防止や広告ブロック回避対策の一環であるとの見解もあります。</p>
+<h2>ユーザーの種類と保護</h2>
+<p>テックに疎いユーザー（「おばあちゃん」に例えられることが多い）が詐欺やマルウェアによって誘導され、ADBなどの開発者向け機能を誤って有効にしてしまうリスクについても議論されています。しかし、このリスクを軽減するために、すべてのユーザーから有用な機能を奪うべきではないという意見が支配的です。より良い解決策として、明確な警告表示、教育、または特定の機能を有効にする際のより厳格な確認プロセスが提案されています。また、このようなユーザーには「ダムフォン」のようなシンプルなデバイスを提供すべきだという極端な意見も出ています。</p>
+<h2>Androidエコシステムの未来と代替案</h2>
+<p>Googleの動きは、AndroidがAppleのiOSのような「walled garden（閉鎖的なエコシステム）」化していることのさらなる兆候と見られています。この傾向が続けば、ユーザーはAndroidを選ぶ理由が失われ、iOSに移行するか、あるいはLinuxベースのOS（GrapheneOS, LineageOS, PostmarketOSなど）を搭載したデバイスを模索することになるだろうという予測もあります。しかし、LinuxベースのOSはまだ広く普及しておらず、銀行アプリや主要な商用アプリが利用できないなどの課題も指摘されています。</p>
+<h2>まとめ</h2>
+<p>GoogleがAndroidのADB機能を制限しようとする動きは、ユーザーのデバイスに対する制御、オープン性、およびセキュリティに関する激しい議論を巻き起こしています。多くのユーザーは、これがセキュリティという名のもとにGoogleのビジネス上の利益とプラットフォームのコントロールを強化するためのものであり、Androidの主要な魅力であるオープン性を損なうと懸念しています。テックに疎いユーザーの保護は重要ですが、そのためにすべてのユーザーから有用な機能を奪うことには反対意見が多く、よりバランスの取れた解決策が求められています。この傾向は、Androidエコシステムの将来と、モバイルデバイスにおけるユーザーの自由の限界について広範な疑問を投げかけています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
