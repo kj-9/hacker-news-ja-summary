@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glue bonds to nonstick surfaces and wipes clean with ethanol - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Glue bonds to nonstick surfaces and wipes clean with ethanol</h1>
+        <div class="meta">
+            投稿日: 2026年07月27日 | ランク: 4
+        </div>
+        <a href="https://cen.acs.org/materials/adhesives/glue-bonds-nonstick-surfaces-wipes-clean/104/web/2026/07" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、フッ素化合物の表面に強力に接着し、エタノールで簡単に剥がせるという新しい接着剤、CyclicFP-fmocに関するものです。コメントは、この接着剤の潜在的な用途、環境への影響、および既存の接着技術との比較に焦点を当てています。</p>
+<h2>用途と利点</h2>
+<p>新しい接着剤は、特に接着が難しいPTFE（テフロン）などの非粘着性表面への強力な接着に注目が集まっています。
+*   <strong>一時的な固定（Fixturing）</strong>: 部品製造時の一時的な固定や、表面を傷つけずにセンサーなどを設置する用途（例：ボートの表面）に有効であることが示唆されています。
+*   <strong>調理器具</strong>: 食品安全性がある場合、PTFEとアルミニウムを接着する調理器具に応用できる可能性があります。
+*   <strong>再利用性</strong>: エタノール洗浄で回収・再利用が可能であり、接着剤自体をリサイクルできる点がユニークです。これは、特定の環境下（例：磁石を一時的に固定し、洗浄時に取り外したい場合）で非常に有用です。
+*   <strong>特定の産業用途</strong>: 海洋産業では、PTFEやPOMに構造強度を持つ非水溶性接着剤が求められており、この接着剤がそのニーズを満たす可能性があります。
+*   <strong>ホットグルーの代替</strong>: ホットグルーのように加熱して塗布し、エタノールで剥がせるという特性から、一部のホットグルーの代替となる可能性が指摘されています。</p>
+<h2>環境への影響と安全性</h2>
+<p>フッ素化合物であるため、その環境への影響について懸念が表明されています。
+*   <strong>「永遠の化学物質」懸念</strong>: PFOAのような既存のPFAS（パーフルオロアルキル化合物およびポリフルオロアルキル化合物）と同様に、新しい接着剤が環境中で分解されにくい「永遠の化学物質」となる可能性が心配されています。
+*   <strong>毒性研究の必要性</strong>: 著者自身も環境運命と影響の徹底的な研究が必要であると述べており、コメント投稿者も、過去のPFASに関する問題を踏まえ、その毒性、オゾン層への影響、燃焼時の問題、摂取時の問題を早急に調査するべきだと主張しています。
+*   <strong>手洗い消毒剤の使用</strong>: 接着剤の剥離に手洗い消毒剤が使えるという記述について、その現実的なシナリオや、消毒剤に含まれる他の成分が接着剤の「リサイクル」に与える影響について疑問が呈されています。</p>
+<h2>既存の接着技術との比較</h2>
+<p>既存の接着剤、特にホットグルーやスーパーグルー（シアノアクリレート）との比較も行われています。
+*   <strong>ホットグルーとの類似点</strong>: 新しい接着剤が溶融して塗布され、エタノールで剥がせるという点で、ホットグルーに似ているという指摘があります。ただし、ホットグルーは非粘着性表面には接着しない点が異なります。
+*   <strong>ホットグルーの特性</strong>: 安価なホットグルーには、非多孔質表面からイソプロピルアルコールで簡単に剥がれる特性があることが共有され、一時的な固定に非常に有効であるという経験が語られています。
+*   <strong>スーパーグルーとの違い</strong>: スーパーグルーははるかに強力であり、この新しい接着剤がそれを完全に置き換えることはないだろうと予測されています。スーパーグルーもアセトンで除去可能ですが、アセトンはより多くの素材を攻撃する可能性があります。
+*   <strong>接着剤選択サイト</strong>: 「ThisToThat」のような古い接着剤選択ウェブサイトの信頼性について疑問が呈され、最新のブランド提供の接着剤セレクターツールの利用が推奨されています。</p>
+<h2>まとめ</h2>
+<p>この新しいフッ素系接着剤は、PTFEのような非粘着性表面への接着と、エタノールによる容易な剥離・再利用という革新的な特性を持っています。これにより、一時的な固定、調理器具、特定の産業用途など、多くの分野での潜在的な応用が期待されています。しかし、フッ素化合物であることから、その環境への影響と安全性について、PFOAなどの過去のPFAS問題を踏まえた慎重な評価と徹底的な研究が強く求められています。既存の接着剤とは異なるユニークな特性を持つ一方で、それぞれの接着剤には得意な用途があり、この新しい接着剤もその一つとして位置づけられるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
