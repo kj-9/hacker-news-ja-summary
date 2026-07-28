@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steel Bank Common Lisp version 2.6.7 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Steel Bank Common Lisp version 2.6.7</h1>
+        <div class="meta">
+            投稿日: 2026年07月28日 | ランク: 2
+        </div>
+        <a href="https://sbcl.org/all-news.html?2.6.7" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>SBCLの新しいバージョンである2.4.6のリリースに関して、Hacker Newsのコメントスレッドでは、その新機能、特にSIMDサポート、Common Lisp（CL）の使用例、そしてLisp言語全般の展望について活発な議論が交わされました。</p>
+<h2>SIMD命令のサポート</h2>
+<p>SBCL 2.4.6の主な新機能として、ARM64およびX86-64アーキテクチャでのSIMD（Single Instruction, Multiple Data）命令のサポートが挙げられています。これにより、特定の計算タスクにおいてパフォーマンスが大幅に向上する可能性があります。コメントでは、このSIMDサポートが自動ベクトル化によるものなのか、それとも明示的な組み込み関数として使用するものなのか疑問が呈されました。現状では自動ベクトル化は実現されておらず、ユーザーが明示的にSIMD機能を利用する必要があるようです。</p>
+<h2>Common Lispの使用例とLisp言語の展望</h2>
+<p>多くの人がCommon Lispを試したいと考えているものの、具体的なユースケースを見つけられないという意見がありました。これに対し、CLは現代においてウェブ（ECLのwasmコンパイルを含む）からゲームエンジン、ウェブサービスまで幅広い分野で活用できるという反論がありました。</p>
+<p>しかし、Lispが「趣味の言語」として留まっているという批判的な意見も存在します。その根拠として、Lispの持つマクロ、動的プログラミング、リフレクションといった強力な機能が、却ってエコシステムの混乱を招き、開発者が車輪の再発明をしたり、理解しにくいDSLを乱立させたりする原因となっていると指摘されています。Racketの「プログラミング言語を作るためのプログラミング言語」というコンセプトは、この問題の象徴であるとまで言われています。</p>
+<p>一方で、実際に職場でCommon Lispを使用しているという反論も複数あり、FAANG企業でLispが主要な開発言語として使われている例も挙げられました。Lispの持つ強力な機能は、プロジェクトの標準化やコードレビュー、熟練したプログラマーによるDSL開発を通じて、開発を大幅に効率化できるという意見もあります。Clojureコミュニティがマクロの乱用を避けることで成功している例も示唆されました。</p>
+<h2>Lispマシンとデプロイメントの未来</h2>
+<p>もしLispが「勝った」世界では、どのようにデプロイメントが行われるか、という想像がなされました。Lispマシンイメージがデプロイの単位となる世界では、KubernetesやAWS EC2のようなインフラがどのように進化するのか、という興味深い問いが投げかけられました。あるコメントでは、そのような世界ではNixのような決定論的システムがより早く発見され、広く使われるようになっただろうと推測されています。</p>
+<p>しかし、Common Lispは現在の意味での関数型言語ではなく、イメージを変更し、すべてが可変である点が強調され、Nixのような不変性を前提としたシステムとは異なるとの見方もありました。</p>
+<p>デプロイメントに関しては、Lispの「カスタマイズされたイメージ」という特徴が扱いにくいと感じる人もいます。Windows向けに実行可能ファイルをコンパイルする商用LISPが存在したことや、GUIを持つRADツールがLISPで作成され、HTML5 CanvasやJavaScriptにコンパイルされるような未来を望む声もありました。Dockerがイメージベースのデプロイメントに似ているという指摘や、Graalのような技術が現代のLispデプロイの可能性を示唆しています。</p>
+<h2>SBCLのその他の話題</h2>
+<p>メモリアリーナ機能のドキュメント不足に関するコメントがあり、公式マニュアルではなく、内部向けノートにしか記載がない現状が指摘されました。また、SBCLとCCL (Clozure Common Lisp) の比較も行われ、かつてWindowsサポートでCCLが優れていたものの、SBCLも現在ではWindowsで問題なく動作すること、SBCLの速度が依然として優れていること、そしてCCLのメンテナンスが以前ほど活発ではない現状が共有されました。</p>
+<h2>まとめ</h2>
+<p>SBCL 2.4.6のリリースは、SIMDサポートという技術的進歩をもたらし、Lispコミュニティに活発な議論を促しました。この議論は、Common Lispの現代における実用性、Lisp言語の長所と短所、そしてもしLispが主要な言語となっていた場合の未来のデプロイメントモデルにまで及びました。Lispが趣味の言語であるという見方がある一方で、実際の職場で活用されている事例も存在し、Lispの強力な機能は、適切な管理と規律をもって利用すれば大きなメリットをもたらすという認識が示されました。また、Lispのデプロイメントに関する課題や、より良いドキュメンテーションへのニーズも浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

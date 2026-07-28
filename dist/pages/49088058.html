@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 2026-07-28 Specification: transport going stateless - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">MCP 2026-07-28 Specification: transport going stateless</h1>
+        <div class="meta">
+            投稿日: 2026年07月28日 | ランク: 4
+        </div>
+        <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、<strong>新しい「Machine Communication Protocol (MCP)」の主要なアップデート、特にステートレス化への移行</strong>について議論しています。多くのユーザーがこの変更を肯定的に捉え、その影響や関連する課題、今後の改善点について意見を交換しています。</p>
+<h2>ステートレス化への肯定的な評価</h2>
+<p>多くのコメントは、MCPのステートレス化への移行を高く評価しています。</p>
+<ul>
+<li><strong>シンプルさと信頼性の向上:</strong> ユーザーは、ステートレスになることでサーバ側の複雑さが減り、インフラの負担が軽減され、信頼性が向上すると指摘しています (1.5, 1.6, 1.10)。あるユーザーは、これはHTTPが成功した理由と同じで、サーバはリクエストを処理するだけで、状態を記憶するのはクライアントの仕事だと述べています (1.7)。</li>
+<li><strong>サーバレス環境での展開の容易さ:</strong> 主要メンテナーの一人であるdend氏は、この変更がサーバレスホストへのMCPサーバの展開を可能にする点で特にエキサイティングだと説明しています (1.3)。</li>
+<li><strong>既存コードへの影響なし:</strong> dend氏は、既存のMCPコードはこのプロトコル変更の影響を受けず、新しい機能を利用したい場合にのみ変更が必要だと明確にしています (1.2.1)。</li>
+</ul>
+<h2>認証と状態管理の課題</h2>
+<p>ステートレス化に伴い、認証や一時的な状態管理に関する実践方法について疑問が提起されています。</p>
+<ul>
+<li><strong>API認証の課題:</strong> 上流APIがBasic認証のみをサポートし、トークンの有効期限が短い場合（1時間など）に、MCPサーバ側で資格情報をキャッシュして silently refresh するのが最善の方法なのか、より良いパターンがあるのかという質問があります (1.3.2)。</li>
+<li><strong>URL Elicitationの可能性:</strong> 一部のユーザーは、URL Elicitationがクライアントが人間である場合に有効だと提案していますが、MCPクライアントのサポートはまだ不十分であると指摘しています (1.3.2.1)。</li>
+</ul>
+<h2>ファイルアップロードとバイナリデータ処理</h2>
+<p>ファイルのアップロードとバイナリデータの処理は、MCPの現状における大きな課題として挙げられています。</p>
+<ul>
+<li><strong>現行仕様の欠点:</strong> ユーザーは、Base64エンコーディングによるコンテキストウィンドウの汚染、クライアントによるデータの切り捨て、バイナリデータの効率的かつ信頼性の高い処理のギャップについて不満を表明しています (1.3.5, 1.3.5.1)。複数の仕様提案がドラフト状態のままであり、活発な進展がないことが懸念されています。</li>
+</ul>
+<h2>クライアントSDKとエコシステムのサポート</h2>
+<p>新しい仕様へのクライアントとSDKのサポート状況も関心の対象です。</p>
+<ul>
+<li><strong>Claudeクライアントの進捗:</strong> Claudeクライアントでのサポートについて質問があり、メンテナーはエコシステム全体でのサポートが展開中であることを示しています (1.3.4, 1.3.4.1)。</li>
+<li><strong>Java SDKの更新:</strong> Java SDKが最新の仕様変更に対応する時期についての問い合わせもあります (1.3.3)。</li>
+</ul>
+<h2>その他の意見と課題</h2>
+<ul>
+<li><strong>MCPの歴史的評価:</strong> 一部のユーザーは、MCPが当初からアンチパターンを多く含んでいたと厳しく批判し、今回のステートレス化はその間違いを修正する一歩だと見ています (1.7.1)。</li>
+<li><strong>HTTPとの類似性:</strong> 一部のユーザーは、HTTPヘッダーの必要性に疑問を呈し、メソッド名などをURLで処理することでHTTPのパラダイムに近づけることを提案しています (1.4)。</li>
+<li><strong>既存バージョンの継続利用と移行パス:</strong> MCP 1.xを継続して使用できるか、そしてステートレスコアから段階的に2.xに移行できるかについての質問があります (1.8)。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Machine Communication Protocol (MCP) のステートレス化への移行を広く歓迎しています。この変更は、サーバ側の複雑さを大幅に軽減し、信頼性を向上させ、サーバレス環境での展開を容易にすると評価されています。しかし、認証メカニズムのベストプラクティスや、特にバイナリデータとファイルアップロードの効率的な処理に関する未解決の課題が残っています。また、新しいプロトコル変更に対するクライアントSDKとエコシステム全体のサポートの普及が、今後の重要な焦点となります。多くのユーザーがこの進化をポジティブに捉えつつも、プロトコルの更なる成熟と実用性向上への期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

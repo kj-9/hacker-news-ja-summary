@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zig&#x27;s Incremental Compilation Internals - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zig&#x27;s Incremental Compilation Internals</h1>
+        <div class="meta">
+            投稿日: 2026年07月28日 | ランク: 8
+        </div>
+        <a href="https://mlugg.co.uk/posts/incremental-compilation-internals/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、Zigのインクリメンタルコンパイルに関する投稿について議論しており、主にRustとの比較、Cコードのサポート、メモリ安全性、コンパイル速度の重要性、そしてデバッグビルド時のバイナリサイズと設計のトレードオフに焦点を当てています。</p>
+<h2>インクリメンタルコンパイルとリリースビルド</h2>
+<p>Zigのインクリメンタルコンパイルは現在、最適化パスを持たない自社製コード生成バックエンド (x86_64用が主) でのみ動作するため、デバッグビルドに限定されています。将来的にはリリースビルドにも対応する計画ですが、関数間の情報を伝播させる最適化（インライン化など）はインクリメンタルコンパイルと両立しにくいため、最適化のサブセットに限定される可能性があります。LLVMとのインクリメンタルリンカの連携は現状では困難です。</p>
+<h2>Cコードのサポート</h2>
+<p>ZigコンパイラはCコードをコンパイルできますが、Cコードのインクリメンタルコンパイルには対応していません。ZigコンパイラはZig AIRをキャッシュしますが、Cからの情報はキャッシュしません。Cコンパイルは主にLLVMに依存しており、ZigがCコンパイルを自社製バックエンドでサポートする計画（<code>arocc</code>への移行など）は、Cのソースコード全体ではなくヘッダーの変換を目的としているとの指摘があります。ただし、CコンパイルのLLVM依存性を解消する計画自体は存在します。</p>
+<h2>コンパイル速度の重要性</h2>
+<p>コメントでは、長らく業界がコンパイル速度を軽視してきたことへの不満が表明され、Zigのこの分野での取り組みが高く評価されています。Go言語もコンパイル速度を重視して設計されたことや、JavaがC++よりも高速なコンパイルで評価された過去が言及されています。</p>
+<h2>Rustとの比較とメモリ安全性</h2>
+<p>多くの議論がRustのコンパイル速度とメモリ安全性に集中しています。
+*   <strong>コンパイル速度の要因</strong>: Rustのコンパイルが遅いのは、メモリ安全性のチェックそのものよりも、メタプログラミング機能（マクロ、ジェネリクス）、名前解決、そして伝統的なコンパイルモデル（ライブラリ全体をコンパイルしてからバイナリにリンクする）に起因するという見解があります。特に、需要駆動型コンパイル（最終プログラムが必要とするものからコンパイルを開始する）ではなく、ライブラリを独立したアーティファクトとして生成するモデルが、多くの不要なコードのコンパイルにつながると指摘されています。
+*   <strong>メモリ安全性の定義</strong>: 「メモリ安全性はtable stakes（最低限の必須条件）」という発言に対し、メモリ安全性の定義と程度について活発な議論が交わされました。RustとJavaは明示的に危険な操作を選択しない限りメモリ安全であるのに対し、ZigやCにはそのような明確な区別がないという意見が主流です。ただし、一部のユーザーは、Rustの「安全な」部分で書きたい低レベルの操作が不可能であり、結果として多くの「unsafe」コードを書く必要があるため、自分にとってはRustのメモリ安全性の価値が低いと主張しています。
+*   <strong>Zigのメモリ安全性</strong>: ZigはCと比較して空間的メモリ安全性（配列の範囲外アクセスなど）を向上させているが、RustやJavaのような「デフォルトで安全」な設計ではないと指摘されています。Zigに借用チェッカーを実装する可能性も示唆されていますが、Zig自体がそれを追加する予定はないとされています。</p>
+<h2>デバッグビルドにおけるバイナリ設計</h2>
+<p>Zigがデバッグビルド用にすべてのコードを含む巨大なバイナリを作成することに対し、なぜ多くの小さな共有ライブラリを生成してリンクするアプローチを採用しないのかという疑問が呈されています。このアプローチは、バイナリのパッチ適用や破損のリスクを回避できる可能性があります。しかし、共有ライブラリの数が多すぎると動的リンカのオーバーヘッドが大きくなる可能性があり、インクリメンタルコンパイルの性質上、静的リンキングの利点も考慮されるべきという反論もあります。</p>
+<h2>まとめ</h2>
+<p>Zigのインクリメンタルコンパイル機能はデバッグビルドに限定されているものの、将来的にリリースビルドへの対応やCコードのコンパイルに関する改善が期待されています。コンパイル速度の向上は業界全体にとって重要であり、Zigのこの分野での取り組みは高く評価されています。Rustとの比較では、両者のコンパイル速度とメモリ安全性の設計思想の違いが浮き彫りになりました。特に、Rustのコンパイル速度は言語の複雑性や伝統的なコンパイルモデルに起因し、メモリ安全性の定義を巡っては「デフォルトで安全か」という点が主要な論点となりました。デバッグビルド時のバイナリ設計に関する議論は、速度と設計上のトレードオフを示唆しており、Zigの継続的な改善と進化への期待が感じられるコメントスレッドとなりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
