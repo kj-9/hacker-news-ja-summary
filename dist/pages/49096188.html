@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document-borne AI worms can self-propagate through Copilot for Word - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Document-borne AI worms can self-propagate through Copilot for Word</h1>
+        <div class="meta">
+            投稿日: 2026年07月29日 | ランク: 10
+        </div>
+        <a href="https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのユーザーたちは、Microsoft WordのCopilotにおける脆弱性、特に「隠された指示」を通じてAIを乗っ取り、文書の改ざんや拡散を可能にする問題について議論しています。多くのコメントは、この脆弱性がLLMの根本的な限界に起因するものであり、従来の「コードとデータの分離」の原則がAIシステムに適用できないことに対する懸念を示しています。</p>
+<h2>AIワームと拡散の可能性</h2>
+<p>著者は、この脆弱性がMicrosoft Copilot for Wordにおける協調開示されたものであり、攻撃者が制御する指示が文書に隠され、AIを操作して出力を改ざん（例：財務数値を半減させる）し、攻撃プロンプトを白いテキストとして新しい文書に隠して付加すると説明しています。これにより、ペイロードを含む文書が通常のユーザーワークフローを通じて「AIワーム」のように拡散する可能性があると指摘されています。以前にもAIワームの概念はデモンストレーションされていますが、商業的な生産性ツールでの実証はこれが初めてだという見解も出ています。</p>
+<h2>コードとデータの分離の問題</h2>
+<p>多くのユーザーは、「命令とデータを混ぜることは決して良い考えではない」という共通のセキュリティ原則に言及し、LLMが命令とデータを区別できないという一般的な未解決の問題がこの脆弱性の根本にあると指摘しています。一部のユーザーは、物理的な現実や人間の心にはそのような分離がないため、AIシステムにも適用できないと主張し、LLMを人間のようなコンポーネントとして扱うべきだと提言しています。しかし、他のユーザーは、コードとデータの分離はソフトウェアセキュリティの核心であり、LLMはまだ「賢い」とは言えず、この分離ができないのであれば、そのアプローチ全体を見直す必要があると反論しています。</p>
+<h2>隠されたテキストへのアクセス</h2>
+<p>ユーザーたちは、Word文書に隠されたテキスト（例：白い背景に白いテキスト、非常に小さいフォント、ページ外のテキスト、画像に覆われたテキストなど）がなぜAIにアクセス可能なのか疑問を呈しています。過去のWordの「隠しテキスト」機能の正当な用途が挙げられる一方で、AIがユーザーに見えるものだけを処理するようなフィルターや高コントラストモードの必要性が議論されています。しかし、そのようなフィルターの実装は、レンダリングとOCR、または複雑なグラフィック処理を伴うため、技術的に困難であり、常に完璧であるとは限らないという意見もあります。</p>
+<h2>従来のセキュリティ問題との類似性</h2>
+<p>この脆弱性は、古くからのマクロウイルスやSQLインジェクションなど、従来のセキュリティ問題と類似しているという意見が多く見られます。特に、マクロウイルスのように、AIが信頼できない文書内の指示を実行するリスクが指摘されています。また、AIを「bash構文を知っている無謀な幼児」と比較し、重要なシステムへの深い組み込みが危険であるという見解も示されています。</p>
+<h2>LLMの根本的な限界と対策</h2>
+<p>「現在のところ、この広範な脆弱性クラスに対する堅牢な緩和策は利用できない」という発表は、多くのユーザーに懸念を抱かせています。LLMが命令とデータを区別できないという根本的な限界があるため、問題の解決は困難であると広く認識されています。Microsoftは複数の修正を展開し、攻撃対象領域を大幅に削減したと著者は述べていますが、根本的な解決策はまだ見つかっていないとのことです。一部のユーザーは、AIエージェントに信頼できるシステムからの署名付きメッセージのみを処理させる、または人間の介入を伴う二重制御システムを導入するといった、より厳格なアプローチを提案しています。</p>
+<h2>まとめ</h2>
+<p>Microsoft WordのCopilotにおける「隠された指示」の脆弱性は、LLMが命令とデータを区別できないという根本的な限界を露呈させ、文書の改ざんや拡散を可能にする「AIワーム」のリスクを伴います。この問題は、従来のセキュリティ原則とAI技術の間の大きなギャップを浮き彫りにし、マクロウイルスやSQLインジェクションといった過去の脅威との類似性が指摘されています。現在のところ決定的な解決策は見つかっておらず、AIシステムにおけるデータ処理とセキュリティのあり方について、根本的な再考が求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

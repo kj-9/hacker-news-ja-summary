@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keychron announces first open-source firmware for gaming mice - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Keychron announces first open-source firmware for gaming mice</h1>
+        <div class="meta">
+            投稿日: 2026年07月29日 | ランク: 5
+        </div>
+        <a href="https://www.digitalfoundry.net/news/2026/07/keychron-announces-first-open-source-firmware-for-gaming-mice" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、Keychronがオープンソースのマウスファームウェア「ZGM」を発表したことについて議論されています。Keychronは過去にQMKをサポートしたキーボードで高い評価を得ていますが、今回の発表には期待と同時に懐疑的な意見も寄せられています。</p>
+<h2>オープンソースファームウェアへの期待と現実</h2>
+<p>多くのコメント投稿者は、KeychronのQMKサポート経験からオープンソースファームウェアに肯定的な見方を示しており、ルーターやIPカメラなど、より多くのハードウェアがオープンソースファームウェアを搭載することを期待しています。しかし、その実現可能性については意見が分かれています。オープンソースファームウェアは、改造愛好家にとって魅力的なセールスポイントとなり、コミュニティの協力や製品の認知度向上に繋がるという意見がある一方で、一般的な消費者には関心が薄く、ニッチな市場に留まるという現実的な見方もあります。一部のコメントでは、Keychron自身が以前にオープンソースファームウェアの提供を約束しながら実現していないケースがあるため、今回の発表にも懐疑的な姿勢が示されています。</p>
+<h2>Keychron製品に関するフィードバック</h2>
+<p>Keychronのキーボードとマウスについては、様々な意見が寄せられています。キーボードに関しては、QMKサポートへの感謝、Mac/Windows切り替えスイッチの便利さ、コストパフォーマンスの高さなどが評価されています。一方で、初期不良（ホットスワップソケットの再はんだ付けが必要なケース）、特定のモデルのファームウェア設定の不便さ（Super/Altキーのマッピング問題）、ワイヤレス使用時のバッテリー切れ時の動作不良、バックライト設定の不満などが挙げられています。マウスに関しては、すでに品質が高く、価格も手頃であるという肯定的な意見がいくつか見られます。</p>
+<h2>ZGMの発表と現状への懐疑論</h2>
+<p>ZGMの発表については、現在のGitHubリポジトリにはソースコードが提供されておらず、プロジェクトの初期段階であることを示す説明があるため、多くの懐疑的な意見が出ています。「意図的に早く公開した」というKeychron側の説明に対し、「AIでREADMEを作成し、今後6ヶ月でファームウェアを開発するつもりだろう」といった皮肉なコメントも見られます。ソースコードがない状態で貢献を呼びかける姿勢や、2027年Q1というリリース予定日についても、ベイパーウェア（実体のない製品）ではないかという懸念が表明されています。</p>
+<h2>オープンソースマウスファームウェアの潜在的な影響</h2>
+<p>オープンソースのマウスファームウェアが普及した場合の潜在的な影響についても議論されています。マクロプログラミング機能の向上や、特定のオペレーティングシステムに依存しないカスタマイズの可能性への期待があります。一方で、ゲームでのチート行為への悪用を懸念する声も複数上がっていますが、これは既存の技術でも可能であるため、オープンソースファームウェア特有の問題ではないという意見も出されています。QMKエコシステムとの統合や、デバイス間通信チャネルの欠如が課題として挙げられています。</p>
+<h2>まとめ</h2>
+<p>Keychronによるオープンソースのマウスファームウェア「ZGM」の発表は、オープンソースハードウェアコミュニティから注目を集めています。Keychronの過去のQMKサポート経験は評価されているものの、現在のZGMリポジトリにソースコードがないことや、以前のオープンソースに関する約束が守られていないケースがあるため、今回の発表に対しては期待と同時に強い懐疑論が表明されています。Keychron製品自体についても、コストパフォーマンスと品質の良さが評価される一方で、初期不良やファームウェア関連の不満も散見されます。オープンソースマウスファームウェアがゲームチートに悪用される可能性も指摘されていますが、これはすでに存在する問題であり、オープンソース化が本質的な原因ではないとされています。プロジェクトが具体化し、約束通りにファームウェアが提供されるかどうかに、コミュニティの関心が集まっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
