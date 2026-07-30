@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2x, not 10x: coding with LLMs in 2026 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">2x, not 10x: coding with LLMs in 2026</h1>
+        <div class="meta">
+            投稿日: 2026年07月30日 | ランク: 5
+        </div>
+        <a href="https://obryant.dev/p/2x-not-10x/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、LLM（大規模言語モデル）によるソフトウェア開発の生産性向上について、その程度（2倍、10倍など）と性質に関して多様な意見が交わされています。多くの人が、LLMの恩恵を感じつつも、その限界や予期せぬ影響についても指摘しています。</p>
+<h2>生産性向上の程度と評価の難しさ</h2>
+<p>LLMによる生産性向上の度合いについては、「2倍」から「10倍以上」、中には「無限倍」といった極端な意見まで様々です。
+*   <strong>過大評価の指摘</strong>: 多くの人が「10倍」という主張を誇張だと見ており、「2倍（100%増）」や「20%増」がより現実的だと考えています (iLoveOncall)。コード生成の品質低下、コーディングが開発時間全体に占める割合の少なさ、LLM使用による燃え尽き症候群などが全体の生産性向上を相殺すると指摘されています。
+*   <strong>特定のタスクでの大幅な改善</strong>: 特定の種類のバグ修正 (wongarsu) や、bashスクリプトの作成 (leoedin)、デプロイ環境でのテスト・検証 (coffeebeqn) など、特定の狭い領域では大幅な効率化を実感している人もいます。特に熟練した開発者にとっては、なじみ深いドメインでLLMが「思考の速度」でコードを生成することで、10倍以上のスピードアップが可能だと感じられています (lazopm)。
+*   <strong>全体的な開発プロセスへの影響</strong>: ソフトウェア開発がプランニング、コーディング、テスト、レビュー、リワークなど複数のフェーズからなることを考慮すると、コーディング部分の速度向上が全体に与える影響はAmadahlの法則によって限定的だという意見があります (gashad, whateveracct)。ただし、一部のユーザーは、LLMがコーディングだけでなく、コードレビュー/リワーク、テスト/検証の速度も向上させると主張しています (ChadNauseam)。
+*   <strong>未検証の領域</strong>: LLMによって、これまで優先されなかったインフラ整備や品質向上のためのリファクタリング、SDLCツールの構築など、新たな開発作業が進められているという見方もあります (steveBK123, move-on-by)。また、LLMがなければ着手しなかったであろうアイデアを試す機会が増えるため、単純な「LLMの有無」での比較では測れない生産性向上があるという意見もあります (pantelisk)。</p>
+<h2>コード品質とレビュープロセスへの影響</h2>
+<p>LLMが生成するコードの品質と、それによるレビュープロセスへの影響についても懸念が表明されています。
+*   <strong>コード品質の低下</strong>: LLMが生成するコードは「非常にひどいコードで、1年前ならコードレビューを通らなかっただろう」という意見があり、これによりテスト、検証、コードレビューが遅延し、手動でのリワークが困難になるという指摘があります (altern8)。
+*   <strong>レビュープロセスの形骸化</strong>: LLMの導入により、チームワークが減少し、レビュープロセスが追いつかなくなり、結果として「動作するようだ」という程度の品質のものがリリースされるようになるという懸念が示されています (agumonkey)。
+*   <strong>ドキュメントの品質問題</strong>: LLMによるコメントやドキュメント生成は、冗長で意味不明瞭なものになりがちで、かえってコードレビューの手間を増やしたり、信頼性を損なったりするという意見が多数を占めます (deergomoo, openasocket, NichoPaolucci)。一部のユーザーは、LLMにドキュメントやコメントを書かせないように指示することで、出力品質が向上すると述べています。</p>
+<h2>学習と経験、そして将来</h2>
+<p>LLMが開発者の学習プロセスや、将来の開発に与える影響についても議論されています。
+*   <strong>経験の重要性</strong>: LLMを効果的に使うには、長年の手作業による経験から得られた「何が正しいかを知る」能力が依然として重要であるという意見があります (watso)。
+*   <strong>学習モードの活用</strong>: 未知の領域では、LLMを「教師モード」で利用し、学習に時間を使うことで、後々の生産性向上に繋がるというアプローチも提案されています (lazopm)。
+*   <strong>ゲールマン健忘症候群</strong>: LLMが不慣れな言語やドメインで魔法のように機能する一方で、熟知している領域では「嘘をついたり、もっともらしいナンセンスを生成したりする」ことに気づきやすいという、ゲールマン健忘症候群に似た現象が指摘されています (Rustwerks)。
+*   <strong>「ループエンジニアリング」と課題</strong>: 将来の生産性向上は、「すべてのコードを読まずに品質を確保する」という「ループエンジニアリング」にかかっており、そのためには統計的品質管理や形式手法が必要になるという展望が語られています (esafak)。しかし、LLM単独では大量の技術的負債を生み出す可能性があり、複雑な問題に対するシンプルな解決策の欠如が課題とされています (pornel)。</p>
+<h2>まとめ</h2>
+<p>LLMはソフトウェア開発において、特定のタスクで大幅な生産性向上をもたらす可能性を秘めている一方で、その影響は開発者のスキルレベル、タスクの性質、および使用方法に大きく依存します。コード品質の低下、レビュープロセスの形骸化、意味不明瞭なドキュメント生成といった課題も顕在化しており、安易な導入はかえって生産性を損なう可能性も指摘されています。LLMを最大限に活用しつつ、その欠点を補うためには、開発者自身の深い専門知識と、人間とAIの協調を最適化する新たなワークフローの確立が求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
