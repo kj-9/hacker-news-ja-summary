@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golang proposal: container/: generic collection types - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Golang proposal: container/: generic collection types</h1>
+        <div class="meta">
+            投稿日: 2026年07月31日 | ランク: 4
+        </div>
+        <a href="https://github.com/golang/go/issues/80590" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Go言語への新しい機能追加（特にジェネリクスやイテレーター、コレクションなど）と、その進化のペースや方向性について議論しています。</p>
+<h2>Go言語の進化のペースと哲学</h2>
+<p>多くのコメントは、Go言語がGuy Steeleの「Growing a Language」の概念をゆっくりと再発見していると指摘しています。一部のユーザーは、この保守的な進化が実装や可読性のコストを考慮しており、「win」だと見ています。Goの設計哲学は、複雑な問題を回避し、シンプルさとYAGNI（You Ain't Gonna Need It）の原則を重視しているという意見があります。これにより、Goは多くの一般的なソフトウェア開発タスクを不必要な複雑さなしに処理できるとされています。</p>
+<p>一方で、このような遅いペースや保守的なアプローチに不満を感じているユーザーもいます。「基本的な機能がこれほど長くかかったのは残念だ」「<code>Map</code>関数すら実装されていない」といった声があります。また、Goがプログラミング言語設計のパレートフロンティアには程遠いという厳しい意見もあります。</p>
+<h2>ジェネリクスの導入と課題</h2>
+<p>Go 1.0以降にジェネリクスが追加されたことについて、賛否両論があります。</p>
+<h3>肯定的な意見</h3>
+<p>ジェネリクスの導入は「遅れてでもないよりはまし」と評価されており、セットや型付きヒープのような機能が「ずっと前から必要だった」とされています。言語の作者が標準ライブラリへの追加に時間をかけるのは、一度追加された機能は削除できないため、慎重な設計を確実にするためだという理解も示されています。ジェネリクスの設計が、ジェネリックコードの記述よりも、それを使用するコードの可読性を優先している点は、Goの全体的な哲学と一致していると見られています。</p>
+<h3>批判的な意見と副作用</h3>
+<p>一部のユーザーは、Goの初期の設計決定（例：外部型にカスタムメソッドを定義できないこと）が、ジェネリクスが後から追加されたことで問題を引き起こしていると指摘しています。これにより、コンパイル時に型安全なジェネリックコードを書くことが難しくなり、実行時型スイッチングで回避せざるを得ないケースがあるとのことです。</p>
+<p>イテレーターについても、APIを改善する一方で、「forループでは不可能だった基本的なロジックバグ（ループの終了を忘れる）を実行時パニックに変えてしまう」ことや、「合成が難しい」といった懸念が示されています。また、ジェネリクスのような機能がGoの「ユニークさ」を徐々に失わせ、多くのユーザーを不満にさせているという意見もあります。</p>
+<h2>Go 2の可能性</h2>
+<p>Go 2の将来についても議論されています。公式ブログの引用によると、Go 2はGo 1との互換性を破る形では「決して起こらない」とされており、2017年に始まった主要な改訂としてのGo 2は「すでに起こった」とされています。これは、Go言語が後方互換性を重視し、既存のコードを壊さない形で進化していくことを意味しています。</p>
+<p>しかし、一部のユーザーは、既存のジェネリクスの実装が最適ではないと感じており、Go v2でより根本的なレベルでこの問題を解決し、現在のGoコードとの相互運用性や移植性を維持することを望んでいます。</p>
+<h2>まとめ</h2>
+<p>Go言語のコミュニティは、その進化のペースと新機能の追加、特にジェネリクスやイテレーターの導入について活発な議論を繰り広げています。保守的なアプローチを評価し、そのシンプルさと実用性を支持する意見がある一方で、機能の遅れや既存の設計との不整合によって生じる問題、そして言語の独自性が失われることへの懸念も表明されています。Go 2は後方互換性を維持しつつ進化する方向ですが、ジェネリクスの設計が完全にフィットしていないと感じるユーザーからは、より根本的な改善を望む声も上がっています。全体として、Goは「シンプルで有能」な言語として多くの支持を得ているものの、その進化の道のりには課題も伴っているようです。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

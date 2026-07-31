@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting 25 Gbps Thunderbolt Ethernet on My Mac Studio - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Getting 25 Gbps Thunderbolt Ethernet on My Mac Studio</h1>
+        <div class="meta">
+            投稿日: 2026年07月31日 | ランク: 8
+        </div>
+        <a href="https://www.jeffgeerling.com/blog/2026/getting-25g-ethernet-mac-thunderbolt/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Jeff Geerling氏のMac Studioに25Gbpsイーサネットを導入する試みに関するもので、特にmacOSでのSMB Direct（RDMA）サポートの欠如、高速ネットワークハードウェアの熱問題、USB-C/Thunderboltネットワーキングの実現可能性、そして25Gbpsネットワークの具体的なユースケースについて議論しています。</p>
+<h2>macOSでのRDMAサポートとSMBの性能</h2>
+<p>コメントの主要なテーマの一つは、macOSにおけるSMB Direct（RDMA）のサポートと、それに関連するSMBのパフォーマンス問題です。
+ユーザーは、macOSがThunderbolt経由でのRDMA自体はサポートしているものの、SMBドライバーがそれを活用するように更新されていない点を指摘しています。Appleの焦点がiCloudなどの「ニッチではない」ソリューションに移っているため、SMB Directのような高速ファイル共有機能への投資は少ないという見方も示されています。
+一部のユーザーは、macOSのSMBが一般的に「ひどい」と評価しており、大量のファイル転送で不安定になったり切断されたりすると報告しています。Parallels上のLinuxの方がSMBの動作が安定しているという経験談もあります。
+一方で、Linux環境ではNFSとRDMAを組み合わせることでパフォーマンスが大幅に向上するという意見や、2つのLinuxマシンを接続する際にRDMAが有用であるかという疑問も投げかけられています。</p>
+<h2>高速ネットワークハードウェアの熱と電力消費</h2>
+<p>25Gbpsイーサネットアダプターの熱と電力消費についても議論されています。
+コメントでは、25Gbps NICの消費電力はMac StudioのCPUよりも低いが、それでも冷却が不十分だと非常に熱くなることが指摘されています。特に、NICが古い製造プロセスで構築されていることや、イーサネットの物理層における信号伝達と絶縁の要件が、Thunderboltのような直接的な接続と比べて電力消費を増やす要因として挙げられています。
+また、イーサネットは長距離伝送に対応しているのに対し、Thunderboltはアクティブケーブルなしでは1m程度しか届かない点も、必要な電力の違いに関係していると説明されています。</p>
+<h2>USB-C/Thunderboltネットワーキング</h2>
+<p>USB-CまたはThunderboltを使用した直接的なネットワーク接続の可能性と実装についても活発に議論されています。
+USB4はThunderbolt 3の標準化を含み、ThunderboltネットワーキングはMacで比較的容易に設定できることが言及されています。Thunderbolt 4および5ポートは、ホスト間のネットワーク接続を必須機能としてサポートしています。
+Linuxでは<code>thunderbolt_net</code>カーネルモジュールをロードすることで、Thunderboltポートを通常のイーサネットインターフェースとして扱うことができ、Cephバックエンドなどの用途で活用された事例も報告されています。
+しかし、USBスイッチが存在しないため、ネットワークトポロジーが点対点に限定される点や、USB経由のイーサネットアダプターはCPU使用率が高くなる傾向がある点が指摘されています。</p>
+<h2>25Gbpsネットワークのユースケース</h2>
+<p>25Gbpsネットワークが必要とされる具体的なユースケースについても多くの意見が寄せられています。
+主な用途としては、高解像度（特に非圧縮）のマルチストリーム動画編集、バックアップやインポートのための大容量ファイル転送（100-200GBのプロジェクトなど）、分散型LLM（大規模言語モデル）の実行、複数のリファビッシュステーションへのISO/IPSWイメージの配布、およびNAS（ネットワークアタッチトストレージ）のパフォーマンス向上などが挙げられています。
+特にNASに関しては、NVMe SSDの速度が25Gbps接続を上回るため、さらなる高速化（100Gbpsまで）の余地があることが示唆されています。
+また、実用的な必要性だけでなく、「速いのはクールで楽しい」といった趣味的な側面もユースケースとして語られています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、Mac Studioに25Gbpsイーサネットを導入する際の技術的な課題と、その裏にある広範なネットワーキングの議論を反映しています。macOSにおけるSMB Direct（RDMA）サポートの不備が主なボトルネックとして指摘され、Appleの製品戦略がプロユーザーの高速ファイル共有ニーズから離れている可能性が示唆されました。高速NICの熱と電力消費の課題、Thunderbolt/USB-Cネットワーキングの実用性、そして高帯域ネットワークがもたらす多様なユースケース（特に動画編集、AIモデル、大容量データ転送）が議論の中心となりました。全体として、最新の高速ネットワーキング技術を既存のエコシステムに統合する際の複雑さと、それに対するユーザーコミュニティの強い関心が浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

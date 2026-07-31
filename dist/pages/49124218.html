@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevators - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Elevators</h1>
+        <div class="meta">
+            投稿日: 2026年07月31日 | ランク: 2
+        </div>
+        <a href="https://john.fun/elevators" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にエレベーターの制御アルゴリズム、その複雑さ、ユーザー体験、そしてエレベーターを題材にしたゲームについてのものです。多くのユーザーが、エレベーターの待ち時間に対する不満や、アルゴリズムの効率性・公平性に関する考察を共有しています。</p>
+<h2>エレベーターのアルゴリズムと課題</h2>
+<p>多くのコメントがエレベーターのアルゴリズムの複雑さに注目しており、特に「SCAN（またはLOOK）」アルゴリズムや、乗客の目的地を事前に把握する「Destination Dispatch（行先階登録システム）」について言及しています。</p>
+<ul>
+<li><strong>待ち時間とスループット</strong>: ユーザーはエレベーターの待ち時間が長いことに不満を感じていますが、実際にはエレベーターは非常に忙しくスケジュールされており、キャブの資本コストが高いため、台数を増やすよりもスループットを最適化することが重要だと指摘されています[1.3.1.1, 1.3.2, 1.3.3]。</li>
+<li><strong>目的関数</strong>: 待ち時間の最小化だけでなく、摩耗やエネルギー消費、総輸送量（スループット）なども目的関数として考慮されるべきだという意見があります[1.3.1, 1.40]。特に、最新のエレベーターは回生ブレーキを備えているため、下降時のエネルギー消費は少ない傾向にあります[1.3.1.2]。</li>
+<li><strong>積載量への考慮</strong>: エレベーターが満員であるにもかかわらず、すべての階に停車してしまう問題が指摘されており、一部のアルゴリズム（RSR）は積載量を考慮に入れることが説明されています[1.3.4, 1.3.4.2, 1.30.1]。</li>
+<li><strong>Destination Dispatchの問題点</strong>: 行先階登録システムは理論上は効率的ですが、ユーザーがシステムを理解していなかったり、割り当てられたエレベーターに乗り遅れたり、満員のエレベーターが予定外の階に停車してしまうなどの「ユーザーエラー」によってパフォーマンスが低下する可能性があります[1.14, 1.14.1, 1.36, 1.36.1, 1.56]。特に、割り当てられたエレベーターが途中で変更できないというシステムの硬直性が問題視されています[1.36.1]。</li>
+<li><strong>アルゴリズムのシンプルさと複雑さ</strong>: 複雑なアルゴリズムの恩恵はごくわずかであり、シンプルさが勝る場合が多いという指摘があります[1.17, 1.30]。</li>
+<li><strong>非対称な需要パターン</strong>: オフィスビルやホテルでは、朝のラッシュ時（ロビーから上層階へ）、昼食時（各階からロビーへ、または同一フロアへの移動）、夜（上層階からロビーへ）など、時間帯によって需要パターンが大きく異なるため、アルゴリズムもこれに適応する必要があるという意見があります[1.29.1, 1.37, 1.37.4, 1.52]。</li>
+<li><strong>アイドル時の挙動</strong>: 未使用のエレベーターが適切な階に待機せず、すべてのエレベーターが特定の階（例：ロビー）に集中してしまうことで、待ち時間が増えるという不満も聞かれます[1.13, 1.29, 1.29.1, 1.35]。多くのシステムはアイドル時にキャブを分散させるオプションがあると指摘されています[1.29.3]。</li>
+</ul>
+<h2>ユーザー体験と心理</h2>
+<p>エレベーターのアルゴリズムは、単なる効率性だけでなく、利用者の心理や行動にも大きな影響を与えることが示唆されています。</p>
+<ul>
+<li><strong>待ち時間の知覚</strong>: 何もせずに待つことは非常に不快であるため、たとえ遠回りでも何らかの「進行」があると感じさせることで、利用者の満足度を高めることができるという心理的側面が指摘されています[1.16.3, 1.57]。</li>
+<li><strong>ユーザーの行動</strong>:<ul>
+<li><strong>上下両方のボタンを押す</strong>: 一部の地域や混雑時では、早くエレベーターに乗るために、目的の方向とは逆のボタンも押す人がいるという現象が報告されています[1.16, 1.16.1.1, 1.16.5, 1.16.6]。これにより、不必要な停車が増え、全体の効率が低下する可能性があります。</li>
+<li><strong>方向を尋ねる</strong>: エレベーターが来た際に、表示されている方向矢印を見ずに乗客にどちらに行くか尋ねる行動も指摘されています[1.16.2]。</li>
+<li><strong>ドア閉ボタン</strong>: ドア閉ボタンの機能に対する誤解や、意図的に閉まるドアに腕を挟んで開放させるなど、利用者の行動がエレベーターの効率に影響を与える例が挙げられています[1.16.1.1.1.1, 1.80]。</li>
+</ul>
+</li>
+<li><strong>不公平感</strong>: 最も効率的なアルゴリズムが、必ずしもすべての乗客にとって公平であるとは限らないという考察もあります。例えば、遠回りをしてでもより多くの人を運ぶ方が効率的でも、遠回りさせられた乗客は不公平だと感じるかもしれません[1.69]。</li>
+<li><strong>特別扱い</strong>: CEOなどの「重要な人物」のために専用のエレベーターが用意されたり、ペットアレルギーの人と犬を連れた人を同じエレベーターに乗せないようにするなど、特定の乗客を優遇する機能が実装されることもあるようです[1.43, 1.43.1]。</li>
+</ul>
+<h2>エレベーターとゲーム</h2>
+<p>多くのユーザーが、エレベーターのスケジューリングを題材にしたゲームに言及し、その楽しさや難しさを共有しています。</p>
+<ul>
+<li><strong>Elevator Saga</strong>: エレベーターのスケジュールをプログラミングするゲームとして「Elevator Saga」が特に人気で、多くのコメントで推奨されています[1.2, 1.5, 1.23, 1.20.1]。</li>
+<li><strong>SimTower</strong>: エレベーターのシミュレーションが含まれる名作ゲームとして「SimTower」を挙げる人も多く、懐かしさを感じているようです[1.5.5, 1.9, 1.9.3, 1.10]。</li>
+<li><strong>その他の関連ゲーム</strong>: 「Project Highrise」「Human Resource Machine」「7 Billion Humans」「The Farmer Was Replaced」「Flipper Lifter」など、プログラミングパズルやシミュレーションゲームが紹介されています[1.5.3.1, 1.5.3.1.1.1, 1.5.3.2, 1.5.3.3, 1.9.2, 1.62]。</li>
+<li><strong>自作ゲーム</strong>: 自身でエレベーター制御のモバイルゲームを開発した経験を共有するユーザーもいます[1.20]。</li>
+<li><strong>プログラミング課題</strong>: エレベーターの制御アルゴリズムは、かつてコンピューターサイエンスの授業やプログラミングの面接課題としてよく出題されていたことが語られています[1.1, 1.4, 1.42, 1.53, 1.74]。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li><strong>技術と歴史</strong>:<ul>
+<li>ハードディスクのリード/ライトアルゴリズムとエレベーターのアルゴリズムには共通点があることが指摘されています[1.4.1, 1.42]。</li>
+<li>過去にはリレーで制御されていた時代もあり、その複雑さがうかがえます[1.71]。</li>
+<li>エレベーターのセキュリティやハッキングに関する情報、および建築コードや規制に関するビデオも共有されています[1.33, 1.33.1, 1.75]。</li>
+</ul>
+</li>
+<li><strong>アニメーションツール</strong>: 記事中の美しいアニメーションがどのようなツールで作られたのか、興味を持つユーザーが複数います[1.60, 1.68]。</li>
+<li><strong>特定のメーカー</strong>: HITACHIのエレベーターの応答性が良いと感じるユーザーもいます[1.39]。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、エレベーターのアルゴリズムが、単なる技術的な課題に留まらず、利用者の心理、行動、経済的な制約、さらにはゲームや教育といった多様な側面を持つことを明らかにしています。効率性、公平性、ユーザーの理解度、そして実際の利用状況（時間帯ごとの交通パターン）などを考慮に入れることで、より良いエレベーターシステムが構築できるという共通認識が見られます。特に、Destination Dispatchのような高度なシステムが、理論上の優位性にもかかわらず、ユーザーの行動によって期待通りのパフォーマンスを発揮できない可能性が指摘されており、人間中心設計の重要性が浮き彫りになっています。また、多くの人がエレベーターの制御に魅力を感じ、ゲームやプログラミング課題として楽しんでいることも興味深い点です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

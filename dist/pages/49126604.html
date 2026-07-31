@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>qm - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">qm</h1>
+        <div class="meta">
+            投稿日: 2026年07月31日 | ランク: 3
+        </div>
+        <a href="https://github.com/yc-software/qm" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、YC SoftwareのAIエージェントハーネス「qm」に関するもので、そのユニークな貢献プロセス、AIエージェントの使用と設計に関する考察、および実際の利用事例について議論されています。</p>
+<h2>貢献プロセスへの意見</h2>
+<p>プロジェクトがコードではなく人間が書いたテキストでの貢献を求めることに対し、多くの議論が交わされました。一部のユーザーは、これはAIによって生成された質の低いPRを避けるための合理的なアプローチだと評価しています。</p>
+<ul>
+<li><strong>AI生成コードの質の懸念</strong>: メンテナーは、コンテキストのない「ずさんなPR」やLLMによって生成された差分よりも、テキストによる提案や変更記述を好むと述べています。AIが平均的な設計や実装を生み出す傾向があるため、長期的に見て問題が増えるという意見もあります。</li>
+<li><strong>仕様書作成の奨励</strong>: これは、ユーザーに提案する機能について10〜15分間考えることを促し、実質的に仕様書のようなものを作成させるための良い方法だと見られています。</li>
+<li><strong>既存の慣行との比較</strong>: SQLiteなど、著作権保護のために「インターネット上の無作為な人々」からのパッチを受け付けない既存のプロジェクトと比較され、AI時代以前からコード以外の形式での貢献を求める慣行があったことが指摘されています。</li>
+<li><strong>貢献者の視点</strong>: 一部の貢献者は、バグ報告のためにプロジェクトが設ける手続きが多すぎると感じており、それが報告を諦める原因になると述べています。PRが無視される経験をしたため、今後は修正案のコードではなく問題のあるコード行を指摘するだけに留めるという声もありました。</li>
+<li><strong>「プロンプト作成の依頼」という見方</strong>: このアプローチを「基本的にプロンプトを書いてくれるよう求めている」と皮肉る声もあります。</li>
+</ul>
+<h2>AIエージェントの設計と「スロップ」問題</h2>
+<p>AIエージェントの設計と、AIが生成する低品質なコンテンツ（「スロップ」）に対する懸念が議論されました。</p>
+<ul>
+<li><strong>AI生成コードの設計の限界</strong>: コーディングエージェントは非常に便利ですが、デザインに関しては「非常に愚か」であり、自分で設計しないと「ずさんなもの」になるという意見があります。</li>
+<li><strong>「アンチスロップ」スキル</strong>: <code>qm</code>プロジェクトのコードに「アンチスロップ」デザインスキルが導入されていることが指摘されました。これは、AIが生成する「テンプレート的」な見た目を避けるための具体的なガイドライン（特定の背景色の禁止など）を含んでいますが、これが新たな「無趣味の領域」を生み出すだけではないかという疑問も呈されています。</li>
+<li><strong>人間が書いたテキストの要件の矛盾</strong>: AIプロジェクトでありながら、貢献に「人間が書いたテキスト」を要求すること、特にAIに「正式な提案」に拡張させないという指示について、皮肉や疑問の声が上がっています。しかし、これは単に「正式な提案」の作成を禁止しているだけで、AIの使用を全面的に制限しているわけではないと解釈する人もいます。</li>
+</ul>
+<h2>AIエージェントの実際の使用事例</h2>
+<p>AIエージェント、特にOpenClaw系のシステムやHermesの具体的な使用事例が共有されました。</p>
+<ul>
+<li><strong>オンコール対応</strong>: オンコール対応の初動対応や、プロダクションアラートを受けてRCA（根本原因分析）を自動作成し、修正PRを生成するといった用途で非常に役立っているという声があります。</li>
+<li><strong>CI/DB最適化</strong>: シンプルなCIの失敗を自動修正したり、遅いDBクエリを定期的にチェックして高速化の方法を見つけたりするのに使用されています。</li>
+<li><strong>情報フィルタリングと要約</strong>: RSSフィードやニュースレターを読み込み、ユーザーにとって重要なニュースや市場の最新情報をフィルタリングして提供する用途もあります。</li>
+<li><strong>多機能性とコンテキスト消耗</strong>: Hermesのようなエージェントは機能が豊富で、初心者には良いですが、コンテキストを消費しすぎて軽量なローカルモデルでは実行が難しいという意見もあります。</li>
+<li><strong>レビューの重要性</strong>: エージェントが生成するコードが増えるほど、その来歴、レビューの人間工学、信頼性が重要になるという課題が指摘されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>YC SoftwareのAIエージェントハーネス「qm」に関するHacker Newsの議論は、AI時代におけるオープンソースプロジェクトの貢献モデル、AI生成コンテンツの品質管理、そしてAIエージェントの実用的な応用という多岐にわたるテーマを浮き彫りにしています。コードではなくテキストでの貢献を求めるというアプローチは、AIによる「スロップ」を防ぎ、より思慮深い提案を促すための合理的な試みとして評価される一方で、AIプロジェクトにおけるAIの使用制限の矛盾や、貢献者側の負担増といった課題も指摘されています。また、AIエージェントはオンコール対応やシステム最適化など様々な分野でその有用性を示し始めていますが、その設計の限界や生成物のレビューの重要性、UIとの連携における新たなパラダイムの必要性など、まだ解決すべき多くの問題があることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
