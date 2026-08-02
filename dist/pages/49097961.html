@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers are attached to tools because tools encode trust - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Developers are attached to tools because tools encode trust</h1>
+        <div class="meta">
+            投稿日: 2026年08月02日 | ランク: 4
+        </div>
+        <a href="https://stackoverflow.blog/2026/07/29/developers-are-attached-to-tools-because-tools-encode-trust/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、AIコーディングエージェントがソフトウェア開発のワークフローに与える影響、特に生産性の主張と、開発者がツールに寄せる信頼の変化に焦点を当てています。</p>
+<h2>AIエージェントの生産性に対する懐疑論</h2>
+<p>多くのコメント投稿者は、AIエージェントによるコーディングの生産性向上について懐疑的です。ある投稿者は、AIが40時間分の作業を8時間で完了させたように見えても、その後、予期せぬ形でアプリケーションが壊れていることに気づき、その修正にさらに40時間費やすことになるという経験を語っています。これは、全体的なペースが速くなったわけではなく、コードに対する深い理解が失われることで、同じペースであればその価値がないかもしれないという懸念につながっています。彼らは、多くの自動テストと最新のモデルを使用しているにもかかわらず、バグの特定と修正にはまだ多くの手作業が必要だと指摘しています。</p>
+<h2>信頼と予測不可能性の問題</h2>
+<p>AIエージェントに対する信頼の欠如は、主要なテーマです。開発者は長年の経験を通じてVimやEmacsのようなツールに愛着を持ち、それらを思考の予測可能な延長として信頼してきました。しかし、AIエージェントは高速であるものの、確率的で不透明、常に変化し、人間がレビューできる以上のコードを生成するため、この信頼を破壊します。これにより、ボトルネックはコードを書くことから、コードの仕様、レビュー、検証、安全な運用へと移行します。日によってエージェントのパフォーマンスが大きく変動し、その理由が不明であるため、開発者は「コントロールが効かない」と感じ、ソフトウェア開発の習得と職人技の側面が失われることに不満を感じています。</p>
+<h2>AIエージェントを扱う上での課題と解決策</h2>
+<p>AIエージェントの出力を信頼し、品質を確保するための具体的な課題と潜在的な解決策が議論されています。</p>
+<ul>
+<li><strong>コンテキストとテスト:</strong> AIツールが成功するために必要なコンテキストを十分に与えているか、あるいは多くの破損を招かないようにする方法が問題視されています。投稿者は、AGENTS.mdファイルやコードベースへのコメントを通じてコンテキストを提供し、型システムを活用していると述べていますが、エージェントがこれらの指示を一貫して遵守しないことに苦労しています。自動テストの重要性は強調されていますが、ゲーム開発のような複雑な分野では、テストの自動化が難しいという制約もあります。</li>
+<li><strong>アーキテクチャのガイドライン:</strong> ある投稿者は、モデルがテスト可能で分離しやすいアーキテクチャや、構築時に正しいデータモデルを生成するように厳しく指導する必要があると提案しています。</li>
+<li><strong>技術的負債の管理:</strong> LLMの導入によっても技術的負債は依然として存在し、その管理がさらに重要になると指摘されています。</li>
+<li><strong>特定のツールの必要性:</strong> AIエージェントが大規模なファイルを効率的に扱うための、新しいコマンドラインツール（<code>repo read-file</code>や<code>venetianblinds</code>のような）の必要性が提唱されています。これにより、エージェントはファイル全体を読み込むことなく、関連する部分を迅速に把握できます。</li>
+<li><strong>LLMのパーソナライズとサンドボックス:</strong> LLMのシステムプロンプトをパッチ適用してバージョンを固定し、ベンダーによるリモートからの変更を無効にすることで、一貫性が向上したという経験が共有されています。また、AIエージェントがサンドボックス化されていない環境で任意のコマンドを実行することを避けるなど、「ゼロトラスト」のアプローチが推奨されています。</li>
+</ul>
+<h2>その他の関連トピック</h2>
+<ul>
+<li><strong>Stack Overflowの衰退:</strong> AIエージェントの台頭が、Stack Overflowの有用性と利用を減少させているという見解が示されています。AIが質問に対する代替手段を提供し、Stack Overflowが以前持っていたコミュニティの魅力を失ったため、多くのユーザーがAIに移行したとされています。</li>
+<li><strong>ツールの愛着と所有権:</strong> 開発者がツールに愛着を持つのは、信頼だけでなく、そのツールを「所有」している感覚から来るとの意見もあります。ツールの頻繁な変更は、この所有感を奪い、不快感をもたらします。</li>
+<li><strong>自動更新のパラレル:</strong> AIエージェントの予測不可能性は、自動更新によってワークフローが中断されるという、過去のソフトウェア（Windowsなど）の課題と類似していると指摘されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、AIコーディングエージェントが開発者のワークフローにもたらす複雑な影響が浮き彫りになっています。AIが初期のコード生成を加速させる一方で、その予測不可能性、不透明性、そして生成されたコードのレビューと修正にかかる時間が、生産性向上という初期の主張に疑問を投げかけています。開発者は、信頼性の低いツールを管理することに不満を感じており、AIエージェントの能力を最大限に引き出しつつ、その欠点を軽減するために、より厳格なテスト、アーキテクチャのガイダンス、および新しい補助ツールの必要性を模索しています。全体として、AIは有望なツールであるものの、現在の形では開発者が深いコード理解とコントロールを維持しながら、その出力の信頼性を確保するという課題が残っています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
