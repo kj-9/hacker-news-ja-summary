@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Hollywood stopped making movies in Hollywood - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How Hollywood stopped making movies in Hollywood</h1>
+        <div class="meta">
+            投稿日: 2026年08月03日 | ランク: 9
+        </div>
+        <a href="https://www.statsignificant.com/p/how-hollywood-stopped-making-movies" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ハリウッドが映画制作の拠点としての地位を失い、世界中の税制優遇措置や低コスト地域に制作が移転している現状について議論しています。根本的な問題は、ロサンゼルスの高い生活費と不動産コストにあり、これが産業全体に波及しています。</p>
+<h2>制作の国際化と税制優遇措置</h2>
+<p>ハリウッドの制作が国際化している主な要因は、各国の税制優遇措置と低い運営コストです。コメントでは、英国、カナダ、東ヨーロッパ、アトランタなどが人気のロケ地として挙げられています。これは、映画会社が数千万ドルもの節約を可能にし、その資金を有名俳優や精巧なセット、CGIエフェクトに回せるためです。しかし、この「底辺への競争」は、アトランタのような場所でさえ、より良い優遇措置を提供する英国などに制作を奪われるという状況を生み出しています。スポーツチームがより良い条件を求めて拠点を移すのと似た現象だと指摘されています。</p>
+<h2>ハリウッド会計と映画のビジネスモデル</h2>
+<p>「ハリウッド会計」とは、制作会社が利益を隠すことで、利益分配契約を結んだ俳優やスタッフへの支払いを回避するための慣行として言及されています。これは税金回避のためではなく、利益に基づく報酬の支払いを避けるために行われると説明されています。各映画は独立した法的事業体（LLC）として設立され、親会社がサービスを「過剰請求」することで利益を操作できるとされていますが、これは最終的にIRS（内国歳入庁）の監査に耐える必要があります。また、映画館が最初の数週間の興行収入の大部分をスタジオに渡し、ポップコーンなどの販売で生き残っている現状や、レコード会社とアーティストの「360度契約」との類似性も指摘されています。</p>
+<h2>ロサンゼルスの高コストと「家賃の病」</h2>
+<p>ロサンゼルス、特にハリウッドの高い生活費と不動産コストは、この問題の核心にあると多くのコメントが指摘しています。これは、SVのIT企業が高い給与を支払う原因にもなった「家賃の病」として説明されています。一部のコメントでは、このような高コストが、ロサンゼルスのエンターテイメント産業を「裕福な人々の遊び場」に変え、労働者が使い捨てにされるような状況を生み出していると強く批判しています。住居コストが高すぎるため、多くの才能がロサンゼルスから流出し、より生活費の安い地域や国で活動せざるを得なくなっています。</p>
+<h2>AIの台頭と業界への影響</h2>
+<p>生成AIの進化は、映画業界に壊滅的な影響を与える可能性が指摘されています。すでにカメラマンやプロデューサーがAIを使ってシーンの計画やショットのマッピングを行っており、将来的にはAI生成ビデオが主要な制作手段となり、実写撮影が不要になる可能性が議論されています。これは、多くの職種を不要にし、残された少数のプロンプトエンジニアリングの仕事で争うことになるだろうと予測されています。しかし、AI生成コンテンツの品質や著作権、アーティストの創造性との関係については懐疑的な意見もあり、「スロップ（質の悪いもの）」が量産されることへの懸念も表明されています。一部の業界関係者は、本物のカメラで撮影することの価値や、クリストファー・ノーランのような監督がIMAXカメラを使う例を挙げ、AIがすべてを置き換えるわけではないと主張しています。</p>
+<h2>映画の品質低下とフランチャイズ化</h2>
+<p>ハリウッド映画の品質が低下しているという意見も多く、特に1990年代以降のCGIの多用、画一的なスーパーヒーロー映画の量産、そして「公共サービスメッセージ」のような政治的・説教的な内容が増えたことが批判されています。これは、投資家が「安全なROI」を求め、リスクを避け、オリジナル性よりもフランチャイズ、続編、リメイクに頼るようになった結果だと分析されています。結果として、観客は「個性のない、攻撃性のない、平凡で忘れられがちな泥沼」を消費せざるを得なくなっていると指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、ハリウッドが制作の国際化、税制優遇措置の追求、ロサンゼルスの高コスト、そしてAIの台頭といった多岐にわたる課題に直面していることを示しています。これらの要因が複合的に作用し、映画制作の場所、方法、そして最終的なコンテンツの品質に大きな変化をもたらしています。特に、ロサンゼルスの高すぎる生活費は、才能ある人々が離れる原因となり、産業の衰退を加速させている根本的な問題として認識されています。将来的にはAIが映画制作のあり方を根本的に変える可能性があり、それが「底辺への競争」をさらに激化させるのか、あるいは全く新しい形のコンテンツ創造を可能にするのか、議論が分かれています。全体として、ハリウッドは変革の岐路に立たされており、その未来は不確実であるという見方が支配的です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
