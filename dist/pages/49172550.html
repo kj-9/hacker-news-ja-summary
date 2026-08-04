@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why some people mow a lawn better than others - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why some people mow a lawn better than others</h1>
+        <div class="meta">
+            投稿日: 2026年08月04日 | ランク: 7
+        </div>
+        <a href="https://pudding.cool/2026/06/mow/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、芝刈りの最適な経路を問う記事（ゲーム形式）について、そのゲームと現実の芝刈りの違い、さらには芝刈りの本質や価値について議論しています。</p>
+<h2>ゲームと現実の芝刈りの違い</h2>
+<p>多くのコメントが、記事で提示された「最小移動回数」を目的とする芝刈りゲームが、現実の芝刈りの複雑さを捉えきれていないと指摘しています。</p>
+<ul>
+<li><strong>ターンのコスト</strong>: 現実では方向転換に労力や時間がかかり、芝刈り機によってはコーナーを刈り残すことがあります。ゲームでは単純な「移動」として扱われるターンが、現実では重要な要素です。</li>
+<li><strong>美観とパターン</strong>: 多くの人は、芝生の見た目（ストライプや模様）を重視しており、純粋な効率性よりも美しいパターンを残すために特定の刈り方をします。これは、長時間の直線移動を最適化したり、特定の方向に刈り筋を残すために行われます。</li>
+<li><strong>芝生の健康</strong>: 芝生の健康を保つため、毎回同じ方向に刈るのではなく、パターンを変えて芝刈り機の車輪による芝生への負担を分散させるべきだという意見があります。</li>
+<li><strong>環境要因と障害物</strong>: 現実の芝生は平坦ではなく、岩、樹木、庭の装飾品、子どものおもちゃ、ペットの糞など、多くの障害物があり、それらを避けて刈る必要があります。</li>
+<li><strong>排出物の処理</strong>: 刈り取った草の処理（集める、マルチングするなど）も、現実の効率性に影響を与えます。</li>
+</ul>
+<h2>芝刈りの本質的な価値</h2>
+<p>純粋な効率性とは異なる、芝刈りの個人的な価値について多くのコメントが寄せられています。</p>
+<ul>
+<li><strong>瞑想と精神的な健康</strong>: ストレスの多い時期に芝刈りをして精神的な安定を取り戻した経験や、「大きな塗り絵をするようなもの」という表現で、瞑想的で心の癒しになる活動だと感じている人がいます。屋外で体を動かし、明確な進捗が見える作業は、気分転換や思考の整理に役立つとされています。</li>
+<li><strong>運動と達成感</strong>: 芝刈りをすることで体を動かし、具体的な成果を得られること、そしてポッドキャストを聴いたり、考え事をしたりする時間として楽しむ人もいます。</li>
+<li><strong>気候による影響</strong>: 芝刈りの快適さは気候に大きく左右され、猛暑の中では苦痛な作業となることが指摘されています。</li>
+<li><strong>異なる目標</strong>: 人によって芝刈りの目標は異なり、都会の人は美しいパターンを重視する一方で、田舎の人は虫やダニ対策、生態系維持のために芝生の長さを変えるなど、多様な目的があります。</li>
+</ul>
+<h2>ゲームの評価と批評</h2>
+<p>記事が提示した芝刈りゲーム自体への評価も分かれています。</p>
+<ul>
+<li><strong>ゲームとしての面白さ</strong>: 「Chip's Challenge」や「Q*bert」、ポケモンのジムパズルに似ているという声もあり、コンピュータサイエンスの難しい問題をゲームに落とし込んだZachtronics作品のようだと評されています。パズルとして楽しめるという意見もあります。</li>
+<li><strong>目標設定の欠陥</strong>: 多くのコメントが、ゲームの「最小移動回数」という目標設定が現実の芝刈りとはかけ離れており、記事の主張の根幹を揺るがしていると批判しています。特に、JavaScriptを無効にすると記事の内容がほとんど表示されない点についても指摘がありました。</li>
+<li><strong>ゲーマーの優位性</strong>: 記事で「ゲーマーは直感的に最適な戦略を認識した」と述べられている点について、ゲームのルールを理解した結果であり、現実の芝刈りのスキルとは別物だという意見があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、芝刈りゲームが現実の芝刈りの複雑さや多様な目的に対して単純化しすぎていると指摘しています。現実の芝刈りには、ターンの効率、美観、芝生の健康、環境要因、個人の価値観（瞑想、運動、達成感）など、多くの要素が絡み合っています。記事の「人は芝刈りがうまい」という前提が、ゲームのシンプルなルールに最適化しているだけであり、現実世界での「うまい」とは異なるという点が主要な論点となっています。一方で、パズルゲームとしては楽しめるという評価もありました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

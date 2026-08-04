@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation</h1>
+        <div class="meta">
+            投稿日: 2026年08月04日 | ランク: 8
+        </div>
+        <a href="https://arxiv.org/abs/2602.16763" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、大規模言語モデル（LLM）の進捗、限界、そして評価方法について議論しています。特に、LLMの能力が「頭打ち」になっているという意見と、進化は続いているという意見が対立しています。</p>
+<h2>LLMの進歩の限界と「頭打ち」</h2>
+<p>一部のコメントでは、LLMの進歩が限界に達しつつあるという見解が示されています。これは、モデルが回帰分析に基づいているため、非常に非線形な空間での精度には限界があるという考えに基づいています。ベンチマークのスコアが80～90%で飽和する現象は、「テストを完璧にする」のではなく「壁にぶつかっている」証拠だと指摘されています。また、現在の性能向上は、RL（強化学習）に莫大なリソースを投入した結果であり、本質的なモデルの「賢さ」が向上しているわけではないという意見もあります。</p>
+<h2>LLMの進歩は続いている</h2>
+<p>これに対し、LLMの進歩は依然として速いペースで続いているという反論も多く見られます。特にAI評価に携わる人々は、ベンチマークにおける「リーケージ」や「生態学的妥当性」の問題はあるものの、それらが現在の進歩を全て説明するものではないと主張しています。Epoch社のような研究機関による評価トレンド分析では、能力の成長は依然として衰える兆候を見せていないとされており、リリース頻度が高まり、個々の進歩は小さく見えるが、長期的な能力向上は続いていると指摘されています。</p>
+<h2>ベンチマークの信頼性と問題点</h2>
+<p>ベンチマークの信頼性については多くの議論が交わされています。</p>
+<ul>
+<li><strong>ベンチマークの飽和</strong>: 多くのベンチマークがモデルによって飽和状態に達しており、これはモデルが限界に達しているのではなく、ベンチマーク自体が不十分であるためとされています。モデルが100%のスコアを出さない場合でも、ベンチマークの設問自体に誤りや曖昧さがある可能性が指摘されています。</li>
+<li><strong>「ベンチマークのゲーム化」</strong>: PCゲーム業界の例を挙げ、ベンチマークが固定されると、ベンダーが特定のベンチマークに最適化し、汎用的な性能を犠牲にする「ゲーム化」が起こるとの意見があります。LLM業界でも同様のことが起きており、モデルの実際の有用性よりもベンチマークのスコアが優先されている可能性があると懸念されています。</li>
+<li><strong>新しい評価方法の必要性</strong>: 飽和しにくく、汚染に強く、スケール可能な新しい評価方法の必要性が叫ばれています。多エージェント環境での協力・競争ゲームや、実際の専門家が実際のデータを使って評価するなどの提案がされています。</li>
+</ul>
+<h2>「AI」と「LLM」の定義、そして「知能」とは</h2>
+<p>コメントの中では、「AI」と「LLM」という用語の使い分けについても議論が起こっています。LLMを「AI」と呼ぶことに異議を唱える意見があり、ほとんどの「AI」は単なる最適化アルゴリズムであり、新しいものではないと主張しています。また、「知能」とは何か、LLMがどのように機能するのかについて、まだ十分に理解されていないという意見もあります。一方で、LLMの内部動作は完全に理解されているという主張もあり、その「創発的行動」の理由やメカニズムについては未解明であるという見解と対立しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのユーザーは、LLMの現状について「進歩が頭打ちになった」という意見と「進化は続いている」という意見の間で活発な議論を交わしています。特に、現在のベンチマークがLLMの真の能力を正確に測れていないこと、そしてモデルがベンチマークを「ゲーム化」している可能性が指摘されています。このため、より現実世界に即した、飽和しにくい、動的な新しい評価方法の必要性が強く認識されています。また、「知能」という概念自体の曖昧さも、LLMの評価を難しくしている要因として挙げられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

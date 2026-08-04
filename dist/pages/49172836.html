@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waymo – Dallas Open to All - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Waymo – Dallas Open to All</h1>
+        <div class="meta">
+            投稿日: 2026年08月04日 | ランク: 3
+        </div>
+        <a href="https://waymo.com/blog/shorts/dallas-open-to-all/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Waymoがダラスでサービスを開始したことに対するHacker Newsのコメントは、主にWaymoのサービスエリア、自動運転車のメリットとデメリット、都市の呼称、および自動運転技術の課題に関するものです。</p>
+<h2>サービスエリアと展開</h2>
+<p>Waymoのダラスでのサービス展開は、「ダラス全域で利用可能」ではなく、「ダラスにいるすべての人々が利用可能」という表現について議論されました。実際のサービスエリアは特定の地域（Bishop Arts、Fair Park、White Rockなど）に限定されており、郊外は含まれていません。Waymoは以前停止していたフリーウェイでの運転を最近再開したとのことです。また、Waymoのダラスでのサービスエリアは、過去に人種差別的なレッドライニングによって価値を下げられた地域もカバーしている点が評価されています。これは、UberのAvrideやTeslaのRobotaxiが裕福な地域に限定されていることとは対照的であると指摘されています。</p>
+<p>Waymoの展開地域については、赤色州（共和党支持州）での展開が早く、青色州（民主党支持州）で遅れているという意見もありましたが、主な要因は積雪の有無や各州の法規制、都市の認可状況にあるという見方が優勢です。例えば、ニューヨーク市やボストンでは法規制によりテストや展開が阻まれており、カリフォルニア州の大きな都市では積雪が少ないため展開が進んでいます。</p>
+<h2>自動運転車のメリットとデメリット</h2>
+<p>多くのユーザーはWaymoの自動運転車体験を高く評価しています。人間ドライバーに比べて予測可能で、車線変更時にも他の車に道を譲るなど、交通インシデントが少ないとされています。また、人間との会話が不要で、車内環境を自分でコントロールできる快適さもメリットとして挙げられています。人間ドライバーに対する嫌悪感が、AIドライバーへの需要を高めているという意見もあります。</p>
+<p>一方で、WaymoのコストがUberに比べて高いこと、およびプライバシーへの懸念（車内カメラによる生体認証データの収集など）がデメリットとして挙げられています。また、Waymoが警察に通報した事例なども話題になりました。</p>
+<h2>都市の呼称（Demonym）</h2>
+<p>ダラスの人々を指す「Dallasites（ダラス人）」という呼称について、多くのコメントが寄せられました。「ひどい」「タイプミスかと思った」といった否定的な意見が多く、代替案として「Dallasians」「Dallasers」「Dallan」などが提案されました。中には、単純に「テキサス人」と呼んだり、「ノーステキサン」を好む人もいました。</p>
+<h2>自動運転技術の課題と将来性</h2>
+<p>自動運転技術のビジネスモデルとしての持続可能性（採算性）については疑問が呈されています。車両、センサー、メンテナンス、マッピングにかかるコストを考えると、単一の車両が利益を上げられるのかという点です。しかし、将来的に自動運転車が都市での移動手段の主流となり、人間ドライバーの車がなくなるという長期的な視点から投資されているとの見方もあります。Waymoの車両が大型である理由としては、センサーやコンピューティングに必要な電力供給の安定性、開発初期の多人数での利用、特定の車種の調達状況などが挙げられています。小型車両の方が効率的ではないかという意見も出ています。</p>
+<p>また、自動運転車が極めて稀な状況（long tail problem）にどのように対応するのかという技術的な疑問も提示されています。シミュレーションによるテストや不確実性追跡モデルの利用などが考えられています。自動運転車は人間よりも安全であるというデータがある一方で、テクノロジーのミスは人間の場合よりも許容されにくいという見方があります。その理由として、事故が発生した場合の責任の所在の曖昧さや、人間がするミスと機械がするミス（知覚エラーや未知の状況への対応不能など）の種類の違いが挙げられています。</p>
+<h2>まとめ</h2>
+<p>Waymoのダラス展開は、特定の地域に限定されつつも、過去の不当な地域差別を是正するようなサービスエリア選択で評価されています。ユーザー体験は快適で安全性が高いと支持される一方、高コストやプライバシー、責任の所在といった課題も指摘されています。自動運転技術の持続可能性や、極めて稀な状況への対応、そして人間とAIによるミスの許容度の違いは、今後の普及に向けた重要な論点となっています。また、「Dallasites」のような都市の呼称一つとっても、コミュニティ内で多様な意見があることが示されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
