@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zed DeltaDB - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zed DeltaDB</h1>
+        <div class="meta">
+            投稿日: 2026年08月05日 | ランク: 1
+        </div>
+        <a href="https://zed.dev/deltadb" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Zedエディターの新機能であるDeltaDBについて様々な意見を述べています。DeltaDBは、コードとAIエージェントとの会話を関連付け、継続的な履歴を提供するシステムです。</p>
+<h2>ACP (Agent Communication Protocol) とエージェント連携</h2>
+<p>ZedのACPにより、Zen Agentだけでなく、CodexやClaude Code、OpenRouterなど様々な外部AIエージェントとの連携が可能であると多くのユーザーが評価しています。これにより、エージェントの選択肢が増え、ベンダーロックインが避けられる点が強みとされています。一部のユーザーは、Zedでのエージェント体験がCursorよりも優れていると述べています。</p>
+<h2>Zedの基本機能と安定性</h2>
+<p>多くのユーザーが、ZedはAI機能の追加よりも基本的なエディター機能の安定性と改善に注力すべきだと主張しています。特に、Linux環境（Waylandでのコピペ問題、ファイルマネージャーの遅延、スニペットの挙動、ウィンドウ表示の問題）やM1 Macでのコピペ問題、WSLでのファイル表示問題、LSPや設定の不備などが指摘されており、「ほぼ使えない」とまで表現するユーザーもいます。一方で、macOSユーザーからは「毎日問題なく使っている」という声もあり、プラットフォームによる安定性の差が示唆されています。</p>
+<h2>DeltaDBの価値と懸念</h2>
+<p>DeltaDBは、AIエージェントとのセッションをコード変更と関連付けて保存する機能として説明されています。これに対し、肯定的な意見として、IntelliJの「ローカル履歴」やVSCodeの同様の機能のように、変更履歴が保存されることで問題解決に役立つという声があります。また、コードと会話を紐付けることで、早期にフィードバックを得られる可能性があるという期待も寄せられています。</p>
+<p>しかし、この機能には強い懸念も表明されています。</p>
+<ul>
+<li><strong>マイクロマネジメントの助長</strong>: AIとの会話履歴が記録されることで、マネージャーが開発者のプロセスを過剰に監視し、「プロンプトの質が悪い」といった理由で評価されたり、解雇の根拠にされたりする可能性を恐れる声が多数あります。</li>
+<li><strong>プライバシーの問題</strong>: 個人がAIとどのように対話したかが記録されることに対するプライバシー上の懸念があります。</li>
+<li><strong>ノイズの増加</strong>: 膨大な会話履歴が追加されることで、LLMでしかフィルタリングできないほどのノイズが増えるのではないかという懸念があります。</li>
+<li><strong>不必要な機能</strong>: 一部のユーザーは、この機能が「誰も求めていない、存在しない問題の解決策」であり、開発者の時間とリソースの無駄だと感じています。GitやJujutsuのような既存のバージョン管理システムで十分だという意見もあります。</li>
+<li><strong>VCからの圧力</strong>: VCからの資金調達が、このような「不必要な」機能開発を促しているのではないかという推測もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Zedエディターは、その強力なAIエージェント連携機能（ACP）で高く評価されていますが、新機能であるDeltaDB（コードとAI会話の履歴システム）については賛否両論があります。多くのユーザーは、AI機能の拡充よりも、エディターの基本的な安定性（特にLinux環境）を優先すべきだと考えています。DeltaDB自体は、IntelliJのローカル履歴のような価値を認める声がある一方で、マイクロマネジメントの助長、プライバシー侵害、ノイズの増加といった強い懸念が表明されており、開発者の間で大きな議論を呼んでいます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

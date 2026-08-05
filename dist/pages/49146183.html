@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNU Hurd News 2026-Q2 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">GNU Hurd News 2026-Q2</h1>
+        <div class="meta">
+            投稿日: 2026年08月05日 | ランク: 6
+        </div>
+        <a href="https://www.gnu.org/software/hurd/news/2026-q2.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>ユーザーはHurdの進捗に関するHacker Newsのコメントを要約するよう求めています。</p>
+<p>このスレッドは、Hurdのプロジェクトの更新に関するもので、その実現可能性、デスクトップLinuxの現状、およびマイクロカーネル設計の課題について議論しています。</p>
+<h2>Hurdの進捗と将来性</h2>
+<p>Hurdプロジェクトはまだ開発中であり、一部のユーザーは進捗が見られることを喜んでいます。特に、Samuel Thibault氏が依然として貢献していることや、Apple M1チップでのブータブルイメージ構築の計画が言及されています。しかし、多くのコメントはHurdが実用的なOSになることに対する懐疑的な見方を示しており、「Hurdにはいつかその日が来るだろうが、おそらく100年後だろう」という声や、開発の遅さをDuke Nukem Foreverになぞらえる意見もあります。FOSDEM 2026での発表資料や動画も共有されており、プロジェクトの継続的な努力を示しています。</p>
+<h2>デスクトップLinuxの現状</h2>
+<p>Hurdの将来を語る上で、「Linuxがデスクトップに進出してからHurdもその日を迎えるだろう」という冗談がきっかけとなり、デスクトップLinuxの現状に関する議論が活発に行われています。</p>
+<ul>
+<li><strong>成功と浸透</strong>: 一部のユーザーは、Linuxがすでにデスクトップに浸透していると主張しています。特に、SteamOSやBazziteのようなゲーミング指向のディストリビューションが、MintやPop!のような使いやすさ重視のディストロよりも成功している点が指摘されています。これは、技術ではなく「製品」を提供することの重要性を示唆しています。また、多くのパワーユーザーがメインOSとしてLinuxを使用していることや、AndroidもカーネルはLinuxであるという意見もあります（ただし、ユーザーランドがGNU/Linuxではないという反論もあります）。</li>
+<li><strong>市場シェアと認識</strong>: StatCounterのデータによると、デスクトップLinuxの市場シェアは10%未満であり、Windowsの70%、Macの20%と比較すると依然として小さいという指摘があります。しかし、一部のユーザーは、2003年頃にはすでに個人的にはデスクトップLinuxがWindowsに代わるものとして十分に機能していたと述べ、非専門家にとってはWindowsがプリインストールされているから簡単に見えるだけで、実際のインストールはLinuxの方が簡単だと主張しています。</li>
+<li><strong>将来の展望</strong>: MicrosoftがAzureからの利益にシフトすることで、Windowsが「enshittify（劣悪化）」され、Linuxがデスクトップに進出する道が開かれるという予測や、「ラップトップと電話の修理屋の看板にWindows、Linux、MacOSが並んでいるのなら、それがすでにデスクトップに進出した証拠だ」という具体的な例も挙げられています。</li>
+</ul>
+<h2>マイクロカーネルのパフォーマンス課題</h2>
+<p>HurdがMachベースのカーネルであることから、Machベースのカーネルが抱えていたパフォーマンス問題、特にIPCメッセージ送信時の権限/アクセス検証によるボトルネックについて疑問が呈されています。</p>
+<ul>
+<li><strong>現代のハードウェアとの関連</strong>: 一部のユーザーは、1994年には顕著だったパフォーマンスヒットが、2026年の現代のハードウェアではもはや問題ではないかもしれないと推測しています。しかし、「コンピューターが速くなるほど、ソフトウェアに起因するボトルネックはより大きな問題になる」という反論もあります。</li>
+<li><strong>Spectreの影響</strong>: Spectreのような脆弱性がコンテキストスイッチのオーバーヘッドを悪化させたため、MachスタイルのIPCはむしろ状況が悪化した可能性があるという意見もあります。</li>
+<li><strong>セキュリティ vs パフォーマンス</strong>: 「Linuxよりも優れたセキュリティプロファイルを持つマイクロカーネルが得られるなら、10年古いチップで日常のブラウジングをしても気づかないかもしれない」と、セキュリティ上の利点のために多少のパフォーマンス低下は許容できるという考えも示されています。しかし、Hurdがこれらの問題を実際に解決したという証拠は示されていません。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、GNU Hurdの継続的な開発状況について、熱心な支持者と懐疑的な見方の両方を示しています。プロジェクトはまだ活動しており、特にApple M1のような新しいハードウェアへの対応を目指している点が注目されます。しかし、Hurdが実際に主流になるには、既存のマイクロカーネル設計に内在するパフォーマンス課題を克服し、実用的な「製品」として提供する必要があるという認識が共有されています。議論は、Hurdがいつかその日を迎えるかという問いから、デスクトップLinuxがすでにその日を迎えているか、そしてその道のりにどのような課題と機会があるかという、より広範なテーマへと展開しています。ユーザーは、Hurdのようなニッチで非営利なテックプロジェクトが存在すること自体を歓迎する傾向にあります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
