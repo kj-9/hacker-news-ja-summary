@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle bans AI-generated code from OpenJDK - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Oracle bans AI-generated code from OpenJDK</h1>
+        <div class="meta">
+            投稿日: 2026年08月07日 | ランク: 5
+        </div>
+        <a href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>OracleのOpenJDKプロジェクトが、AI生成コードの貢献を一時的に禁止する方針を発表したことについて、Hacker Newsのコメントスレッドでは、その妥当性、背後にある理由、そしてより広範な影響について活発な議論が交わされています。多くのコメントが、OracleのAIへの大規模な投資と、そのオープンソースプロジェクトにおけるAIコードの禁止という方針の矛盾に注目しています。</p>
+<h2>AI生成コードの品質とリスク</h2>
+<p>多くのコメントは、AI生成コードの品質とそれに伴うリスクに懸念を示しています。</p>
+<ul>
+<li><strong>品質の低下とレビューの負担</strong>: OpenJDKのコア開発者は限られた時間しかなく、AIによって生成されたコードのレビューは、その品質の低さや理解の困難さから、多大な負担となることが指摘されています。あるユーザーは、AIが生成したコードが「だらしなく、巨大で読みにくい」と表現し、結果として保守性の問題やインシデント（認証情報の漏洩、テスト環境での本番DB消去、デタラメなドキュメントなど）を経験したと語っています。</li>
+<li><strong>理解と説明の欠如</strong>: AIが生成したコードを提出する開発者自身がそのコードを十分に理解していないことが問題視されており、「PRを弁護できないなら、提出すべきではない」という意見もあります。これは、コードの品質だけでなく、共同開発における信頼関係にも影響を与えます。</li>
+<li><strong>「Vibe code」と「Slop code」</strong>: 多くのユーザーがAI生成コードを「Vibe code」や「Slop code」（感覚的で雑なコード）と呼び、その信頼性の低さや保守性の問題を強調しています。</li>
+</ul>
+<h2>知的財産権と法的問題</h2>
+<p>コメントの多くは、AI生成コードの法的側面、特に知的財産権（IP）に関する懸念が、今回の禁止措置の主要な理由であると推測しています。</p>
+<ul>
+<li><strong>著作権の不確実性</strong>: AI生成コードの著作権帰属についてはまだ不明瞭な点が多く、米国の著作権局は「純粋なAI生成素材や、表現要素に対する人間の制御が不十分な素材には著作権が及ばない」との見解を示しています。この不確実性が、Oracleのような大企業が将来的な訴訟リスクを避けるためにAI生成コードを拒否する動機となっていると指摘されています。</li>
+<li><strong>Oracleの過去の経緯</strong>: Oracleが過去にJavaの著作権侵害でGoogleを訴えた経緯があるため、自らがAI生成コードを受け入れることで、将来的に他社を訴える際の立場が弱まることを懸念しているという意見が多く見られます。彼らは、「自社がLLMを内部で使用している場合に、Oracleが著作権を持つコードに類似したLLM生成コードを理由に人々を訴えることは困難になるだろう」と考えています。</li>
+<li><strong>ライセンス問題</strong>: コピーレフトライセンスのオープンソースプロジェクトにおいて、AI生成コードがどのような影響を与えるか、という懸念も示されています。</li>
+</ul>
+<h2>Oracleの方針の皮肉と矛盾</h2>
+<p>OracleがAI技術に多額の投資を行い、その将来をAIに賭けているにもかかわらず、自社の主要なオープンソースプロジェクトでAI生成コードを禁止するという矛盾した方針が、多くのコメントで皮肉られています。</p>
+<ul>
+<li><strong>「Never get high on your own supply」</strong>: 「麻薬の売人は自分の商品でハイになるな」という格言になぞらえ、Oracleが他者にAIツールを販売しておきながら、自社ではその製品の使用を控えていると指摘されています。</li>
+<li><strong>「Rules for thee, but not for me」</strong>: ユーザーは、Oracleが「AIは我々のためだが、あなたたちのためではない」という姿勢を取っていると見ています。</li>
+<li><strong>投資と現実の乖離</strong>: Oracleの経営陣がAIの可能性を喧伝し、巨額の投資を行っている一方で、現場レベルではAI生成コードの品質や法的リスクに直面しているという現実が浮き彫りになっています。</li>
+</ul>
+<h2>実施の難しさ</h2>
+<p>AI生成コードの禁止をどのように実施するのか、という現実的な問題も提起されています。</p>
+<ul>
+<li><strong>検出の困難さ</strong>: AIが生成したコードと人間が書いたコードを区別するツールの存在や、人間がAI生成コードを修正・加工した場合の判断基準について疑問が呈されています。</li>
+<li><strong>自己規制</strong>: 多くのユーザーは、この方針が主に開発者の自己規制によって機能すると考えています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>OpenJDKがAI生成コードの貢献を禁止する決定は、AI技術の急速な進展とそれがソフトウェア開発にもたらす影響について、重要な問いを投げかけています。コメントスレッドでは、主に<strong>AI生成コードの品質と保守性の問題</strong>、そして<strong>知的財産権と法的リスク</strong>に対する懸念が、この決定の主な要因であると指摘されています。</p>
+<p>多くのユーザーは、AIへの大規模な投資を行っているOracleが、自社の主要なオープンソースプロジェクトでAI生成コードを禁止する矛盾した姿勢に皮肉を込めて言及しています。この決定は、OracleがAI技術を外部に販売する一方で、その内部的な利用や受け入れには慎重な態度を取っていることを示唆しています。最終的には、この方針はAI生成コードの現時点での限界と、それに伴う法的・運用上の課題を浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
