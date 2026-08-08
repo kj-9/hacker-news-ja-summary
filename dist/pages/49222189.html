@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&quot;Code was never the hard part&quot; is an insult to all programmers - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">&quot;Code was never the hard part&quot; is an insult to all programmers</h1>
+        <div class="meta">
+            投稿日: 2026年08月08日 | ランク: 4
+        </div>
+        <a href="https://blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、AIがコードを生成する能力の向上に伴い、プログラミングにおける「コーディングは決して難しい部分ではなかった」という意見について議論しています。多くのコメント投稿者は、この主張に同意したり、反論したり、あるいはその真意を解釈したりしています。</p>
+<h2>「コーディングは難しい部分ではなかった」という主張への反論</h2>
+<p>多くのコメント投稿者は、「コーディングは決して難しい部分ではなかった」という主張を誤解であるか、不完全であると考えています。彼らは、コーディングが依然として高度なスキルを必要とする専門的な活動であると主張しています。</p>
+<ul>
+<li><strong>根本的な難しさ</strong>: 多くの人が、基本的なコーディング自体が難しく、誰もができることではないと指摘しています (1.11, 1.25, 1.61)。「正しいコードを書くこと」は特に難しいと強調されています (1.6.3, 1.6.9)。</li>
+<li><strong>知的要件とスキル不足</strong>: プログラミングには最低限のIQ要件があり、多くの人が学ぶのに苦労すると指摘されています (1.6.1, 1.6.1.2, 1.25.1)。また、コーディングを嫌うプログラマーは進歩せず、コードの質が低いという意見もあります (1.15)。</li>
+<li><strong>時間的側面</strong>: 時間が経つにつれてコードを正しく維持すること（保守性、拡張性）が難しく、これはAIが解決できない問題だとされています (1.6.3.2)。</li>
+<li><strong>特定の領域の難しさ</strong>: 分散システム、並行処理、パフォーマンス最適化、複雑なアルゴリズムの実装（ジョン・カーマックのような例）など、特定の種類のコーディングは非常に難しいと認識されています (1.11, 1.9, 1.6.15, 1.6.16, 1.6.3.2.1)。</li>
+<li><strong>規制と責任</strong>: 車や橋のような規制の厳しい分野でのコーディングは、その厳格さゆえにさらに難しいと指摘されています (1.6.3.1, 1.6.3.1.2.1.1)。</li>
+</ul>
+<h2>「コーディングは難しい部分ではなかった」という主張への同意と解釈</h2>
+<p>一部のコメント投稿者は、この主張に同意するか、その背景にある真意を説明しようとしています。彼らは、プログラミングという仕事には、コードを書く行為以上に難しい側面があると見ています。</p>
+<ul>
+<li><strong>デザインと設計</strong>: コードを書くこと自体よりも、何を書くべきかをデザインし、要件を理解し、全体像を把握することが難しいという意見が多く見られます (1.3, 1.6.12, 1.39, 1.40)。</li>
+<li><strong>要件定義と顧客との対話</strong>: 顧客から真の要件を引き出す能力が、プログラマーの給与が高い理由であり、コードを書く能力よりも重要であるという意見が繰り返し出されています (1.6, 1.6.2, 1.6.3, 1.6.4, 1.6.6, 1.6.9.2, 1.6.11, 1.31.5)。ただし、これには異論もあり、開発者が直接顧客と話すことはまれだという意見もあります (1.6.4)。</li>
+<li><strong>問題解決と意思決定</strong>: プログラミングの本質は、問題解決と意思決定であり、コードを書く行為は「手段に過ぎない」という見解があります (1.2.1, 1.6.2, 1.9, 1.33)。</li>
+<li><strong>複雑性と保守性</strong>: ソフトウェアのバグが多いのは、バグのないソフトウェアを作るには時間とリソースがかかりすぎるためであり、ビジネス上の優先順位が影響していると分析されています (1.20)。</li>
+<li><strong>役割の分化</strong>: プログラマーは、コーディング以外にも多くの「見えない帽子」をかぶっており（プロジェクト管理、アーキテクチャ設計、QAなど）、これらの活動が仕事の大部分を占めると指摘されています (1.6, 1.6.13, 1.12, 1.52)。</li>
+<li><strong>AIによる自動化</strong>: AIの登場により、コードを書くことは「肉体労働」になりつつあり、人間はより高次の問題解決、設計、顧客ニーズの理解に焦点を当てるべきだという意見があります (1.14, 1.6.3.2.3, 1.17)。</li>
+</ul>
+<h2>AIとプログラミングの未来</h2>
+<p>AIがコード生成の分野で進歩していることに対し、様々な視点から議論が繰り広げられています。</p>
+<ul>
+<li><strong>AIの影響</strong>: AIは開発者の生産性を大幅に向上させるが、それによって開発者の仕事がより難しくなるという意見があります（セキュリティ問題、要件の不一致、AIによって生成されたコードのレビューなど）(1.17, 1.18)。</li>
+<li><strong>スキルの変化</strong>: AIの進化により、プログラマーはコードを書くスキルよりも、AIを管理し、AIが生成したコードをレビューし、アーキテクチャを設計するスキルが求められるようになると考えられています (1.17.2, 1.18)。</li>
+<li><strong>品質の低下</strong>: AIによって生成されたコードの品質が低いにもかかわらず、顧客やマネージャーはその違いを認識できないことが多いという懸念があります (1.17.1)。</li>
+<li><strong>「AI効果」</strong>: AIが能力を高めるにつれて、人々は「本当の知能」の定義を再定義し、AIの新しい能力を軽視する傾向があるという「AI効果」が指摘されています (1.42)。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、「コーディングは決して難しい部分ではなかった」という主張を巡るプログラミングの本質についての激しい議論を反映しています。多くのコメント投稿者は、コーディングが依然として高度なスキルを必要とする複雑な活動であると主張していますが、一方で、プログラミングという職業には、コードを書く行為以上に、デザイン、要件定義、顧客との対話、アーキテクチャ設計、問題解決といった難しい側面があるという意見も多く見られます。AIの登場は、コード生成の自動化を進め、これらの「非コーディング」スキルの重要性をさらに高めると考えられています。しかし、AIが生成するコードの品質、それに伴うレビューや保守の負担、そしてプログラマーの役割とアイデンティティの変化については、懸念と不確実性が残っています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
