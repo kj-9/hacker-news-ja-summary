@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Sandboxes – Disposable, isolated sandboxes for AI agents - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Docker Sandboxes – Disposable, isolated sandboxes for AI agents</h1>
+        <div class="meta">
+            投稿日: 2026年08月10日 | ランク: 9
+        </div>
+        <a href="https://www.docker.com/products/docker-sandboxes/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドでは、Docker Sandboxesの発表と、AIエージェント向けのサンドボックス環境に関する広範な議論が行われています。ログイン要件やLinuxサポートの有無など、Docker Sandboxes自体の特定の機能や欠点について活発な意見が交わされる一方で、多くの開発者が自作のサンドボックスソリューションを紹介し、AIエージェントのセキュリティに関する一般的な課題とベストプラクティスが議論されています。</p>
+<h2>Docker Sandboxesへの批判と懸念</h2>
+<p>Docker Sandboxesの主な批判点として、<strong>ログインが必須であること</strong>が挙げられます。多くのユーザーはローカル開発ツールにログインが不要であるべきだと主張し、Dockerのビジネスモデルが将来的に機能制限や追加料金につながるのではないかと懸念しています。また、発表当初は<strong>Linuxサポートが不明瞭</strong>であることも批判されましたが、実際にはLinux（Ubuntu）でも利用可能であることが後にDockerの担当者によって明言されました。その他、<strong>設定の柔軟性の欠如</strong>（カスタムボリュームマウントなど）、<strong>パフォーマンスや安定性</strong>、<strong>クローズドソースであること</strong>も指摘されています。</p>
+<h2>AIエージェントサンドボックスの必要性</h2>
+<p>コメントでは、AIエージェントのコード実行における<strong>セキュリティの重要性</strong>が繰り返し強調されています。エージェントが意図せずシステムを破壊したり、機密情報を漏洩したりするリスクがあるため、サンドボックスは必須であると多くの人が考えています。特に、<code>--dangerously-skip-permissions</code>のようなオプションを使用する場合、厳重なサンドボックスが必要だという意見が多数を占めています。</p>
+<h2>サンドボックス技術の種類と議論</h2>
+<p>AIエージェントのサンドボックスには、さまざまな技術が提案・議論されています。</p>
+<ul>
+<li><strong>MicroVMs (マイクロVM)</strong>: Docker Sandboxesが採用しているFirecrackerスタイルのVMです。起動が高速でオーバーヘッドが低いのが特徴で、従来のコンテナよりも強力なカーネルレベルの隔離を提供します。</li>
+<li><strong>コンテナ（Docker、Podman、LXC/Incus）</strong>: Linuxカーネルの機能（cgroups、名前空間など）を利用した隔離方法です。多くのユーザーがコンテナベースのソリューションを自作しており、特にPodmanのrootlessモードはセキュリティ面で評価されています。しかし、カーネルを共有するため、VMほどの厳密な隔離ではないという意見もあります。</li>
+<li><strong>OSレベルのサンドボックス（Bubblewrap、Nono.sh）</strong>: Flatpakなどで使用されているような、より軽量なOSネイティブのサンドボックス機能です。ファイルシステムやネットワークアクセスを細かく制限できますが、設定が複雑になる場合があります。</li>
+<li><strong>完全なVM (QEMU/KVM、Apple Virtualization Framework)</strong>: より高い隔離性と柔軟性を提供しますが、リソース消費が大きく、起動時間が長い傾向があります。開発環境全体をVM内に構築するアプローチも提案されています。</li>
+</ul>
+<h2>自作ソリューションと代替案</h2>
+<p>Docker Sandboxesの発表を受けて、多くの開発者が自身の<strong>オープンソースのサンドボックスプロジェクト</strong>や<strong>セットアップ</strong>を共有しています。これらには、<code>smolvm</code>、<code>virtdev</code>、<code>agent-images</code> (Nixベース)、<code>vibepod-cli</code> (Podmanサポート)、<code>flar</code> (Bubblewrapベース)、<code>Agent Circus</code> (Dockerコンテナベース)、<code>Locki</code> (VM + Incusコンテナ)、<code>yoloAI</code> (MicroVM、ネットワーク隔離、秘密情報注入)、<code>mvm</code> (QEMU microvm)などが含まれます。
+これらのプロジェクトは、ログイン不要、オープンソース、より細かい制御、特定のワークフローへの適合性などの利点を主張しています。</p>
+<h2>秘密情報（Credential）管理とネットワーク隔離</h2>
+<p>サンドボックスの重要な機能として、<strong>秘密情報（APIキーなど）の安全な注入</strong>と<strong>ネットワークアクセスの制御（アウトバウンドファイアウォール）</strong>が挙げられています。Docker Sandboxesは、ネットワークプロキシを介してホスト側の認証情報ストアから秘密情報をHTTPヘッダーに注入し、エージェントが直接秘密情報にアクセスできないようにする仕組みを提供しています。これにより、エージェントが悪意のあるエンドポイントに秘密情報を漏洩させるリスクを軽減します。多くの自作ソリューションも同様の機能を取り入れています。</p>
+<h2>まとめ</h2>
+<p>Docker SandboxesはAIエージェント向けのサンドボックス環境として登場しましたが、ログイン要件やクローズドソースであることに対する批判が目立ちました。しかし、AIエージェントのセキュリティと隔離の必要性については広く合意されており、多くの開発者が様々な技術（MicroVM、コンテナ、OSレベルサンドボックス、フルVMなど）を用いて独自のソリューションを構築・提案しています。特に、秘密情報の安全な管理とネットワーク隔離は、サンドボックス機能の中核として重要視されています。この分野はまだ発展途上にあり、標準化された堅牢なソリューションへの収斂が期待されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

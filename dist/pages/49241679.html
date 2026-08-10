@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse Glimmer: 30B-parameter model optimized for always-on local agent workflows - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Muse Glimmer: 30B-parameter model optimized for always-on local agent workflows</h1>
+        <div class="meta">
+            投稿日: 2026年08月10日 | ランク: 1
+        </div>
+        <a href="https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Metaの新しいオープンウェイトモデル「Muse Glimmer 30B」のリリースと、それを取り巻く状況、特にローカルでの実行可能性、パフォーマンス、そしてMeta社の評判について議論しています。</p>
+<h2>ローカル実行の可能性とハードウェア要件</h2>
+<p>多くのコメントが、Muse Glimmer 30Bをローカルで実行するためのハードウェア要件とパフォーマンスに焦点を当てています。
+*   このモデルは24GBのVRAMを持つGPU、または32GB〜64GBのRAMを持つMacBook Proや高性能PCで実行可能とされています。RTX 3090 (24GB VRAM) やRX 7900XT (20GB VRAM) で実行できたという報告もあります。
+*   一部のユーザーは、Apple Silicon (M1 Max, M5 Max) 上での実行速度について言及しており、MTP (Multi-Token Prediction) やdflashなどの最適化技術を用いることで、実用的な速度（30-60 tok/s）が得られると述べています。
+*   しかし、高性能なモデルをローカルで実行するには、未だに高価なハードウェア（RTX 5090など）が必要であり、多くのユーザーにとって敷居が高いという意見もあります。特に、RAMの価格高騰がハードウェア購入の障壁となっています。</p>
+<h2>パフォーマンスと他のモデルとの比較</h2>
+<p>Muse Glimmer 30Bのパフォーマンスは、他のオープンウェイトモデル、特にQwen 3.6 27BやGemma 4と比較して評価されています。
+*   多くのベンチマークではQwen 3.6 27Bとほぼ同等か、わずかに上回る程度とされていますが、ツールコーリングのスキル（MCPなど）では優位性があると指摘されています。
+*   「thinking traces（思考過程）」がQwenよりも簡潔で、トークン効率が良いという評価もあります。これにより、コンテキストウィンドウの消費を抑え、より長い推論が可能になる可能性があります。
+*   しかし、Qwen 3.8 27Bなどの新しいモデルがリリースされる予定であり、Muse Glimmer 30Bがどれだけ競争力を維持できるか疑問視する声もあります。</p>
+<h2>「オープンウェイト」とMetaの評判</h2>
+<p>「オープンウェイト」という用語の定義とその意味合い、そしてMetaがオープンウェイトモデルをリリースすることへの評価が、コメントの大きな部分を占めています。
+*   「オープンウェイト」は「オープンソース」とは異なり、モデルの重みが公開されているだけで、内部動作が不透明であるという批判があります。
+*   多くのユーザーは、Metaが過去に行ってきたとされる「悪行」（プライバシー侵害、ミャンマーでのジェノサイド助長など）のために、今回のオープンウェイトリリースを同社の「名誉回復」とはみなしていません。
+*   しかし、Apache 2.0ライセンスでのリリースは、エコシステム全体への貢献として評価されており、たとえMetaの動機がPR戦略であったとしても、ユーザーは無料で優れたモデルを利用できることにメリットを感じているようです。
+*   中国のAI企業がオープンウェイトモデルをリリースした場合と比較して、Metaのリリースに対する評価が厳しすぎるという意見や、政治的な影響キャンペーンの可能性を指摘するコメントも見られます。</p>
+<h2>その他の重要なテーマ</h2>
+<ul>
+<li><strong>専門モデルの有効性:</strong> プログラミング言語に特化したモデルや、特定のタスク（分類、RAGなど）に特化したモデルは、汎用モデルと比較してサイズを縮小しつつ性能を向上させることができるかについて議論されています。しかし、一般的には専門モデルが汎用モデルより劇的に優れているという証拠は少ないようです。</li>
+<li><strong>AIaaS（AI-as-a-Service）のビジネスモデル:</strong> APIベースのLLMの収益性について疑問が呈されており、「机の下のサーバー」時代への回帰を予想する声もあります。コスト、プライバシー、ベンダーロックインが懸念されています。</li>
+<li><strong>イノベーションの方向性:</strong> モデルのパラメータ数を増やす「ブルートフォーススケーリング」から、効率性、量子化、推論エンジン、注意機構、アクティブパラメータなど、より洗練された最適化へとイノベーションの焦点が移っているという見方があります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>MetaのMuse Glimmer 30Bのリリースは、オープンウェイトモデルの領域に新たな選択肢をもたらし、特にローカル実行に関心のある開発者コミュニティで活発な議論を巻き起こしました。モデルのパフォーマンスは既存のトップモデルに匹敵し、トークン効率も評価されています。しかし、高価なハードウェア要件とMetaの企業としての評判が、その受け入れに影を落としている側面もあります。全体として、オープンウェイトモデルの競争激化は、エンドユーザーにとってより多くの選択肢と改善をもたらすものとして期待されていますが、AI技術の発展とそれを支える企業の倫理的側面との間で、複雑な感情が入り混じった評価が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
