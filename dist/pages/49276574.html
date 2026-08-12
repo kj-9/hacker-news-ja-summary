@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zed: Delta - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Zed: Delta</h1>
+        <div class="meta">
+            投稿日: 2026年08月12日 | ランク: 2
+        </div>
+        <a href="https://zed.dev/blog/introducing-delta" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Zedが発表したAIエージェントとリアルタイムコラボレーションツール「Delta」に関するHacker Newsのコメントでは、AIによるコード要約やエージェント活用の課題と可能性、そしてZedエディタ本体の現状とAIへの注力に対する賛否が議論されています。</p>
+<h2>AIによるコード要約・生成エージェントの評価と課題</h2>
+<ul>
+<li><strong>有用性の疑問と課題:</strong> 多くのユーザーは、AIによるコード要約が冗長すぎたり、重要なエッジケースや基準を見落としたりする点を指摘しています。数行のコードを説明するのに長い段落を読むことになったり、あるいは逆に情報が欠落したりすることが問題視されています。要約を得るためにAIと「戦う」プロセスがストレスだと感じたり、AIの出力が冗長で「中間的な開発者が長い文章を書いているようだ」と感じる人もいます。</li>
+<li><strong>特定の文脈での有用性:</strong> 一方で、特定のプロンプト（問題と解決策を要求するなど）を使用することで、データベーススキーマ、API仕様、アルゴリズムなどの主要な点を概観するのに役立ち、大規模な差分を把握しやすくする、と評価する声もあります。AIの要約がコードベースの「ロードベアリング（負荷に耐える）部分」を特定するのに役立つという意見もあります。</li>
+<li><strong>改善の提案:</strong> AIの出力は「生のひき肉」のようなもので、リライトパスを要求して冗長性を排除し、能動態にするなど、人間による編集プロセスが必要だと指摘されています。「アスペクト指向プログラミングの逆」として、エラー処理やロギングなどの非意味的な部分を削除し、「おもちゃの例」に変換させることでコードを明確化するアイデアも提案されています。</li>
+</ul>
+<h2>Zedの新製品Deltaに対する期待と懸念</h2>
+<ul>
+<li><strong>期待される機能と利点:</strong> Deltaは、リアルタイムの共同会話や、会話をドキュメントとして扱う機能（インラインコメントなど）が特徴で、特にジュニアエンジニアの指導、作業の引き継ぎ、エージェントとの対話の効率化に貢献すると期待されています。テストユーザーからは、複数のモデルプロバイダーを並行して利用できる点や、会話の一部を直接アノテーションできる点が非常に有用だと評価されています。これにより、エージェントの巨大なテキスト応答に対してどこにコメントしているかを明確に伝えられるメリットが挙げられています。</li>
+<li><strong>価値と市場での位置付けへの疑問:</strong> しかし、多くのユーザーはDeltaが1年前には魅力的だったかもしれないが、現在のAIエージェントの急速な進化を考えると、その付加価値が不明確だと感じています。Codex Appなど、既存のツールにも同様のインラインコメント機能が既に存在することも指摘されています。</li>
+<li><strong>その他懸念:</strong> Deltaがクローズドソースであることや、将来的なロックインの可能性について懸念が表明されています。会話の記録が長期的にどれほどの価値を持つのか、Slackでの意思決定のように記録が埋もれてしまうのではないか、という疑問も呈されています。企業のセキュリティポリシーに反し、使用がブロックされる可能性も指摘されています。</li>
+</ul>
+<h2>Zedエディタの現状とAIへの注力に関する論争</h2>
+<ul>
+<li><strong>Zedエディタへの不満:</strong> 多くのコメントが、Zedがコードエディタとしての本質を見失い、AIツールに過度に注力していることへの不満を表明しています。ユーザーはZedエディタ本体のバグ、グリッチ、未完成な部分を指摘し、「停滞している」「abandonwareのようだ」と述べています。</li>
+<li><strong>理念との乖離:</strong> Zedが以前「AIを完全にオフにできる」と宣伝していたことと、現状のAI重視の姿勢との乖離を指摘し、失望を表明するユーザーが多数います。「ZedはVisual Studio Codeのホワイトラベル版のようだ」「Zedのアイデンティティ危機」といった厳しい意見も見られます。</li>
+<li><strong>AIなしの選択肢への需要:</strong> AIなしで手動でコーディングすることの価値を強調し、AIが生成するコードの遅さやバグの多さを指摘するユーザーもいます。AIに頼らない代替エディタ（Neovim、Emacs、ZedのAIなしフォークであるGram Editorなど）を求める声もあります。</li>
+<li><strong>肯定的な見方:</strong> 一方で、Zedが人間とAIのインタラクション分野で革新的な企業の一つであり、今後のWeb/モバイル版の展開（Delta.devは既にWebAssemblyでWeb対応済み）にも期待する声もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Zedが発表したAIエージェントとコラボレーションツール「Delta」は、リアルタイムな共同作業や会話の記録・アノテーション機能によって、AI活用を効率化する可能性を秘めていると評価される一方、AIの急速な進化による価値の不明確さや、クローズドソースによるロックインへの懸念が示されています。</p>
+<p>同時に、親プロジェクトであるZedエディタ本体の現状について、多くのユーザーが不満を抱いています。バグや未完成な部分が多く、AI機能への過度な注力がエディタとしての本質を見失わせているという批判が集中しています。AIによるコード要約自体も、冗長性や情報の欠落といった課題が指摘されており、より洗練されたAIとの対話方法が模索されています。Zedが今後の方向性としてAIに大きく舵を切る中で、ユーザーはエディタとしての品質維持と、AI活用の真の価値提供の両方を求めている状況が浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

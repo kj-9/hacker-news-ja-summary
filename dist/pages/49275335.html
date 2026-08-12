@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML over WebSockets: real-time SPAs with barely any JavaScript - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">HTML over WebSockets: real-time SPAs with barely any JavaScript</h1>
+        <div class="meta">
+            投稿日: 2026年08月12日 | ランク: 8
+        </div>
+        <a href="https://en.andros.dev/blog/ef4968f5/html-over-websockets-real-time-spas-with-barely-any-javascript/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にHTTPを介してHTMLを提供することと、WebSocketやSSE（Server-Sent Events）などのリアルタイム通信技術を組み合わせて部分的なページ更新を行うアプローチについて議論しています。多くのコメントは、これがSPA（Single Page Application）の問題点に対する解決策となりうるか、あるいは過去の技術の再発明に過ぎないのかという点に焦点を当てています。</p>
+<h2>リアルタイム通信技術の選択（WebSocket vs. SSE）</h2>
+<p>多くのコメントは、双方向通信が必要な場合はWebSocket、サーバーからの一方的なプッシュのみの場合はSSEがよりシンプルで安価であるという見解を支持しています。
+*   <strong>SSEの利点:</strong> 永続的な接続、組み込みの回復メカニズム（<code>Last-Event-ID</code>）、HTTPスタックのシンプルさ（<code>data:value\n\n</code>のような形式）。WebSocketのハンドシェイクに比べてタイム・トゥ・ファースト・バイトが速い可能性があると指摘されています。
+*   <strong>WebSocketの利点:</strong> 双方向通信の必要性がある場合に最適ですが、複雑なプロトコルスタックや、企業のDPIファイアウォールによるブロックの可能性といった懸念も挙げられています。
+*   <strong>WebTransportの登場:</strong> 2026年にはWebTransportが普及し、WebSocketよりも低遅延で双方向の通信が可能になるという意見もあります。</p>
+<h2>部分的なページ更新とフレームワーク</h2>
+<p>RailsのTurboやhtmxのようなフレームワークが、サーバーサイドレンダリングを基本としながら、部分的なページ更新を効率的に行うアプローチとして言及されています。
+*   <strong>Turbo/htmxのメリット:</strong> SPAの利点の90%を10%のコードで実現でき、APIなしでデータベースの状態を常に維持し、Reactなどの複雑なJSフレームワークを避けることができると説明されています。特にRails/Turboでは、カスタムHTML要素<code>turbo_frame</code>を使って、リンククリックやフォーム送信時に、対応するフレームの内容のみをサーバーからのレスポンスで置き換えることで、ほぼ無料で部分更新を実現できるとされています。
+*   <strong>懸念点:</strong> HTMLの一部を置き換える際に、入力要素のフォーカスが失われたり、スクロール位置がリセットされたりするなどのユーザビリティ上の問題が指摘されていますが、その経験はないという反論もあります。また、キャッシュの欠如も問題視されています。
+*   <strong>既存技術の再発明:</strong> このアプローチを、DHTML、ASP.NET Ajax、JSF Ajax、または過去のWeb Formsのような技術の再発明と捉える声も多く聞かれます。</p>
+<h2>SPAとの比較と開発モデル</h2>
+<p>コメントでは、SPAとこれらのサーバー駆動型アプローチの開発モデルが比較されています。
+*   <strong>SPAの利点:</strong> クライアント側で多くの処理を行うことでサーバーへのリクエスト数を減らし、データに基づいてDOMを関数的に操作する（Vue/React/Svelteモデル）ことで、状態管理が明確になるという意見があります。特に、静的型付けと組み合わせることでロジックエラーを減らせるとされています。
+*   <strong>htmx/LiveViewの懸念:</strong> HTMXでは、DOMを命令的に操作するために複数のサーバーサイド関数やテンプレートにコードが散らばる可能性があり、ショッピングカートのような複雑な例ではSPAモデルの方が優れていると指摘されています。
+*   <strong>「十分複雑なSPA」の批判:</strong> 「十分に複雑なSPAは、Fetchの半分をアドホックで、非公式に定義され、バグだらけで、遅い実装を含んでいる」という、グリーンズパンの第10法則になぞらえた批判もされています。</p>
+<h2>セキュリティと運用上の懸念</h2>
+<p>WebSocketサーバーの運用におけるセキュリティとDoS攻撃のリスクに関する懸念も表明されています。
+*   <strong>DoS攻撃とモニタリング:</strong> WebSocketサーバーが攻撃された場合の脆弱性や、WebサーバーとWebSocketサーバーの2つの状態を監視する複雑さ、DPIファイアウォールによるブロックの可能性などが挙げられています。
+*   <strong>キャッシュの欠如:</strong> WebSocketベースのアプローチでは、従来のHTTPサーバーのように簡単にHTMLコンテンツをキャッシュできないという点が指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、WebSocketやSSEを活用したHTMLの部分的な更新というアプローチについて、メリットとデメリットの両面から活発な議論が展開されています。RailsのTurboやhtmxのようなフレームワークは、SPAの複雑さを避けつつリアクティブなUXを実現する手段として評価されている一方で、これは過去のAjax的アプローチの再発明であり、新たな技術的課題（セキュリティ、運用、キャッシュなど）を伴うという批判的な意見も多いです。特に、シンプルで一方的なサーバープッシュにはSSEが適しており、複雑な双方向通信が必要な場合はWebTransportのような新しいプロトコルが将来を担う可能性があるという見方が示されています。全体として、Web開発における技術選択は、アプリケーションの要件、開発チームのスキル、および運用上の考慮事項によって大きく左右されるという認識が共有されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
