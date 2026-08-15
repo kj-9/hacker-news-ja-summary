@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Spectre Is Haunting Unicode - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A Spectre Is Haunting Unicode</h1>
+        <div class="meta">
+            投稿日: 2026年08月15日 | ランク: 8
+        </div>
+        <a href="https://www.dampfkraft.com/ghost-characters.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にUnicodeにおけるCJK（中国語、日本語、韓国語）文字の統合（Han Unification）とその歴史的背景、そして記事で紹介された「幽霊文字」に関する議論に集中しています。特に、Han Unificationにおける哲学的な問題や、それが言語処理に与える影響について深く掘り下げられています。</p>
+<h2>Han Unificationの論争</h2>
+<p>Han Unificationは、UnicodeがCJK文字を統合する際に行った、概念的に同じ文字を一つのコードポイントにまとめる試みであり、多くの議論を呼んでいます。</p>
+<ul>
+<li><strong>日本語からの不満</strong>: ユーザーは、特に日本語話者がUnicodeの「アリストテレス的本質主義」的傾向に反対し、概念的に同一と見なされた文字が統合されたことについて不満を表明したと指摘しています。これにより、日本語と中国語で字形が異なるにもかかわらず、同じコードポイントが割り当てられるケースが発生しました。</li>
+<li><strong>「アリストテレス的本質主義」</strong>: 「essentialist」という言葉は、Unicodeが文字を定義する哲学を指すものとして引用されています。これは、文字の「本質」に基づいて統合するアプローチであり、グリフや文脈による多様性を考慮しないと批判されています。</li>
+<li><strong>実用上の問題</strong>: Han Unificationは、特にテキスト検索において、見た目や意味が似ているが異なるコードポイントを持つ文字、あるいは同じコードポイントだが異なる字形を持つ文字の処理を複雑にしていると述べられています。</li>
+<li><strong>他の言語との比較</strong>: ラテン文字のaとキリル文字のаのように、見た目が同じでも異なるコードポイントを持つ文字がある一方で、CJK文字では見た目が異なるものが統合された例が挙げられ、その原則の一貫性の欠如が指摘されています。</li>
+</ul>
+<h2>「幽霊文字」の起源と存在意義</h2>
+<p>記事で紹介された「幽霊文字」に関する議論も行われています。</p>
+<ul>
+<li><strong>「彁」の起源</strong>: 「彁」という文字は、新聞記事の劣悪なスキャンが原因で生まれたという説が紹介されており、その調査に関する日本語の情報源も言及されています。</li>
+<li><strong>存在意義</strong>: 一部のユーザーは、欠落している実在の文字よりも、余分な無効な文字がある方がましだと考えています。</li>
+<li><strong>現代での利用</strong>: これらの「幽霊文字」が現代の若者言葉やオンラインスラングで使われているかという疑問も投げかけられています。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li><strong>著者への言及</strong>: 記事の著者であるPaul McCann氏が、日本のNLP分野で多大な貢献をしてきた優れたプログラマーであると紹介されています。</li>
+<li><strong>共産主義の象徴</strong>: Unicodeに共産主義の象徴（U+262D）が含まれていることに関する軽いジョークも交わされています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、主にUnicodeにおけるHan Unificationの歴史的経緯と、それが引き起こした技術的・哲学的な議論に焦点を当てています。日本語話者からの不満や、「アリストテレス的本質主義」という言葉で表現されるUnicodeの文字定義哲学に対する批判が目立ちます。特に、見た目や意味が異なる文字が統合されたことによるテキスト処理上の問題が指摘されています。また、記事で紹介された「幽霊文字」の起源についても議論され、その存在意義や現代における利用可能性が問われています。全体として、文字コードの設計が単なる技術的な問題に留まらず、言語、文化、哲学に深く関わる複雑な課題であることが浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
