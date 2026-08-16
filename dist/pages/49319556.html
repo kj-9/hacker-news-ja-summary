@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude: System Prompts - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Claude: System Prompts</h1>
+        <div class="meta">
+            投稿日: 2026年08月16日 | ランク: 3
+        </div>
+        <a href="https://platform.claude.com/docs/en/release-notes/system-prompts" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、AnthropicのClaudeシリーズ、特にOpus 5のシステムプロンプトの進化と、その長さ、内容、およびモデルのパフォーマンスへの影響について議論しています。特に、プロンプトの増加と、それがモデルの挙動、コスト、安全性、そして哲学に与える影響に焦点が当てられています。</p>
+<h2>システムプロンプトの進化と内容</h2>
+<p>システムプロンプトが初期の300語程度から現在の3000語以上に大幅に増加している点が注目されています。これは、Anthropicがモデルに、より詳細な指示、安全に関するガードレール、さらにはFable 5からOpus 5へのリダイレクトといった内部的なルーティングメカニズムに関する説明を組み込んでいるためです。Simonw氏は、システムプロンプトの変更履歴をGitコミットとして公開しており、特に輸出規制に関する最新の通知が追加されたことを指摘しています。しかし、これらの公開されているプロンプトには、より興味深いとされるツール定義が含まれていないことや、Claude Codeのプロンプトが公開されていないことに対する不満も表明されています。</p>
+<h2>長いシステムプロンプトがモデルのパフォーマンスに与える影響</h2>
+<p>長いシステムプロンプトがモデルのパフォーマンスに悪影響を与える可能性があるという懸念が複数挙げられています。主な理由は以下の通りです。</p>
+<ul>
+<li><strong>コンテキストウィンドウの消費:</strong> システムプロンプトが長くなることで、ユーザーのタスクに利用できるコンテキストウィンドウが減少します。これは、特に重要なコンテキストウィンドウの「最も重要な部分」がシステムプロンプトで埋め尽くされることを意味します。</li>
+<li><strong>コストと計算量:</strong> プロンプトが長くなると、API呼び出しごとに送信されるトークン数が増え、Anthropic側での計算量とエネルギー消費が増加します。ただし、Simonw氏は、コンシューマー向けチャット製品のプロンプトはAPIに影響せず、またプレフィックスキャッシュされるため、コストとパフォーマンスへの影響は大幅に削減されると説明しています。</li>
+<li><strong>指示の矛盾:</strong> プロンプト内の矛盾や一貫性のなさがモデルの品質を低下させるという指摘もあります。</li>
+</ul>
+<p>これに対し、モデルにシステムプロンプトを「焼き込む（bake in）」べきだという意見も出ましたが、モデルの柔軟性を損なう、更新が困難になる、インコンテキスト学習ほど効果的でないなどの理由から、多くのコメントで反論されています。</p>
+<h2>安全性、ガードレール、モデルの挙動</h2>
+<p>システムプロンプトには、子供の安全に関する指示や、ユーザーが危機状態にある場合の対応、特定の言葉遣いを避けるよう求める指示など、詳細な安全ガードレールが含まれるようになっています。初期のプロンプトにはこれらの安全対策がほとんど含まれていなかったことが指摘されており、これはLLMの利用が広がるにつれて安全性とアラインメントの定義が変化した結果だと考えられています。</p>
+<p>しかし、これらのガードレールや指示が実際にモデルの挙動にどの程度影響しているかについては疑問の声も上がっています。例えば、「簡潔に」という指示があるにもかかわらず、Claudeが非常に冗長な応答をすることがしばしばあると指摘されています。また、モデルがユーザーの危機を察知してタスクの完了よりもユーザーの健康を優先する、という指示に対して、それがツールとしての機能性を損なうのではないかという懸念も示されています。</p>
+<h2>Hacker Newsのモデレーションに関する傍流の議論</h2>
+<p>スレッドの後半では、Hacker NewsがAIに対して否定的なニュアンスを持つ記事を削除しているのではないかという懸念について、脱線した議論が展開されています。一部のユーザーは、特定のAI批判記事がフラグ付けされてフロントページから削除されたと主張していますが、他のユーザーは、これはユーザーが低品質な記事や論争を招く記事をフラグ付けするHacker Newsのモデレーションシステムが意図通りに機能した結果であると反論しています。</p>
+<h2>まとめ</h2>
+<p>AnthropicのClaudeのシステムプロンプトは、その複雑さと長さが増しており、安全性やアラインメントに関する詳細な指示が含まれるようになっています。これは、モデルの挙動を誘導し、危険な出力を防ぐためのAnthropicの取り組みを反映していますが、同時に、パフォーマンスの低下、コンテキストウィンドウの消費、およびモデルの実際の挙動との乖離といった懸念も引き起こしています。長いシステムプロンプトの必要性、その設計、およびモデルへの影響は、AIコミュニティにとって重要な議論の対象となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
