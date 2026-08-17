@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Preview of DuckDB v2.0 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A Preview of DuckDB v2.0</h1>
+        <div class="meta">
+            投稿日: 2026年08月17日 | ランク: 2
+        </div>
+        <a href="https://duckdb.org/2026/08/17/duckdb-20-highlights" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>DuckDB 2.0のリリースに関するコメントは、その技術的な進歩、特にクラウドデータウェアハウスの基盤としての可能性、新しい機能、そして多様なユースケースについて活発な議論が交わされています。多くのユーザーがDuckDBのポータビリティ、使いやすさ、パフォーマンスを高く評価しており、今後の発展に期待を寄せています。</p>
+<h2>クラウドデータウェアハウスとしての可能性とMotherDuck/DuckLake</h2>
+<p>DuckDBは元々インプロセス実行エンジンとして優れていましたが、最近の機能強化によりクラウドデータウェアハウスの基盤としても使えると認識されています。MotherDuckはすでにその方向性でサービスを提供しており、DuckLabsがMotherDuckの共同設立者であることが明らかになりました。また、DuckLakeという新しいサービスも登場し、DuckDBが分散型データ処理の領域に進出していることが示唆されています。ユーザーは、DuckDBが単一ノードでの処理に特化しているという従来の認識から、複数ノードでの協調作業への可能性に注目しています。</p>
+<h2>多様なユースケースと活用事例</h2>
+<p>コメントの多くは、DuckDBの幅広いユースケースと具体的な活用事例に言及しています。</p>
+<ul>
+<li><strong>ブラウザ内でのデータ分析:</strong> DuckDB WASMを使ってParquetファイルなどをブラウザ内で直接クエリし、ダッシュボードを構築する事例が多く報告されています。これにより、REST/GraphQLなどのAPIを介さずにデータ層にアクセスできる点が評価されています。</li>
+<li><strong>ETLパイプライン:</strong> K8sノード上でETLパイプラインを実行し、以前は大きなデータフレーム変換でメモリを大量に消費していた処理を、より小さなPod/ノードで実行できるようになったとの声があります。</li>
+<li><strong>ローカルでの大規模データ処理:</strong> 100GB規模のデータをローカルでクエリしたり、CLIツールとして大規模なモデルデータセットの後処理に使用したりする事例が紹介されています。</li>
+<li><strong>サーバーレスデータ層:</strong> Apache Supersetのサーバーレスゴールド層としてDuckDBを使用するケースもあります。</li>
+<li><strong>ニッチな用途:</strong> トリビアゲームの質問をフィルタリングして保存・クエリするような個人的な用途にも使われています。</li>
+<li><strong>Pandasの代替:</strong> 多くの場所でPandasの代わりにDuckDBがデータ変換に利用され、パフォーマンス向上に貢献していると報告されています。</li>
+</ul>
+<h2>新機能と今後の期待</h2>
+<p>DuckDB 2.0で導入される（または期待される）新機能についても言及されています。</p>
+<ul>
+<li><strong>非同期サポート:</strong> 今後の非同期サポートにより、HTTPトラフィックを処理するための小さなデータベースとして利用できるようになることに期待が寄せられています。特に数千のParquetファイルに対してクエリを行う際に、パフォーマンスが劇的に向上すると予測されています。</li>
+<li><strong>安定したC++ API:</strong> 拡張機能開発者にとって、安定したC++ APIが提供されることは大きなメリットであり、一度ビルドすれば常に動作するようになると喜ばれています。</li>
+<li><strong>Quackプロトコル:</strong> クライアント・サーバーモードを可能にするQuackプロトコルにより、より高度な並行処理が期待され、センサーデータなど新しい種類のツールとの連携が促進されると見られています。</li>
+<li><strong>ICUの再実装:</strong> ICUの再実装は、テキストエンコーディングや照合順序の処理における課題への対応として注目されていますが、その複雑さに懸念を示す声もあります。</li>
+<li><strong>その他:</strong> プロシージャル機能（PL/pgSQLのような）、リアルタイムマテリアライズドビュー、統計関数などの追加を望む声もあります。</li>
+</ul>
+<h2>議論されている課題と懸念</h2>
+<p>いくつかの課題や懸念も提起されています。</p>
+<ul>
+<li><strong>AIによる投稿の「匂い」:</strong> リリース発表の文章がAIによって書かれたかのような違和感を覚えるという指摘があり、その文体が内容から注意を逸らす可能性があると議論されました。</li>
+<li><strong>ランタイムサイズ:</strong> ブラウザ内でWASM版DuckDBを実行することを想定しているユーザーは、ランタイムサイズに関心を示しています。開発者からは、Emscriptenベースのビルドが約10MB、新しい機能の多くがオプション拡張として提供されるため、バイナリサイズは約20MBと小さいことが説明されています。</li>
+<li><strong>メモリ制限の動作:</strong> <code>memory_limit</code>が設定されているにもかかわらず、OOMキルが発生することがあるという問題点が指摘されています。</li>
+<li><strong>分散処理の課題:</strong> DuckDB単体では複数ノード間の作業を調整できないという認識があり、これを解決するためにHTTPレイヤーを介して水平スケーリングする方法や、DuckLake、Quack、DeepSeekのSmallpondといった分散DBがDuckDBをベースに開発されていることが挙げられています。</li>
+<li><strong>ClickHouseとの比較:</strong> 最近の変更により、DuckDBがClickHouseの領域に踏み込んでいると感じるユーザーもおり、プロトタイプからプロダクションへの移行でDuckDBの使用を再検討するきっかけになっているとの声もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>DuckDB 2.0は、インプロセス分析データベースという従来の強みに加え、クラウドデータウェアハウスの基盤、ブラウザ内での大規模データ処理、ETLパイプライン、そして将来的には分散システムとしての可能性を広げることで、データエコシステムにおいてさらに重要な位置を占めることが期待されています。非同期サポートや安定したC++ API、Quackプロトコルなどの新機能は、その汎用性とパフォーマンスを向上させ、多くの開発者にとって魅力的なツールであり続けるでしょう。一方で、AIによる文章の「匂い」やメモリ管理の課題など、コミュニティからのフィードバックも今後の開発に影響を与える可能性があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
