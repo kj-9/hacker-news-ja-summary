@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How does IKEA come up with names for its products? - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">How does IKEA come up with names for its products?</h1>
+        <div class="meta">
+            投稿日: 2026年08月18日 | ランク: 7
+        </div>
+        <a href="https://www.ikea.com/se/en/customer-service/knowledge/articles/6f564c4d-2ccc-46de-b643-545a3948dc79.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、IKEAの製品命名戦略に関する記事について議論しています。多くの人が記事の簡潔さと明瞭さを賞賛する一方で、命名規則の具体的な詳細、特に言語的な側面や文化的な側面についてコメントしています。</p>
+<h2>記事の明瞭さへの賞賛と企業コンテンツへの皮肉</h2>
+<p>多くのコメント投稿者は、IKEAの製品命名戦略に関する記事が、質問に明確かつ簡潔に答えている点を高く評価しています。あるユーザーはこれを「今年見た企業コンテンツの中で最高かもしれない」とまで述べています。しかし、このようなシンプルでわかりやすいコミュニケーションが例外的であることに寂しさを感じる声や、現代の企業コンテンツによく見られる「バズワード」や「パンチの効いた見出し」がないと、かえって情報を見つけられないと皮肉る声も見られます。これに関連して、イギリスのスーパーマーケットチェーンIcelandがコンサルタントを痛烈に批判するウェブサイトの「暗黒時代」セクションが紹介され、その率直さが称賛されています。</p>
+<h2>命名規則に関する具体的な疑問と議論</h2>
+<ul>
+<li><strong>「数字」の繰り返し表現:</strong> 創設者イングヴァル・カンプラードが数字を覚えるのが苦手だったという記述で、「numbers and numbers」という表現が使われていることについて、奇妙だと感じ、スウェーデン語の表現ではないかという疑問が提起されています。スウェーデン語話者からは、単純な誤訳である可能性や、同様の繰り返し表現がスウェーデン語には存在しないという意見が出ています。</li>
+<li><strong>Å, Ä, Öの推奨:</strong> 製品名にÅ, Ä, Öの文字を含めることが推奨されている点について、意図的なものなのか、それとも単にスウェーデン語の自然な結果なのかという疑問が投げかけられています。これはスウェーデンのアイデンティティを強調し、非スウェーデン語話者にはエキゾチックに感じさせるための意図的な戦略であるという見方が優勢です。スウェーデン語話者からは、これらの文字はウムラウトではなく、独立した文字としてスウェーデン語のアルファベットの最後に並ぶことが説明されています。</li>
+<li><strong>「不適切な意味」の回避ルール:</strong> 「あらゆる製品名が、他の言語での不適切な意味、政治的または宗教的な関連性を避けるために慎重にチェックされる」というルールについて、過去の製品名（例: JERKERデスク）がこのルールに反しているように見えるという指摘があります。これは、このルールが後になって追加されたものである可能性を示唆しています。</li>
+<li><strong>年間製品数:</strong> 年間2,000〜3,000の新製品が命名されているという記述について、それが「製品」の数なのか「名前」の数なのか疑問が呈されています。一部のユーザーは、この数字が高すぎるとして、IKEAのカタログの総製品数を参照して反論しています。</li>
+</ul>
+<h2>製品命名の多様性と文化的な側面</h2>
+<p>IKEAの命名戦略は、特定の種類の製品（例：ソファ、本棚、ドアマット）に特定のカテゴリの名称（例：スウェーデンの地名、男性名、デンマークの地名）を割り当てるという点で議論されています。一部のユーザーは、これにより製品が特定の文化的な連想を持つことになり、スウェーデン人にとっては奇妙に感じられる場合があると述べています。また、ポーランド語などの発音しにくい言語の地名が製品名に使われた場合の難しさについても言及されています。一方で、一部のブランド専門家は、単なる記述的な名前よりも、大胆で特徴的な名前がブランドにとって有利であると指摘しています。その他、ユーモアの要素や意図的な駄洒落（例: fejka、nattbad）が含まれている可能性や、デンマークとスウェーデンのライバル関係が命名に影響しているという逸話も共有されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、IKEAの製品命名戦略に関する記事を非常に肯定的かつ詳細に議論しています。記事の明瞭さや簡潔さを賞賛する声が多く聞かれる一方で、命名規則の具体的な詳細、特にスウェーデン語の文字の使用、不適切な名前の回避策、年間新製品数といった点について深い考察や疑問が提示されています。また、製品名が持つ文化的な意味合いや、それが各国語話者に与える影響についても活発な意見交換が行われ、IKEAの命名戦略が単なるブランド構築を超えた、興味深い言語的・文化的現象であることが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

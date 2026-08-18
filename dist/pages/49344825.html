@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using the railway network as a flatbed scanner - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Using the railway network as a flatbed scanner</h1>
+        <div class="meta">
+            投稿日: 2026年08月18日 | ランク: 5
+        </div>
+        <a href="https://philo.gay/linecam/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、列車からのラインスキャンカメラ写真プロジェクトについてのものです。このプロジェクトは、列車が移動しながら風景を撮影するというユニークな手法で、過去の類似プロジェクトや技術、将来の応用について活発な議論が交わされています。</p>
+<h2>過去の類似プロジェクトと先行者</h2>
+<p>コメントの多くは、投稿されたプロジェクトと同様のアイデアや技術が以前にも存在したことを指摘しています。
+*   <strong>フラットベッドスキャナーを改造したカメラ:</strong> Matthias Wandelがデジタルカメラ登場以前にフラットベッドスキャナーを電動モーターに取り付けてデジタル写真を撮影したブログ記事が言及されています（[1.2], [1.2.1.1]）。これは当時のSlashdotで非常に人気を博しました。
+*   <strong>スリットスキャンカメラ:</strong> Ward Cunninghamと筆者が2008年にiSightカメラを使って列車の画像をスリットスキャンで撮影した事例が共有されています（[1.5]）。また、Adam Magyarが2013年頃に手作りのスリットスキャンカメラでニューヨークの地下鉄を撮影した作品も紹介されています（[1.28]）。
+*   <strong>鉄道事業者による軌道検査:</strong> 鉄道会社が線形スキャンカメラを線路に向けて取り付けて、軌道を検査していることが指摘されています（[1.3], [1.6]）。
+*   <strong>フォトレディカメラ:</strong> 陸上競技のフォトレディ判定に使用されるLynxカメラも、同じラインスキャン技術に基づいていると説明されています（[1.10]）。
+*   <strong>産業用ラインスキャンカメラ:</strong> 産業界では、高速で動くコンベア上の物体を撮影するためにラインスキャンカメラが非常に一般的であることが述べられています（[1.10.1]）。
+*   <strong>衛星画像:</strong> 多くのイメージング衛星がラインスキャン技術を用いて写真を撮影していることも指摘されています（[1.13], [1.21.1]）。</p>
+<h2>プロジェクトの課題と解決策</h2>
+<p>ラインスキャン写真特有の技術的な課題と、それに対する提案や既存の解決策が議論されています。
+*   <strong>水平方向の圧縮/歪み:</strong> 列車の速度やカメラの動きによって画像が歪む問題（[1.5], [1.22]）。
+    *   Matthias Wandelのプロジェクトでは、ガレージのドアが開く写真に見られるような奇妙な歪みが話題になりました（[1.2.1.1.4]）。
+    *   dllu氏は、視差によるRGBフリンジを完全に解消することは困難であると説明しています（[1.27]）。
+*   <strong>巨大な画像ファイルサイズ:</strong> 撮影された画像が非常に大きくなるため、表示や共有が困難であるという問題（[1.27]）。
+    *   dllu氏は、この問題に対処するために自身で画像ビューア「sriv」を開発したと述べています（[1.27]）。また、単一の超幅広画像ではなく複数行で表示することで、より人間工学的に優れていると提案しています（[1.27]）。
+*   <strong>色のずれ（RGBフリンジ）:</strong> 各チャンネルの露出時間のずれによる色のずれ（[1.27]）。
+    *   dllu氏は、相関ベースのアプローチでRGBフリンジを自動補正する方法を実装したと共有しています（[1.27]）。
+*   <strong>スタンドアロン性:</strong> ラップトップに依存せず、よりポータブルなシステムにするという目標（[1.27]）。
+    *   dllu氏は、NVIDIA Jetson Orin Nanoとタッチスクリーン、カスタムケースを組み合わせてスタンドアロンシステムを構築したと報告しています（[1.19.1], [1.27]）。
+*   <strong>ブレの補正:</strong> 加速度計だけでは限界があるという意見（[1.22]）。
+    *   別の通常カメラを同時に使用して画像をスティッチングする方が簡単ではないかという提案もあります（[1.24]）。</p>
+<h2>クリエイティブな応用と今後の展望</h2>
+<p>このラインスキャン技術の芸術的・実用的な可能性について、さまざまな意見が寄せられています。
+*   <strong>芸術性と実用性の融合:</strong> awwaiid氏は、このようなプロジェクトを「実用性と芸術の境界線で踊る」と表現し、インスピレーションを受けるとコメントしています（[1.4]）。
+*   <strong>「XをYとして使う」プロジェクト:</strong> otherayden氏は、YouTubeをマウント可能なファイルシステムとして使ったり、WiiをWebサーバーとして使ったりするような、型破りな「XをYとして使う」プロジェクトに魅力を感じると述べています（[1.4.1]）。
+*   <strong>手動スプライシングによるアニメーション:</strong> decae氏は、通常のカメラで撮影した動画をフレームごとに手動でスプライシングし、抽象的な背景の中で被写体に焦点を当てた興味深いアニメーションを制作したことを紹介しています（[1.12]）。
+*   <strong>ビデオステレオグラム:</strong> andrewla氏は、移動する列車からの動画を利用して、片方の目を時間/距離で遅らせることで、非常に長いベースラインのビデオステレオグラムを作成し、橋や雲の3D構造を見ることを楽しんでいると述べています（[1.14]）。
+*   <strong>将来の改良案:</strong>
+    *   スマートフォンカメラでの高速度記録の限界と、IMUやGNSSの記録を組み合わせることの可能性（[1.11], [1.11.1.1]）。
+    *   NeRF（Neural Radiance Fields）やGaussian splattingといった最新技術との組み合わせの可能性（[1.8], [1.11]）。
+*   <strong>既存ツール:</strong> jonty氏が作成したウェブベースのスリットスキャンツール「slitscan.space」が紹介されており、多くのユーザーが楽しんでいるようです（[1.7], [1.7.1], [1.7.2]）。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、列車からのラインスキャンカメラ写真プロジェクトが、技術的な課題を克服しつつ、創造的な可能性を探求する魅力的な分野であることを示しています。過去の先駆的な試みから、フォトレディカメラや産業用、さらには宇宙での応用といった実用例、そして現在のソフトウェアやハードウェアの進歩による改良や新たな芸術表現への挑戦まで、幅広い視点から議論が展開されました。特に、歪み補正、巨大ファイル処理、スタンドアロン化といった課題への取り組みや、手動スプライシング、ビデオステレオグラム、将来的なNeRF/Gaussian splattingとの組み合わせといった創造的な応用例が提示され、コミュニティ全体の技術とアートへの深い関心と探求心が見て取れます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

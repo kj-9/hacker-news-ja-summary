@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixing a bricked Framework laptop - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Fixing a bricked Framework laptop</h1>
+        <div class="meta">
+            投稿日: 2026年08月18日 | ランク: 6
+        </div>
+        <a href="https://quantum5.ca/2026/08/16/fixing-bricked-amd-7040-series-framework-13-laptop-with-20-tools/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、公式BIOSアップデートが原因でFrameworkラップトップが故障したという投稿者（OP）の経験を中心に展開されています。OPは、Frameworkのサポートが保証期間切れを理由にマザーボードの交換を勧め、500カナダドル以上の費用がかかると言われたことに不満を表明しました。OPは最終的に、自力でBIOSチップを再フラッシュして問題を解決しました。コメント欄では、他のユーザーも同様の不満や懸念を共有し、Frameworkの修理可能性の主張と実際の経験との乖離について議論しています。</p>
+<h2>公式アップデートによるデバイスの不具合</h2>
+<p>多くのユーザーが、FrameworkだけでなくGoogle、Roku、Vizio、Lenovo、HPなどの様々なデバイスで、公式アップデートによってデバイスの動作が悪くなったり、機能しなくなったりした経験を共有しています。</p>
+<ul>
+<li><strong>Google製品の例:</strong> あるユーザーは、Google TVがGeminiアップデート後に遅くなり、Pixelのバッテリー寿命もアップデートごとに悪化していると報告しています (1.1)。Fitbitの古い体重計がファームウェアアップデートによって故障し、Google Meshネットワークがアップデート後に使えなくなったという報告もあります (1.1.2, 1.1.3)。</li>
+<li><strong>保証と責任:</strong> カスタムファームウェアのインストールが保証を無効にするのであれば、公式アップデートが保証期間を延長するべきだという意見もあります (1.1)。また、ソフトウェアの作者は、そのソフトウェアが引き起こす可能性のある物的損害に対して責任を負うべきであり、そのような苦情処理を容易にするための法整備が必要だという意見も出ています (1.1.5)。</li>
+<li><strong>BIOSアップデートのリスク:</strong> BIOSアップデートは常に危険が伴うものであり、「壊れていないなら直すな」という格言に従うべきだという意見もあります (1.24.1)。しかし、一部のハイエンドマザーボードにはデュアルBIOSチップやBIOSリカバリ機能が搭載されており、アップデート失敗時に復旧できるという指摘もあります (1.3.1, 1.8.2, 1.24.1.1)。</li>
+</ul>
+<h2>Frameworkの修理可能性と顧客サポート</h2>
+<p>Frameworkは修理可能性を売りにしていますが、今回の件を含むいくつかのコメントでは、その主張と現実とのギャップが指摘されています。</p>
+<ul>
+<li><strong>BIOSリカバリ機能の欠如:</strong> OPや他のユーザーは、FrameworkのマザーボードにはUSBスティックからBIOSファイルをフラッシュしてリカバリできる機能（「BIOSリカバリ」や「CrashFree BIOS」などと呼ばれる）が欠けていることを批判しています (1.3, 1.3.1)。OPは、この機能が$70のデスクトップマザーボードにも搭載されていると指摘し、Frameworkが公式アップデートで問題が発生した場合の修理/再フラッシュ費用を負担すべきだと主張しています (1.3)。</li>
+<li><strong>保証期間切れ後のサポート:</strong> 保証期間が切れた後、Frameworkのサポートがマザーボードの交換を唯一の選択肢として提示したことに対し、ユーザーは失望を表明しています (1.3, 1.24)。バッテリー交換や指紋リーダーの問題など、保証期間内であれば Framework が対応したという肯定的な経験もありますが (1.5.1, 1.12)、保証期間切れ後の対応には一貫性のない部分が見られます。</li>
+<li><strong>パーツ販売と「修理可能性」のビジネスモデル:</strong> Frameworkのパーツ販売が主要なビジネスケースなのではないかという「陰謀論」を唱えるユーザーもいます (1.11.2)。部品が容易に入手できることは評価される一方で、市場競争がないため、結局はFrameworkから高価な部品を購入するしかなくなるという懸念も示されています (1.11)。</li>
+<li><strong>修理のしやすさ vs. 実際の故障率:</strong> Frameworkは分解しやすいが、故障が多く、他のブランドのノートPCと比較して修理可能性のメリットが過大評価されているという意見もあります (1.11.1, 1.15.2)。</li>
+</ul>
+<h2>他のノートPCとの比較</h2>
+<p>Frameworkの修理可能性は、他のノートPCと比較して議論されています。</p>
+<ul>
+<li><strong>エンタープライズ向けノートPC:</strong> Dell、Lenovo、HPなどのエンタープライズ向けノートPCは、長年にわたりIT部門向けに修理可能なモデルを提供してきたことが指摘されています (1.15)。しかし、これらのモデルでも最近は修理可能性が低下しているという意見や、Frameworkのようにマザーボードをアップグレードできる柔軟性はないという反論もあります (1.15.1.2, 1.15.3)。</li>
+<li><strong>MacBookとの比較:</strong> FrameworkとMacBookを比較する意見も多く見られます。MacBookは修理が困難であると批判されることが多いですが、一方で部品の品質が高く、故障が少ないという経験談もあります (1.2, 1.11)。しかし、MacBookでもポートがはんだ付けされており、交換が困難であるという指摘も (1.15.10.2)、一方でAppleは特定の修理部品（USBドーターボードなど）を正規の販売店で入手可能にしているという情報も提供されています (1.15.10.2.1.1)。</li>
+<li><strong>バッテリー寿命 (Linux):</strong> FrameworkのLinuxディストリビューションでのバッテリー性能の悪さに言及するユーザーもいます (1.2)。新しいIntelボードでは改善が見られるという報告もありますが (1.2.1)、MacBook Proに戻ったユーザーもいます (1.2)。</li>
+</ul>
+<h2>その他の問題点</h2>
+<ul>
+<li><strong>USB-C問題:</strong> 一部のユーザーは、FrameworkラップトップのUSB-Cポートに信頼性の問題があり、ECコントローラーにもバグが多いと報告しています (1.18)。</li>
+<li><strong>電源関連の問題:</strong> 長期間使用しなかったFrameworkラップトップが起動しなくなった、あるいはバッテリーの充電閾値設定にバグがあるなどの電源関連の問題も報告されています (1.9, 1.27)。</li>
+<li><strong>個人情報漏洩:</strong> Frameworkがサードパーティに委託した情報管理で個人情報漏洩が発生したことについても言及されていますが、これは現代では一般的な問題であるとの見方も示されています (1.10)。</li>
+</ul>
+<h2>まとめ</h2>
+<p>本件の議論は、Frameworkが掲げる「修理可能性」という理念が、公式BIOSアップデートの失敗によって生じた故障への対応という点で十分に実現されていないというユーザーの失望を浮き彫りにしています。多くのユーザーが、BIOSリカバリ機能の欠如や、保証期間切れ後のサポートの不十分さ、さらには他のメーカーでも見られる公式アップデートによるデバイスの不具合について懸念を表明しています。一方で、Frameworkのモジュール性や部品交換の容易さを評価する声もありますが、それが必ずしも他のメーカーよりも優れた全体的なユーザーエクスペリエンスに繋がるとは限らないという複雑な実態が示されました。Frameworkがその理念を真に追求するためには、今回の件のような根本的な問題への対応と、より一貫性のある顧客サポートの改善が求められています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

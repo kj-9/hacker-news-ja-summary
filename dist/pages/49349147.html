@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data centers raise nearby temperatures by up to 4 degrees in Phoenix - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Data centers raise nearby temperatures by up to 4 degrees in Phoenix</h1>
+        <div class="meta">
+            投稿日: 2026年08月18日 | ランク: 9
+        </div>
+        <a href="https://asmedigitalcollection.asme.org/sustainablebuildings/article/7/2/024501/1233035/Data-Center-Waste-Heat-as-an-Emerging-Urban" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、データセンターが引き起こす局所的な熱上昇、水と電力の消費、騒音公害といった問題について議論しています。特にAIデータセンターの急速な普及とそれに関連する経済的・環境的影響に焦点を当てています。</p>
+<h2>データセンターによる局所的な熱上昇</h2>
+<p>コメントでは、データセンターが周囲の気温を上昇させるという論文の主張が議論されています。
+*   <strong>論文の主張</strong>：フェニックス地域のデータセンターが、風下側の気温を最大2.2°C、平均で0.7〜0.9°C上昇させ、この熱の影響は施設から最大500mまで検出可能だとされています。
+*   <strong>懐疑的な意見</strong>：一部のコメントは、この温度上昇がデータセンターの廃熱に起因するとする主張に懐疑的です。アスファルトの駐車場や他の産業施設も同様に熱を発生させる可能性があり、論文の方法論に疑問を投げかけています。また、論文の数字は平均値であり、最大値ではないという指摘や、地球温暖化と局所的な熱上昇を混同すべきではないという意見もあります。
+*   <strong>都市計画の失敗</strong>：一部のデータセンターが住宅地のすぐ近くに建設されており、これは都市計画の失敗であるという見方もあります。</p>
+<h2>水と電力の消費、および費用</h2>
+<p>データセンターの建設・運用に伴う水と電力の消費、それが住民の光熱費に与える影響について多くの議論が交わされています。
+*   <strong>電力需要と料金</strong>：AIデータセンターは従来のデータセンターと比較してはるかに多くの電力を消費するため、電力網に大きな負担をかけ、住民の電気料金上昇につながるという懸念が表明されています。一部の地域では、データセンターが新設されたことで電気料金が大幅に上昇したという具体的な経験が語られています。
+*   <strong>水の利用</strong>：データセンターの冷却には大量の水が使われます。特に乾燥地域での水の使用は、地域の水資源に影響を与え、水不足を悪化させる可能性があります。ただし、データセンター全体の水使用量が誇張されているという意見や、発電に必要な水の使用量を含めて計算されているため誤解を招くという指摘もあります。
+*   <strong>経済的インセンティブと規制</strong>：データセンターは、建設や運営において地方自治体から多額の税制優遇措置を受けることがあり、これが地域の住民に不公平な負担を強いているという批判があります。オレゴン州のように、データセンターに高い電力料金を課すことで住民の料金を下げる試みも行われています。</p>
+<h2>騒音公害とゾーニング</h2>
+<p>データセンターが発する騒音も、住民にとっての懸念事項です。
+*   <strong>騒音の影響</strong>：冷却システムやオンサイト発電機からの騒音は、特に住宅地の近くにデータセンターが建設された場合に問題となります。
+*   <strong>ゾーニングの重要性</strong>：データセンターは、重工業施設と同様に、住宅地から離れた場所に建設されるべきだという意見が多く、適切なゾーニングが重要であると指摘されています。しかし、一部の地域では、不適切なゾーニングや事前の緩衝地帯の欠如により、問題が発生しています。</p>
+<h2>AIデータセンターに対する批判の背景</h2>
+<p>多くのコメントが、AIデータセンターに対する批判が単なる環境問題だけでなく、より広範な社会的・経済的懸念の代理（プロキシ）として機能しているという見方をしています。
+*   <strong>AIへの感情</strong>：AIが雇用を奪う、あるいは社会にネガティブな影響を与えるという一般的な不安が、データセンターへの反感として現れているという意見が多く見られます。人々は、AI自体ではなく、その物理的な具現化であるデータセンターに対して抗議することで、AIへの不満を表明しています。
+*   <strong>企業への不信</strong>：データセンターを建設する企業が、地域のコミュニティの利益を顧みず、利益最大化のみを追求しているという認識が、反発の根源にあると指摘されています。企業が地域社会に貢献することなく、税制優遇を受けたり、公共資源（電力、水）を大量に消費したりすることへの不満が強いです。
+*   <strong>スケールの問題</strong>：過去数十年にわたるデータセンターの建設は問題視されませんでしたが、AIブームによるデータセンターの建設規模と速度が前例のないレベルに達しており、これが新しい問題を引き起こしているという見方があります。
+*   <strong>情報戦</strong>：一部のコメントは、データセンターへの反対運動が、外国勢力や競合他社によって煽られた情報戦の一部である可能性を指摘しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AIデータセンターが局所的な熱上昇、水・電力の大量消費、騒音公害といった環境的・地域的問題を引き起こしていると指摘しています。特に、住宅地に近い立地、不適切なゾーニング、企業が受ける税制優遇、そして電力料金上昇への影響が懸念されています。これらの問題は、AIに対する広範な不安や、企業が地域社会の利益を顧みないことへの不満の代理として表れていると分析されています。一方で、データセンターが社会に提供する価値を評価し、批判が誇張されている、あるいは情報戦の一部であるという意見も存在します。多くの参加者は、データセンター建設の増加に伴い、より良い規制、公正な料金設定、そして地域社会との協調が不可欠であるという点で一致しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
