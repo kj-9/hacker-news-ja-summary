@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extensible Software in the age of LLMs - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Extensible Software in the age of LLMs</h1>
+        <div class="meta">
+            投稿日: 2026年08月19日 | ランク: 9
+        </div>
+        <a href="https://jeremymorrell.dev/blog/extensible-software-in-the-age-of-llms/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、LLM（大規模言語モデル）の台頭がソフトウェア開発の未来にどのような影響を与えるか、特にエンドユーザーがソフトウェアを構築・カスタマイズする方法に焦点を当てて議論しています。多くのコメントは、AIが開発プロセスを自動化し、プログラマーの役割を変革する可能性について探っています。</p>
+<h2>LLMによるソフトウェア開発の未来</h2>
+<p>AIがソフトウェア開発における手動テストのプラットフォームとして機能し、ユーザーのリクエストからプルリクエストまでを自動生成する未来が描かれています。これにより、プログラマーが不要になる、あるいはLLMが生成したコードの検証や残りのギャップを埋める役割を担うといった変革が議論されています。LLMが、複雑なシステム変更における既存機能の破壊を避けるために、仕様書やプロジェクトマネージャー（PM）の役割を果たす可能性も指摘されています。</p>
+<h2>LLM生成コードの品質とメンテナンス</h2>
+<p>LLMが生成したプログラムの品質とそのメンテナンスの課題についても言及されています。クライアントがLLM生成の「概念実証（PoC）」を持ってきて、それを修正するだけで済むと考えているケースに対し、実際には既存コードの修正が困難であるという経験が語られています。LLMが生成したコードの「messy（乱雑さ）」が人間の手でも触れられないほどの場合、結局はLLM自身がリバースエンジニアリングして書き直すことになり、それがAIサービスの追加料金として発生する可能性も示唆されています。</p>
+<h2>個人用ソフトウェア開発におけるLLMの役割</h2>
+<p>LLMが個人用ソフトウェアの開発をいかに容易にするかについても触れられています。あるユーザーは、LLMを使ってわずか30分でアプリケーションを起動するシンプルなツールを作成し、既存の肥大化した商用オプションよりも優れていると感じています。しかし、別のユーザーは、同様のシンプルなMP3プレイヤーを2002年に30分で作成した経験を共有し、LLMがなくても既存の知識があれば可能であったと指摘しています。LLMはプログラミング知識がない人にとっては障壁を取り除く一方で、経験豊富な開発者はLLMをレバレッジしてより効率的に高品質なソフトウェアを設計できるという見解もあります。</p>
+<h2>カスタマイズ可能なソフトウェアとAIの融合</h2>
+<p>一部のコメントは、Cloudflare OSやSmalltalkのような環境、あるいはローカルファーストのWebアプリなど、カスタマイズ可能で拡張性のあるプラットフォームにAIがどのように統合されるかについて言及しています。これらのプラットフォームは、エンドユーザーが自身のニーズに合わせてアプリを構築・カスタマイズすることを可能にし、AIエージェントがそのプロセスを支援することが期待されています。しかし、既存の企業向けデータとの連携や、Cloudflare OSのような名称が誤解を招く可能性についても議論されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、LLMがソフトウェア開発の未来に大きな影響を与えるという共通認識を示しつつ、その影響の具体像については多様な意見を提示しています。AIがコード生成とテストを自動化し、プログラマーの役割を変化させる可能性や、エンドユーザーがより簡単にパーソナルなソフトウェアを構築できるようになるという楽観的な見方がある一方で、LLM生成コードの品質問題、既存コードのメンテナンスの困難さ、そしてAIへの過度な依存がソフトウェアの品質低下を招く可能性といった懸念も表明されています。最終的には、LLMがソフトウェア開発を民主化し、より多くの人々が自身のニーズに合ったツールを作成できるようになる一方で、その進化は現在の課題を克服し、適切なガバナンスと専門知識の活用が不可欠であると示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
