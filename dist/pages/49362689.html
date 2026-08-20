@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Can Do That - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">HTML Can Do That</h1>
+        <div class="meta">
+            投稿日: 2026年08月20日 | ランク: 7
+        </div>
+        <a href="https://chrisburnell.com/html-can-do-that/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、「HTMLができること」という記事について議論しています。多くのユーザーが現代のHTMLとCSSの進化に驚きと興奮を示し、JavaScriptなしで多くのインタラクティブな機能を実現できる可能性について語っています。一方で、既存のHTML機能の限界、ブラウザ間の実装のばらつき、UXの課題、そしてJavaScriptを完全に排除することの現実性についても議論が交わされています。</p>
+<h2><code>datalist</code>要素の限界</h2>
+<p>多くのユーザーが、<code>datalist</code>要素が検索入力を含むコンボボックスの代わりにはならないと指摘しています。
+*   <code>datalist</code>はユーザーがリストにない値を入力することを許容するため、厳密なデータ契約が必要な場合には不適切であると指摘されています (yurishimo, vlucas, dematz)。
+*   ファジーフィルタリングやタイプミス軽減機能がなく、よりリッチなコンボボックス機能が必要な場合は、JavaScriptライブラリが依然として必要とされています (yurishimo, vlucas)。
+*   ブラウザやOSのタイプミス軽減機能があるという意見もありますが、それは限定的であるとされています (sarchertech, vlucas)。
+*   古いブラウザへの対応や、日付ピッカーのようなネイティブ機能の実際のパフォーマンスが不十分であるという懸念も示されています (yurishimo)。
+*   <code>datalist</code>のブラウザサポートはまだらであり、バグも多いと指摘されています (Groxx)。</p>
+<h2><code>hidden="until-found"</code>属性のユースケース</h2>
+<p><code>hidden="until-found"</code>属性について、多くのユーザーがその用途を議論しています。
+*   この属性は、ブラウザの検索機能（Ctrl+Fなど）でマッチした場合にのみ要素を表示する、一方向の表示/非表示メカニズムとして機能すると説明されています (dofm, aitchnyu, culi)。
+*   具体的なユースケースとして、価格条件や除外事項のような「必要なときにだけ読まれる」追加情報の表示、JSなしの画像プレビュー、折りたたみ可能なツリー構造やアコーディオン、アクセシビリティのための「コンテンツにスキップ」リンク、タブコンテンツなどが挙げられています (dofm, seki285, wvbdmp, pseudosavant, akersten, megaman821)。
+*   スクレイパーのための「ポイズンコンテンツ」の配置など、意図しない使用方法も示唆されています (dspillett)。
+*   ただし、この属性が古いユーザーエージェントやアクセシビリティツールでどのように解釈されるかを確認する必要があるという懸念も示されています (dspillett)。</p>
+<h2>JavaScriptを最小限に抑えたウェブ開発とSPAへの批判</h2>
+<p>現代のHTMLとCSSでJavaScriptなしに多くのことができるという考えは、多くのユーザーに支持されています。
+*   JavaScriptをサイトごとに有効にするNoScriptユーザーは、最新のHTML機能の採用と、SPAが不要なケースが多いことへの認識を望んでいます (jamescun)。
+*   SPA（シングルページアプリケーション）は、ブックマークの不便さや、フロントエンドとバックエンドのチーム分けによって生じた問題など、煩わしいウェブパターンだと批判されています (gunalx, phyzix5761)。
+*   BlazorのようなSPAフレームワークでもURL更新や状態復元は可能であり、その問題は解決できると指摘されています (ThunderSizzle, tyre)。
+*   NoScriptを使用すると、Googleがいかに多くのウェブサイトに普及しているか、そしてトラッキングが行われているかを認識できるという意見もあります (evenhash)。
+*   HTMXのようなツールはJavaScriptを必要とするため、NoScript環境では機能しないという指摘もあります (nozzlegear, ipsod)。
+*   JavaScriptなしでウェブサイトを構築する実験を行い、多くのインタラクティブな機能がHTMLだけで実現できることを示した例も挙げられています (stagas)。</p>
+<h2>その他の注目すべき点</h2>
+<ul>
+<li><strong>新しいHTML属性の設計</strong>：<code>popovertarget</code>や<code>popovertargetaction</code>のような新しい属性の設計について、JavaScriptの機能と重複する部分があるという疑問が提示されています (hyperhello)。一方で、ネイティブの実装によって期待されるUXの均一性が得られるという反論もあります (Aachen)。</li>
+<li><strong>ソート可能なテーブル</strong>：HTMLがネイティブでソート可能なテーブルをサポートすることを望む声があります (hk__2)。しかし、一部のユーザーはこれをJavaScriptの領域と考え、既存のJSライブラリで解決済みだと主張しています (krapp)。また、サーバーサイドレンダリングでソートパラメータ付きのリンクを使用する方法や、クライアントサイドソートの複雑さについても議論されています (wild_egg, jwr)。</li>
+<li><strong>日付入力の課題</strong>：<code>date</code>入力がプラットフォームネイティブな形式に依存するため、多言語・多国籍環境でのUXに混乱が生じることが指摘されています。ISO形式の強制や、<code>lang</code>属性に基づくローカライズの必要性が議論されています (silvestrov, jimmygrapes)。</li>
+<li><strong>HTMLの役割</strong>：HTMLがレイアウトではなく「構造」を記述するものであるという、長年の議論が再燃しています (zephen, krapp, crab_galaxy)。</li>
+<li><strong>新機能への慎重さ</strong>：新しいブラウザ機能の採用には慎重な姿勢を示すユーザーもいます。ブラウザ間の実装のばらつきや、古い機能でも可能なことに対して新しい機能を導入することの必要性、そして多数の標準をサポートすることの負担を懸念しています (bellowsgulch, yipinwong, hk1337)。</li>
+<li><strong>HTML要素の適切な使用</strong>：<code>div</code>を何にでも使う傾向があることへの批判と、<code>button</code>や<code>a</code>などの適切なセマンティック要素を使用することの重要性が指摘されています (hendurhance, nobleach, xboxnolifes)。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このスレッドは、現代のHTMLとCSSがJavaScriptに頼ることなく、以前は考えられなかった多くのインタラクティブな機能を実現できるようになったという興奮と、その限界および実用的な課題についての活発な議論が交わされています。<code>datalist</code>のような要素の機能的な制約や、<code>hidden="until-found"</code>のような新属性の革新的なユースケースが挙げられ、ウェブ開発者がよりセマンティックでアクセシブルなソリューションを模索していることがうかがえます。しかし、ブラウザ間の互換性、複雑なUX要件への対応、そしてJavaScriptの役割を完全に置き換えることの現実性については、依然として様々な意見があることが示されています。多くのユーザーが、HTMLの可能性を追求しつつも、実用性とUXのバランスを取ることの重要性を認識しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIA funding helped keep NeXT afloat in the 80s - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">CIA funding helped keep NeXT afloat in the 80s</h1>
+        <div class="meta">
+            投稿日: 2026年08月20日 | ランク: 9
+        </div>
+        <a href="https://www.wsj.com/tech/steve-jobs-apple-next-cia-161b65f9?st=NWWds1&amp;reflink=desktopwebshare_permalink" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ウォール・ストリート・ジャーナルの記事「How the CIA Secretly Funded Steve Jobs」（CIAがどのように密かにスティーブ・ジョブズに資金提供したか）に関するものです。特に、CIAが初期のNeXTコンピュータの主要顧客であり、そのカスタマイズされたパフォーマンスと、より広範な政府によるハイテク産業への支援について議論が展開されています。コメントは、この「資金提供」が単なる購入以上の意味を持つかどうか、また政府の介入が産業に与える影響について様々な見解を示しています。</p>
+<h2>CPUアップグレードとNeXT Cubeの性能</h2>
+<p>多くのコメントは、記事が示唆するような「魔法のCPUアップグレード」や「特別なNeXT Cube」の実現可能性について懐疑的な意見を述べています。当時のMotorolaのCPU技術やNeXT Cubeの設計上の制約（CPU/FPUのはんだ付け、オーバークロック不能など）から、大幅な性能向上は困難だったという指摘があります。</p>
+<ul>
+<li><strong>rasz</strong>は、1988年当時、NeXT Cubeを高速化できるチップが存在せず、バスオーバークロックも非常に困難だったと主張しています。唯一の可能性は、1989年4月に発表された50MHz版68030/68882とクロックダブラー回路の組み合わせですが、これも年代が合わない上、そのようなシステムが実証された証拠がないことを指摘しています。</li>
+<li>しかし、<strong>adrian_b</strong>は、MotorolaがMC68030+MC68882よりもはるかに高速なRISC CPUであるMC88100+MC88200を同時に開発していたことを指摘し、ジョブズ自身も当初NeXTにMC88100を採用したかったが、価格と供給の問題で諦めたと述べています。CIAにとってはこれらの問題は障害にならなかったため、アクセラレータカードとして利用された可能性が高いと推測しています。</li>
+<li><strong>wmil</strong>や<strong>hedgehog</strong>は、アクセラレータカードやMotorolaが開発中のDSPチップ（56002のプロトタイプ）の使用、あるいは工場でのオーバークロックといった可能性を提案しており、国家安全保障に関わる予算であれば、あらゆるカスタマイズが可能だったという見方を示しています。</li>
+<li><strong>adrian_b</strong>は、Intelグラフィックスについても、Intel 82720のようなグラフィックコントローラカードが使われた可能性があり、これによりメインCPUがグラフィック処理から解放され、全体的な性能が向上したと推測しています。</li>
+</ul>
+<h2>政府によるハイテク産業への支援</h2>
+<p>コメントの多くは、CIAや他の政府機関がハイテク産業の発展に果たした役割に焦点を当てています。</p>
+<ul>
+<li><strong>mrhottakes</strong>は、20世紀においてCIAの資金提供が多くの産業を支えたと述べており、<strong>high_na_euv</strong>は、政府の介入（たとえそれが合理的であっても）に「自由市場」論者が不満を言うことに疑問を呈しています。</li>
+<li><strong>kersplody</strong>は、国防総省（DoD）がシリコンバレーの形成において重要な役割を果たし、レーダー、ICBM、フライトコンピュータなどのためにファブの生産量のほぼ100%を購入していた歴史に触れています。</li>
+<li><strong>potus_kushner</strong>は、CIAの投資部門であるIn-Q-Tel（IQT）の存在を挙げ、GitLabやDockerのような企業に資金を提供していることを指摘し、「シリコンバレーの半分は彼らが運営している」と主張しています。</li>
+<li><strong>kevmo</strong>や<strong>otterley</strong>は、シリコンバレーのメガテック企業の背景には、ほとんどが税金が投入されているという見方を示しており、基礎科学研究の大部分が税金によって賄われていることを強調しています。</li>
+<li><strong>Teever</strong>は、アメリカのテック業界にいる多くの人々が、自身の業界が政府から受けている支援の量を完全に否定していると指摘し、この誤解に対処する方法について意見を求めています。</li>
+<li><strong>jldugger</strong>や<strong>starik36</strong>は、「CIAの資金提供」という見出しから、コンピュータにバックドアが仕掛けられたなどの陰謀的な内容を期待したが、実際はCIAがNeXTコンピュータを顧客として購入しただけだとし、見出しがミスリードだと感じています。しかし、<strong>sph</strong>は、「なぜ外国の情報機関が私企業に資金提供するのか」という問いは依然として重要だと反論しています。</li>
+</ul>
+<h2>CIAの広範な活動と社会への影響</h2>
+<p>コメントは、CIAがNeXTコンピュータの購入を通じてハイテク産業に影響を与えたという話から、より広範なCIAの活動とその社会への影響へと議論を広げています。</p>
+<ul>
+<li><strong>dataviz1000</strong>や<strong>alexjplant</strong>は、CIAが抽象表現主義の芸術家、例えばジャクソン・ポロックに資金を提供し、ソビエトの集産主義と対比させるための「表現の自由と個人主義」のプロパガンダとして利用したという歴史的事実に触れています。これに対し、<strong>Arkhaine_kupo</strong>は、CIAがポロックのような芸術家を個人的に財政的に支えたわけではなく、彼らが確立された後で、その作品を米国のソフトパワーとして利用しただけだと反論しています。</li>
+<li><strong>ParentiSoundSys</strong>は、スティーブ・ジョブズのカウンターカルチャー的な背景とCIAとの関係について、LSDがどのように米国に広まり、カウンターカルチャーを「骨抜き」にしたかという歴史的背景を踏まえると皮肉な文章だと述べています。</li>
+<li><strong>Lammy</strong>は、ラリー・エリソンとジョブズの関係に言及し、エリソンがAppleへのジョブズの復帰を画策した背景には、「スパイ部門が汎用コンピューティングを人々から奪い去る」という長年のキャンペーンがあったと主張しています。</li>
+<li><strong>bflesch</strong>は、DNA収集の可能性に言及し、情報機関が政治的に影響力のある人物に関する情報を得るために、血液処理を行う検査機関がDNA系譜調査を行っていると仮定すべきだと述べています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、ウォール・ストリート・ジャーナルの記事「How the CIA Secretly Funded Steve Jobs」を巡り、CIAが初期のNeXTコンピュータの主要顧客であったことについて多角的に議論しています。記事のタイトルにある「資金提供」が単なる大規模な購入を指すのか、あるいはより深い戦略的投資を意味するのかという疑問が提起され、NeXT Cubeの技術的なカスタマイズの可能性や、政府が過去から現在に至るまでハイテク産業全体に与えてきた広範な影響が主要なテーマとなりました。コメントは、シリコンバレーの成功における政府支援の役割や、CIAの広範な社会・文化への介入、そして「自由市場」という概念に対する批判的な視点を提供しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
