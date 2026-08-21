@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kagi added a setting for removing paywalled links from search results - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Kagi added a setting for removing paywalled links from search results</h1>
+        <div class="meta">
+            投稿日: 2026年08月21日 | ランク: 4
+        </div>
+        <a href="https://kagi.com/changelog#11296" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Kagi検索エンジンが提供する新しい「有料記事を除外する」機能について議論しています。多くのユーザーがこの機能を歓迎し、Paywallや広告に疲弊した現代のインターネットにおける貴重な選択肢だと評価しています。一方で、ジャーナリズムの資金調達モデルや、KagiのYandexデータ使用に関する懸念も提起されています。</p>
+<h2>Paywallの課題と新機能への評価</h2>
+<p>多くのユーザーは、検索結果にPaywall付きの記事が表示されることに不満を抱いています。これは、情報へのアクセスを妨げ、有料コンテンツへの購読を強制する広告のようなものだと捉えられています。Kagiの「有料記事を除外する」機能は、このようなPaywallに煩わされることなく、関連性の高い情報にアクセスできるため、非常に有用だと評価されています。一部のユーザーは、Googleなどの大手検索エンジンが同様の機能を提供しないことに疑問を呈しています。</p>
+<h2>ジャーナリズムのビジネスモデル</h2>
+<p>Paywallを排除する動きは、ジャーナリズムのビジネスモデルに対する深い議論を引き起こしています。「ジャーナリズムは対価を払うに値する仕事であり、Paywallはその正当な対価を求めるものだ」という意見と、「現代のインターネットでは情報は無料で提供されるべきだという認識が広まっており、Paywallは時代遅れだ」という意見が対立しています。</p>
+<p>多くのユーザーは、単一の記事のために月額購読料を支払うことに抵抗があり、マイクロペイメント（記事ごとの少額決済）があれば利用したいと考えています。しかし、出版社側はマイクロペイメントに積極的でなく、クレジットカード手数料の問題や、ユーザーの心理的な障壁があるため、普及が進まない現状が指摘されています。</p>
+<h2>Redditのアクセス制限とKagiの活用</h2>
+<p>最近、Redditがログインしないユーザーの旧Redditへのアクセスを制限したことについて、多くのユーザーが不満を表明しています。Kagiのユーザーは、この問題を解決するために、Kagiの「リダイレクト」機能を使ってRedditのリンクを代替フロントエンドに書き換えることで、引き続き旧Redditを利用できることに感謝しています。これはKagiのカスタマイズ性の高さを示す例として挙げられています。</p>
+<h2>Kagi AIアシスタントへの高い評価</h2>
+<p>KagiのAIアシスタント機能についても多くの言及があります。ユーザーは、その情報の正確性、簡潔さ、出典の明記、そして検索とAI回答のシームレスな統合を高く評価しています。特に、SEOで溢れた現代のウェブから有用な情報を探し出す上で、AIアシスタントが非常に役立つと感じている人が多くいます。ChatGPTやClaudeなどの他のAIモデルと比較して、KagiのAIがより信頼性が高く、質問に的確に答えるとの意見も見られます。</p>
+<h2>Kagiとロシアデータに関する懸念</h2>
+<p>一部のユーザーは、KagiがYandex（ロシアの企業）のデータをインデックスに利用していることについて、懸念を表明しています。これは、ロシアによるウクライナ侵攻への間接的な資金提供につながる可能性があるという倫理的な問題として提起されており、Kagiの創業者もこの問題について自身の見解を述べています。Kagi側は、製品の品質とユーザーのプライバシーを最優先しており、企業が拠点を置く政府の行動を支持するものではないと説明しています。</p>
+<h2>まとめ</h2>
+<p>Kagiの新しい「有料記事を除外する」機能は、現代のウェブにおけるPaywallや広告への不満を解消する画期的なものとして広く歓迎されています。この機能は、情報への自由なアクセスを求めるユーザーのニーズに応える一方で、ジャーナリズムの持続可能なビジネスモデルについての根深い議論を浮上させました。また、KagiのAIアシスタントやカスタマイズ機能は、SEOに汚染された検索結果を改善し、効率的な情報収集を可能にするツールとして高く評価されています。しかし、Kagiのデータソースに関する倫理的な懸念は、一部のユーザーにとって重要な検討事項となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

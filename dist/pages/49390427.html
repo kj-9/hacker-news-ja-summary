@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kobo can run apps now - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Kobo can run apps now</h1>
+        <div class="meta">
+            投稿日: 2026年08月21日 | ランク: 1
+        </div>
+        <a href="https://bandarlabs.github.io/Cobalt/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Koboの電子書籍リーダーでカスタムアプリを実行できる新しいプラットフォーム「Cobalt」について議論しています。コメントは、このプロジェクトの可能性と、電子書籍リーダーの多機能化に対する人々の賛否両論に焦点を当てています。</p>
+<h2>電子書籍リーダーの多機能化と利用価値</h2>
+<p>多くのKindleユーザーは、Koboでカスタムアプリを実行できることに「非常に嫉妬している」と述べています。彼らは、Kindleの機能が限定的であること（例：Farsiの書籍が読めない、e-pubファイルを簡単に入れられない、広告が表示される）に不満を感じており、より自由度の高い、自分でコントロールできるリーダーを求めています。Cobaltは、電子書籍リーダーを単なる読書デバイス以上の多機能ツール（例：論文検索、チェスパズル、AIアシスタントのリモート監視、オーディオブック生成など）として利用できる可能性を提示しています。</p>
+<p>一方で、多くの人々は電子書籍リーダーは「一つのことをうまくやる」べきだと主張しています。彼らは、電子書籍リーダーを「別の多目的デバイス」に変えることに反対しており、スマートフォンやタブレットのような既存の多機能デバイスと競合する「弱いCPU、ラグのある画面、貧弱な入力」を持つ別のマルチツールには実用的な用途を見出していません。彼らにとって、電子書籍リーダーの魅力は「気が散ることなく読書できる」点にあります。</p>
+<h2>既存のModdingコミュニティと代替ソリューション</h2>
+<p>コメントでは、Koboにはすでに「NickelMenu」や「KOReader」といった既存のmoddingソリューションがあることが指摘されています。これらは長年メンテナンスされており、Koboのネイティブソフトウェアと統合して様々な機能を追加できます。Cobaltの作者は、これらの既存ソリューションがKoboの標準インターフェースを拡張するのに対し、CobaltはAndroidのような「アプリプラットフォーム」として設計されており、開発者がUIツールキットやアプリのライフサイクル管理、デバイス固有の処理（描画、タッチ入力など）を気にせずにアプリを作成・公開できるようにすることを目指していると説明しています。また、Cobaltはアプリを非特権プロセスで実行し、特定の機能（ネットワーク、ストレージなど）を宣言して使用する点で、NickelMenuがroot権限を継承するシェルコマンドを実行するのと異なるとも述べています。</p>
+<p>Kindleに関しても、ジェイルブレイクと「KindleForge」や「KOReaderプラグイン」で同様の機能を実現できることが言及されています。</p>
+<h2>ハードウェアの制約とカラー画面への議論</h2>
+<p>Kobo Clara BW（白黒モデル）を所有しているユーザーからは、デバイスの処理速度が遅いことや、Wi-Fi接続に時間がかかること、ページの切り替えでフリーズすることが報告されています。一部のユーザーは、カラーモデルの方がデュアルコアCPUを搭載しているため、パフォーマンスが良い可能性があると指摘しています。</p>
+<p>また、カラーe-inkディスプレイのコントラストや鮮明さについても議論があり、多くのユーザーは白黒モデルの方がテキストの鮮明さが高く、読書に適していると感じています。</p>
+<h2>AI生成コンテンツへの懸念</h2>
+<p>一部のコメントでは、プロジェクトの説明文やREADMEが「LLM（大規模言語モデル）の出力」であり、特にClaudeによって生成されたものである可能性が指摘されています。これに対し、一部のユーザーは「AIが生成した文章は人間が検討した文章よりも読みにくく、プロジェクトへの信頼感を損なう」と批判的な意見を表明しています。一方で、「機能がきちんと動作する限り、AIアシスト開発でも構わない」という意見もあります。</p>
+<h2>まとめ</h2>
+<p>Kobo電子書籍リーダー向けの新プラットフォーム「Cobalt」は、従来の読書専用デバイスにアプリ実行機能をもたらし、多機能化への期待と懸念を同時に引き起こしています。Kindleユーザーからは機能の自由度を求める声が上がる一方、既存のKoboユーザーは、より汎用的な目的で利用できる可能性に興奮しています。しかし、多くのユーザーは電子書籍リーダーの「気が散らない」という本質的な利点を重視しており、多機能化がこの価値を損なうことへの抵抗感も示しています。既存のmoddingコミュニティは活発ですが、Cobaltはアプリ開発の容易さと安全な実行環境を提供することで差別化を図っています。一方で、デバイスのハードウェア性能やカラー画面の読書体験に関する議論、さらにはAI生成コンテンツへの倫理的・美学的懸念も浮上しています。全体として、このプロジェクトは電子書籍リーダーの未来の可能性を巡る活発な議論を促しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
