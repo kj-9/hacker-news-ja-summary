@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run OpenBSD on DigitalOcean for $4/month - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Run OpenBSD on DigitalOcean for $4/month</h1>
+        <div class="meta">
+            投稿日: 2026年08月25日 | ランク: 7
+        </div>
+        <a href="https://nil.wallyjones.com/run-openbsd-on-digitalocean-for-4month/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、OpenBSDなどのBSD系OSを実行するためのVPSプロバイダーに関する議論に焦点を当てています。様々なプロバイダーの推奨、価格、パフォーマンス、サポート、セキュリティ上の懸念、そして代替となるホスティング戦略が論じられています。</p>
+<h2>VPSプロバイダーの推奨と体験</h2>
+<p>多くのユーザーが特定のVPSプロバイダーを推奨し、自身の体験を共有しています。</p>
+<ul>
+<li><strong>OpenBSD.amsterdam</strong>: OpenBSD Foundationに寄付していることで知られ、優れたVPSとして評価されています。かつては小規模だったが成長し、現在はアムステルダムに物理的な拠点を置いているため、他の地域での利用にはVultrなど他社を検討するケースもあります。</li>
+<li><strong>Vultr</strong>: 長年にわたりOpenBSD/FreeBSD VMをサポートしており、BSD VMの選択肢として頻繁に挙げられます。サポートが手厚く、特定のファームウェアパッチ問題にも対応した経験が共有されています。しかし、FreeBSD VMでsshdが定期的に停止する問題に悩まされているユーザーもいます。</li>
+<li><strong>BuyVM.net</strong>: 以前BSD向けに利用されており、問題なく、サポートも迅速で役立つとの評価があります。</li>
+<li><strong>RootBSD.net</strong>: 以前利用されていたが、現在は存在しないようです。</li>
+<li><strong>Netcup.de</strong>: OpenBSDを月額2ユーロで利用できる低価格な選択肢として挙げられています。</li>
+<li><strong>RamNode</strong>: 月額2ドルでIPv6アドレスが1つ、IPv4を追加すると月額4ドルで利用できます。</li>
+</ul>
+<h2>ホスティングの課題と懸念</h2>
+<p>VPSを利用する上での様々な課題や懸念が指摘されています。</p>
+<ul>
+<li><strong>DigitalOceanの能力と価格</strong>: DigitalOceanのCPU制限や、最近の計算能力の提供に関する問題、また8GB VMが月額48ドルという価格設定が議論されています。過去にはプロモーションリンクで$100のクレジットが提供されていた時代との比較も。</li>
+<li><strong>DDoS攻撃への対応</strong>: DigitalOceanがDDoS攻撃に対してIPアドレスの変更しか提供せず、ユーザーがOVHやHetznerに移行した事例が報告されています。</li>
+<li><strong>ネットワークの問題</strong>: DigitalOceanがUDPデータグラムのドロップ問題（特にIPsec IKEに影響する）を理解せず、ユーザーが原因ではないかと主張するケースがありました。</li>
+<li><strong>データアクセスとセキュリティ</strong>: ほとんどのクラウドプロバイダーはユーザーのデータにアクセスできるため、クライアント側での暗号化が不可欠であると指摘されています。特に、フルディスク暗号化だけでは不十分で、RAMダンプによる鍵の抽出を防ぐためにはVPSに送る前にデータを暗号化する必要があるという意見も出ています。</li>
+<li><strong>供給不足と価格上昇</strong>: 来年製造予定のRAMがすでに売り切れているという話や、Hetznerが最近価格を3倍にしたという情報など、供給不足とそれに伴う価格上昇の傾向が指摘されています。</li>
+</ul>
+<h2>代替のホスティング戦略</h2>
+<p>VPS以外のホスティング方法についても議論されています。</p>
+<ul>
+<li><strong>専用サーバー</strong>: 既存のクラウドVMの価格に疑問を呈し、安価な専用サーバーを探すことの有効性が指摘されています。月額35ドルでデュアルCPUと24GB RAMの物理マシンを所有できる例が挙げられています。</li>
+<li><strong>自宅ホスティングとCloudflare Tunnel/Tailscale</strong>: Raspberry Piのような自宅のハードウェアをCloudflare Tunnel経由で利用し、ウェブアプリやSSHアクセスを提供する「完全に無料」な選択肢も紹介されています。しかし、Cloudflare TunnelのSSL証明書が公開され、自宅システムへの注目を集める可能性を懸念してTailscaleに切り替えるユーザーもいます。TailscaleはVPNを通じて自宅ネットワークにアクセスできる方法を提供します。</li>
+<li><strong>電気代の問題</strong>: 自宅ホスティングを「完全に無料」と呼ぶことに対し、電気代を考慮すべきであり、月額4ドル程度のVPSも同様に「無料」とみなせるのではという意見も出ています。</li>
+</ul>
+<h2>その他の情報源</h2>
+<ul>
+<li><strong>OpenBSDのドキュメント</strong>: OpenBSDに関しては、manページとオンラインFAQが非常に優れており、それらを活用することが推奨されています。</li>
+<li><strong>書籍</strong>: 『Absolute OpenBSD』は少し古いが、現在のmanページと組み合わせれば依然として有用であるとされています。</li>
+<li><strong>openbsdhandbook.com</strong>: このウェブサイトには不正確な情報が含まれているため、注意が必要です。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、OpenBSDを含むBSD系OSをホストするためのVPSプロバイダーに関する活発な議論が展開されました。OpenBSD.amsterdamやVultrが人気のある選択肢として挙げられ、それぞれの利点や課題が共有されています。一方で、DigitalOceanのような大手プロバイダーに対するDDoS攻撃対応の不満やネットワーク問題、価格設定への疑問も浮上しました。データセキュリティに関する懸念から、クライアントサイドでの暗号化の重要性が強調され、VPSの代替として安価な専用サーバーや、Cloudflare Tunnel/Tailscaleを利用した自宅ホスティングの可能性も探られています。総じて、ユーザーはコスト、パフォーマンス、サポート、セキュリティを考慮し、自身のニーズに最適なホスティングソリューションを求めていることが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
