@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordination Headwind: How Organizations Are Like Slime Molds - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Coordination Headwind: How Organizations Are Like Slime Molds</h1>
+        <div class="meta">
+            投稿日: 2026年08月30日 | ランク: 8
+        </div>
+        <a href="https://komoroske.com/slime-mold/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、「コーディネーションの逆風（Coordination Headwind）」という概念、特に組織が成長するにつれて、なぜ物事が遅く、難しくなるのかというプレゼンテーションについての議論です。多くのコメントは、この考え方が企業内でどのように機能するのか、あるいはしないのか、そしてそれが組織の文化、インセンティブ、規模にどのように関連しているのかという疑問に焦点を当てています。</p>
+<h2>組織文化とインセンティブ</h2>
+<p>Googleのプレゼンテーションとされるこの概念に対し、人々は組織の文化とインセンティブがその実装に大きく影響すると指摘しています。
+- <strong>C-suiteの関心不足</strong>: 多くのコメントで、組織のリーダー層（C-suite）が、この種の課題に対処することにほとんど関心がないと述べられています。この問題は組織文化そのものに関わるため、解決が難しいとされています。
+- <strong>インセンティブの構造</strong>: インセンティブが、システムを不正利用する人々に利益をもたらすように構築されている場合が多いとの見方があります。リーダーシップが適切なインセンティブを設計するのが難しい、あるいは外部要因によって最善のインセンティブでさえも無効化される可能性があると指摘されています。
+- <strong>短期的な利益重視</strong>: 現代の資本主義企業、特に四半期ごとの利益を重視する企業構造では、スライムカビのような自律的で探索的な行動は本質的に不適合であるという意見もあります。Googleのような企業でも、かつてはスライムカビ的な組織の例であったが、現在はそうではないとされています。</p>
+<h2>組織規模と信頼の崩壊</h2>
+<p>企業規模が拡大するにつれて、信頼が失われ、プロセスが増加することが問題視されています。
+- <strong>ダンバー数</strong>: 「ダンバー数」の概念が引用され、企業が十分に小さければ、人々が「正しいこと」をすると信頼できるが、規模が拡大するにつれて信頼が失われると指摘されています。
+- <strong>プロセスの増加と摩擦</strong>: 信頼の欠如はプロセスによって補われ、これらのプロセスが摩擦点となり、最終的にはプロジェクトの努力の大部分を占めるようになります。これは、社員の離職や「自分の領地」を愛する人々の固定化につながります。
+- <strong>過剰な精査</strong>: 例として、「月5ドルのAuroraデータベースが必要かどうかを、時給150ドルの12人が1800ドルかけて議論する」というような、信頼の崩壊による過剰な精査が挙げられています。これは、アプリのライフタイムコストよりも、その必要性を検証する費用の方が高くなるという、非効率性の象徴とされています。
+- <strong>プラットフォームチームの弊害</strong>: オープンソースプロジェクトをカスタムDSLでラップする「プラットフォームチーム」についても言及され、複雑さが増し、オリジナルの検索性や機能性が失われる問題が指摘されています。</p>
+<h2>意思決定の分散化と複雑性の管理</h2>
+<p>組織における意思決定の分散化と複雑性の管理も重要なテーマです。
+- <strong>分散型 vs 集中型</strong>: 軍隊やテックスタートアップの「分隊」や「2枚ピザチーム」のように、リアルタイムのコンテキストを持つ少人数のチームが意思決定権を持つ「分散型」の意思決定が、調整のオーバーヘッドを減らす上で重要であると提案されています。
+- <strong>複雑性の管理</strong>: 組織における複雑性の管理は、コードにおける「単一責任」「DRY（Don't Repeat Yourself）」「カプセル化」といった原則と同様のパターンに従うと指摘されています。情報理論の観点から、多くの人にコンテキストを共有・維持するほど、意思決定能力が低下するとされています。
+- <strong>コンウェイの法則</strong>: 組織の構造がシステム設計に影響を与える「コンウェイの法則」も引用され、組織が持つ人々という要因が、コードのリファクタリングとは異なる複雑さをもたらすと述べられています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、組織が成長するにつれて発生する「コーディネーションの逆風」という課題に焦点を当てています。この逆風は、組織の規模拡大による信頼の崩壊、不適切なインセンティブ、そして過剰なプロセスによって加速されます。結果として、プロジェクトの非効率性が増大し、社員のバーンアウトや意欲喪失につながります。解決策としては、組織文化の変革、戦略的なアライメントの強化、そして「スライムカビ」のような自律的で適応性の高いチームを奨励することが示唆されていますが、これらを大規模な企業で実現することの難しさも浮き彫りになっています。本質的には、組織の複雑性管理と意思決定の分散化が鍵であり、人間関係やインセンティブという要素が絡むため、単純な技術的解決策では対応できないという認識が共有されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

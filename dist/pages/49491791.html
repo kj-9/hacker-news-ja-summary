@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creepy Crawlies - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Creepy Crawlies</h1>
+        <div class="meta">
+            投稿日: 2026年08月30日 | ランク: 1
+        </div>
+        <a href="https://people.kernel.org/monsieuricon/creepy-crawlies" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、kernel.orgのcgitインスタンスに対するAIスクレイパーの急増と、それが引き起こす負荷増大、そしてそれに対するさまざまな対策と議論に焦点を当てています。多くのユーザーが同様の問題を抱えており、現在のインターネットの持続可能性について懸念を表明しています。</p>
+<h2>AIスクレイパーによる負荷の増大</h2>
+<p>kernel.orgのcgitインスタンスは、AIスクレイパーからの大量のトラフィックにより、CPU使用率が大幅に増加していると報告されています。スクレイパーは効率の悪い方法でデータを収集し（例：Gitリポジトリをクローンする代わりにHTMLをレンダリングして解析）、さまざまなIPアドレスやユーザーエージェントを装ってアクセスします。これにより、従来のIPバンやレートリミットといった対策が効果を失っています。多くのウェブサイト運営者も、同様に無駄なアクセスパターンを示すスクレイパーに悩まされています。</p>
+<h2>AnubisとProof-of-Work (PoW) 課題</h2>
+<p>Anubisは、スクレイパーを阻止するためにPoW課題を導入する解決策として議論されています。初期には効果がありましたが、時間が経つにつれてスクレイパーが課題を解決する能力を高めており、Anubisの有効性について疑問が投げかけられています。特に、ASICマイナーのような専用ハードウェアや、最適化されたC言語カーネルをSafari拡張機能で使用するなどの方法が示され、PoW課題はスクレイパーにとってはそれほど負担にならない一方、低スペックのデバイスを使用する正当なユーザーにとってはサイトが使用不能になるほどの遅延を引き起こす可能性があります。PoWの設計思想に対する批判として、スクレイパーと正当なユーザーの間でコスト非対称性が存在しない点が指摘されています。</p>
+<h2>代替案と将来の展望</h2>
+<p>スクレイパー問題に対する多様な提案がなされていますが、決定的な解決策は見つかっていません。
+*   <strong>キャッシングとパフォーマンス最適化:</strong> HTMLレンダリングを高速化したり、古いコンテンツをプリレンダリングして静的ファイルとして提供したりする提案があります。しかし、gitリポジトリの性質上、組み合わせ爆発的にURLが存在するため、完全なキャッシングは困難です。
+*   <strong>クライアントサイドレンダリング:</strong> サーバーの負荷を減らすために、gitの生のデータを配信し、ブラウザ側でHTMLをレンダリングする案も出ています。
+*   <strong>誘導と毒入りデータ:</strong> スクレイパーを無限ループに陥れたり、LLMが学習すると性能が劣化するような「毒入り」データを意図的に提供したりするアイデアも提案されています。
+*   <strong>マイクロペイメント:</strong> アクセスに少額の費用を課すことで、スクレイパーに経済的負担をかけ、正当なユーザーには影響が少ないようにするという考え方です。
+*   <strong>法的措置:</strong> DDoS攻撃として法的措置を講じるべきだという意見もありますが、攻撃者を特定し、国境を越えた法的執行を行うことの難しさが指摘されています。
+*   <strong>レジデンシャルプロキシの規制:</strong> スクレイパーが利用するスマートTVなどのデバイスを悪用したレジデンシャルプロキシサービスを規制すべきだという意見も挙がっています。
+*   <strong>認証とデバイスアテステーション:</strong> ログイン/認証を必須にする、またはデバイスアテステーション（人間であることを証明するメカニズム）を導入する、という抜本的な対策も議論されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、AIスクレイパーがインターネット上の無料リソースに与える深刻な影響を浮き彫りにしています。AnubisのようなPoW課題は一時的な解決策となり得るものの、スクレイパーの進化とリソースの非対称性により、その有効性には限界があります。この問題は、技術的な解決策だけでなく、経済的、法的、社会的なアプローチも必要とする、インターネットの持続可能性に関わる根本的な課題であると認識されています。今後、マイクロペイメントやより高度な認証・人道性証明システム、あるいは協調的な法執行など、多角的な対策が求められるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
