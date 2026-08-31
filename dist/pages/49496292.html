@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone LED detects hidden cameras with AI - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Smartphone LED detects hidden cameras with AI</h1>
+        <div class="meta">
+            投稿日: 2026年08月31日 | ランク: 8
+        </div>
+        <a href="https://www.chosun.com/english/industry-en/2026/08/30/SBFXUIJQYZEARKP5T4FBAY25HQ/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、隠しカメラを検出するツールについての議論を展開しています。特に、スマートフォンカメラを使って隠しカメラのレンズを特定する技術の有効性、IR（赤外線）を用いた検出の可能性、そしてスマートグラスなどの新しいデバイスへの応用について掘り下げられています。</p>
+<h2>マイク検出の必要性</h2>
+<p>ユーザーたちは、隠しカメラ検出だけでなく、隠しマイク検出の必要性も指摘しています。どのようなものでもマイクになり得るという視点（例：VisualMicプロジェクト）から、プライバシー保護の対象はカメラに留まらないという認識が示されています。</p>
+<h2>IR（赤外線）検出の可能性と課題</h2>
+<p>IR光を使った隠しカメラ検出について多くの議論が交わされました。</p>
+<ul>
+<li><strong>利点</strong>: IRを使用すれば、非可視光で検出できるため、監視している相手に気づかれずに調査できる可能性があります。また、多くの監視カメラはIRフィルターを持たないため、IR光源と組み合わせることで隠しカメラを容易に特定できるという意見もあります。</li>
+<li><strong>スマートフォンカメラでのIR検出</strong>: 多くのスマートフォンカメラにはIRフィルターが搭載されており、IR光を完全に捉えることはできません。一部の古いiPhoneや安価なカメラ、あるいはフロントカメラではIRを検出できるという報告もありますが、品質の高い最近のスマートフォンでは難しいとされています。IRフィルターがなければ、リモコンのIR信号がはっきりと見える、という経験談も共有されました。</li>
+<li><strong>熱源としてのIR</strong>: IRカメラを使用すれば、隠しカメラからの熱を検出することでパッシブに隠しカメラを見つけられる可能性も指摘されています。</li>
+<li><strong>IRブラスター</strong>: 過去のスマートフォン（Galaxy S6など）に搭載されていたIRブラスターがあれば、この種の検出に理想的だっただろうという意見や、Xiaomiの現代の電話にはまだIRブラスターがあるという情報も共有されました。</li>
+</ul>
+<h2>スマートグラス検出</h2>
+<p>この技術がスマートグラスの検出にも使えるかという疑問に対し、スマートグラスは現状では非常に目立つため、特別な検出器は不要だという意見がありました。しかし、将来的にさらに小型化・隠蔽化された場合には検出が重要になるという反論も出ています。特に、盗撮目的のデバイスがますます隠蔽されやすくなる中で、規範的な公共空間を維持するためには、これらのデバイスを検出することが不可欠であるという強い意見も表明されています。</p>
+<h2>検出技術の限界と有効性</h2>
+<ul>
+<li><strong>隠蔽方法</strong>: カメラは様々な角度から隠されたり、衣服や布の後ろに隠されたりすることがあるため、効果的に検出できない可能性が指摘されています。警察の手法では、肉眼では見えない場所に隠されたカメラが使われることもあります。</li>
+<li><strong>完璧さより有用性</strong>: 完璧な検出は難しいかもしれないが、「完璧は良いことの敵」という格言が引用され、ある程度の効果があるだけでも価値があるという視点も提示されています。</li>
+<li><strong>AIとカメラの電源</strong>: AIが搭載された隠しカメラが、スキャン後に自動的に電源オンになることで検出を回避する可能性も指摘されています。しかし、この検出技術はレンズの物理的な特性を見るため、カメラのオンオフに関わらず機能するはずだという反論もあります（ただし、レンズを覆うシャッターのような機構があれば回避できる可能性も示唆されています）。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この議論は、隠しカメラ検出ツールの実用性、特にIR光を使った検出の可能性とスマートフォンカメラの限界に焦点を当てています。IR検出は非侵襲的で有用性が高いと見なされていますが、現行のスマートフォンカメラの制約が課題となっています。また、スマートグラスのような新しい形態のデバイスや、将来的なAIと組み合わせた隠蔽技術の進化に対しても、プライバシー保護の観点から検出技術の重要性が強調されました。完璧な検出は難しいかもしれないが、ある程度の効果であっても、公共空間における監視デバイスの蔓延を防ぐ上で価値があるという認識が共有されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
