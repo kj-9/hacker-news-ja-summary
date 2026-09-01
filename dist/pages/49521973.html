@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing Ad Blocker for Firefox on iOS - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Introducing Ad Blocker for Firefox on iOS</h1>
+        <div class="meta">
+            投稿日: 2026年09月01日 | ランク: 8
+        </div>
+        <a href="https://blog.mozilla.org/en/firefox/ad-blocker-on-ios/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Firefox for iOSに「広告ブロッカー」機能が導入されたことに関するものです。ユーザーは、この機能の展開方法、制限、Mozillaの過去の決定、および他のiOSブラウザや広告ブロッカーソリューションと比較して、その有用性について議論しています。</p>
+<h2>展開と可用性への不満</h2>
+<p>多くのユーザーが、Firefox for iOSの広告ブロッカー機能が大々的に発表されたにもかかわらず、すぐに利用できないことに不満を表明しています。この機能は段階的なロールアウトで提供されており、一部のユーザーはアップデート後もオプションが表示されないと報告しています。</p>
+<ul>
+<li><strong>段階的ロールアウトによる混乱:</strong> ユーザーは、発表と同時に機能が全員に提供されないことに不満を感じています。Mozillaのマーケティングが機能がすでにローンチされているかのように語る一方で、多くのユーザーは「実験」として扱われ、いつ使えるようになるか分からない状況です。</li>
+<li><strong>「遠隔改善」との関連:</strong> 当初、この機能を利用するにはMozillaのテレメトリー（技術データおよびインタラクションデータの共有）を有効にする必要があるという誤解があり、一部のユーザーはこれを強く批判しました。しかし、Firefoxバージョン148以降では、テレメトリーを無効にしても「遠隔改善」にオプトインできるよう変更されたことが指摘されています。</li>
+<li><strong>過去の信頼の喪失:</strong> 一部のユーザーは、Mozillaが過去にMr. Robotのプロモーション拡張機能をユーザーに無断でインストールしたことや、CEOの報酬問題、市場シェアの低下など、「疑わしい決定」を下してきた歴史に言及し、今回の機能展開方法もそのパターンに沿っていると批判しています。</li>
+</ul>
+<h2>広告ブロックの制限と代替ソリューション</h2>
+<p>Firefox for iOSの新しい広告ブロッカーにはいくつかの制限があり、ユーザーはその有用性について議論し、他のソリューションと比較しています。</p>
+<ul>
+<li><strong>YouTube広告のブロック不可:</strong> 最も頻繁に指摘される制限は、YouTube広告をブロックできないことです。これは多くのユーザーにとって重要な機能であり、Brave、DuckDuckGoブラウザ、またはAdGuardなどのコンテンツブロッカーをSafariと組み合わせて使用するなどの代替手段が言及されています。ProTubeというアプリもYouTube広告をブロックできる代替手段として紹介されています。</li>
+<li><strong>検索結果広告のブロック不可:</strong> 検索エンジンの結果ページに表示される広告（Google検索の上部に表示される詐欺的な広告など）もブロックされないことが明記されており、これは商業的な理由によるものと推測されています。Firefox自身のスポンサーリンクや広告もブロック対象外です。</li>
+<li><strong>既存ソリューションとの比較:</strong> ユーザーは、Safari用のuBlock Origin Liteが依然として最も優れた広告ブロッカーであり、Firefoxの新しい広告ブロッカーよりも多くの広告をブロックできると主張しています。Orionブラウザも、iOS上でuBlock Originを含む拡張機能をサポートしているため、Firefoxの代替として挙げられています。</li>
+<li><strong>「商業的理由」と資金源:</strong> FirefoxがGoogle検索の契約に縛られているため、特定の種類の広告をブロックできないのではないかという推測がなされています。多くのユーザーはブラウザが無料で提供されることを期待しており、Googleからの資金提供なしにMozillaが活動を続けることは難しいという認識があります。</li>
+</ul>
+<h2>技術的側面とMozillaへの要望</h2>
+<p>一部のコメントは、技術的な疑問やMozillaへの具体的な要望に触れています。</p>
+<ul>
+<li><strong>WebKitの使用:</strong> iOS上のすべてのブラウザはAppleのWebKitエンジンを使用する必要があるため、Firefox for iOSも例外ではありません。しかし、OrionブラウザがFirefoxやChromeの拡張機能を使用できるのはなぜかという疑問が提起されています。</li>
+<li><strong>A/Bテストの仕組み:</strong> 段階的なロールアウトはA/Bテストの一環であると思われますが、その仕組みや、ユーザーが意図的に特定のバージョンを選択する方法について疑問が呈されています。</li>
+<li><strong>「ユーザーエージェント」としての役割:</strong> あるユーザーは、広告ブロッカー機能の追加を「ユーザーエージェント」という言葉を真剣に受け止めている証拠だと評価していますが、その制限により、その理念が完全に実現されているとは言えないという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Firefox for iOSに導入された新しい広告ブロッカーは、多くのユーザーからその存在自体は歓迎されているものの、段階的なロールアウト、YouTube広告や検索結果広告をブロックできないといった制限、および過去のMozillaの「疑わしい決定」の歴史と結びつけて、その実装方法と有効性について強い不満と批判が寄せられています。多くのユーザーは、SafariとuBlock Origin Liteの組み合わせや、Orion、Braveなどの代替ブラウザが、より包括的な広告ブロック体験を提供していると考えており、Mozillaがこれらの制限に対処し、より透明性の高い展開を行うことを期待しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

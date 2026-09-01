@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Fable 5.1 and Claude Mythos 5.1 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Claude Fable 5.1 and Claude Mythos 5.1</h1>
+        <div class="meta">
+            投稿日: 2026年09月01日 | ランク: 1
+        </div>
+        <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Anthropicは、主にコーディングと科学研究に特化した新しいAIモデル「Claude Fable 5.1」を発表しました。このリリースは、既存モデルの費用対効果、使いやすさ、および安全対策に関するHacker Newsコミュニティからの幅広い議論と批判を巻き起こしました。</p>
+<h2>価格と利用制限の変更</h2>
+<p>Fable 5.1のリリースに伴い、いくつかの価格と利用制限の変更がありました。最も注目すべきは、キャッシュ読み取りのコストが25%削減され、特定の作業負荷では最大45%の節約になる可能性があるというAnthropicの主張です。しかし、一部のユーザーは、実際の使用では全体的なコストがFable 5よりも増加したと報告しています。</p>
+<p>さらに、ユーザーの利用制限のリセットが行われましたが、これは一部のユーザーに歓迎された一方で、他のユーザーからは「一時的な増加が元に戻っただけだ」と批判されました。特に、以前の週次リセットのタイミングと重なった一部のユーザーは、実質的に利用可能な時間が減少したと感じています。</p>
+<h2>Fableの有用性と安全対策</h2>
+<p>コメントの中で最も議論されたテーマの1つは、Fableモデルの実際の有用性と、その厳格な安全対策、特にサイバーセキュリティ関連のタスクにおける問題です。多くのユーザーは、セキュリティ関連のプロンプトをFable 5に与えると、すぐにOpusにダウングレードされてしまい、タスクが完了できないと報告しています。</p>
+<p>一方で、一部のユーザーはFableが計画策定や特定のタスク（例えば、Binary Ninja MCPを用いたリバースエンジニアリング、グラフィック関連のクリエイティブなプログラミング、RustやLeanのような形式的な数学）で非常に効果的だと感じています。特に、5.1では安全対策が緩和されたという声もあり、以前は拒否されていた生物学関連のトピックが処理できるようになるなど、改善が見られます。しかし、それでもなお、認証コードのテストや脆弱性分析など、サイバーセキュリティの防御側でさえもFableがブロックされるという不満は根強く残っています。</p>
+<h2>Haikuモデルの現状と期待</h2>
+<p>Anthropicの軽量モデルであるHaikuの将来についても、多くのユーザーが懸念を表明しています。Haiku 5のリリース時期に関する情報が不足していることに加え、Anthropicが収益性の高い高知能モデルに注力しているとの見方から、Haikuが低優先度になっているのではないかという憶測が飛び交っています。競合するOpenAIの「Luna」やGemini 3.7 Flashといった安価で高性能なモデルが登場している中、Haikuの価格設定や性能に対する期待も高まっています。</p>
+<h2>Claudeの文章スタイル問題</h2>
+<p>Claudeモデル全般、特にOpus 5の冗長で独特な文章スタイルは、多くのユーザーから不満の声が上がっています。ユーザーは、回りくどい表現、説明の多さ、そして「ロードベアリング」「正直なところ」といった特定のAIらしいフレーズ（いわゆる「Claudism」）に疲弊していると述べています。Fable 5.1ではこの書き方が改善されたというAnthropicの主張に対して、一部のユーザーは期待を寄せる一方で、懐疑的な見方も示しています。ユーザーは、より簡潔で直接的な回答を求め、Opus 4.8など以前のモデルや競合他社のモデル（GPT Sol、Gemini Pro、GLM Maxなど）に移行するケースも見られます。</p>
+<h2>その他の重要な議論</h2>
+<ul>
+<li><strong>ウォーターマーク</strong>: Fable 5.1から導入されたウォーターマークについて、出力の品質や内容に影響がないというAnthropicの主張に対する疑問が呈されています。一部のユーザーは、テキストのウォーターマークが表現の自由を制限し、AI生成コンテンツの検出によって不利益を被る可能性があると懸念しています。</li>
+<li><strong>思考の痕跡 (Thought Traces)</strong>: 思考の痕跡の開示に関するポリシー変更、特に特定の「不正利用」を防ぐための措置は、モデルの透明性を求めるユーザーから批判されています。</li>
+<li><strong>科学研究への貢献</strong>: AnthropicはFable 5.1の科学ベンチマークにおける改善を強調していますが、安全対策が研究の進行を妨げる可能性や、実際のラボ機器の操作を伴わない限り、AIが科学に根本的な貢献をするのは難しいという意見もあります。</li>
+<li><strong>モデルの信頼性と市場競争</strong>: 全体として、Anthropicのモデルは、その高価格、厳格な安全対策、そして特定のユーザー体験の低下により、OpenAIや中国のLLM（GLM、Qwenなど）といった競合モデルとの間で市場競争が激化している状況が浮き彫りになっています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Claude Fable 5.1のリリースは、Anthropicがより高性能なモデルを提供しようとする努力を示していますが、Hacker Newsコミュニティからは、モデルの費用対効果、安全対策の厳格さ、そして文章スタイルの問題に対する根強い不満が表明されました。特にサイバーセキュリティや生物学といった特定の専門分野における制限が指摘されており、多くのユーザーは、より安価で使いやすい競合モデルや以前のClaudeバージョンへの移行を検討しています。一方で、Fable 5.1のキャッシュコスト削減と文章スタイルの改善には、一部のユーザーから期待の声も上がっています。Anthropicは、企業顧客への提供や科学研究への応用を進める中で、ユーザーの懸念にどのように対応していくかが今後の課題となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
