@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shutting down our public encrypted DNS - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Shutting down our public encrypted DNS</h1>
+        <div class="meta">
+            投稿日: 2026年09月04日 | ランク: 5
+        </div>
+        <a href="https://mullvad.net/en/blog/shutting-down-our-public-encrypted-dns-servers-and-sponsoring-quad9-instead" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Mullvad VPNがDNSサービスを停止し、代わりにQuad9を推奨するという発表は、ユーザー間で様々な議論を巻き起こしました。主な論点は、広告ブロック機能の喪失、Quad9のコンテンツ検閲ポリシー、Mullvad自身のサービス変更、そして集中型プライバシーサービスの信頼性に関するものです。</p>
+<h2>Mullvadの決定とDNSSECに関する懸念</h2>
+<p>Mullvadが自社DNSサービスを停止し、Quad9のサポートにリソースを投入するという決定に対し、一部のユーザーは「素晴らしい」と評価しています。しかし、Quad9がDNSSECの重複検証を避けるためにローカルでのDNSSEC有効化を推奨しないことについて、「Quad9がDNSを汚染できるのでは？」という技術的な懸念が表明されました。これに対し、Quad9がDNSSECを使用しているため問題ないという意見や、ローカルでの検証は可能だが実用的なトレードオフではないという意見が出ています。また、DNSSEC自体を無効にすることを提案する声もあります。</p>
+<h2>広告ブロック機能の喪失と代替ソリューション</h2>
+<p>MullvadのDNSが提供していた広告ブロック機能がQuad9にはないため、多くのユーザーはQuad9が完全な代替にはならないと指摘しています。2026年において広告ブロックは必要不可欠であり、DNSによる透過的なブロッキングの重要性が強調されています。Pi-holeやAdGuard Homeのような自己ホスト型DNSソリューションが、Quad9をアップストリームとして利用しながら広告ブロック機能を実現する優れた方法として推奨されています。また、NextDNS、Control D、AdGuard DNSなど、広告ブロック機能を持つ他のパブリックDNSサービスも代替案として挙げられています。</p>
+<h2>Quad9の地域ブロックと検閲</h2>
+<p>MullvadのDNSがフランスやイタリアの政府のブラックリストに掲載されたウェブサイトをブロックしていなかったのに対し、Quad9が欧州の一部地域で裁判所命令に従い、特定のドメインをブロックしていることが懸念されています。特に、ドイツの裁判所がVPNによる回避をブロック違反と見なしたことに対し、「VPNやTorノードまでブロックすべきなのか？」という疑問が投げかけられています。これは、権利者が単一国での勝訴をグローバルな削除要求に繋げようとしているという懸念に繋がっています。</p>
+<h2>Mullvadのその他の変更と創設者への懸念</h2>
+<p>MullvadがポートフォワーディングやOpenVPNサポートを廃止したことに対し、以前のユーザーからは不満の声が上がっており、Proton VPNやAirVPNなどの代替サービスに移行したとの報告があります。さらに、Mullvadの共同創設者の一人がスウェーデンの極右政党に資金提供しているという情報が共有され、これに対する倫理的な懸念が表明されています。ただし、この政党のイデオロギーについては異なる解釈も提示されています。</p>
+<h2>集中型プライバシーサービスの信頼性</h2>
+<p>集中型のDNSサービスのようなプライバシーサービスが、政府機関による監視や浸透の最初の標的になりやすいのではないかという懸念が提起されています。これらのサービスはトラフィックフローを集中させるため、少数のポイントを監視するだけで全ユーザーの情報を把握されるリスクがあります。しかし、サービスプロバイダーの従業員がプライバシーの使命にコミットしており、強制的な情報開示があればリークされる可能性が高いという反論もあります。一部のユーザーは、VPNやセキュアDNSサービスがNSAのような高度な機関からデータを保護するのではなく、主にISPによるデータ販売や著作権侵害通知を防ぐのに役立つと考えています。</p>
+<h2>DNSサービスの自己ホスティングの容易さ</h2>
+<p>Mullvadが「プライバシー重視のパブリックDNSサービスの運用は高度に専門的な作業」と述べたことに対し、多くのユーザーが異議を唱えています。Unboundなどのツールを使って自宅で再帰的DNSを自己ホストすることは、比較的低いメンテナンスとハードウェア要件で、数時間で設定可能であり、広告やトラッカーのブロックも実現できると主張されています。このことから、Mullvadの決定は技術的な困難さよりもコスト削減が本当の理由である可能性が示唆されていますが、家庭での運用と大規模なパブリックサービスの運用を比較するべきではないという意見もあります。</p>
+<h2>まとめ</h2>
+<p>MullvadのDNSサービス停止とQuad9への移行は、広告ブロック機能の不足、Quad9のコンテンツ検閲ポリシー、Mullvad自身のサービス変更、そしてその創設者に関する倫理的な懸念から、Hacker Newsコミュニティ内で活発な議論を引き起こしました。多くのユーザーは、広告ブロックの必要性からPi-holeやAdGuard Homeといった自己ホスト型ソリューションや、NextDNSなどの代替パブリックDNSサービスを検討しています。また、集中型プライバシーサービスの信頼性に対する懸念が高まり、自宅でDNSサービスを自己ホストすることの容易さが再認識されました。この動きは、ユーザーが自分のプライバシーとインターネット利用の制御を求める傾向を浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
