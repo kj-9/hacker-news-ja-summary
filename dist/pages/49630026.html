@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwen 3.8 follows GPT-5.5 Pro reasoning prefills - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Qwen 3.8 follows GPT-5.5 Pro reasoning prefills</h1>
+        <div class="meta">
+            投稿日: 2026年09月09日 | ランク: 10
+        </div>
+        <a href="https://gist.github.com/wsxiaoys/e0286dc6bb624ff5fdf49e7f4c528ba3" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Qwen3.8がGPT-5.5 Proの思考プロセス（reasoning traces）から学習した可能性が高いというブログ記事と、それが技術の進歩やLLM業界の競争に与える影響について議論しています。特に、大手AI企業がデータを「盗用」しているという認識と、それに対する中国企業の行動に対する倫理的・実用的な視点が焦点となっています。</p>
+<h2>GPT-5.5 Proの思考プロセスからの学習と証拠</h2>
+<p>Qwen3.8がGPT-5.5 Proの思考プロセスから学習したというブログ記事の主張について、コメントはそれが本当かどうか、そしてその証拠の有効性を議論しています。
+*   <strong>「盗まれた思考」の公開時期</strong>: Qwen3.8が論文発表（8月10日）後に訓練されたため、公開されたGPT-5.5の具体的な思考プロセスを知っている可能性があり、これがQwenが思考プロセスを「流出」させた証拠と見なすのは不適切だという意見があります。しかし、思考プロセスの概念自体はそれ以前から知られていたとも指摘されています。
+*   <strong>思考プロセスの復元方法</strong>: コメントでは、公開されているOpenAIやAnthropicモデルのCoT（Chain of Thought）から読み取り可能な思考プロセスを復元する既知のエクスプロイト（<code>stolen-thoughts.com/paper.pdf</code>）について言及しています。これは暗号化された思考トレースをモデルに送り返して書き起こさせる方法だとのことです。
+*   <strong>QwenのCoTの類似性</strong>: ユーザーが、GPT-5.6 SolのCoTがQwen3.8 27BのCoTと非常に似ていることに気づいたという具体的な経験を共有しています。特に、短く直接的なプロンプトを与えた場合に「grug-talk」（原始的な話し方）のような思考プロセスを示すとのことです。ただし、他のユーザーからは、Qwen3.8のCoTがそのような形式ではないという反論も出ており、特定のプロンプトや設定によってCoTの形式が変わる可能性が示唆されています。</p>
+<h2>大手AI企業のデータ利用と「盗用」の倫理</h2>
+<p>多くのコメントは、OpenAIやAnthropicのような大手AI企業がインターネット上の膨大なデータを許可なくスクレイピングしてモデルを構築していることを批判し、Qwenが行っているとされる「思考プロセスの蒸留」は、彼らが「盗用」したデータに対する彼らの行動と本質的に同じだと主張しています。
+*   <strong>「水は濡れており、空は青い」</strong>: 大手AI企業が自分たちの製品を作るためにインターネットを許可なくスクレイピングしたにもかかわらず、似たようなことが自分たちに対して行われると不平を言うのは皮肉だという意見が多数を占めています。
+*   <strong>道徳的権威の欠如</strong>: フロンティアAIラボには道徳的権威が一切ないという意見が強く、彼らの「安全」やその他の自己奉仕的な主張は真剣に受け止めるべきではないとまで言われています。
+*   <strong>情報へのアクセス</strong>: 「情報には自由でありたいという欲求がある」という考えが強調され、大手企業が何兆ドルも費やしても、その成果がすぐにコピーされる可能性があることに喜びを感じる声もあります。</p>
+<h2>中国のAI技術の立ち位置と競争</h2>
+<p>この件は、中国のAIラボがフロンティア技術に対してどのような戦略をとっているか、そして世界的なAI競争における彼らの位置づけについて、様々な見方を引き出しています。
+*   <strong>遅れている証拠</strong>: Qwenが思考プロセスをコピーしているだけだとすれば、中国のラボはフロンティアから1年以上遅れているという見方があります。
+*   <strong>「追随戦略」と模倣</strong>: 中国のラボは主に「ファストフォロー戦略」で動いており、蒸留攻撃やアーキテクチャのイノベーションをコピーする能力があるという意見があります。これは戦後の日本の電子産業の発展に例えられています。
+*   <strong>異なる最適化</strong>: 中国のラボは、最高級のNvidiaハードウェアを必要としない、効果的でコンパクトなモデルなど、他の要素を最適化している可能性があるという見方もあります。
+*   <strong>蒸留の価値</strong>: モデルの蒸留は、スクラッチで訓練するよりも達成度が低いと見なされることもありますが、オープンモデルを動かせるようにする点では「とてつもない成果」だと評価する声もあります。蒸留が止まらないなら、それは合理的な戦略であり、必ずしも中国が遅れていることを意味しないという意見もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Qwen3.8がGPT-5.5 Proの思考プロセスから学習したという疑惑を巡り、その技術的な証拠の妥当性と、LLM開発におけるデータ利用の倫理的側面について深く掘り下げています。多くのユーザーは、大手AI企業が以前にインターネットからデータを「盗用」したことを考えると、中国企業による同様の行為を批判する道徳的権限がないと強く主張しています。この議論は、AI技術の進歩、国際的な競争、そして「情報が自由でありたい」という哲学的な視点が複雑に絡み合っていることを示しています。Qwenの行動は中国のAIラボがフロンティア技術を「ファストフォロー」している証拠と見なされつつも、それが必ずしも遅れを意味するわけではなく、アクセス可能なオープンモデルを提供する上で重要な戦略であるという見方も提示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
