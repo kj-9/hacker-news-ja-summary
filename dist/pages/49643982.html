@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify moves back to Native from React Native - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Shopify moves back to Native from React Native</h1>
+        <div class="meta">
+            投稿日: 2026年09月10日 | ランク: 8
+        </div>
+        <a href="https://shopify.engineering/back-to-native" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、ShopifyがReact Nativeからネイティブアプリ（SwiftとKotlin）への移行を発表したことについて議論しており、特にLLMがこの決定にどのような影響を与えたかに焦点を当てています。</p>
+<h2>LLMの影響と開発コスト</h2>
+<p>多くのコメントが、LLMの進化がネイティブアプリ開発の経済性を変えたというShopifyの主張に同意しています。LLMはコードの生成、言語間の移植、テストの作成、さらにはデバッグにおいて開発者を大幅に支援し、以前は二つのネイティブコードベースを維持することが費用対効果に見合わなかった企業でも、それが可能になると考えられています。これにより、開発者は「退屈な」移植作業から解放され、より高品質なUXに集中できるようになるという意見もあります。しかし、一部では、LLMによるコード生成は「スロップ（ずさんなコード）」を生み出しやすく、品質と保守性の問題を引き起こす可能性があると懸念しています。</p>
+<h2>ネイティブ vs. クロスプラットフォームの議論の再燃</h2>
+<p>コメントの多くは、この移行がネイティブアプリとクロスプラットフォームフレームワーク（React Native、Flutter、Electronなど）に関する長年の議論を再燃させると指摘しています。「流行の車輪が再び回る」という意見がある一方で、LLMが開発のトレードオフを変えたため、これは単なる流行の繰り返しではないという見方もあります。大規模で資金力のある企業にとってはネイティブが最適だという意見が多く、リソースが限られたスタートアップや小規模プロジェクトでは引き続きクロスプラットフォームが有力な選択肢であるとの認識が示されています。</p>
+<h2>App Storeレビュー時間とOTAアップデート</h2>
+<p>ネイティブアプリへの移行に伴う大きな懸念の一つが、App Storeのレビュー時間です。一部のユーザーは最近のレビュー時間が非常に長くなっており、バグ修正に1週間以上かかることもあると報告しています。これに対し、React Nativeなどのクロスプラットフォームでは、OTA（Over-The-Air）アップデートにより、レビューを待たずに迅速な修正が可能であるという利点が強調されています。このレビュー時間の予測不可能性は、多くの開発者にとってネイティブアプリを避ける大きな理由となっています。</p>
+<h2>コードの品質、保守性、知的財産</h2>
+<p>LLMが生成するコードの品質と長期的な保守性について、懐疑的な意見も多く聞かれます。LLMはコードを迅速に生成できるが、コードの整合性を長期にわたって維持すること、特に多数の変更、バグ修正、プラットフォーム固有の動作、アクセシビリティ要件などを考慮した「機能パリティ」を保つことは難しいという懸念があります。Shopifyは「Helix」というシステムと共有の仕様、テスト、レビューチェックポイントでこれを解決しようとしていると説明していますが、その実証的なデータが不足しているとの批判もあります。また、LLMに企業独自のコードを投入することで、知的財産がトレーニングデータとして取り込まれる可能性についても懸念が示されています。</p>
+<h2>まとめ</h2>
+<p>ShopifyがReact Nativeからネイティブアプリへの移行を決定したことは、LLMがソフトウェア開発の経済性を根本的に変えつつあるという、テクノロジー業界の大きな変化を象徴していると捉えられています。LLMがコード生成と移植を容易にすることで、ネイティブアプリの高品質なユーザー体験とパフォーマンスを、以前よりも低コストで実現できる可能性が開かれています。</p>
+<p>しかし、この変化は、App Storeのレビュー時間、複数コードベースの長期的な保守性、LLMが生成するコードの品質と知的財産に関する新たな課題も提起しています。大規模な企業にとっては実行可能な戦略かもしれませんが、リソースが限られた企業にとっては、依然としてクロスプラットフォームフレームワークが現実的な選択肢であり続けるでしょう。この決定の真の成功は、数年後のネイティブアプリの運用と維持のコスト、そしてユーザー体験によって測られることになります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proof of Capture: Apple Reference Image, but open source and using steganography - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Proof of Capture: Apple Reference Image, but open source and using steganography</h1>
+        <div class="meta">
+            投稿日: 2026年09月10日 | ランク: 10
+        </div>
+        <a href="https://merybenavente.me/blog/proof-of-capture" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、AIによって生成された偽情報に対処するためにデジタルカメラが画像を署名するというコンセプトについて議論しています。</p>
+<h2>カメラによる画像署名の有効性と限界</h2>
+<p>多くのコメントで、デジタルカメラが画像を署名することの有効性や限界について議論されています。これは、AIによる偽情報が蔓延する中で、画像の信憑性を証明する手段として提案されています。</p>
+<p>例えば、<code>xg15</code>や<code>figmert</code>、<code>TedDoesntTalk</code>は、AIが生成した画像を画面に表示してそれを撮影するという「スクリーン攻撃」によって、署名された偽の画像が作成されてしまうという、このシステムの明らかな脆弱性を指摘しています。<code>shagie</code>は、写真を写真に撮るという問題は以前から存在しており、ポラロイド写真を使った古い時代の偽装の例を挙げています。<code>treyd</code>は、写真センサーコントローラーの配線を操作して任意の画像をキャプチャさせるという、より技術的な脆弱性を指摘しています。</p>
+<p>しかし、<code>azatom</code>は、署名にタイムスタンプやGPS座標、カメラ/レンズの設定が含まれるため、単に画面を撮影するだけでは解決できない問題も解決すると述べています。<code>vzaliva</code>は、AIの台頭以前から手動の改ざんを防ぐために有用であり、今後はすべてのデジタルカメラが画像を署名するようになると予測しています。</p>
+<h2>プライバシーと追跡への懸念</h2>
+<p>画像署名がプライバシーに与える影響についても懸念が表明されています。</p>
+<p><code>xg15</code>は、EXIFデータがプライバシーの危険性から除去される理由があるのに、署名によってこれが再び問題になるのではないかと指摘しています。<code>smalltorch</code>は、カメラの署名の存在自体がプライバシー問題につながる可能性があると述べています。<code>xg15</code>はまた、画像のIDが追跡の主要な標的になる可能性があると懸念しています。</p>
+<p>一方、<code>hamdingers</code>は、裁判や報道、科学など、画像の真偽を証明する必要がある文脈では、通常プライバシーは懸念事項ではないと反論しています。</p>
+<h2>編集履歴の管理と技術的課題</h2>
+<p>画像が編集された場合に、その履歴をどのように管理するかについても議論されています。</p>
+<p><code>vzaliva</code>は、オリジナルの画像を証明するだけでなく、回転やコントラスト調整などの編集が加えられた場合に、それが文書化され、オリジナルの画像IDにリンクされるような追加の認証レイヤーの必要性を提案しています。これをGitの署名付きログに例えています。</p>
+<p>しかし、<code>doc_ick</code>は、編集履歴やオリジナルの画像を写真に含めると、ファイルサイズが大きくなりすぎて使用不能または共有不能になると指摘しています。<code>xg15</code>は、オリジナルの画像全体ではなく、一意のIDやハッシュを含めることで、ファイルサイズの問題を回避できる可能性があると述べています。</p>
+<p>また、<code>ranger_danger</code>は、署名システムを回避する方法は常にあるだろうと述べ、プロ用一眼レフカメラの代替ファームウェアで改ざんが可能になる可能性を指摘しています。<code>teravor</code>も、この方法が普及すれば、プライベートキーの盗用やセンサーへの直接光投射など、それを回避する努力も増えるだろうと予測しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、AIが生成する偽情報に対抗するためのデジタルカメラによる画像署名というアイデアについて、その有効性、限界、プライバシーへの影響、そして技術的な課題という多角的な視点から議論しています。多くのコメントが、AI生成画像を画面に表示して撮影する「スクリーン攻撃」など、署名システムを迂回する明白な脆弱性を指摘している一方で、タイムスタンプやGPS情報、カメラ設定を組み込むことで一定の問題解決には貢献すると見ています。また、署名情報がプライバシー侵害や追跡に繋がる可能性への懸念と、真偽が重要視される場面での有用性とのバランスについても議論されています。全体として、この技術が完璧な解決策ではないものの、欺瞞に対する摩擦を生み出す一歩としては評価できるという意見も見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

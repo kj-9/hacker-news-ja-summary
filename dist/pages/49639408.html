@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More questions about whether researchers can trust OpenAI with unpublished math - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">More questions about whether researchers can trust OpenAI with unpublished math</h1>
+        <div class="meta">
+            投稿日: 2026年09月10日 | ランク: 3
+        </div>
+        <a href="https://mathstodon.xyz/@andreasthom/117240535270608201" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、OpenAIが未発表の数学研究をトレーニングデータとして利用し、Navier-Stokes方程式などのミレニアム懸賞問題を自社のAIモデルで解決したと主張している件について議論しています。</p>
+<h2>AIによる「発見」の信憑性</h2>
+<p>多くのコメントは、AIが完全に独立して発見したというOpenAIの主張が弱いと指摘しています。一部のユーザーは、AIが既存のアイデアや概念を合成する能力は高いものの、独自の創造的な仕事はできないと考えています。アインシュタインの相対性理論を例に出し、彼も数学者マルセル・グロスマンに助言されたと指摘する意見もありますが、これは「AIへのプロンプト」とは異なるとの反論も出ています。AIが「データの収集と点と点の接続」を行うのは人間の研究と似ているという見方がある一方で、OpenAIが他者のデータを自身のものとして主張しているという批判もあります。また、AIは人間がトレーニングデータで扱った問題しか解決できないように見えるという意見も挙げられています。</p>
+<h2>データ利用と信頼性の問題</h2>
+<p>OpenAIがユーザーの同意なしに、あるいは同意を誤解させる形で、ユーザーの会話データをトレーニングに利用している可能性について強い懸念が表明されています。特に、数学者がトレーニングへのデータ使用をオプトアウトした後もデータが使われたと主張している点や、「Improve the model for everyone」のような設定が実質的にデータ利用を許可している点に注目が集まっています。一部のユーザーは、プライバシー設定のUXが意図的に分かりにくく、同意なしのデータ収集が行われていると指摘しています。また、OpenAIのビジネス利用規約と消費者利用規約の間にデータ利用に関する違いがあることも言及されています。これは、企業がユーザーデータを取得し、それを自社の利益のために利用する「データ搾取」や「IPロンダリング」であるという批判につながっています。</p>
+<h2>学術界への影響と倫理</h2>
+<p>この事件は学術界に深刻な影響を与え、純粋数学の大学院進学を検討している学生が減少しているという懸念が示されています。研究者がAIに研究アイデアを「盗まれる」ことで、研究のモチベーションが低下し、キャリアパスが危うくなる可能性があります。また、AI企業が未発表の研究を「先取り」して発表することや、適切な引用を行わないことは、学術的な公正さに反するという意見も多く見られます。特に、OpenAIが研究者に共同著者から他の研究者を外すよう圧力をかけたという話は、学術倫理に反する行為として強く非難されています。これは、AI企業が利益のために学術的な規範を無視しているという認識を深めています。</p>
+<h2>AIの能力と未来</h2>
+<p>AIの真の能力についての議論も活発です。AIが本当に新しいアイデアを生み出しているのか、それとも既存の知識を効率的に組み合わせているだけなのかという疑問が提示されています。AIが「低くぶら下がっている果実」（overhang）を組織的に収穫することで、人間が長期間取り組んできた問題を解決しているという見方もあります。一部のコメントでは、AIと人間の協調が発見を加速させる可能性を認める一方で、その過程での倫理的な問題と信頼の欠如が、長期的な協力関係を損なうと警鐘を鳴らしています。AIが数学だけでなく、他の分野でも同様の「盗用」を行う可能性についても言及されており、AIが人間の専門知識を吸収し、最終的には人間の仕事を奪うことになるという懸念が広がっています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、OpenAIのAIモデルによる数学のブレイクスルーに関する発表に対し、広範な疑念と強い批判を表明しています。主な論点は、AIが本当に独自に発見したのかという信憑性、OpenAIによるユーザーデータの利用に関する信頼性と倫理、学術界への深刻な影響、そしてAIの真の能力とそれがもたらす未来への懸念です。多くのユーザーは、OpenAIの行動を「データ搾取」「IPロンダリング」「学術的な詐欺」と見なし、その不透明な運営と倫理観の欠如を強く非難しています。この議論は、AI技術の発展とそれが社会にもたらす影響、特に知的所有権、プライバシー、学術的公正さといった根本的な価値観を巡る広範な課題を浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
