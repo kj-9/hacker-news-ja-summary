@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrapheneOS&#x27; rewritten Messages app is released - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">GrapheneOS&#x27; rewritten Messages app is released</h1>
+        <div class="meta">
+            投稿日: 2026年09月11日 | ランク: 2
+        </div>
+        <a href="https://github.com/GrapheneOS/Messaging/releases/tag/13" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>GrapheneOSが新しいメッセージングアプリをリリースしたことについて、Hacker Newsのコメントでは、その迅速なリリース、RCS（Rich Communication Services）のサポートの有無、開発優先順位、スクリーンショットの欠如、および特定のUI/UXの回帰など、多岐にわたる議論が交わされています。</p>
+<h2>リリースとインターフェースの更新</h2>
+<p>GrapheneOSが新しいメッセージングアプリを非常に迅速にリリースしたことに驚きの声が上がっていますが、実際には数ヶ月前から開発が進められていたようです。新しいアプリはAOSP（Android Open Source Project）のメッセージングアプリを近代化し、より洗練されたものにするための取り組みの一環と見られています。</p>
+<h2>RCSサポートの要望と課題</h2>
+<p>多くのユーザーがRCSサポートを強く求めていますが、現状では実装が非常に困難であることが指摘されています。RCSはGoogleのインフラに大きく依存しており、技術的な複雑さやセキュリティ上の懸念がGrapheneOSの原則と衝突する可能性があります。一部のユーザーは、RCSが実装されないと「一般人」とのコミュニケーションが不便で安全性が低いと訴えていますが、RCS自体のセキュリティを疑問視する声もあります。GrapheneOSは将来的にはRCSの実装を目指しているものの、その道のりは「ヘラクレス級の努力」が必要だとされています。</p>
+<h2>開発の優先順位とリソース</h2>
+<p>GrapheneOSのような小規模なチームが、セキュアなOSフォークの維持という膨大な作業の中で、なぜメッセージングアプリのようなシステムアプリにリソースを割くのかという疑問が呈されています。これに対し、以下の点が挙げられています。
+*   <strong>プラットフォームの普及:</strong> 一般ユーザーにGrapheneOSを広めるためには、メッセージングアプリのような基本的な機能が洗練されている必要がある。
+*   <strong>初期体験の重要性:</strong> 新しいユーザーが最初に目にするアプリの質は、全体の印象を大きく左右する。
+*   <strong>既存アプリの問題:</strong> 既存のAOSPアプリは古く、メンテナンスが不十分なため、現代の標準に合わせて書き直す必要がある。</p>
+<p>しかし、一部のユーザーは、バックアップ機能のような「置き換え不可能な」重要な機能の改善が優先されるべきだと主張しています。</p>
+<h2>スクリーンショットの欠如</h2>
+<p>新しいアプリのスクリーンショットが提供されていないことに対して、多くのユーザーから不満の声が上がっています。「百聞は一見に如かず」という言葉が引用され、開発者が機能性を重視しすぎるあまり、ユーザー体験や美的な側面に注意が払われない傾向があることが指摘されています。開発者は自身が製品を知り尽くしているため、スクリーンショットの重要性を見落としがちだという意見もあります。</p>
+<h2>UI/UXの問題と回帰</h2>
+<p>新しいメッセージングアプリには、ワンタイムコードのコピー機能など、以前は存在した便利な機能が失われているというUI/UX上の回帰が報告されています。これは、開発にAIレビューツールが導入されたと報告されているにもかかわらず発生しており、ユーザーを落胆させています。また、Material 3/Material Youデザインへの変更が、画面上の余白を増やしすぎているとして批判されています。</p>
+<h2>その他の懸念事項</h2>
+<ul>
+<li><strong>完全なシステムバックアップ:</strong> Seedvaultの不十分さから、信頼性の高いフルシステムバックアップ機能の早急な実装を求める声があります。</li>
+<li><strong>通話アプリの改善:</strong> 現行の通話アプリのUI/UXが非常に悪く、通話履歴の詳細確認が面倒であるとの批判があります（ただし、一部ユーザーは詳細確認機能が存在すると指摘）。</li>
+<li><strong>Fairphoneのサポート:</strong> GrapheneOSとFairphoneの組み合わせを望む声があるものの、GrapheneOSはFairphoneがセキュリティ要件を満たしていないとして、公式にサポートしない方針を表明しています。</li>
+<li><strong>Google Pixel以外のデバイスサポート:</strong> GrapheneOSを動かすためにGoogle Pixelデバイスに投資する必要がある現状について不満の声があり、Motorolaなどの他デバイスへのサポート拡大に期待が寄せられています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>GrapheneOSの新しいメッセージングアプリのリリースは、AOSPの既存アプリを近代化し、ユーザー体験を向上させるという重要な一歩ですが、RCSサポートの欠如、UI/UXの回帰、そしてスクリーンショットの不足といった点がコミュニティで広く議論されています。開発チームは、セキュリティと使いやすさのバランスを取りながら、リソースの優先順位付けとコミュニケーション戦略の改善が求められています。特に、ユーザーが期待する高度な機能（RCSなど）の実装と、基本的な使い勝手の両立は、今後のGrapheneOSにとって大きな課題となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

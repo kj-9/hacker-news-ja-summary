@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rune is now open source - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Rune is now open source</h1>
+        <div class="meta">
+            投稿日: 2026年09月11日 | ランク: 10
+        </div>
+        <a href="https://rune.build/blog/rune-is-now-open-source" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この投稿は、Go言語を使ってIDE「Rune」を構築することの背景と、その革新的な貢献者プログラムについて説明しています。</p>
+<h2>貢献者プログラムとライセンス</h2>
+<p>Runeの作者は、プロジェクトの収益の一部を貢献者と分配する新しいプログラムを導入し、伝統的なCLA（Contributor License Agreement）を回避します。これはオープンソースコミュニティにおける企業のライセンス変更問題への反動として注目されており、多くのユーザーから「素晴らしい」「革新的」と好評です。ライセンスはGPLv3を採用しています。</p>
+<h2>IDEとしてのRuneへの関心と初期フィードバック</h2>
+<p>多くのユーザーがRuneに興味を持ち、現在のIDE（VS Code、Zed、Emacsなど）からの乗り換えや、新しいIDEを試すことに意欲を示しています。特に、Go言語で書かれていることや、ターミナルが第一級市民である点が評価されています。</p>
+<p>しかし、初期のフィードバックとして、以下の点が挙げられています。</p>
+<ul>
+<li><strong>UI/UX</strong>: ホームページにRuneの使用動画が欲しいという要望や、ライトテーマの出来栄えが良くないという意見があります。</li>
+<li><strong>キーバインディングとオンボーディング</strong>: Vimモードを選択すると、Vimの操作に慣れていないと何もできないと感じるほどの厳格なモード設定に戸惑うユーザーがいます。作者はこれを「褒め言葉」と受け取りつつも、オンボーディングのバランス調整の難しさを認めています。</li>
+</ul>
+<h2>技術的な側面と開発計画</h2>
+<ul>
+<li><strong>Go言語の使用</strong>: Goをメイン言語としてIDEを構築している点が言及されており、Goコミュニティからの期待があります。</li>
+<li><strong>配布とパッケージング</strong>: Fedoraへのパッケージ化を求める声があり、作者はFlatpakやHomebrewのCask化、Fedora Go SIGとの連携を検討しています。</li>
+<li><strong>リモート開発</strong>: Rune Networkを介した複数マシンでの作業の容易さが好意的に受け止められています。Tailscaleとの連携も可能で、SSHも選択肢として存在します。</li>
+<li><strong>パフォーマンス</strong>: ビルド時間に関するブログ記事の主張について、GoのビルドシステムとRustのビルドシステムを比較する詳細な議論があり、Runeのビルドパスが最適化されていないという指摘があります。また、ターミナルエミュレータのベンチマークについても議論があり、作者は自社のターミナルのパフォーマンスが競合他社に比べて優れていると主張するベンチマーク結果を提示しています。</li>
+<li><strong>AIとの統合</strong>: Runeがターミナルマルチプレクサとして、AIと手動プログラミングの橋渡しをする役割を果たすことが強調されています。シンボル検索やファイル参照、コンパイルエラーの即時フィードバックなど、AIエージェントの作業効率を高める機能が計画されています。</li>
+<li><strong>言語サポート</strong>: TypeScriptサポートへの要望があり、作者はTypeScriptエコシステムに関する知識を持つ貢献者を求めています。</li>
+</ul>
+<h2>IDEの将来とAIの影響</h2>
+<p>一部のコメントでは、ClaudeなどのAIツールが進化する中で、従来のIDEの必要性が薄れるのではないかという議論があります。EmacsやVimのようなシンプルなエディタで十分であると考える人もいますが、コードベースのナビゲーション（検索、使用箇所の検索など）にはより強力なツールが必要だという反論もあります。Runeの作者は、AIとエディタの統合によって、新しい価値を生み出せると考えています。</p>
+<h2>まとめ</h2>
+<p>Runeは、Go言語で構築された新しいIDEであり、特にその革新的な貢献者プログラムとGPLv3ライセンスが注目されています。ユーザーは既存のIDEからの移行を検討しており、リモート開発機能やAIとの統合の可能性に期待を寄せています。一方で、UI/UX、オンボーディング、パフォーマンスの最適化など、改善の余地がある点も指摘されています。作者は活発にコミュニティのフィードバックに対応し、プロジェクトの発展に意欲を見せています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
