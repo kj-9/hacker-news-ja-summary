@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data collected by cars and sold to third parties - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Data collected by cars and sold to third parties</h1>
+        <div class="meta">
+            投稿日: 2026年09月13日 | ランク: 7
+        </div>
+        <a href="https://www.theverge.com/column/994172/your-car-is-selling-your-data" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、現代のスマートカーにおけるデータ収集とプライバシー侵害の問題について議論しています。多くのユーザーが、個人データが無断で収集・販売されている現状に懸念を表明し、その対策や代替策について意見を交換しています。</p>
+<h2>プライバシーとデータ保護法の欠如</h2>
+<p>多くのコメントが、米国におけるデータ保護法の不備を指摘し、スマートカーが大量のテレメトリーデータを収集している現状を批判しています。ヨーロッパの車メーカーも同様に大量のデータを収集しており、一部のユーザーはEUのプライバシー法が実際には形骸化し、むしろ監視を義務付ける法律が増えていると主張しています。CCPA（カリフォルニア州消費者プライバシー法）のような既存の法律でデータレポートの取得や削除が可能かという問いも提起されています。</p>
+<h2>古い車の利点</h2>
+<p>現代のスマートカーがデータを収集する一方で、1990年代から2000年代の古い車を使用することの利点を挙げるユーザーが多数います。古い車は、データ収集機能がなく、修理が容易で耐久性が高いという意見が多く見られます。また、現代の車は衝突安全性を高めるために「クランプルゾーン」を採用しており、修理費用が高額になりがちであるのに対し、古い車は頑丈で修理費が安いという具体的な例も挙げられています。</p>
+<h2>データ収集を止めるための技術的対策</h2>
+<p>データ収集を技術的に阻止する方法についても多くの議論がなされています。
+*   <strong>ハードウェアの除去:</strong> テレマティクスモデムやGPSを物理的に取り外す方法が提案されており、具体的な手順を解説するリンクも共有されています。ただし、車のモデルによっては複雑な作業になる可能性があります。
+*   <strong>アンテナの切断/無効化:</strong> テレマティクスアンテナのコネクタを抜き差ししたり、ファラデーケージで覆ったり、50オームのダミーロード/ターミネーションを取り付けたりする方法が議論されています。
+*   <strong>ヒューズの取り外し:</strong> テレマティクスモジュールのヒューズを抜くことが提案されていますが、これによって他の機能（インフォテインメント、GPS、リモートアクセスなど）が利用できなくなる可能性があると指摘されています。
+*   <strong>ソフトウェアスイッチの信頼性:</strong> ユーザーは、車の設定画面で「データ収集をオフにする」といったソフトウェアスイッチだけでは不十分であり、ハードウェアレベルでの対策が必要だと考えています。</p>
+<h2>プライバシーと利便性のトレードオフ</h2>
+<p>データ収集を停止することで、リモートアクセスやOTA（Over-The-Air）アップデートなどの便利な機能が利用できなくなるという意見も多く出ています。特に、寒い地域や暑い地域で車のエアコンを遠隔操作したいというニーズや、妻がAndroid Auto/CarPlayの機能を期待しているといった、個人的な利便性との葛藤が語られています。多くの消費者がプライバシーよりも利便性を優先する傾向にあるため、市場ベースでの解決は難しいという見方も示されています。</p>
+<h2>その他の関連する懸念</h2>
+<ul>
+<li><strong>HOAとデータ収集:</strong> 住宅所有者協会（HOA）が開発プロセスで法的要件を満たすために設置されるのと同様に、車のテレマティクスも何らかのコンプライアンス要件を満たすために利用されているのではないかという推測もされています。</li>
+<li><strong>右側修理権:</strong> データ収集機能の除去が法的に義務付けられている場合、それが「修理する権利（Right-to-Repair）」の法律と衝突するのではないかという懸念も提起されています。</li>
+<li><strong>車の寿命と陳腐化:</strong> 「スマート」な車が、ログ記録のためのフラッシュメモリの寿命や、暗号化による部品間のハンドシェイクの複雑さにより、早期に機能しなくなる可能性があるという懸念も表明されています。</li>
+<li><strong>DMVのデータ販売:</strong> 自動車局（DMV）も登録データを販売しており、個人が所有する車をLLC（合同会社）で登録することで、一部のプライバシー保護を図るという提案もあります。</li>
+<li><strong>Teslaに対する言及:</strong> Teslaはデータ販売を行わないと主張するユーザーがいますが、それに対してはデータはTesla社内に留まるだけであり、従業員によるビデオフィードの監視といった別の懸念があるという反論も出ています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>現代のスマートカーにおけるデータ収集は、多くのHacker Newsユーザーにとって深刻なプライバシー問題です。データ保護法の不備、古い車の利点、そしてデータ収集を阻止するための様々な技術的対策が議論されました。しかし、プライバシーと利便性の間で多くのユーザーが葛藤を抱えており、法的な規制と消費者の意識改革の両方が求められています。物理的なハードウェアの切断が最も確実な対策と見なされていますが、それが車の他の重要な機能を損なう可能性や、技術的な難しさも伴います。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
