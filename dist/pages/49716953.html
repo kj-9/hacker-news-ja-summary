@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chopping up books when they&#x27;re physically too big - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Chopping up books when they&#x27;re physically too big</h1>
+        <div class="meta">
+            投稿日: 2026年09月15日 | ランク: 9
+        </div>
+        <a href="https://attainablefelicity.mattkirkland.com/20260915/cut-up-your-books.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、厚い物理的な本を読みにくく感じ、分冊することに言及する元の投稿に対し、主に電子書籍と物理的な本の比較、本の扱い方、そして物理的な本の未来について議論しています。</p>
+<h2>電子書籍 vs 物理的な本</h2>
+<p>多くのコメントが、元の投稿のアイデア（厚い本を分冊する）の代替案として電子書籍を推奨しています。
+*   <strong>電子書籍の利点:</strong> 電子書籍は軽く、持ち運びが容易で、どんなサイズの本でも腕が疲れることなく読めるという意見が多くあります。また、テキストのリフロー、フォントサイズの変更、辞書検索、しおり機能、デバイス間の同期、内蔵ライト、ページ送りのしやすさといった機能も挙げられています。KoboやKindleのような電子書籍リーダーは、厚い本を読む際の物理的な課題を解決すると評されています。
+*   <strong>電子書籍の欠点:</strong> 一部のユーザーは、電子書籍のエコシステムが楽天などのベンダーによって強制されることや、ファームウェアの不具合（データ損失など）に不満を表明しています。また、「ePub形式で入手できない本が多い」という指摘や、「電子書籍が元のテキストを100%保証しない（改訂される可能性がある）」という懸念も挙げられています。
+*   <strong>物理的な本の利点:</strong>
+    *   <strong>所有と永続性:</strong> 物理的な本は「永遠に所有できる」「充電不要」「画面を見つめる必要がない」という意見があります。
+    *   <strong>触覚と記憶:</strong> 物理的な本をめくる行為、本の匂い、ページ上の言葉の位置などが記憶に残りやすく、読書体験を豊かにすると感じている人もいます。
+    *   <strong>コレクションと存在感:</strong> 本棚に並んだコレクションを見る喜び、古書店巡りの楽しさ、会話のきっかけになることなどが挙げられています。
+    *   <strong>その他:</strong> グラフィックノベルやコミックは物理的な形式の方が優れているという意見もあります。
+*   <strong>物理的な本の欠点:</strong> 厚い本は重く、持ちにくく、特に片手で読むのが難しいという点が指摘されています。また、スペースを取るという問題も挙げられています。</p>
+<h2>本の扱い方とパーソナライゼーション</h2>
+<p>本を物理的にどう扱うかについても様々な意見が出ています。
+*   <strong>分冊・裁断:</strong> 元の投稿のように厚い本を分冊するアイデアには、「手間がかかる」という意見がある一方で、「重さの問題が解決する」「持ち運びが楽になる」と評価する声もあります。教科書を裁断して穴を開け、バインダーに綴じる、スペイン語辞書を半分に分けるといった例も挙げられています。
+*   <strong>書き込み・注釈:</strong> 本に書き込んだり、線を引いたりすることについて、賛否両論があります。一部の人は、本への書き込みを「汚す」と感じる一方で、言語学習者のカト・ロンブのように「本を自分の鏡にする」と捉え、学習効果を高める方法として肯定的に捉える人もいます。「唯一本を本当に傷つける方法は、読まないことだ」という哲学的な意見もあります。
+*   <strong>しおり:</strong> 物理的なしおりが落ちてしまうという問題に対し、ページの写真を撮る、章の終わりで読むのをやめる、日本の「書籍販売カード」のように挟み込むタイプのしおりを使うといった工夫が共有されています。</p>
+<h2>その他の興味深いテーマ</h2>
+<ul>
+<li><strong>絶滅した「マスマーケットペーパーバック」:</strong> かつて一般的だった小さくて薄い「ポケットブック」（マスマーケットペーパーバック）が、配布元が取り扱いをやめ、実質的に消滅しつつあるという情報が共有され、その便利さを惜しむ声があります。</li>
+<li><strong>KOReader:</strong> Koboなどの電子書籍リーダーにインストールできるオープンソースの代替ファームウェア/ソフトウェアKOReaderが、カスタマイズ性の高さから推奨されています。</li>
+<li><strong>本のデザインとフォーマット:</strong> Macmillan Collector's Libraryシリーズのような「ポケットサイズ」のハードカバー本や、複数の巻に分かれた形式（日本の本によく見られる）を望む声があります。また、分厚い本をスパイラルバインディングにすることを勧める意見もありますが、その使い心地には賛否があります。</li>
+<li><strong>「IKEA効果」:</strong> 本を分冊するなどの手間をかけることで、その本への愛着が増す可能性があるという「IKEA効果」に言及するコメントもあります。</li>
+<li><strong>連載小説:</strong> 厚い本を分冊するアイデアから、ディケンズの時代のように連載小説が復活する可能性について推測する声もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>このスレッドは、厚い物理的な本を扱うという具体的な問題提起から、物理的な本と電子書籍の読書体験、所有、利便性、そして未来に関する多角的な議論へと発展しました。多くの人々が電子書籍の利便性を享受している一方で、物理的な本の触覚的な魅力、所有感、そして改変されない永続性に価値を見出していることが明らかになりました。最終的には、読書体験は個人的な好みや状況によって大きく異なることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

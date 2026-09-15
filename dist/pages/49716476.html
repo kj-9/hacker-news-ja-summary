@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We got admin access to Baseten&#x27;s production GitHub in 25 minutes - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">We got admin access to Baseten&#x27;s production GitHub in 25 minutes</h1>
+        <div class="meta">
+            投稿日: 2026年09月15日 | ランク: 7
+        </div>
+        <a href="https://www.strix.ai/blog/baseten-harbor-github-pat-takeover" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Baseten社でStrixという自律型ハッキングエージェントが発見した、GitHubのトークン漏洩に関する記事について議論しています。</p>
+<h2>Basetenの対応と報奨</h2>
+<p>Basetenが脆弱性の報告に対して迅速に対応し、パッチを適用したことは評価されていますが、報奨としてTシャツやパーカーを送ったことに対しては批判的な意見が多数を占めています。多くのコメント投稿者は、130億ドルの価値がある企業が、致命的なバグを報告した研究者に対し、数千ドル程度の金銭的な報奨を与えなかったのは不適切であり、正直な研究者がBasetenの脆弱性を探す意欲を削ぐだけでなく、悪意のある攻撃者を誘引するメッセージを送っていると指摘しています。一方で、報奨は「感謝のしるし」であり、金銭的なものではないと擁護する声や、企業倫理上、潜在的な顧客に現金を与えるのは禁止されているという意見もあります。</p>
+<h2>法的な問題と倫理</h2>
+<p>StrixがBasetenに対して許可なくペネトレーションテストを行ったことの合法性について、議論が交わされています。多くの人が、相手の許可なくペンテストを行うことは、ほとんどの法域で違法であると考えています。しかし、Strixは、公開されたDockerイメージからトークンを発見し、そのトークンが有効であることを確認しただけであり、悪意のある行動は一切行っておらず、すぐにBasetenに報告したため、問題ないと主張する人もいます。しかし、トークンを使ってシステムに不正アクセスした時点で、違法行為にあたるという見方も存在します。</p>
+<h2>セキュリティ対策と教訓</h2>
+<p>BasetenがSOC2 Type IIやHIPAAに準拠していると謳っているにもかかわらず、GitOpsリポジトリや顧客固有のリポジトリへの管理アクセス権を持つトークンが公開されたDockerイメージに長期間含まれていたことについて、企業としてのセキュリティ文化や「最小権限の原則」の欠如が指摘されています。また、このような自律型ハッキングエージェントによるセキュリティ侵害が、悪意のある攻撃者によってどれほど発生しているのか、という懸念も表明されています。コメントでは、単一ホストのSSL証明書ではなくワイルドカード証明書の使用、プライベートなGit/Dockerレジストリの分離、Gitパイプラインにおける自動<code>terraform apply</code>の回避など、より強固なセキュリティ対策を推奨する声が上がっています。</p>
+<h2>AIとセキュリティの未来</h2>
+<p>AI経済への移行が議論されており、AIエージェントによるサイバーセキュリティの脅威と防御の両面が注目されています。AIエージェントによる迅速な脆弱性発見と悪用が進む中で、ソフトウェアのパッチ適用サイクルが日に日に短くなり、企業にとっては「ゲームオーバー」を避けるためにセキュリティ対策の強化が必須であるという意見もあります。また、AIエージェントが生成するコンテンツの検出や、AIエージェントの利用に関する倫理的なガイドラインの必要性についても言及されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、BasetenのGitHubトークン漏洩事件から、セキュリティ企業による脆弱性報告の報奨のあり方、ペネトレーションテストの合法性と倫理、企業が取るべきセキュリティ対策の重要性、そしてAIがサイバーセキュリティにもたらす影響と未来について深く議論しています。特に、脆弱性報告に対する企業の報奨が、研究者のモチベーションと倫理に与える影響や、AIを活用したペネトレーションテストの法的なグレーゾーンが注目されています。この事件は、現代のデジタル環境におけるセキュリティの課題と、それに対する企業の責任を浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
