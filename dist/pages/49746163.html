@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bend – A language that blocks AI mistakes via proof, on CPU and GPU - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Bend – A language that blocks AI mistakes via proof, on CPU and GPU</h1>
+        <div class="meta">
+            投稿日: 2026年09月17日 | ランク: 2
+        </div>
+        <a href="https://bend-lang.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、AIが生成したコードの正確性を数学的証明で検証する新しいプログラミング言語「Bend」のリリースに関するものです。投稿者はBendの作者であるLightMachine氏です。</p>
+<h2>コミット履歴に関する懸念</h2>
+<p>リポジトリのコミット履歴が1つのコミットにまとめられていることに対し、ユーザーから強い懸念が表明されています。これは信頼性の欠如、AIによる大量の「slop」（質の低いコードやドキュメント）を隠蔽しているのではないか、といった批判を招きました。
+*   <strong>AlexErrant</strong>: コミット履歴の消去は信頼を損なう行為であり、他の言語プロジェクトでは見られない。AIによる「slop」があるのは普通だが、それを隠そうとするのは奇妙。個人の情報が含まれているという理由も、強制プッシュでは完全に隠せないため疑問。
+*   <strong>LightMachine (作者)</strong>: コミット履歴には個人情報やAIによる「slop」、さらには独自のコードが含まれていたため、統合した。これが問題になるとは思わなかったが、フィードバックを受け、機密部分を削除して履歴を復元することを検討する。
+*   <strong>developedby</strong>: 以前のリポジトリは<a href="https://github.com/HigherOrderCO/Bend1">HigherOrderCO/Bend1</a>でアクセス可能。
+*   <strong>randomblock1</strong>: 以前にもリポジトリがほぼ空のREADMEだけにリセットされたことがあった。
+*   <strong>stschaef</strong>: 「Single commit history is hella sus（コミット履歴が1つなのは非常に疑わしい）」。</p>
+<h2>「Laws」（証明）の有効性と限界</h2>
+<p>Bendの核となるアイデアである「Laws」（コードが破ってはならない不変条件を数学的に証明する仕組み）について、その有効性と実用性に関する議論が集中しています。
+*   <strong>garrisonj</strong>: 「vibecode」された「laws」が間違っている可能性がある。
+*   <strong>pdpi</strong>: 「壁をなくす」デモで、「勝てない」という法則だけを与えた結果、AIがゲームの動きを斜めにするなど、意図しない「賢すぎる」解決策を導き出したことを指摘。「laws」を書くことがコードを書くことよりも大きな問題になる可能性があると懸念。AIが法則の「文字通り」の意味は満たすが「精神」を満たさない解決策を生み出す危険性がある。
+*   <strong>LightMachine (作者)</strong>: 「勝てない」という法則は極めて仕様が不十分であると認めつつ、デモは法則が破られないことを示すのが目的だと説明。法則は「思い出したことを守る」だけであり、銀の弾丸ではないが、小さな法則でも大規模なバグを防ぐことができる（例：イーサリアムのDAOハック）。AIが「laws.bend」に書いた内容を人間が確認する必要があるが、それはコードベース全体を読むよりはるかに少ない労力で済む。
+*   <strong>konart</strong>: 「laws」を書くことがコードを書くことよりも大きな問題になるというのは、そもそも明確な境界線と目標を定義することがプログラミングで最も難しい部分であり、それが正しければ他の部分は些細なことだ、という意見。
+*   <strong>RomanKornev</strong>: 「laws」は新しい機能に合わせて変更されがちで、意味がなくなることがあると指摘。一部の「laws」は凍結する必要があるが、すべてではない。判断は依然として人間が行うため、人間がボトルネックになる。</p>
+<h2>AIとプログラミングの未来</h2>
+<p>BendがAI時代のプログラミングにどう貢献するか、その前提について疑問が呈されています。
+*   <strong>pron</strong>: 「ポストAGI経済では人間はコードを書いたり読んだりしなくなるが、AIに何をしたいかを伝える明確な方法が必要」という主張に対し、AGIが十分賢ければ人間の意図をよりよく理解し、コンパイラも必要なく、ユーザー自体も置き換えることができるのではないかと疑問を投げかける。
+*   <strong>lacedeconstruct</strong>: AGIはシニアエンジニアのように要件を収集し、質問を通じて顧客のアイデアを完成させるべきだ、と示唆。
+*   <strong>whoamii</strong>: AIが曖昧な部分を仮定することで生産性を高めているため、常に「曖昧さのない」方法が必要なのか疑問。
+*   <strong>daishi55</strong>: フロンティアモデルがプロンプトを正しく実装できないという問題は、モデルの改善に伴い、すでに問題ではなくなってきていると感じる。</p>
+<h2>技術的な質問と議論</h2>
+<ul>
+<li><strong>boxed, robinhouston, LightMachine</strong>: コンパイラがどこにあるかという質問に対し、<code>bend2/comp.ts</code>にあると回答。現在「きれいなファイルではなく、多くの応急処置やAIのslopが含まれている」と認めている。</li>
+<li><strong>tyushk, etiamz</strong>: インタラクションコンビネータやインタラクションネットに関心を持つユーザーから、関連研究（Marc ThatcherのPhD論文）が紹介される。</li>
+<li><strong>IshKebab, gr_norm</strong>: 形式的検証が現実世界のプログラムにスケールするかという疑問に対し、AWS EC2、Appleの暗号ライブラリ、MicrosoftのRust検証の例が挙げられる。</li>
+<li><strong>avodonosov, LightMachine</strong>: Bendの論理的基盤（アフィニティ、クロージャの最大1回呼び出しなど）を理解するための文献を求める質問に対し、作者は単一の書籍ではカバーできないと回答。「Type Theory and Formal Proof」や「Idris 2: Quantitative Type Theory in Practice」を推奨。</li>
+<li><strong>gslepak, LightMachine</strong>: CPUとGPUで同じCファイルをコンパイルする仕組みについて質問があり、作者はMetalまたはCUDAにコンパイルされることを明確化する予定だと回答。</li>
+<li><strong>rao-v, LightMachine</strong>: HVMのファンから、プロファイルガイド最適化やオートチューニングへの投資計画について質問。作者は将来的に検討すると回答。</li>
+<li><strong>mathisfun123, LightMachine</strong>: HVMの現状について質問があり、作者はBend 2でHVMを再実装したことを明かす。</li>
+<li><strong>stschaef, LightMachine</strong>: GPU並列処理の仕組み、Leanなど既存の証明支援系との比較、コミット履歴の問題、アフィン依存型理論の新規性、引用されていない論文など、多岐にわたる技術的質問に対し、作者が詳細に回答。GPUはアロケータ、GC、クロージャ評価器を実装し、単純なスケジューラで並列化している。Bendはタクティクスやコンパイル時探索を行わないため高速だが、コードは冗長で証明を書くのが大変。コミット履歴の件は申し訳ないと述べる。アフィン依存型理論はQTT（量化型理論）に近く、ランタイムクロージャを完全に禁止することで単純化を図っているため、研究上の画期的な成果ではないと説明。</li>
+<li><strong>amluto, LightMachine</strong>: ガイドの曖昧な点（無限ループ、<code>Kind</code>の定義、配列の型など）について具体的な質問が寄せられる。作者は、今後のバージョンで改善する意向と、現バージョンは言語セットを「シンプルに保っている」と回答。<code>-</code>は「消去された引数」を意味し、消去された位置で何度でも使用できると説明。<code>Array &amp; U32</code>はペア型であると回答。</li>
+</ul>
+<h2>その他の懸念とフィードバック</h2>
+<ul>
+<li><strong>AlexErrant</strong>: 冒頭の「バグなし、高速なvibecodeアプリを楽しもう！」というキャッチフレーズに対し、「snarky」なコメント。</li>
+<li><strong>thechao</strong>: インストールスクリプトに<code>sudo</code>が必要であると指摘。</li>
+<li><strong>LightMachine (作者)</strong>: 自身が作者であることを明かし、Hacker Newsのスタッフにタイトル変更を依頼。ユーザーに対しては、1年間毎日16時間作業し無料で提供しているため、批判は礼儀正しく行ってほしいと要望。</li>
+<li><strong>mmoustafa</strong>: タイトルは「Bend」だけで十分で、詳細はホームページで説明すべきだと提案。</li>
+<li><strong>ble</strong>: AIエージェントを考慮した証明可能な言語というアイデアを高く評価し、頻繁に誤解されたり中傷されたりするだろうと予想。</li>
+<li><strong>hollowturtle</strong>: AIというキーワードがなければもっと注目を集めたはずだとし、AIに過度に依存する宣伝文句に疲れていることを示唆。</li>
+<li><strong>docheinestages</strong>: 証明自体が自然言語で定義されない限り、人間には採用されないだろうと指摘。高い認知負荷が必要。</li>
+<li><strong>resonious</strong>: 「vibecoded!!」というコメントが多すぎると批判。AI指向のツールなので、作者が全て手書きすることを期待するのはおかしいと主張。</li>
+<li><strong>npn</strong>: 「ガイドを読んだが、NP困難問題を解決できるほど簡単に思える。作者ならもっと難しい問題も解決できるだろう。」と皮肉めいたコメント。</li>
+<li><strong>mantovanidaniel</strong>: 「バグなし、高速なvibecodeアプリ！」という謳い文句を「Scam detected（詐欺検知）」と批判し、ベンチマークと再現方法を要求。</li>
+<li><strong>bb-connor</strong>: 2万スターというGitHubの評価に対して「lmao sus（笑えるほど怪しい）」とコメント。</li>
+<li><strong>jwpapi</strong>: 証明の仕組みについて具体的な説明が不足していると感じている。Leanでは理解できるが、Bendではそうでないと指摘。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Bendは、AI生成コードの正確性を数学的証明で保証することを目的とした新しいプログラミング言語です。作者は、AIがコードを書く未来において、人間が「Laws」（不変条件の証明）を定義することで、バグのないアプリケーションを構築できると提唱しています。しかし、その発表はGitHubリポジトリのコミット履歴が1つにまとめられていたこと、AIによって書かれたドキュメントやコードの品質に対する懸念、そして「Laws」の定義がコード記述自体よりも複雑になる可能性など、多くの批判と技術的な疑問を呼びました。作者は、個人情報や「AI slop」の隠蔽がコミット履歴統合の理由だと説明し、フィードバックに基づいて改善する意向を示しました。また、GPU並列処理やアフィン依存型理論といった技術的な詳細についても説明し、Bendがまだ開発の初期段階にあることを強調しました。全体として、Hacker NewsコミュニティはBendの革新的なアイデアに関心を示しつつも、その実装の透明性、実用性、および将来のAIとの関係性について、厳しい検証の目を向けている状況です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
