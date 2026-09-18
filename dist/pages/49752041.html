@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenJev - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">OpenJev</h1>
+        <div class="meta">
+            投稿日: 2026年09月18日 | ランク: 10
+        </div>
+        <a href="https://openjev.com/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このプロジェクトは「OpenJev」と称されており、TypeSafeが開発した「Jev」と呼ばれるモデルのインターフェースパターンを、オープンソースモデル（Qwen3 0.6BやMiniCPM5 2Bなど）で再現しようと試みています。Jevは、高速で安価な意思決定を目的とした分類モデルであり、通常のLLMとは異なるアプローチをとるとされています。しかし、OpenJevのウェブサイトのデザインや、本家Jevの命名、そしてその技術的な本質について、Hacker Newsのコメントでは活発な議論が交わされています。</p>
+<h2>OpenJevの技術的アプローチと本家Jevとの違い</h2>
+<p>OpenJevは、Jevのインターフェースを再現する試みであり、小規模で高速なLLMを使用しています。Jev自体は「LLMではない」と主張されており、分類に特化したモデルで、テキスト生成ではなく意思決定に焦点を当てています。OpenJevは、このアプローチを一般的なLLMで模倣しようとするものですが、コメントではその「Jev」という名称が誤解を招くという指摘が多数あります。本家Jevは、並列サンプリングやRLCD（Reinforcement Learning from Calibrated Decisions）といった独自の訓練アーキテクチャを持ち、非常に高速で費用対効果が高いとされています。OpenJevは、このような速度や精度、特に「校正された確率（calibrated probability）」の出力を再現することの難しさが指摘されています。</p>
+<h2>LLM生成ウェブサイトへの批判と「アンキャニーバレー」現象</h2>
+<p>OpenJevのウェブサイトは、多くのユーザーから「LLMが生成したようなデザイン」として批判されています。具体的な批判点としては、過剰な情報量、無意味なフィラーテキスト、統一性のないレイアウト、不適切なフォントや色の選択などが挙げられています。これは「アンキャニーバレー」現象に似ており、AIが生成したものが人間らしさを模倣しようとするが、どこか違和感があり、不快感を与えるという見方がされています。一方で、「明確で簡潔」と評価する声や、「ブルータリストな美学」として好意的に見る意見も存在します。LLMが生成するサイトは、手作業で作られたサイトに見られるような「人間らしい不完全さ」を欠き、それが「安っぽさ」や「魂のなさ」につながるという分析もされています。</p>
+<h2>Jevの性能と利用可能性に関する議論</h2>
+<p>本家Jevは、その速度と低コスト、そして高い精度で注目されています。特に、特定のタスク（ゼロショット分類など）において、GPT-5.6 Terraのような大規模LLMに匹敵する性能を、はるかに低いコストとレイテンシで提供するとされています。しかし、Jevの技術的な詳細は非公開であり、論文も発表されていないため、その実態については憶測が飛び交っています。OpenJevのようなプロジェクトは、既存のオープンモデルでJevの機能を再現しようとするものですが、本家Jevの性能や校正された確率の信頼性を再現するのは難しいとされています。また、Jevはベンチマーク結果の公開を禁止しているため、公平な比較ができないという問題も指摘されています。</p>
+<h2>まとめ</h2>
+<p>OpenJevは、本家Jevのインターフェースパターンをオープンモデルで再現しようと試みるプロジェクトです。Jevは高速で安価な意思決定に特化した「LLMではない」とされるモデルですが、OpenJevは既存のLLMを用いてその挙動を模倣しています。コメントでは、OpenJevのウェブサイトのデザインに対する批判や、本家Jevの「LLMではない」という主張の真偽、そしてOpenJevが本家Jevの性能、特に「校正された確率」をどこまで再現できるかについて活発な議論が交わされています。多くのユーザーは、Jevの速度と精度に期待を寄せつつも、OpenJevの命名や技術的な詳細の欠如に対して疑問を呈しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
