@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: CUA-S1 – A System One Model for Computer Use - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: CUA-S1 – A System One Model for Computer Use</h1>
+        <div class="meta">
+            投稿日: 2026年09月19日 | ランク: 9
+        </div>
+        <a href="https://github.com/trycua/cua" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Cuaは、コンピューター利用における局所的な意思決定に特化した小型AIモデル「CUA-S1」を発表しました。このモデルは、汎用LLMのような複雑な思考（System 2）ではなく、限定された選択肢から最適なものを迅速に選ぶ「速い思考」（System 1）を模倣することを目指しています。最初のリリースである「CUA-S1-FORMS」は、フォーム入力の自動化に特化しており、スクリプトでは対応しきれないが、汎用LLMを呼ぶほどではない、変動性のある狭いタスクをターゲットとしています。</p>
+<h2>CUA-S1の目的と設計思想</h2>
+<p>Cuaは、全てのコンピューター利用タスクが汎用LLMによる複雑な思考を必要とするわけではないという問題意識からCUA-S1を開発しました。このモデルは、値の入力、チェックボックスの選択、要素の無視といった局所的な意思決定に特化しています。現在のコンテキストと可能な選択肢のセットを受け取り、各選択肢の確率を返すことで、トークンを生成するのではなく、与えられたオプションをスコアリングしてアプリケーションの動作を駆動します。この設計は、Daniel KahnemanのSystem 1/System 2の概念と、TypesafeのJevプロジェクトに触発されています。</p>
+<h2>CUA-S1-FORMSの特長と評価</h2>
+<p>最初のリリースである「CUA-S1-FORMS」は、フォームのインタラクションに特化した専門モデルです。706kパラメータ、2.8 MBという非常に軽量なモデルで、合成データによるトレーニングも30分未満で完了します。ドキュメントから抽出された要素に対し、「与えられた値を使用」「チェック」「クリック」「スキップ」のいずれかを予測しますが、テキストフィールドへの新しい値の予測やスクリーンショットの考慮は行いません。ホスト型Jevと比較した評価では、フォームタスクで99.7%の高い正答率を達成し（Jevは83.6%）、ローカルでのスコアリング時間は7-9ミリ秒と高速です。このモデルは、「脆いスクリプト」と「汎用エージェントループ」の中間領域、すなわち、変動性はあるものの意思決定の選択肢が狭いタスクに対応することを目指しています。</p>
+<h2>将来の展望とコミュニティからのフィードバック</h2>
+<p>Cuaは、汎用エージェントが未知の状況に遭遇した際に、このような専門家モデルに意思決定を委ねるという将来の方向性を模索しています。コメントでは、フォーム、Wikipedia、Final Cutなどの専門家モデル群を親モデルが選択し、汎用LLMの目標達成を迅速化するアイデアや、クッキー同意ポップアップの自動閉鎖、Hacker Newsの要約を行うGrok Botのようなシステムへの応用可能性が提案されました。また、モデルがRLCD（Reinforcement Learning from Critical Decisions）を使っているのか、RLHF（Reinforcement Learning from Human Feedback）を使っているのかといった技術的な詳細に関する質問も寄せられました。Cuaは、合成データ生成、トレーニング、評価、Driver統合コードをMITライセンスでオープンソース化しており、コミュニティからの貢献やフィードバックを積極的に求めています。</p>
+<h2>まとめ</h2>
+<p>Cuaの「CUA-S1」は、コンピューター利用における特定の局所的な意思決定に特化した軽量AIモデルという新しいアプローチを提示しています。特にフォーム入力に焦点を当てた「CUA-S1-FORMS」は、高い精度と処理速度で汎用LLMや従来のスクリプトでは対応しきれないタスクの自動化を実現します。このアプローチは、汎用エージェントと専門家モデルの連携による効率的なタスク実行の可能性を示唆しており、将来的に多様な専門家モデルが開発されることで、より洗練された自動化システムが構築されることが期待されます。オープンソース戦略により、この分野でのコミュニティの関心と貢献を促しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
