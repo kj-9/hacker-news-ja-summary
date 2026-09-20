@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singapore’s National Library Board offers micropayments to build reading habits - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Singapore’s National Library Board offers micropayments to build reading habits</h1>
+        <div class="meta">
+            投稿日: 2026年09月20日 | ランク: 8
+        </div>
+        <a href="https://www.gadgetreview.com/singapore-is-paying-people-to-put-down-their-phones-and-read-books" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、シンガポールの図書館が読書を奨励するために報酬を支払うというニュースについて議論されており、報酬の実際の価値、ゲーミフィケーションの有効性、シンガポールの公共施設の利用制限、そして読書習慣の形成に関する広範な話題が中心となっています。</p>
+<h2>シンガポールの公共施設の制限</h2>
+<p>シンガポールの公共施設（図書館、プールなど）は外国人観光客には使いにくいという意見が多くあります。特にWi-Fi利用やデジタルチケットシステムが外国人にとってアクセスしづらいと指摘されています。公式の言い訳は「納税者が補助しているから」というものですが、これに対しては、シンガポールが富裕層の資金隠しを支援していることを考慮すると皮肉だという声も上がっています。また、シンガポールが「階級社会」であり、市民、永住者、外国人といった移民ステータスによって社会での立場が決定されると批判するコメントもあります。しかし、一方で、土地や資源が限られた国ではこのような「階級主義」も必要であり、ビザの種類によってシンパス（日本のマイナンバーに相当）が発行されるため、短期滞在者への制限は許容範囲だと擁護する意見もあります。</p>
+<h2>読書報酬の有効性とゲーミフィケーション</h2>
+<p>シンガポール図書館の「読書報酬」は、実際には15分間の読書でS$0.02という少額であり、金銭的なインセンティブよりもゲーミフィケーション（XP獲得、ストリーク、リーダーボード、賞品など）が主な目的だと指摘されています。これに対しては、子供向けの読書プログラム（ARプログラムなど）でポイントを貯めて景品と交換するシステムが昔から存在しており、その抜け穴を悪用する子供もいたという体験談が共有されています。少額の報酬では大人にとって努力に見合わないと指摘する声がある一方で、Duolingoのように人々をタスクに集中させる方法を読書にも応用できないかという提案も出ています。</p>
+<h2>読書習慣の形成と現代の課題</h2>
+<p>コメントでは、「電話を最優先する人口」の中で読書習慣を築くことの重要性が強調されています。読書は批判的思考、推論、自己バイアスの検出、金融リテラシーなど、多くの基礎的なスキルと習慣を育むとされています。スマホやPCといったデバイスが読書を妨げる原因であるという意見に対し、「電源を切る」というシンプルな解決策が提示されています。しかし、配偶者や子供などの扶養家族がいる場合、数時間も連絡を絶つのは難しいという反論もあります。これに対しては、「即時連絡可能である必要性は現代の不安であり、20年前までは存在しなかった」という意見や、過度なコミュニケーションの副作用を指摘する声も上がっています。</p>
+<h2>読書形式（電子書籍 vs. 紙）</h2>
+<p>読書形式については、電子リーダー（Kindleなど）の利便性が多く語られています。特にテキストサイズを自由に変更できることで、多くの人が読書しやすくなったと感じています。これは、視覚的な問題（失読症でなくても）を持つ人や、単に大きい文字の方が見やすいと感じる人にとって大きなメリットです。また、KindleとAudibleを同期させて利用することで、読書量が増えたという経験も共有されています。一方で、電子書籍では、以前のページを振り返る際に検索機能を使う必要があり、紙の本よりも手間がかかるという不満も述べられています。</p>
+<h2>「コンテンツ消費」としての読書</h2>
+<p>読書を「コンテンツ消費」とみなすことに対する議論も展開されています。あるコメントでは、書籍、記事、オーディオブック、ポッドキャスト、音楽、テレビ、ショートフォームコンテンツをすべて「コンテンツ消費」として、創造や行動とバランスを取るべきだと主張しています。しかしこれに対し、読書を「コンテンツ」と呼ぶことは、思考、感情、物語を広告や販売の媒体と見なす人々が使う言葉であり、言葉の選択に注意すべきだという反論があります。2000年前の著者の声を聞くことができる読書と猫の動画を同列に扱うのは傲慢であると批判されています。一方、現代のロマンス小説を読むことは、まさに「スナックのように消費される」ものであり、ハリー・ポッターシリーズを再読することも、オンライン動画を見るのと本質的に変わらない消費活動だと述べる意見もあります。</p>
+<h2>まとめ</h2>
+<p>シンガポールの「読書報酬」は、少額の金銭的インセンティブよりも読書習慣の形成を目的としたゲーミフィケーションが主体であると評価されています。この議論は、シンガポールの外国人に対する公共施設のアクセシビリティの問題や、現代社会における読書習慣の維持の難しさ、電子書籍の利便性、そして読書を単なる「コンテンツ消費」と見なすことへの是非といった広範なテーマに及んでいます。多くのコメントが、多忙な現代において、いかにして読書の時間を確保し、その価値を再認識するかに焦点を当てています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
