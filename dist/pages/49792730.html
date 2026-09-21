@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiaomi MiMo v2.6 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Xiaomi MiMo v2.6</h1>
+        <div class="meta">
+            投稿日: 2026年09月21日 | ランク: 1
+        </div>
+        <a href="https://mimo.xiaomi.com/mimo-v2-6" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Xiaomiがオープンウェイトの新しいMiMo-V2.6モデル（FlashおよびPro）をリリースしたことに関するコメントは、主にその能力、コスト効率、そしてモデルがAI市場全体、特に米国のAI企業に与える影響に焦点を当てています。透明性の高いトレーニングプロセスと、特にFlashモデルのパフォーマンスが高く評価されています。</p>
+<h2>コストと能力</h2>
+<p>MiMo-V2.6モデルは、そのコストと能力のバランスで高い評価を得ています。多くのコメント投稿者は、特にMiMo-V2.6 Flashモデルが、その価格で提供するパフォーマンスに感銘を受けています。これは、他のオープンソースモデルや、OpenAI、Anthropicといった米国の主要モデルと比較しても、競争力があると考えられています。</p>
+<ul>
+<li><strong>優れたコストパフォーマンス</strong>: MiMo-V2.6は、コストパフォーマンスの面でフロンティアを推進しており、「知能対コスト」のパレートフロンティアを牽引していると評価されています([1.4], [1.24])。</li>
+<li><strong>多様なタスクでのデモンストレーション</strong>: DAWの使用など、多様なタスクでのモデルのデモンストレーションや、さまざまなベンチマークと価格帯からのグラフ、科学的環境での実際の使用例が好意的に受け止められています([1.2])。</li>
+<li><strong>以前のバージョンからの改善</strong>: MiMo 2.5のユーザーは、最近のモデルの振る舞いから新しいバージョンのリリースを予測しており、2.6の改善に期待を寄せています([1.5])。</li>
+<li><strong>Flashモデルの評価</strong>: Flashモデルは特に評価が高く、ニッチな専門分野のタスクで良い結果を出しているとの報告もあります([1.13])。一部のベンチマークでは、GPT-5.6 LunaやClaude 4.9に匹敵するとされています([1.12])。</li>
+<li><strong>Proモデルの評価</strong>: MiMo 2.6 Proは、Kimi K3 (2.8Tパラメータ) などのより大きなモデルと比較しても、ベンチマークで高いパフォーマンスを発揮しています([1.27])。</li>
+</ul>
+<h2>トレーニングの透明性と方法論</h2>
+<p>Xiaomi MiMoチームは、トレーニングプロセスの透明性を高く評価されており、特にリアルタイムダッシュボードの公開や詳細な技術レポートの共有が注目されています。</p>
+<ul>
+<li><strong>リアルタイムダッシュボード</strong>: トレーニング中に共有されたリアルタイムダッシュボード（[1.7]にリンクあり）は、「信じられないほどの学習・教育ツール」と評されています([1.7])。このダッシュボードでは、モデルの進化、直面した課題（サイバーデータセットの破棄など）、リアルタイムのトレーニング損失、ベンチマークスコア、実行コストの見積もりなどが詳細に記録されており、その存在自体がユニークであると指摘されています([1.7.1.1], [1.7.1.2])。</li>
+<li><strong>詳細な技術レポート</strong>: トレーニング方法論に関する詳細な情報（GoogleやDeepseekの論文のような「賢い舞台裏のトリック」を含む）や、苦手な分野を含めたベンチマークスコアの公開が評価されています([1.7])。</li>
+<li><strong>オンポリシーRLの指標</strong>: ダッシュボードには、最先端のトレーニング手法であるオンポリシーRLに関連する「partial/avg_staleness」や「train_infer_diff/new_infer/kl」といった指標が含まれており、モデルの改善効率を評価する上で非常に有用であると指摘されています([1.7.1.3])。</li>
+</ul>
+<h2>AI開発の「減速」と地政学的競争</h2>
+<p>中国製モデルの台頭は、米国におけるAI開発の「減速」を求める声の真の動機について、議論を巻き起こしています。多くのコメント投稿者は、米国の大手AIラボが規制を求めているのは、競争を抑制し、市場での優位性を維持するためではないかと推測しています。</p>
+<ul>
+<li><strong>規制による市場支配</strong>: AnthropicのDario AmodeiやOpenAI、Grokなどの主要AI企業がAI開発の減速を訴えているのは、中国製モデルのような安価で高性能な競合モデルがマージンを侵食するのを恐れているためであり、規制を通じて市場参入障壁を設け、競争を抑制しようとしている「規制の捕捉」の一環であるという見方が示されています([1.7.2], [1.7.2.1.2], [1.7.2.2], [1.7.2.3])。</li>
+<li><strong>中国製モデルの競争力</strong>: 中国製モデルは、多くの点で安価で高性能であり、API料金でも米国製モデルと競争力があると評価されています([1.15.2], [1.15.4])。チップ規制があるにもかかわらず中国がAI競争でこれほど進んでいることに驚きを示す声もあります([1.15.2.1.1])。</li>
+<li><strong>「スプートニクの瞬間」</strong>: 一部のコメント投稿者は、中国がAIでアメリカを追い越すことは、アメリカが「傲慢さを捨て、再び勢いを取り戻すために必要なスプートニクの瞬間」となるだろうと述べています([1.15.3])。</li>
+<li><strong>地政学的考慮</strong>: 中国製モデルの使用には、経済的・軍事的ライバルを支援したくないという地政学的な考慮も存在しますが、一方で、どちらの国も言論の自由を完全に保証しているわけではなく、ローカルでモデルを実行することで検閲を回避できるという意見もあります([1.15.1], [1.15.1.1])。</li>
+</ul>
+<h2>その他</h2>
+<ul>
+<li><strong>AI生成デザインの癖</strong>: モデルが生成するフロントエンドデザインに見られる「01 - UPPERCASE TEXT」といった独特の表現（いわゆる「claudeslop」）は、AIが安定したデザインを構築するための「足場」技術なのか、あるいはRLHFによって強化されたものなのかという議論があります([1.6], [1.6.2], [1.6.3], [1.13.1], [1.13.1.1])。</li>
+<li><strong>ペリカンのベンチマーク</strong>: モデルのSVG生成能力を評価する「ペリカンベンチマーク」について言及されています([1.17])。このベンチマークは、モデルが「ベンチマックス」を狙って調整されていないことを示していると解釈されています([1.17.3.1], [1.17.3.1.1])。</li>
+<li><strong>パレートフロンティアの解釈</strong>: ベンチマークチャートで使用されている「パレートライン」という用語について、その正確な意味（パレート効率性/パレートフロンティア vs. パレートの法則）に関する議論があり、多くのユーザーが正しい解釈を共有しています([1.14], [1.14.1], [1.14.2], [1.14.3], [1.14.4])。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Xiaomi MiMo-V2.6のリリースは、AIコミュニティに大きな関心と興奮をもたらしました。特にその優れたコストパフォーマンスと、トレーニングプロセスにおける透明性が高く評価されています。この中国製モデルの登場は、AI開発の競争環境を激化させ、米国の主要AI企業がAIの「減速」を求める真の動機について、地政学的・経済的な観点からの議論を巻き起こしています。多くのコメント投稿者は、中国製モデルの台頭がAIをより手頃な価格で利用可能にし、消費者にとって有益な競争を促進すると考えています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

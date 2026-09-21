@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention is all you have - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Attention is all you have</h1>
+        <div class="meta">
+            投稿日: 2026年09月21日 | ランク: 7
+        </div>
+        <a href="https://alicegg.tech/2026/09/21/attention" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、現代のインターネットにおける「アテンション・ハイジャック」問題、特にアルゴリズム駆動型プラットフォームがユーザーの注意をいかに捉え、操作するかという記事についての議論です。コメントは、この問題の認識、その起源、そして個人および社会レベルでそれにどう対処するかという点に焦点を当てています。</p>
+<h2>タイトルの解釈とAIとの関連性</h2>
+<p>記事のタイトル「Attention is All You Need」は、有名な機械学習論文のタイトルと酷似しているため、多くのコメントがこの点の議論に集中しました。一部のユーザーは、タイトルから機械学習（ML）関連の記事だと誤解したと述べ、ML論文を意識した意図的な引用だと解釈しました（1.1.1.1）。これに対し、MLが現代の「ドゥームスクロール」をより効果的/悪質にしているという文脈で、タイトルがその論文への言及であると推測する意見もありました（1.1.1.1.3）。また、著者がAIの関連性を軽んじる意図で、あえて無知を装った皮肉的な言及だと考える人もいました（1.1.1.1.2）。</p>
+<h2>「アテンション・ハイジャック」の広がりと影響</h2>
+<p>多くのユーザーは、現代のアプリやプラットフォームがユーザーの注意を奪おうとする実態に同意しています。特にソーシャルメディアやレコメンデーションアルゴリズムが、私たちの思考や習慣を形成し、しばしば望まないコンテンツ（政治的プロパガンダ、ネガティブなニュース、エンゲージメントを最大化するコンテンツ）を提示することで、精神的健康に悪影響を与えているという懸念が表明されました（1.3, 1.27）。一方で、YouTubeのアルゴリズムは適切に管理すれば、ユーザーの興味に沿った「あまりにも退屈な」フィードになることもあるという意見や（1.14.1）、特定の分野の専門家になるための強力な学習ツールになり得るという肯定的な側面も指摘されています（1.39）。</p>
+<h2>現代のインターネットと過去の比較</h2>
+<p>コメントでは、現代のインターネットが過去とどう異なるかについて多くの比較がなされました。
+*   <strong>初期インターネットの「意図的」な利用</strong>: 昔はユーザーが自ら何を閲覧するか決める必要があり、特定の目的のためにウェブサイトにアクセスしていたが、今はアルゴリズムがそれを決定しているという意見があります（1.7, 1.10）。
+*   <strong>ブックマークと検索の進化</strong>: 初期ブラウザには履歴検索機能があったが、現在はウェブサイトの寿命が短く、ブックマークの有用性が低下しているという声が上がっています。また、Googleの検索エンジンがブックマークの必要性を薄め、ユーザーの「ブックキーピング」を怠る傾向と相まって、ブックマーク文化が衰退したとの見解もあります（1.13, 1.13.5）。
+*   <strong>「ウォールドガーデン」と人間のコンテンツの価値</strong>: 将来的にインターネットは「ウォールドガーデン」化し、人間の認証やキュレーションが重要になるだろうという予測があります（1.9）。また、AI生成コンテンツの台頭により、人間の創造したコンテンツの価値が再認識されるべきだという期待も述べられています（1.35）。</p>
+<h2>対処法と個人の責任</h2>
+<p>アテンション・ハイジャックから自身を守るための具体的な方法や考え方が共有されました。
+*   <strong>アルゴリズムの無効化</strong>: レコメンデーションアルゴリズムを無効にし、直接フォローしているチャンネルやRSSフィードのみを見ることで、精神状態が改善されたという体験談があります（1.8, 1.10.3）。
+*   <strong>意図的なメディア消費</strong>: ソーシャルメディアを断ち、より「意図的」なメディア（本を読む、目的意識を持ってインターネットを利用する）に移行することで、集中力と幸福感が向上したという報告が多く見られます（1.10, 1.10.2）。
+*   <strong>「ドゥームスクロール」の再定義</strong>: ソーシャルメディアだけでなく、個人的な非生産的なプロジェクトに取り組むことも「ドゥームスクロール」と同じくらい悪いと指摘する声もあります（1.5）。
+*   <strong>広告とAIへの警戒</strong>: 広告は私たちの思考や世界観を形成する危険な「がん」であり（1.27）、AIチャットボットが「アテンション・ハイジャック」の解決策になるという提案は、ユーザーを精神病に陥れる可能性があるとして疑問視されました（1.11, 1.11.1）。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsの議論は、現代のインターネットが「アテンション・ハイジャック」という重大な課題を抱えていることを浮き彫りにしています。レコメンデーションアルゴリズムの普及は、ユーザーの思考や習慣に深く影響を与え、ドゥームスクロールや精神的疲弊を引き起こす一方で、適切に利用すれば学習ツールとしての可能性も秘めています。多くのコメントは、この問題に対処するためには、個人が能動的に情報源を選択し、アルゴリズムの制御を無効化し、より「意図的」なメディア消費に回帰することが重要であると主張しています。同時に、かつてのインターネットのオープンで人間中心の性質への郷愁と、AIがコンテンツを支配する未来への懸念も示されており、今後のインターネットのあり方に対する問いを投げかけています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

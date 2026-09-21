@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI coding has made CI a bottleneck, so we reworked ours to keep up - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">AI coding has made CI a bottleneck, so we reworked ours to keep up</h1>
+        <div class="meta">
+            投稿日: 2026年09月21日 | ランク: 8
+        </div>
+        <a href="https://linear.app/now/ci-bottleneck-reworked" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、エージェントベースのコーディングの台頭により、CI/CDのボトルネックがますます顕著になっているという、Linearチームのブログ投稿を受けてのものである。特に、Bazelのようなビルドツールの効率性、CI/CDの課題、そしてLLMがソフトウェア開発に与える広範な影響について議論されている。</p>
+<h2>Bazelとビルド時間の短縮</h2>
+<p>Bazelが大規模プロジェクトでもウォームキャッシュで10秒程度のビルド時間を達成できると主張されており、かつては数年かかったBazelへの移行が、現在では数週間で可能になるほどセットアップコストが大幅に下がったという意見がある。しかし、JavaScript/TypeScriptエコシステムでのBazelの有効性については疑問が呈されており、ネットワークやディスクI/Oがボトルネックとなることが多く、TSエコシステムで1〜2分のビルド時間を達成できれば大成功だと指摘されている。Bazelのキャッシュは最終成果物のみをフェッチしたり、テスト実行の場合はバイナリをダウンロードせずにビルドの有無だけを確認したりできるといった利点も挙げられている。一方で、「ウォームキャッシュ」という前提条件の重さや、Bazelの実際のパフォーマンスが使用するルールに大きく依存するというトレードオフも指摘されている。</p>
+<h2>CI/CDの課題と改善策</h2>
+<p>エージェントコーディングがCIに大きな負担をかけており、ビルド時間の改善やカスタマイズされたランナーの構築が必要とされている。GitHub Actionsは便利だが、遅いことや信頼性の問題から、より高速なCPU、高性能ストレージ、優れたキャッシュインフラを持つサードパーティランナーへの移行が進んでいるという意見もある。CI/CDのボトルネックが解消されても、次のボトルネックがデプロイとロールバックに移行する可能性も示唆されている。また、Vitestのテスト時間の負荷分散がパフォーマンス向上に繋がるという提案もあったが、複雑さに見合うほどの効果は得られないという意見もあった。</p>
+<h2>AI/LLMとソフトウェア開発の未来</h2>
+<p>LLMの登場により、ソフトウェア開発の生産性が向上する一方で、新たな課題も生まれている。AIエージェントによってコード生成が容易になり、「スロップキャノン（粗悪なコードを大量生産する砲）」のように、多くのコードが素早く生成されることで、ユーザーエクスペリエンスの低下や変更の激しさ、バグの増加に繋がる可能性が指摘されている。これに対処するためには、QA側にエージェントを導入し、エージェントによるテストを完全に自動化することが避けられないとされている。</p>
+<p>また、「CI」のような略語が記事中で説明されていないことに対する不満の声も上がっており、技術業界にいる人間でも全ての略語を知っているわけではないという意見に対し、他のユーザーは自己学習の重要性や、特定の領域ではCI/CDが標準的な用語であると反論している。</p>
+<h2>製品開発とAIの影響</h2>
+<p>Linearのような製品が、AIコーディングの速度向上によって「次のJira」になることを懸念する声もある。新しいソフトウェアは当初は高速でシンプルだが、成長するにつれて機能が増え、複雑化して「巨獣」になっていくという「ソフトウェアのライフサイクル」が語られている。</p>
+<p>AIによる生産性向上が実際の製品改善に繋がっているのか、という疑問も提示されている。AIの恩恵を受けているのは主にスタートアップ企業や内部プロセス改善であり、既存の大規模企業製品（OSのパフォーマンスなど）にはまだ目立った改善が見られないという意見が多かった。AIは「車輪の再発明」を助長しているだけで、より良いアイデアやシステムアーキテクトの育成には繋がっていないという悲観的な見方もあった。</p>
+<h2>まとめ</h2>
+<p>本スレッドでは、エージェントベースのAIコーディングが急速に普及する中で、CI/CDが主要なボトルネックとして浮上していることが示された。Bazelのような高度なビルドシステムが注目される一方で、その導入コストや特定の技術スタック（特にJavaScript/TypeScript）における実用性にはまだ課題がある。GitHub Actionsのような既存のCIサービスに対する不満から、より高性能なサードパーティ製ランナーへの移行が進むなど、インフラ面での改善も模索されている。</p>
+<p>また、AIによる開発速度の向上は、生成されるコードの品質低下やテスト・QAプロセスの複雑化といった新たな問題を引き起こす可能性があり、これに対処するためにはAIによるテスト自動化の重要性が増すと予測されている。最終的には、AIによる生産性向上が実際の製品改善や収益増加にどれだけ繋がっているのかについては懐疑的な意見も多く、企業の内部プロセス改善やスタートアップの迅速な立ち上げに貢献しているものの、エンドユーザーが体感できる大きな変化はまだ限定的であるという見方が支配的である。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformers Explained Visually - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Transformers Explained Visually</h1>
+        <div class="meta">
+            投稿日: 2026年09月21日 | ランク: 3
+        </div>
+        <a href="https://poloclub.github.io/transformer-explainer/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、GPT-2モデルの仕組みを視覚的に説明するツールについてのものでした。多くのユーザーはこのツールの有用性を評価しつつ、パフォーマンスの問題や説明の改善点についても指摘しています。</p>
+<h2>ツールの評価と有用性</h2>
+<p>多くのユーザーがこのツールを「素晴らしい」「直感的」「役に立つ」と評価しています。特に、アテンションの仕組みやLLMの理解を深めるのに役立つという意見が多く見られました。しかし、一部では「Chromebookがクラッシュした」「600MBのモデルダウンロードは大きい」といったパフォーマンスに関する問題も報告されています。</p>
+<h2>アテンションメカニズムに関する詳細な議論</h2>
+<p>アテンションメカニズムについて、いくつかの深い議論が展開されました。
+*   <strong>andblac氏の洞察</strong>: アテンション行列がValueベクトルと乗算される部分が、通常のニューラルネットワークのDense層のように機能し、アテンションヘッドが推論時に動的に小さな単一層ネットワークを構築するという点で非常に興味深いと指摘しています。これはLLMのアーキテクチャ説明でめったに強調されない点であり、ツールの視覚化で確認できると述べています。
+*   <strong>Key, Query, Valueの役割</strong>: <code>bilsbie</code>氏の疑問に対し、<code>kingstnap</code>氏がKey, Query, Valueがそれぞれトークンが「尋ねる質問」「答える質問」「その答え」といった役割を果たす latent space への射影であると説明しています。このメカニズムが、最小二乗法やソートなど、様々な関数をデータ上でエンコードできる柔軟性を持っていることも指摘されました。</p>
+<h2>説明の改善点と現代モデルとの違い</h2>
+<p>いくつかのユーザーは、ツールの説明内容について改善の余地があると感じています。
+*   <strong>現代モデルとの差異</strong>: <code>E-Reverance</code>氏は、このツールがGPT-2の説明である点を理解しつつも、絶対位置エンコーディングなど、現代のモデルではもはや使われていない詳細が、一般の人々に現代モデルの仕組みとして誤解されることを懸念しています。
+*   <strong>専門用語の誤解</strong>: <code>throw0101a</code>氏と<code>kQq9oHeAz6wLLS</code>氏は、「Transformer」という用語が電気工学の文脈（変圧器）やトランスフォーマー（ロボット）と混同されやすいことを指摘し、混乱を招く可能性があると述べています。
+*   <strong>温度設定の説明</strong>: <code>robrenaud</code>氏は、温度設定に関する説明で「安全性」という言葉を使うのは不適切だと指摘し、代わりに「驚きのなさ」が人工的に見えるという点を強調すべきだと提言しています。また、ドロップアウトの説明は現代のモデルレシピには含まれないため、削除すべきだと主張しています。</p>
+<h2>その他の参考資料</h2>
+<p>コメントには、アテンションメカニズムやTransformerモデルを理解するための他の優れたリソースもいくつか挙げられています。
+*   <a href="https://bbycroft.net/llm">bbycroft.net/llm</a>
+*   <a href="https://www.welchlabs.com/store/mladeepseek-attention-poster...">Welch Labsの「MLADeepSeek Attention Poster」と関連動画</a>
+*   <a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a></p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドでは、GPT-2のインタラクティブな視覚化ツールがLLMの理解に役立つと広く評価されながらも、パフォーマンスの問題や現代のモデルとの違いを明確にすることの重要性が指摘されました。特に、アテンションメカニズムの深い洞察や、Key-Query-Valueの役割に関する議論は興味深いものでした。ツールの作者に対しては、説明の正確性向上や用語の明確化が提案されており、より広範なユーザーがLLMの複雑な概念を理解するための貴重なフィードバックが提供されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
