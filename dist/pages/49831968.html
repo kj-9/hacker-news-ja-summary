@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F-Droid 2.0 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">F-Droid 2.0</h1>
+        <div class="meta">
+            投稿日: 2026年09月24日 | ランク: 1
+        </div>
+        <a href="https://f-droid.org/2026/09/24/f-droid-2.0-a-new-chapter-for-android-freedom.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、F-Droidアプリのバージョン2.0リリースに関するもので、その新しいデザイン、機能、そしてより広範なAndroidエコシステムにおけるF-Droidの役割について議論しています。</p>
+<h2>新しいデザインとユーザーエクスペリエンス</h2>
+<p>多くのコメントは、F-Droid 2.0の視覚的な刷新と使いやすさの改善を歓迎しています。以前のUIは「ひどい」「時代遅れ」と評されており、今回の変更は待望されていました。
+しかし、一部のユーザーは、新デザインがMaterial UIのトレンドを追いすぎ、UI要素間の視覚的な区別が不足している点や、アプリの更新選択などのインターフェースが以前より複雑になったと感じています。
+Droid-ifyやNeo Storeといった代替F-Droidクライアントを使用していたユーザーは、今回の公式アプリの改善を機に戻ることを検討しています。これらの代替クライアントもまた、UI/UXの改善を目指していました。</p>
+<h2>自動更新と特権拡張機能（FPE）の廃止</h2>
+<p>F-Droid 2.0では、Androidの「セッション」インストーラーを利用することで、特権拡張機能（FPE）なしでのバックグラウンドでの自動更新を可能にしています。これは、FPEの設定の煩雑さや古いAndroidバージョンでのみ機能するという制約を解消するものです。
+一部のユーザーは、FPEが廃止されることを残念に思っており、FPEがメンテナンスの大きな負担になっていたのかと疑問を呈しています。F-Droidの開発者からは、セッションインストーラーがFPEをほぼ置き換えるものの、完全にではないため、FPEの開発再開を検討しているとのコメントもありました。</p>
+<h2>F-Droidの役割とGoogle Playストアとの関係</h2>
+<p>F-Droidのみからアプリを入手するユーザーは少数派のようで、多くのユーザーはF-DroidとGoogle Playストア、Aurora Store（Google Playの匿名クライアント）、Obtainium（GitHubリリースなどから直接APKをダウンロード・更新）などを組み合わせて使用しています。
+F-Droidのみで全てのアプリをまかなうのは難しいと感じるユーザーが多く、特に銀行アプリ、政府サービスアプリ、Discord、ストリーミングアプリ、ゲームなどはPlayストアに依存せざるを得ない状況です。
+F-Droidの利点として、オープンソースであること、広告やデータ販売がないこと、悪質なアプリがないことなどが挙げられています。一方、Google Playストアのマルウェアや広告の問題も指摘されており、F-Droidは「安心」できる選択肢として評価されています。</p>
+<h2>Googleの今後のAndroidロックダウン政策への懸念</h2>
+<p>Googleが来年実施するとされるAndroidのロックダウン政策（サイドローディングの制限）について懸念が表明されています。これにより、F-Droidのような非公式ストアからのアプリインストールがさらに困難になる可能性があります。
+現在の情報では、Googleは「高度なフロー」として、最初の非認証アプリインストール時に24時間の待機時間を設けることで、ユーザーに摩擦を生じさせようとしているようです。これは、F-Droidの利用を妨げるものではないものの、セットアップに時間がかかるようになります。
+この問題に対する究極的な解決策として、GrapheneOSやLineageOSのようなカスタムROMへの移行が提案されています。また、EUの規制が代替アプリストアを義務付けていることが言及されていますが、その実施プロセスが意図的に困難にされているという意見もあります。</p>
+<h2>その他の議論</h2>
+<ul>
+<li><strong>機能要望</strong>: 多くのユーザーがアプリの評価やコメント機能、ダウンロード数の表示などをF-Droidに求めています。F-Droid 2.0では「最も人気のあるアプリ」セクションが追加されたものの、ユーザーレビューシステムはありません。</li>
+<li><strong>代替クライアント</strong>: Droid-ify、Neo Store、Aurora Droid、Obtainiumなど、多くのF-Droid代替クライアントが活発に議論され、それぞれの利点や欠点が語られました。F-Droid開発者も、多様なクライアントが存在することを歓迎しつつ、セキュリティやプライバシー基準の維持の重要性を強調しています。</li>
+<li><strong>CLIツール</strong>: ADB経由でAndroidデバイスにアプリをインストールできるF-DroidのCLIツールを求める声があり、既存のプロジェクト（fdroidcl）が紹介されました。</li>
+<li><strong>ウェブサイトのローカライズ問題</strong>: 中国語キーボードレイアウトが原因で、F-Droidのウェブサイトが自動的に中国語版にリダイレクトされるというバグが報告されました。</li>
+<li><strong>F-Droidアプリの更新問題</strong>: 多くのユーザーがF-Droidアプリ自体が2.0に自動更新されない問題を報告しており、ウェブサイトのAPKも古いバージョンのままであることに対する不満が表明されています。これは、メタデータの設定ミスが原因である可能性が指摘されています。</li>
+<li><strong>電子書籍リーダー</strong>: F-Droidで利用できるFOSSの電子書籍リーダーについて議論があり、KOReader、Episteme、MuPDF、Librera FDなどが推薦されました。Kindleのような使いやすさや同期機能を求める意見も多数ありました。</li>
+<li><strong>LLM（大規模言語モデル）の貢献</strong>: F-DroidがLLMによるコード貢献に対してどのようなポリシーを持っているかという質問に対し、AIによる貢献を禁止していないとの回答がありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>F-Droid 2.0のリリースは、UI/UXの改善という待望の変更をもたらし、多くのユーザーに歓迎されています。特に、特権拡張機能なしでの自動更新は大きな進歩です。しかし、Googleの今後のロックダウン政策や、F-Droid単独では全てのアプリニーズを満たせない現状、そして一部のUIデザインへの批判など、課題も残っています。F-Droidはオープンソースコミュニティにおける重要な存在であり、その進化とAndroidエコシステムにおける役割は今後も注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
