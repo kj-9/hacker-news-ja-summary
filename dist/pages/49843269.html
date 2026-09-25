@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform-independent SIMD in Go - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Platform-independent SIMD in Go</h1>
+        <div class="meta">
+            投稿日: 2026年09月25日 | ランク: 7
+        </div>
+        <a href="https://go.dev/blog/simd-experiment" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Go 1.26および1.27で実験的なSIMD（Single Instruction Multiple Data）APIが導入されたことについて、Hacker Newsのコメントスレッドでは、その潜在的なパフォーマンス向上、Goのメモリ安全性に関する議論、そしてSIMDプログラミング全般の課題と未来について多岐にわたる意見が交わされました。</p>
+<h2>パフォーマンスとSIMDの利点</h2>
+<p>多くのコメントが、SIMDがGoプロジェクトの低レベルなパフォーマンス最適化に大きな可能性をもたらすと評価しています。GoでSIMDサポートが提供されることで、これまでパフォーマンスのためにC/C++コードへのリンクが必要だった場面が減るという意見や、すでに画像処理などの分野で30%程度の速度向上が見られたという報告があります。また、この機能により、Goでデータベースやデータウェアハウスを実装するモチベーションが高まるという声も聞かれました。</p>
+<h2>SIMDプログラミングの課題とGoのアプローチ</h2>
+<p>SIMDをサポートする言語はC/C++以外にもJava、.NET、D、Zig、Julia、Swift、Rustなど多く存在しますが、手動でSIMDコードを書くことの難しさが指摘されています。多くの開発者はSIMDコードを効果的に書く方法を知らず、ライブラリの利用が主流です。Goの新しい<code>simd</code>パッケージは、固定サイズベクターを型システムから排除し、共通の操作のみをサポートすることで移植性を高め、ギャップを効率的なエミュレーションで埋めるというアプローチを取っています。これは、MojoのポータブルSIMDの扱いに近いとも評されており、動的なベクターサイズに対応しやすいという点で、SVEやRISC-V Vector (RVV) といった非固定長ベクターのサポートを容易にする革新的な解決策として注目されています。</p>
+<p>Goのアプローチは、コンパイラがSIMD参照のある関数の複数の特殊化されたコピーを作成し、プログラム開始時に検出されたSIMDレベルに基づいて適切なバージョンを呼び出すことで、ディスパッチオーバーヘッドを最小限に抑えています。これにより、コードの重複とSIMD性能のバランスが取られています。</p>
+<h2>Goのメモリ安全性に関する議論</h2>
+<p>コメントスレッドの重要な部分を占めたのは、Goのメモリ安全性に関する議論です。「Goはメモリ安全ではない」という主張に対し、Goのメモリ安全性の定義とその実用的な意味について活発な意見交換が行われました。</p>
+<p>批判的な意見として、Goのデータ競合がメモリ破損を引き起こす可能性があること、特にマップやスライスのような複数ワードのオブジェクトが競合状態になった場合に、不正なアクセスが発生しうるという指摘がありました。これはGoの<code>unsafe</code>パッケージを使用せずとも発生しうる問題であり、C#などの言語が同期されていないコンカレントアクセスに対して例外をスローしたり、Rustがデータ競合をコンパイル時に防止したりするのと対比されました。</p>
+<p>一方、擁護する意見では、「メモリ安全性」という用語は一般的にスタックオーバーフロー、ヒープオーバーフロー、UAF（Use-After-Free）、型混同などのメモリ破損脆弱性に対する耐性を指すというセキュリティ分野での定義が強調されました。この定義に基づけば、Goは実質的にメモリ破損脆弱性に対するエクスプロイトが皆無であり、広くメモリ安全な言語と見なされるべきであると主張されました。データ競合は論理バグを引き起こす可能性はあるものの、直接的なメモリ破損エクスプロイトに繋がることは稀であるという見解が示されています。</p>
+<p>この議論は、Rust、Java、C#などの言語との比較も交えながら、Goのメモリモデルにおけるデータ競合の具体的な影響（パニックはするが未定義動作ではない、など）と、そのセキュリティ上の意味合いを深く掘り下げたものとなりました。</p>
+<h2>Goの進化と言語設計哲学</h2>
+<p>GoがSIMDのような機能を導入したことについて、「誰も求めていなかったが、Goチームが正しいやり方で時間をかけて実現した」という意見と、「開発者たちは長い間求めていた機能だった」という意見が対立しました。後者の意見は、Goチームが当初、高レベルで移植性の高いAPIを設計しようとしたが複雑さから延期され、最終的に低レベルのアーキテクチャ依存APIと高レベルの移植可能APIという二段階アプローチを採用した経緯を説明しています。</p>
+<p>ジェネリクス導入の経緯にも触れられ、Goの言語設計が「シンプルさ」と「コンパイル速度」を重視し、機能追加に慎重であったことが再確認されました。SIMDの導入は、この哲学を維持しつつ、システム言語としてのGoの能力をさらに押し上げるものと評価されています。</p>
+<h2>まとめ</h2>
+<p>Go 1.26および1.27で実験的に導入されたSIMD APIは、Goにおけるパフォーマンス最適化の新たな道を開くと高く評価されています。特に、移植性の高いSIMDプログラミングを可能にするGoのアプローチは、非固定長ベクターへの対応のしやすさという点で注目されました。</p>
+<p>一方、Goのメモリ安全性に関する議論は、言語設計におけるデータ競合の扱いと、それが「メモリ安全」という用語の定義にどう影響するかという複雑な問題を浮き彫りにしました。実用上、Goプログラムのメモリ破損エクスプロイトは極めて稀であるというセキュリティ専門家の意見がある一方で、データ競合が予期せぬ挙動（パニックなど）を引き起こしうる点は認識されています。</p>
+<p>全体として、このSIMD機能はGoを高性能なシステム言語としてさらに発展させるものであり、Goの進化と、その堅実な言語設計哲学が引き続き評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
