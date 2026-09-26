@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fifteen years later, the Apple Cards origin story - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Fifteen years later, the Apple Cards origin story</h1>
+        <div class="meta">
+            投稿日: 2026年09月26日 | ランク: 8
+        </div>
+        <a href="https://lexontech.org/fifteen-years-later-the-apple-cards-origin-story" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Appleが2011年にリリースした物理的なグリーティングカードをiPhoneから送れるアプリ「Cards」に関する記事について議論しています。多くのコメントが、このサービスに対する個人的な経験、Appleの製品デザイン哲学、そしてビジネス的な側面について言及しています。</p>
+<h2>国際的な利用と料金</h2>
+<p>一部のユーザーは、「Cards」サービスが国際的に利用しにくい点や高価であった点を指摘しています。美しい仕上がりにもかかわらず、高価格と複雑な国際配送プロセスが、ユーザーが利用を諦める原因となったようです。</p>
+<h2>Appleのデザイン哲学と「見えないバーコード」</h2>
+<p>コメントの多くは、Appleが封筒にバーコードを印字することを嫌がり、米国郵政公社（USPS）と協力してUV光でのみ見える「見えないバーコード」を開発したという記事の記述に集中しています。</p>
+<ul>
+<li><strong>「ジョブズの意志」と細部へのこだわり:</strong> これは故スティーブ・ジョブズの「純粋な意志の力」と評され、製品のあらゆる側面に美学と品質を貫くAppleの哲学（例えば、見えない部分にも美しい木材を使う職人の話）の象徴として見られています。</li>
+<li><strong>賛否両論:</strong> この「見えないバーコード」へのこだわりは、「誰もバーコードを気にしない」「馬鹿げた執着」と批判される一方で、「プレミアム製品の差別化」「ミニマリズムを追求する価値」として擁護する声もあります。一部のユーザーは、ウェディングの招待状で手消印を求める人々のように、デザインの細部にこだわる顧客層が存在すると指摘しています。</li>
+<li><strong>「ブラウンM&amp;M」論争:</strong> この議論は、バンドのライダースにある「ブラウンM&amp;M抜き」という有名な要求に例えられ、細部への注意力が全体的な品質管理の指標となるか、あるいは単なる無駄な要求かという議論に発展しています。</li>
+</ul>
+<h2>同様のサービスと市場の動向</h2>
+<ul>
+<li>現在でも同様の物理カード送付サービスが複数存在し、中には「TouchNote」のような成功している例も挙げられています。</li>
+<li>一部のユーザーは、LPレコードやアナログ写真の復活のように、物理的なカードサービスも再評価される可能性を指摘しています。</li>
+<li>2011年当時、Sincerelyというスタートアップが同様のサービスを先行しており、Appleの「Cards」発表を「Sherlocked」（Appleにアイデアを奪われた）と感じた経験が共有されています。しかし、結果的にAppleのサービスは短命に終わり、Sincerelyの認知度向上に貢献したという皮肉な結果も語られています。</li>
+</ul>
+<h2>ジョブズのリーダーシップと「創業者の気まぐれ」</h2>
+<ul>
+<li>ジョブズの「見えないバーコード」へのこだわりは、「顧客体験に狂気的に集中している」と評価される一方で、「傲慢で頑固」「診断されていない境界性パーソナリティ障害に基づいた決定」「創業者の気まぐれ」と批判する声もあります。</li>
+<li>彼が部下を罵倒し、取るに足らない細部のために多大な労力を要求したという批判的な意見も出ています。しかし、その結果が「他に類を見ない価値ある製品」を生み出したという擁護もあります。</li>
+<li>「会議室で寝泊まりして、金持ちの最新の思いつきのために働く」という、創業者が主導する企業における暗部についても言及されています。</li>
+</ul>
+<h2>その他の観点</h2>
+<ul>
+<li>このアプリは、オンラインでない高齢の家族に写真を送るのに非常に便利で、ユーザーにとって摩擦のない体験を提供したと評価されています。</li>
+<li>Appleの「Cards」アプリはジョブズの死後に「情熱を注ぐ人がいなかった」ため失速した可能性や、多くの失敗したプロジェクトは成功し得なかったと後から判断されがちだが、実際は成功の可能性があったという考察もなされています。</li>
+<li>レタープレス印刷における「デボス加工」の流行についても触れられており、ブライアン・イーノの「新しいメディアの欠点がその特徴となる」という引用が紹介されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Appleの「Cards」アプリは、物理的なカードをiPhoneから送るという先駆的なサービスであり、特に封筒のバーコードを隠すためにUVインクを使用するなど、Apple（特にスティーブ・ジョブズ）の細部への極端なこだわりと美的哲学を色濃く反映していました。このこだわりは、「狂気」と「革新」の間で評価が分かれ、Apple製品の差別化要因と見なされる一方で、ビジネス上の無駄遣いや創業者のエゴとして批判されることもありました。結果的にこのサービスは短命に終わりましたが、その発表は同業他社の認知度を高める効果もあったようです。この議論は、製品デザイン、顧客体験、リーダーシップのあり方、そして技術的な実行可能性と市場の現実との間で生じる複雑な相互作用を浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

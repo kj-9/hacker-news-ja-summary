@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipePipe: NewPipe hard fork implementing SponsorBlock - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">PipePipe: NewPipe hard fork implementing SponsorBlock</h1>
+        <div class="meta">
+            投稿日: 2026年09月26日 | ランク: 1
+        </div>
+        <a href="https://github.com/InfinityLoop1308/PipePipe" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、NewPipeのような広告なしのYouTube視聴アプリが、動画内スポンサー広告（SponsorBlock）をブロックしない理由と、それに対するコミュニティの意見、およびデスクトップやiOSを含む他のプラットフォームでの代替手段について議論されています。</p>
+<h2>NewPipeのSponsorBlock不採用の理由と倫理観</h2>
+<p>NewPipeがSponsorBlockを実装しない理由について、開発チームは「倫理的な広告は問題ない」という見解を示しています。彼らは、プライバシー侵害的な広告システムを「悪」と見なす一方で、スポンサーシップはほとんど倫理的な広告方法であると考えています。SponsorBlockを実装することは、NewPipeの主要な売りである「プライバシー重視」を「広告のゲートキーパー」に変えてしまうと懸念しています。</p>
+<p>この見解に対し、ユーザーからは賛否両論があります。
+*   <strong>賛成派</strong>：NewPipeの意見は公平であり、同意しない場合はフォーク（派生版）を作成すれば良いという意見があります。また、広告を非倫理的と考えるユーザーからも、NewPipeがSponsorBlockを採用しないことで、元のプロジェクトは「不正行為」から解放され、フォークがその機能を追加するという現状が実用的に正しいという見方もあります。
+*   <strong>反対派</strong>：YouTubeの広告はブロックするのに、動画内広告はブロックしないというNewPipeの姿勢は矛盾しているという指摘が多く寄せられています。多くのスポンサー広告は詐欺的であったり、プライバシー侵害的である可能性があり、「ほとんど倫理的」という言葉が多くの免責を含んでいると批判されています。ユーザーが広告を見てもスポンサー側が視聴を追跡できない（プライバシー維持のため）場合、広告視聴は意味がないという意見や、そもそもプッシュ型広告自体が非倫理的であるという考えもあります。</p>
+<h2>デスクトップおよびiOSでの代替視聴方法</h2>
+<p>デスクトップユーザー向けには、FirefoxにSponsorBlockとuBlock Originをインストールする方法が最も一般的として挙げられています。また、FreeTube、mpv（yt-dlpと連携）、ChannelSurfer、Materialious（セルフホスト）などの代替アプリも提案されています。ブラウザでのYouTube視聴に関する不満（読み込みの遅さ、再生の問題）についても議論されており、VPNの使用やPage Visibility APIの無効化が提案されています。</p>
+<p>iOSユーザー向けには、Yattee（TestFlight経由でのインストールが容易）、YouMod（mod版YouTubeアプリ）、Unwatchedなどが代替として紹介されています。また、アルメニアのVPNを使用すると広告なしでYouTubeを視聴できるという情報も共有されています。</p>
+<h2>NewPipeの代替アプリと課題</h2>
+<p>NewPipeの派生版であるPipePipeは、NewPipeよりも頻繁に更新され、バグが少ないと評価されています。NewPipeは現在、リライト/再設計の途中にあり、既存アプリの更新が遅いという指摘があります。SponsorBlockの実装やユーザーインターフェース（UI）の改善など、PipePipeの利点が挙げられています。</p>
+<p>YouTubeの仕様変更に伴う「猫とネズミのゲーム」により、これらのアプリは頻繁に更新が必要になります。NewPipeやPipePipeがYouTubeにブロックされ、一時的に使用できなくなる問題も発生しており、Cloudflareの1.1.1.1の使用が解決策として提案されています。</p>
+<p>また、NewPipeの派生ではないが、YouTubeアプリを修正するMorpheやReVancedといったツールも人気を集めています。これらのツールは、公式アプリのUIを維持しつつ、広告ブロックやSponsorBlock機能を追加できる点が評価されています。しかし、手動での更新作業が必要な点が欠点とされています。</p>
+<h2>その他の意見</h2>
+<ul>
+<li><strong>プライバシーとアルゴリズム</strong>：多くのユーザーは広告やプライバシー侵害を避けるためにこれらのアプリを使用していますが、中にはYouTubeのレコメンデーションやショート動画が好きで、プライバシーよりも利便性を重視するユーザーもいます。</li>
+<li><strong>機能</strong>：NewPipeのダウンロード機能、バックグラウンド再生、購読チャンネルのRSSエクスポート、アカウント不要のプレイリスト作成などの機能が評価されています。</li>
+<li><strong>P2Pキャッシング</strong>：YouTubeの負荷を減らし、YouTubeに依存しないサービスを構築するためのP2Pキャッシングのアイデアも議論されました。しかし、ホスティングコスト、コンテンツの不正利用（CSAMなど）、著作権侵害のリスク、ユーザー体験の悪化といった問題が指摘され、実現は困難であると見られています。</li>
+<li><strong>批判</strong>：広告ブロックはクリエイターからの「盗み」であるという批判意見もありましたが、ユーザー側からは、広告に注意を払わないこととの違いはない、クリエイターが趣味で動画を投稿するのも許容されるべき、あるいは、ユーザーは広告を見ない自由があるといった反論が寄せられました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、NewPipeがSponsorBlockを導入しないことへの賛否（主にプライバシー重視と倫理的広告の定義に関する議論）と、YouTube広告なし視聴の代替手段に関する活発な議論を反映しています。多くのユーザーが広告やプライバシー侵害のない視聴体験を求めており、NewPipe、PipePipe、Morphe、ReVanced、デスクトップ/iOSの代替アプリなど、様々なソリューションが紹介されています。一方で、YouTube側の頻繁な仕様変更による維持の困難さや、P2Pキャッシュなどのより抜本的な代替案の課題も浮き彫りになりました。NewPipeの倫理的な立場は尊重される一方で、その一貫性や、現実のスポンサー広告の性質に対する批判も多く見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
