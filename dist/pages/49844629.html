@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The state of SIMD in Rust in 2026 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The state of SIMD in Rust in 2026</h1>
+        <div class="meta">
+            投稿日: 2026年09月27日 | ランク: 6
+        </div>
+        <a href="https://shnatsel.github.io/state-of-simd-rust-2026/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主に「ポータブルSIMD（Single Instruction, Multiple Data）」の実現可能性と実用性について議論しています。多くのユーザーが、真のポータブルSIMDの難しさや限界を指摘しつつも、その利便性や必要性についても言及しています。</p>
+<h2>ポータブルSIMDは存在しないのか？</h2>
+<p>多くのコメントが、純粋な意味での「ポータブルSIMD」は存在しない、という見解を表明しています。ユーザーArchit3chは、「性能（各プラットフォーム向けのASMを手書きする）か、ポータビリティのどちらかであり、両立はしない」と主張しています。いわゆるポータブルSIMDライブラリは「ポータブルな自動ベクトル化」に過ぎず、最高のパフォーマンスは得られないと指摘しています。JITコンパイラも、結局は自動ベクトル化に留まり、直接的なSIMD intrinsicsによる性能には及ばないという意見もあります。</p>
+<h2>ポータブルSIMDと自動ベクトル化の違い</h2>
+<p>一部のユーザーは、ポータブルSIMDライブラリが単なる自動ベクトル化とは異なる点があると考えています。raphlinusは、HighwayやFearless SIMDのようなライブラリが提供するポータブルなプリミティブは、自動ベクトル化ではできないselectやswizzleのような操作を可能にすると指摘しています。また、これらのライブラリは、特定のマイクロアーキテクチャへの特化（downcasting）をサポートしており、高レベルのポータブルなコードと、必要に応じてアーキテクチャ固有の最適化を組み合わせることを可能にする、と述べています。</p>
+<h2>ポータブルSIMDの実用性とトレードオフ</h2>
+<p>真のポータブルSIMDは難しいものの、その実用性は認められています。Sharlinは、手書きの非ポータブルなintrinsicsで理論上8倍の性能を得るよりも、合理的なSIMDライブラリを使って2倍または4倍の性能を得る方が、ほとんどのプログラムでははるかに優れていると主張しています。なぜなら、手書きの最適化はほとんど実現されないため、比較対象はスカラーコードや自動ベクトル化コードになるからです。IshKebabは、一部の基本的なSIMD操作（例：2つの4xf32ベクトルの加算）はポータブルに実行しやすいと述べていますが、AIのような分野では、より深い最適化のために非ポータブルな実装が必要になることが多いとも付け加えています。</p>
+<h2>具体的なアプローチと課題</h2>
+<ul>
+<li><strong>ライブラリ/フレームワーク</strong>: NumPy, Numba, Torch.compileなどのライブラリは、内部でアーキテクチャごとに手動で最適化されており、ユーザーが書くコードはポータブルであると指摘されています。Halideのようなフレームワークも、アルゴリズムとスケジューリング・SIMDの実装を分離するアプローチを採っています。</li>
+<li><strong>コンパイラの役割</strong>: LLVMのようなコンパイラがintrinsicsを効率的にアセンブリにコンパイルすることが重要であり、まだ完璧ではないものの、改善は進んでいるという意見があります。しかし、コンパイラの自動ベクトル化が常に最速のコードを生成するとは限らないという懸念も示されています。</li>
+<li><strong>明示的なSIMDの利点</strong>: vlovich123は、自動ベクトル化では、最適化が意図せず壊れても気づきにくいという問題があるが、ポータブルかつ明示的なSIMDはそのような問題がないと指摘しています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、ポータブルSIMDの概念を巡る複雑な議論を浮き彫りにしています。多くのユーザーは、最高のパフォーマンスを求めるならば、プラットフォーム固有のASM実装が不可欠であり、純粋な意味での「ポータブルSIMD」は存在しない、あるいは単なる「ポータブルな自動ベクトル化」に過ぎないと主張しています。しかし同時に、現実的なアプリケーション開発においては、完璧な性能でなくとも、ポータブルSIMDライブラリが提供する2倍〜4倍の性能向上は非常に価値があるという意見も多数あります。これらのライブラリは、自動ベクトル化では不可能な操作を可能にし、高レベルのポータビリティと、必要に応じたアーキテクチャ固有の最適化を組み合わせる道を提供することで、開発者がSIMDの恩恵をより手軽に享受できるようにする、という点で実用的なソリューションであると考えられています。最終的には、パフォーマンス測定とアセンブリ出力の確認が不可欠であり、「一度書けばどこでも動く」ポータブルSIMDはまだ到来していない、というのが一般的な見解です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

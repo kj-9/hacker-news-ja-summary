@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When did Google get so weird? - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">When did Google get so weird?</h1>
+        <div class="meta">
+            投稿日: 2026年09月27日 | ランク: 1
+        </div>
+        <a href="https://sancho.bearblog.dev/google-weird/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsユーザーは、Google検索のAI概要機能がユーザーの意図を誤解し、共感的な返答をする現象について議論しています。多くのユーザーは、AIが検索エンジンとしての役割よりも、人間のような対話や感情的なサポートを提供しようとすることに不満や懸念を表明しています。</p>
+<h2>AIによる意図の誤解と不適切な共感</h2>
+<p>Google AIの概要機能が、ユーザーが引用文やフレーズを検索しているだけなのに、まるでユーザー自身の個人的な感情や経験について語っているかのように誤解し、共感的な返答をすることが指摘されています。例えば、「Darioは決して来ない」というフレーズを検索した際、AIがユーザーが男性に振られたと思い込み、慰めの言葉をかけた事例が挙げられています。ユーザーは、検索エンジンに共感を求めているのではなく、関連する情報やリンクを求めていると述べています。これは「Steins;Gate」の引用を探していた際にも同様の誤解が生じたという体験談もあります。</p>
+<h2>従来の検索機能の劣化とAIの信頼性</h2>
+<p>多くのユーザーは、Google検索のAI概要機能の導入により、従来の正確なキーワード検索が難しくなったと感じています。特に、特定のテキストフレーズや引用、古いミームなどを正確に検索したい場合に、AIが介入して不正確な情報や無関係な共感的な応答を返すことが問題視されています。AIが検索結果を考慮せずに「幻覚」を起こしたり、誤った情報を自信満々に提示したりする事例が多数報告されており、その信頼性が疑問視されています。ユーザーは、AIが「知らない」と答える代わりに、誤った情報を捏造する傾向があると批判しています。</p>
+<h2>Googleの戦略とユーザー体験</h2>
+<p>GoogleがAI概要機能を導入する背景には、ユーザーが検索エンジンをまるで人間と話すかのように利用したいというニーズがあると推測する声があります。これにより、「普通のユーザー」にとっては検索体験が向上し、Googleの広告収益や市場シェア維持に貢献しているという意見もあります。しかし、一方で、従来の検索に慣れている技術に詳しいユーザーからは、検索の質の低下やAIの押し付けがましさに対する強い不満が表明されています。Googleが「Star Trekのコンピューター」のような理想を追求する中で、実用的な検索機能が損なわれているという批判も出ています。</p>
+<h2>孤独感と社会性への影響に関する議論</h2>
+<p>AIが共感的な反応を示すことに関連して、現代社会における孤独の問題が議論されています。「世界中のほとんどの人が深く孤独である」という意見が提示され、人々がAIとの擬似的な人間関係を求める背景にある可能性が指摘されています。しかし、この「ほとんど」という表現については、特に欧米圏とそれ以外の国々での社会交流の頻度の違いを指摘する反論も多く、旅行経験などに基づいた多様な見解が交わされています。孤独感とAIの関係性、そしてそれが社会性に与える影響について、ユーザー間で深い考察が行われています。</p>
+<h2>まとめ</h2>
+<p>Google検索のAI概要機能は、ユーザーの検索意図を誤解し、共感的な対話を提供しようとする傾向が強く、これにより従来の正確な情報検索機能が損なわれていると多くのHacker Newsユーザーが感じています。AIの信頼性の低さや「幻覚」の問題が頻繁に指摘され、Googleが検索エンジンとしての本質を見失っているという批判が上がっています。一方で、Googleの戦略は「普通のユーザー」が自然言語で検索したいというニーズに応えるものであり、ビジネス的な成功に繋がっているという見方も存在します。この現象は、AIと人間のインタラクション、社会における孤独感、そしてテクノロジー企業の戦略とユーザー体験のバランスといった多岐にわたる議論を巻き起こしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
