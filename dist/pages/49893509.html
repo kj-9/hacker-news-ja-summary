@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>America.gov - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">America.gov</h1>
+        <div class="meta">
+            投稿日: 2026年09月29日 | ランク: 9
+        </div>
+        <a href="https://america.gov/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>新しい政府ウェブサイト「America.gov」のローンチは、AIチャットボットを活用して政府サービスへのアクセスを改善するという野心的な試みである一方、その実装、デザイン、そして透明性に関してHacker Newsコミュニティで活発な議論と多くの懸念を引き起こしています。</p>
+<h2>技術的側面とパフォーマンス</h2>
+<p>サイトは既存の<code>usa.gov</code>よりもはるかに重く（25MB対800KB）、読み込みが遅いという指摘があり、一部のユーザーは画像が表示されなかったり、アクセシビリティテストに不合格だったりするなどの問題を報告しています。特に、WebAssembly、ONNXモデル、大規模なトークナイザーを各訪問時に読み込むため、初回ロード時に50MBものデータがダウンロードされることに対し、帯域幅コストとユーザー体験への影響が指摘されました。チャット機能も一時的に利用できない場合がありました。</p>
+<h2>デザインと「Vibe Coding」</h2>
+<p>サイトのデザインは「バイブコーディング」と評され、Appleのスタイルガイドを模倣しているとの声や、<code>arcade.gov</code>のような他の政府サイトの「国境警備ゲーム」に見られるような、物議を醸す、あるいは非人道的なコンテンツと関連付けられています。これに対し、現政権が「右翼のインターネット荒らし」によって運営されているかのようだという批判も出ています。サイトには、Minecraftの終了詩をパロディ化した奇妙なイースターエッグも含まれており、真剣な政府サイトとしての整合性に疑問を投げかける意見もありました。</p>
+<h2>チャットボットの有用性と課題</h2>
+<p>AIチャットボットは、政府サービスの複雑な情報の中から必要なものを見つける際に非常に役立つ可能性があるという肯定的な意見がある一方で、その正確性や法的責任に関する懸念が指摘されています。ユーザーは、チャットボットの出力が権威ある情報として受け取られる可能性があり、誤情報が深刻な結果につながりかねないと懸念しています。ただし、政府が提供する情報に誤りがあっても、市民は法律に従う責任があるという判例も示されました。チャットボットは政治的な質問に対しては回答を拒否するようガードレールが設定されており、現職大統領の犯罪歴に関する質問でバイアスが見られるという指摘もありましたが、全体としてはGoogle GeminiとElon MuskのGrokの組み合わせによって提供されていることが明らかにされています。</p>
+<h2>プライバシーと透明性への懸念</h2>
+<p>サイトのプライバシーポリシーは、メッセージが保存されないと主張していますが、モデルプロバイダー側でのデータ保持に関する懸念が提起されています。より深く、サイトの背後にある「National Design Studio (NDS)」という組織が、Trump政権下で設立された不透明な「一時的な組織」であり、商用トラッキングソフトウェア（PostHogなど）を使用してユーザーの行動を追跡し、連邦政府のプライバシー法を回避するよう設定されていたというガーディアン紙の調査結果が共有されました。NDSがパスポート申請や有権者登録などの機密性の高い政府サービスをホワイトハウスが管理するインフラを介して提供していること、およびその資金調達の不透明性も深刻な懸念事項として挙げられています。</p>
+<h2>「America.gov」という名称への議論</h2>
+<p>「America.gov」という名称についても議論が起こっており、既に存在する<code>usa.gov</code>との重複や、米国以外の南北アメリカ大陸を考慮しない「アメリカ」という呼称が政治的であるという批判がありました。これに対し、<code>.gov</code>ドメインが米国政府のものであり、米国市民が「アメリカ人」と一般的に呼ばれることから、この名称は自然であるという反論も出ています。</p>
+<h2>まとめ</h2>
+<p><code>america.gov</code>は、政府サービスの情報アクセスを革新しようとする意欲的な試みであるものの、現在のところ技術的な問題、デザインの選択、および特にプライバシーとサイト運営の透明性に関する深刻な懸念に直面しています。チャットボットの潜在的な有用性は認められつつも、その信頼性と政治的偏向の可能性は依然として大きな課題です。サイトを巡る広範な議論は、政府のデジタルサービスにおける革新と信頼性の間の複雑なバランスを浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
