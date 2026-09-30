@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Magnitude (YC S25) – Self-optimizing inference engine for agents - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Magnitude (YC S25) – Self-optimizing inference engine for agents</h1>
+        <div class="meta">
+            投稿日: 2026年09月30日 | ランク: 5
+        </div>
+        <a href="https://github.com/magnitudedev/magnitude" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Magnitudeは、ローカル環境でのエージェント向けに最適化された推論エンジンです。既存の推論エンジンが抱える、データセンター向けバッチ推論、広範な互換性、特定ハードウェアへの特化といったトレードオフを解決し、シングルセッションパフォーマンスとメモリ効率を最大化することを目指しています。特に、エージェントワークロード特有の長期間セッション、複数同時実行、他アプリケーションとの並行使用といった課題に対応しています。</p>
+<h2>既存エンジンの課題解決とアプローチ</h2>
+<p>Magnitudeは、既存の推論エンジンが抱える様々な課題を解決するために独自のアプローチを採用しています。</p>
+<ul>
+<li><strong>オンデバイスコンパイルとチューニング</strong>: カーネルは柔軟なパラメータで記述されており、モデル実行前に実際のデバイスでチューニングされます。これにより、広範なハードウェア互換性を維持しつつ、ハードウェア特化型カーネルと同等の性能上限を達成します。ユーザーからは、新しいモデルをダウンロードする際に約1分間のチューニング時間が必要ですが、これは1回限りのプロセスです。</li>
+<li><strong>主要アーキテクチャへのフォーカス</strong>: 最も人気のあるオープンウェイトモデルファミリー向けにチューニング可能で高効率なカーネルを開発することで、ハードウェアまたはモデル特化型エンジン以上の性能を実現します。</li>
+<li><strong>動的メモリ割り当て</strong>: モデルの重みを保持するのに必要な最小限のメモリのみを事前に確保し、エージェントセッションが成長するにつれて動的にメモリヒープを増やし、セッション終了時に解放します。これにより、エージェント実行中でも他のアプリケーションがハードウェアを使用できます。</li>
+<li><strong>ハイブリッドページド・アテンション</strong>: SGLangのようなエンジンからヒントを得て、並行セッションがプレフィックスキャッシュを共有できるようにしつつ、単一セッションのパフォーマンスが低下しないようメモリ隣接性を最適化します。</li>
+<li><strong>KVキャッシュの最適化</strong>: TurboQuantにヒントを得た8ビットキーと4ビット値のKVキャッシュ量子化により、KVメモリ使用量を半分以下に削減し、デコード速度を向上させます。これにより、長いコンテキストサイズでのパフォーマンスも向上し、長期的なコンテキストにおける品質への悪影響はないとされています。</li>
+<li><strong>スペキュラティブデコーディングのサポート</strong>: カタログ内のモデルには、DFlash、DSpark、DFlash2など、ターゲットモデルに最適なドラフトモデルが割り当てられています。</li>
+</ul>
+<h2>パフォーマンスとベンチマーク</h2>
+<p>llama.cppとの比較ベンチマークでは、Qwen 3.6 35B A3B (4ビット)、64kコンテキストにおいて、Mac M4 ProとCUDA (DGX Spark) の両方で高いパフォーマンスを示しています。</p>
+<ul>
+<li><strong>Mac M4 Pro (Metal)</strong>: デコード速度で92%高速化 (30 tok/s → 57 tok/s)、プリフィルで9%高速化 (466 tok/s → 507 tok/s)、エージェントあたりのメモリ使用量が28%削減。</li>
+<li><strong>CUDA (DGX Spark)</strong>: デコード速度で19%高速化 (49 tok/s → 58 tok/s)、プリフィルで23%高速化 (2,033 tok/s → 2,507 tok/s)、エージェントあたりのメモリ使用量が27%削減。</li>
+</ul>
+<p>ベンチマークのソースコードはGitHubで公開されています。</p>
+<h2>今後の展望</h2>
+<p>Magnitudeは、さらなる性能向上と機能拡張を計画しています。</p>
+<ul>
+<li><strong>Expert streaming</strong>: Mixture-of-Experts (MoE) モデルの未使用エキスパートをRAMやディスクにオフロードし、必要に応じてロードすることで、GPUメモリに収まらない大規模モデルの実行を可能にします。</li>
+<li><strong>Kernel compiler</strong>: 現在のカーネルは限られたパラメータをチューニングしますが、将来的にはカスタムコンパイラにより、カーネルの融合方法や実装を自動的に選択し、ハードウェアにさらに最適化します。</li>
+<li><strong>Multi-device utilization</strong>: システム内のすべてのハードウェア (CPU、GPU、RAM、ディスク) を検出し、モデルの最適な配置を自動的に解決することで、最大限に活用します。マルチGPUサポートは近いうちのロードマップに含まれています。</li>
+</ul>
+<h2>ビジネスモデル</h2>
+<p>長期的には、ローカルモデルとクラウドモデルをシームレスに切り替えるハイブリッドワークロードに対応する推論クラウドを構築し、トークン単位での課金を計画しています。ローカル推論で得られる効率性をクラウドにも適用し、コスト削減をユーザーに還元することを目指しています。</p>
+<h2>ユーザーからのフィードバックと開発状況</h2>
+<ul>
+<li><strong>ベンチマークの透明性</strong>: ベンチマークの詳細な手法とソースコードが公開されており、ユーザーからの信頼を得ています。</li>
+<li><strong>MLXとの比較</strong>: MLXベースのエンジンと比較して優位性があるとの暫定的なベンチマーク結果も報告されており、詳細なベンチマークの公開が期待されています。</li>
+<li><strong>AMD/Strix Haloサポート</strong>: Vulkanをサポートしており、AMDやStrix Haloデバイスで自動的にVulkanを使用します。将来的にROCmサポートも検討されています。</li>
+<li><strong>マルチGPUサポート</strong>: 現在は非対応ですが、近いうちのロードマップに含まれています。</li>
+<li><strong>パフォーマンスに関する課題</strong>: M5 Maxなどの新しいチップでのMetal性能の最適化不足が指摘されており、今後の改善が期待されています。</li>
+<li><strong>モデル評価時間の改善</strong>: アプリケーション起動時のモデル評価に時間がかかるという報告があり、この部分の改善も進行中です。</li>
+<li><strong>エージェントワークロード評価</strong>: ツール使用ループを伴う実際の多段階エージェントワークロードでの評価に関心が寄せられており、今後の発表が期待されます。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Magnitudeは、ローカルでのエージェント向け推論に特化した、革新的なオープンソースエンジンです。既存の推論エンジンの限界を克服し、オンデバイスチューニング、動的メモリ管理、ハイブリッドページド・アテンションなどの技術により、高いパフォーマンスとメモリ効率を実現します。将来的には、より大規模なモデルの実行やマルチデバイス利用を可能にするロードマップも提示されており、エージェントのローカル実行環境を大きく変える可能性を秘めています。初期のベンチマークは有望ですが、さらなるハードウェア最適化や広範なモデルサポート、そして実際の複雑なエージェントワークロードでの性能検証が今後の課題となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
