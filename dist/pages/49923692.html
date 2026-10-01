@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clef: Open-source decision models, and new RL fine-tuning platform - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Clef: Open-source decision models, and new RL fine-tuning platform</h1>
+        <div class="meta">
+            投稿日: 2026年10月01日 | ランク: 2
+        </div>
+        <a href="https://blog.cloudflare.com/clef-decision-models/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Cloudflareが「Clef」と「Clef Flash」というオープンウェイトの決定モデルを発表したことについての議論です。これらのモデルは、TypesafeのJevに似た機能を提供しますが、パフォーマンスとコスト、特に画像入力のサポートやオープンウェイトである点に注目が集まっています。</p>
+<h2>決定モデルの概念と模倣の容易さ</h2>
+<p>多くのコメントが、決定モデルのコンセプト自体はJev以前から存在しており、比較的新しい技術ではないことを指摘しています。Jevの登場後、わずか数週間で多くの競合が登場したことについて、その模倣の容易さが主な要因だと考えられています。</p>
+<ul>
+<li><strong>既存技術の応用</strong>: 大規模なトランスフォーマーモデルやQwenのような小型モデルを微調整することで、決定モデルを構築できるとされています。これは、LLMのような大規模な計算リソースや高品質なデータ、強化学習を必要としないため、比較的容易です。</li>
+<li><strong>インターフェースとプロダクトコンセプトの革新</strong>: Jevの主な革新は、そのインターフェース、API、プロダクトコンセプトであり、多くの人々にとって利用しやすく、実用的なものにした点にあると指摘されています。しかし、APIは簡単に模倣できるため、他のLLMも同様の方法で適応可能です。</li>
+<li><strong>「ローハンギングフルーツ」</strong>: AI分野が急速に進化する中で、Jevのような「ローハンギングフルーツ（簡単に手に入る成果）」が数多く放置されてきたと述べられています。Jevはそれを最初に掴み、市場の注目を集めることに成功しただけだという見方があります。</li>
+</ul>
+<h2>JevとClefのパフォーマンスとコスト</h2>
+<p>CloudflareのClefはJevと比較して高価であるという意見がある一方で、いくつかのコメントではClefがJevをベンチマークで上回っていると指摘されています。</p>
+<ul>
+<li><strong>価格</strong>: Clefの価格はJevと比較して約6倍高いと報告されていますが、Clef Flashはより競争力のある価格設定です。</li>
+<li><strong>レイテンシー</strong>: 初期テストでは、Clef FlashはJevよりもレイテンシーが高いという報告もあります。</li>
+<li><strong>画像入力</strong>: Clefは画像入力をサポートしており、これはJevにはない特徴として注目されています。Cloudflare自身のフィッシング検出などの内部ニーズに起因している可能性も指摘されています。</li>
+<li><strong>キャリブレーション</strong>: Jevのモデルの利点として「キャリブレーション」が挙げられていますが、Clefも訓練後のプロセスでBrier損失を用いて確率キャリブレーションを洗練していると説明されています。</li>
+</ul>
+<h2>オープンウェイトとローカル実行</h2>
+<p>Clefがオープンウェイトモデルであることは、ユーザーが自身でホストできるため、多くの関心を集めています。</p>
+<ul>
+<li><strong>オープンウェイトの利点</strong>: Clefのウェイトは許容的なライセンスで提供されており、ユーザーはそれをダウンロードしてローカルで実行できるため、コスト削減やデータプライバシーの面で有利です。</li>
+<li><strong>「オープンソース」ではない</strong>: 一方で、ウェイトが公開されていても、訓練データやパイプラインが公開されていないため、厳密には「オープンソース」ではないという指摘もあります。</li>
+<li><strong>ローカルモデルの競合</strong>: At0Mのような、より小型で低レイテンシーのローカル実行可能な決定モデルも登場しており、プライバシーやコスト面での利点を強調しています。</li>
+</ul>
+<h2>決定モデルの用途と将来性</h2>
+<p>決定モデルは、エージェントがプログラムでコンテキストを収集し、意思決定を行い、タスクを実行したり、必要に応じて人間に委ねたりする能力を向上させるものとして期待されています。</p>
+<ul>
+<li><strong>ユースケース</strong>: CloudflareのWAFルールへの応用、コンプライアンスワークフローの自動化、検索のリランカーや優先順位付けなど、様々な応用が検討されています。</li>
+<li><strong>既存の分類モデルとの比較</strong>: 従来の分類モデルと比較して、Jevのような決定モデルは、より「賢い」と認識され、トレーニングなしで幅広い用途に利用できる点が評価されています。</li>
+<li><strong>今後の発展</strong>: 競争の激化により、決定モデルの速度とコストをさらに改善する研究が進むと予想されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>CloudflareのClefは、TypesafeのJevによって普及した決定モデルのコンセプトを、オープンウェイトと画像入力サポートという新たな特徴で発展させたものです。決定モデルの基本的なアイデアは以前から存在していましたが、Jevが市場のニーズを明確にしたことで、その模倣と改良が急速に進んでいます。Clefの登場は、この分野の競争をさらに加速させ、より高速で安価、そして多様な用途に対応できるモデルの開発を促すものと期待されます。ただし、コスト、レイテンシー、そしてモデルの真の知能と汎用性が、今後の市場競争における重要な差別化要因となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
