@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From the creator of Redis; run LLM locally with ds4 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">From the creator of Redis; run LLM locally with ds4</h1>
+        <div class="meta">
+            投稿日: 2026年10月02日 | ランク: 10
+        </div>
+        <a href="https://dwarfstar.sh/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>DwarfStar (ds4)は、特定の大規模言語モデルに特化し、コンシューマー向けハードウェア（特にApple SiliconやIntel iGPU）で高性能なローカル推論を実現するために最適化された推論エンジンです。コメントでは、そのパフォーマンス、モデル選択、C言語の使用、他のLLMランナーとの比較、そして将来の展望について議論されています。</p>
+<h2>量子化モデルのパフォーマンス</h2>
+<p>DeepSeek V4の量子化モデルの性能については意見が分かれています。あるユーザーはDS4の量子化モデルの品質が良くないと指摘していますが、別のユーザーはUnslothの量子化モデルよりも優れているというベンチマーク結果を提示しています。このベンチマークは、DS4の量子化モデルが特定の状況下で高い性能を発揮する可能性を示唆しています。モデルの種類や量子化レベルによって結果が異なるため、テストした具体的な設定が重要だという意見も出ています。</p>
+<h2>特定ハードウェアへの最適化</h2>
+<p>DS4とその派生プロジェクトは、特定のハードウェアに焦点を当てて性能を最大化しています。</p>
+<ul>
+<li><strong>Apple Silicon (Mシリーズ):</strong> 多くのユーザーがM5 MaxのようなApple Silicon搭載機でDS4を使用し、DeepSeek V4 FlashやQwen 3.8 Flash Nextモデルで高速かつ長大なコンテキスト長での動作を報告しています。Fused TQの実装により、1Mコンテキスト長での利用が可能になったとのコメントもあります。</li>
+<li><strong>Intel iGPU:</strong> Intel Xe-LPやUltra 7 255Hのような統合GPU向けに、Gemma-4などの量子化モデルをサポートするXenolithといったプロジェクトも登場しており、22 tpsという高い推論速度を達成しています。Intel iGPUへのDS4のサポート拡充や、Intel/AMDによる開発支援を望む声も上がっています。</li>
+<li><strong>他の高性能コンシューマーGPU:</strong> NVIDIA x090シリーズ（例: RTX 3090）などのハイエンドコンシューマーGPUでも、Qwen 3.8 27Bなどのモデルを対象とした取り組み（club-3090など）が紹介されています。</li>
+</ul>
+<h2>C言語の採用理由とRustとの比較</h2>
+<p>DS4の作者であるantirezがC言語を採用した理由について議論されています。</p>
+<ul>
+<li><strong>個人の好みと経験:</strong> antirezは長年C言語で開発しており、Rustよりも慣れ親しんでいるため、C言語の方がエルゴノミクスに優れていると感じています。</li>
+<li><strong>LLMによるコード生成:</strong> antirezは、LLMがC言語の膨大で高品質なコードベースで学習しているため、RustよりもC言語の生成に優れていると考えています。また、Rustの厳格なシンタックスやコンパイラのフィードバックがLLMのワークフローにはマイナスに働く可能性も指摘しています。</li>
+<li><strong>パフォーマンスへの注力:</strong> DS4の目標は、限られたハードウェアリソースで絶対的なパフォーマンスを最大限に引き出すことです。Rustが低レベルなアクセスやパフォーマンス最適化にどれだけ貢献できるか、C言語と比較してその追加作業が正当化されるかについての疑問が呈されています。</li>
+<li><strong>Rust支持者の反論:</strong> Rust支持者からは、Rustが低レベルコードやSIMD、マルチスレッドプログラミングにおいて優れたアクセスを提供し、コンパイル時の正確性保証によりzlib-rsのようなプロジェクトがC言語の同等品よりも高速になる例が挙げられています。</li>
+</ul>
+<h2>他のLLMランナーとの違い</h2>
+<p>DS4は他のLLMランナー（例：llama.cpp）と何が違うのかという問いに対し、以下の点が挙げられています。</p>
+<ul>
+<li><strong>特定のモデルとハードウェアへの焦点:</strong> DS4は、すべてのモデルやハードウェアを一度にサポートしようとせず、厳選された少数のモデルを特定のハードウェア（主にコンシューマー向けAIハードウェア）で「非常にうまく」動作させることに重点を置いています。これにより、設定ミスによる問題やパフォーマンス低下のリスクが低減されます。</li>
+<li><strong>パフォーマンスと使いやすさ:</strong> 限られたリソースで最高のパフォーマンスとエージェント機能の実現に重点を置いています。</li>
+<li><strong>派生プロジェクト:</strong> DS4を基盤とした共有ライブラリやFFIバインディング（ds4goなど）も開発され、他の言語からの利用を容易にしています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>DwarfStar (ds4) は、コンシューマー向けAIハードウェア（特にApple SiliconやIntel iGPU）でのローカル推論に特化し、厳選されたLLM（DeepSeek V4 Flash、Qwen 3.8 Flash Nextなど）で高いパフォーマンスと長いコンテキスト長を実現する推論エンジンです。その成功は、C言語による低レベル最適化と、LLMによるコード生成に対する作者の独特な視点に起因していると議論されています。他の汎用的なLLMランナーとは異なり、特定のモデルとハードウェアに焦点を当てることで、設定の複雑さを軽減し、最高の推論体験を提供しています。M5 Maxでの1Mコンテキスト対応やIntel iGPUでの高速推論など、ローカルでの高性能LLM利用の可能性を広げ、今後の進化にも大きな期待が寄せられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
