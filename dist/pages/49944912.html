@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTL: A new operating system for clouds - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">FTL: A new operating system for clouds</h1>
+        <div class="meta">
+            投稿日: 2026年10月03日 | ランク: 10
+        </div>
+        <a href="https://ftl-os.org/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、主にFTLという新しいOSについて議論しています。このOSは、特にクラウド環境向けに設計されたLinux互換のカーネルで、Rustで書かれています。</p>
+<h2>FTLの特性と分類</h2>
+<p>FTLは「OS for clouds」と銘打たれており、多くのコメントがそのアーキテクチャや既存のOSとの比較に焦点を当てています。
+*   <strong>Exokernel/Unikernelとの関連</strong>: FTLは「exokernel」に分類されることが多いです。これは、カーネルがハードウェア多重化に必要最小限の抽象化を提供し、高レベルのサービス（TCPスタック、VFSなど）はユーザー空間で実行されるという設計思想です。これにより、高速なパスでユーザー空間の抽象化サービスにアクセスする必要がなくなり、セキュリティを確保しつつ高性能を実現します。
+*   <strong>Linux互換性</strong>: Linuxプログラムを実行でき、Linuxのシステムコールを処理できるように設計されています。これにより、既存のLinuxエコシステムをある程度活用できる可能性があります。
+*   <strong>ハイパーバイザーとの関係</strong>: KVMのようなハイパーバイザー上で実行されることを前提としており、多くのハードウェアドライバを独自に実装するのではなく、ハイパーバイザーに委譲することで実装の複雑さを軽減しています。これは「クラウド」向けであることの理由の一つと考えられています。
+*   <strong>Rustでの実装</strong>: FTLはRustで書かれており、メモリ安全性や現代的な並行処理サポート（Tokioランタイム）を特徴としています。</p>
+<h2>既存技術との比較</h2>
+<p>FTLは、様々な既存の技術や概念と比較されています。
+*   <strong>gVisor</strong>: gVisorは、Linuxアプリケーションを隔離されたサンドボックスで実行するためのユーザー空間カーネルであり、FTLも同様にLinux互換性を提供することから比較されています。ただし、FTLはよりカーネルレベルの最適化を目指している可能性があります。
+*   <strong>Unikernel</strong>: Unikernelは、単一のアプリケーションとその依存関係のみを含む、専用の最小限のOSイメージですが、FTLはカーネル/ユーザー空間の分離があるため、純粋なUnikernelとは異なります。
+*   <strong>MirageOS</strong>: MirageOSも「OS as a library」を標榜していますが、FTLはカーネル/ユーザー空間の分離がある点で異なります。
+*   <strong>Zircon</strong>: Zircon（GoogleのFuchsia OSのマイクロカーネル）のハンドル指向オブジェクトやVMO（仮想メモリオブジェクト）などの設計要素との類似性も指摘されています。</p>
+<h2>Rustに関する議論</h2>
+<p>FTLがRustで書かれていることに触発され、Rustの利用に関する一般的な議論も展開されています。
+*   <strong>Rust採用の「フェーズ」</strong>: プロジェクトがRustで書かれていることを明示しなくなったのは、Rustがもはや「新しいもの」ではなく、一般的な選択肢になったことの表れではないかという意見があります。
+*   <strong>C/C++との比較</strong>: 新しいプロジェクトでCやC++を選ぶには弁護が必要な時代になったという意見がある一方で、現代のツール（形式検証、ファジング、LLM）を使えばC++でも安全なコードが書け、Rustのコンパイル時間の長さやメタプログラミングの欠点を回避できるという反論もあります。</p>
+<h2>将来の展望と課題</h2>
+<p>FTLが目指す方向性や、OS開発全般の将来に関する考察も含まれています。
+*   <strong>クラウドOSの定義</strong>: 「OS for clouds」という表現の具体的な意味について、KVMのような仮想化を活用しつつ、複数のセキュアなワークロードをVM内で実行できるOS、あるいは特定のクラウド環境に合わせてハードウェアサポートを限定することで開発を容易にするOS、といった解釈がされています。
+*   <strong>OSの再考</strong>: メモリ安全性をデフォルトとし、レガシーな肥大化のない新しいOSの必要性が強調されています。
+*   <strong>LLMによるOS開発</strong>: 将来的にLLMがアセンブリやマイクロカーネルコードを生成し、各アプリケーションが独自の最適化されたOSをロードするようになる可能性について議論されています。これにより、ドライバの複雑さやハードウェアの多様性への対応といった課題が生じることも指摘されています。</p>
+<h2>その他</h2>
+<ul>
+<li>プロジェクト名「FTL」が人気ゲーム「Faster Than Light」と紛らわしいというコメントがいくつかありました。</li>
+<li>プロジェクトのGitHubページにあるASCIIアートの図が、一部の環境（特にモバイル）で表示が崩れるという報告がありました。</li>
+</ul>
+<h2>まとめ</h2>
+<p>FTLは、Rustで書かれたLinux互換の新しいOSで、特にクラウド環境での利用を目指しています。そのアーキテクチャは「exokernel」に分類され、ハードウェア多重化に特化した最小限のカーネルと、ユーザー空間で動作する高レベルサービスによって構成されます。これにより、既存のLinuxアプリケーションを実行できると同時に、高いパフォーマンスとセキュリティ、そしてメモリ安全性を実現しようとしています。多くのHacker Newsユーザーは、FTLの設計思想を既存のunikernelやgVisorのような技術と比較し、その将来性や、AIを活用したOS開発の可能性について活発な議論を交わしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
