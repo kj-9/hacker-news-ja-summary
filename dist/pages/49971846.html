@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT is adding real cartoonists&#x27; signatures to fake New Yorker cartoons - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">ChatGPT is adding real cartoonists&#x27; signatures to fake New Yorker cartoons</h1>
+        <div class="meta">
+            投稿日: 2026年10月06日 | ランク: 1
+        </div>
+        <a href="https://www.niemanlab.org/2026/10/chatgpt-is-adding-real-cartoonists-signatures-to-fake-new-yorker-cartoons/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、AIが生成した画像にアーティストの署名が勝手に含まれる問題について議論しており、これは単なるバグか、より深い著作権侵害やなりすましの問題かという点で意見が分かれています。</p>
+<h2>著作権侵害と剽窃</h2>
+<p>多くのコメントは、AIがアーティストの署名を生成する行為を、著作権侵害、剽窃、またはなりすましと見ています。これは、AIが学習データに含まれるコンテンツを無断で使用しているという広範な問題の一例に過ぎないと指摘されています。</p>
+<ul>
+<li><strong>「著作権洗濯機」と「産業規模の著作権侵害」</strong>: AIがオープンソースやユーザーコンテンツから大量のデータを剽窃しているという批判があり、一部のコメントではこれを「人類史上最大の労働の窃盗」と表現しています。</li>
+<li><strong>なりすましと誤認</strong>: アーティストたちは、AIが自分たちの作品を偽って生成し、さらに署名まで模倣することで、自分たちが作成・支持しない作品に名前が付けられることを「なりすまし」や「信用情報の侵害」だと感じています。これは単なる著作権侵害よりも深刻な問題であり、訴訟の根拠になると考える人もいます。</li>
+<li><strong>訴訟の可能性</strong>: AI企業がこの種の行為に対して法的責任を負うべきだという声があり、実際のアーティストの署名を模倣する行為は、名誉毀損や詐欺に近いと見なされています。</li>
+</ul>
+<h2>AIの「バグ」か「意図された動作」か</h2>
+<p>AIが署名を生成する理由について、多くの技術的な見解が述べられています。</p>
+<ul>
+<li><strong>確率論的生成</strong>: AIは訓練データに基づいて、特定のアートスタイルや形式に署名が含まれる確率が高いため、署名を生成しているに過ぎないという意見が有力です。これは「最も可能性の高いピクセルクラスターを生成する」結果であり、Getty Imagesの透かしやロゴが画像生成に現れるのと同様だと説明されています。</li>
+<li><strong>「バグ」としての認識</strong>: 一方で、意図しない署名の生成は「バグ」として修正されるべきだという意見もあります。しかし、もし画像の他の部分も元のアートから「取られた」ものなら、なぜ署名だけが問題になるのかという反論もあります。</li>
+<li><strong>推論能力の欠如</strong>: 一部のコメントは、AIが署名を生成する問題は、AIが「推論能力」を持っていないことの証拠だと主張しています。もしAIが「思考」していれば、署名を入れてはならないと判断するはずだという意見です。しかし、画像生成モデルとLLM（大規模言語モデル）を混同しているとの批判もあります。</li>
+</ul>
+<h2>AIの倫理的利用と学習データの品質</h2>
+<p>AIの学習データの収集方法と、その倫理的な側面について議論されています。</p>
+<ul>
+<li><strong>倫理的な学習データセットの課題</strong>: 著作権で保護されたコンテンツの無許可使用は、AIアートや文学の分野で特に問題視されています。科学、数学、コードの分野では、生産性向上にAIが役立つという意見もありますが、アート分野での問題が全体に影を落としているという見方もあります。</li>
+<li><strong>「盗まれたデータ」への依存</strong>: 現在のAIモデルの「知能」は、本質的に「盗まれた」膨大な訓練データセットに依存しているという批判があります。一部の企業は海賊版データセットを使用しており、Googleのような企業も疑わしいライセンスのデータを使用していると指摘されています。</li>
+<li><strong>倫理的なデータ収集の提案</strong>: 倫理的なデータ収集の方法として、オープンソース/CC準拠アセットのみの使用、ライセンスの取得、クリエイターが自らデータを提供し報酬を受け取るプログラム、クリエイターを雇用してデータを作成させる方法などが提案されています。しかし、これには多大な費用がかかるため、現在のAI業界がこの道を選ばなかったことを指摘する声もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>AIが生成した画像にアーティストの署名が含まれる問題は、単なる技術的な「バグ」ではなく、著作権侵害、なりすまし、倫理的なデータ収集といったAI業界全体が直面するより深い問題の一部として捉えられています。多くのコメントは、AIのビジネスモデルが実質的に「サービスとしての剽窃」であると批判し、倫理的な学習データセットの構築と、それに伴う法的・経済的責任の重要性を強調しています。また、この問題はAIが真に「推論」しているのかという、より広範な問いにもつながっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example.com Just Launched the Biggest Redesign in Decades - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Example.com Just Launched the Biggest Redesign in Decades</h1>
+        <div class="meta">
+            投稿日: 2026年10月06日 | ランク: 4
+        </div>
+        <a href="https://www.debugbear.com/blog/example-dot-com-redesign-history" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、<code>example.com</code> のウェブサイトのリデザインと機能、そしてその意図された目的と実際の使われ方について議論しています。</p>
+<h2>多言語対応とローカライゼーション</h2>
+<p>多くのコメントが、<code>example.com</code> の多言語対応について言及しています。</p>
+<ul>
+<li><strong>地域IPに基づくローカライゼーションの要望と現実:</strong> 訪問者のIPアドレスに基づいて地域固有のメッセージを表示する方が良いという提案がありましたが、これはサイトが「低オーバーヘッドで簡単に配布できる静的サイト」であるという本来の目的に反するという意見がありました。トラフィックが多いため、帯域幅が重要な考慮事項だとも指摘されています。</li>
+<li><strong>国連公用語の使用:</strong> <code>example.com</code> が国連の公用語（英語、アラビア語、中国語、フランス語、ロシア語、スペイン語）を使用しているという見解があり、ドイツ語やヒンディー語が含まれていないことに疑問を呈する声もありましたが、「ドイツ語圏やヒンディー語圏のほとんどの人が英語も知っている」という反論がありました。</li>
+<li><strong><code>Accept-Language</code> ヘッダーの利用:</strong> 地域IPではなく <code>Accept-Language</code> ヘッダーを確認するだけで良いという提案も出ました。</li>
+</ul>
+<h2>サイトの利用目的と「サービス」としての機能</h2>
+<p><code>example.com</code> が本来「ドキュメントの例で使用するためのものであり、サービスではない」と明記されているにもかかわらず、多くのユーザーが特定の目的で「サービス」として利用していることが議論の焦点となっています。</p>
+<ul>
+<li><strong>キャプティブポータルやテスト目的での利用:</strong> キャプティブWiFiポータルを突破するためや、HTTP/HSTSのない既知のサイトとしてテスト目的で利用しているユーザーが多数います。<code>neverssl.com</code> のような他のサイトも言及されましたが、<code>example.com</code> が信頼できる代替として使われているようです。</li>
+<li><strong>「サービス」としての認識:</strong> IPinfoのような企業が <code>example.com</code> のような「低メンテナンスで高ユーティリティなサービス」を「基盤サービス」と認識し、インフラ投資を行って運営していると述べています。これは、サイトの「サービスではない」という公式な意図に反して、事実上インターネットの重要なインフラの一部となっていることを示唆しています。</li>
+<li><strong>悪用防止:</strong> ドメインが「何をしているか知らない人々」（コードを読まずにコピペする人々）にアクセスされるため、悪意のあるアクターがこれを利用するのを防ぐために、あえてHTTPサービスを運用しているという見方もあります。</li>
+</ul>
+<h2>デザインと実装に関する指摘</h2>
+<p>サイトのデザインや実装についても様々な意見が寄せられています。</p>
+<ul>
+<li><strong>アニメーションの削除:</strong> かつて存在した「徐々に透明度が変化するトランジション」が削除され、すべてのアニメーションなしで言語が表示されるようになったことに対し、残念がる声がありました。これは帯域幅の問題に関連している可能性が指摘されています。</li>
+<li><strong>JavaScriptの使用:</strong> SVGアイコンの挿入にJavaScriptが使用されていることについて、「なぜ静的なSVGにJSを使うのか？」という疑問が呈されました。これに対し、記事が間違っているという意見や、JSを無効にしたクライアント向けにエグレス帯域幅を削減するためという意見がありました。実際のコード解析により、JSが多言語メッセージとスタイルをDOMに挿入していることが示されています。</li>
+<li><strong>コンテンツの質の変化:</strong> 新しいコピーがLLM（大規模言語モデル）によって生成されたように見えるというコメントや、記事自体がAIによって作成されたように読めるという意見もありました。</li>
+</ul>
+<h2>その他のポイント</h2>
+<ul>
+<li><code>example.com</code> が誰によってホストされ管理されているのか、IANAなのかという疑問が投げかけられました。</li>
+<li><code>example.com</code> の変更が、それを利用する自動テストに影響を与える可能性について触れられ、Hyrumの法則が引用されました。</li>
+</ul>
+<h2>まとめ</h2>
+<p><code>example.com</code> のリデザインは、多言語対応と見た目の刷新をもたらしましたが、その変更はHacker Newsコミュニティで様々な議論を巻き起こしました。特に、サイトが本来「ドキュメントの例」という意図にもかかわらず、キャプティブポータルやテスト目的で「サービス」として広く利用されている実態が浮き彫りになりました。多言語メッセージの表示方法（地域IP vs. <code>Accept-Language</code> ヘッダー）、アニメーションの削除、JavaScriptの使用、そしてコンテンツの質の変化などが主な論点です。多くのユーザーは <code>example.com</code> をインターネット上の不可欠な「基盤サービス」と見なしており、その変更が既存のワークフローや自動テストに影響を与える可能性が指摘されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
