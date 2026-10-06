@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharing AI Progress in Mathematics - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Sharing AI Progress in Mathematics</h1>
+        <div class="meta">
+            投稿日: 2026年10月06日 | ランク: 1
+        </div>
+        <a href="https://openai.com/index/sharing-ai-progress-in-mathematics/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、OpenAIが数学研究成果をGitHubで公開したことについて議論しています。特に、数学コミュニティからの批判や、その研究の意義と影響に焦点が当てられています。</p>
+<h2>OpenAIの動機と批判</h2>
+<p>OpenAIが数学研究成果をGitHubで公開したことについて、多くのコメントが寄せられています。一部のユーザーは、OpenAIが以前に人間研究者の結果を盗用したという批判を受け、公に恥をかかされた後に、数学コミュニティと関わるようになったと指摘しています（[1.1] senderista）。これは「ゲートキーピング」の回避（[1.2] karahime）や、過去の不手際（盗用、引用不足など）に対するより慎重なアプローチ（[1.2.4] hgoel）と見なされています。しかし、OpenAIが「許可を求めている」ように見せかけているだけで、実際には悪い評判への対応策だという意見もあります（[1.2.2] xpct）。数学コミュニティの規範を尊重し、プロジェクトがコミュニティに害を与えないように配慮している点は評価されています（[1.2.3] reasonableklout）。</p>
+<h2>公開方法と意義</h2>
+<p>研究成果がGitHubで公開されたことに対し、有料ジャーナルでの「ゲートキーピング」を回避した「科学の新しい時代」だと歓迎する声がある一方で（[1.4] binlog）、多くの数学的成果はarXivで共有されており、ジャーナルは査読の価値を提供するという指摘もあります（[1.4.1] fph）。GitHubはarXivよりも重要な成果を保存する場所としては劣るという意見も聞かれます（[1.4.2] traes）。</p>
+<h2>研究成果の内容と影響</h2>
+<p>公開された成果には、リーマン、ホッジ、ユニークゲーム定理などの重要な進展が含まれており、Gizmodo59はこれを「50〜100年分の人間の数学的進歩」に匹敵すると評価しています（[1.9] gizmodo59）。特に、Unique Games Conjectureの証明は計算複雑性理論における画期的な成果として注目されています（[1.10] enoether, [1.10.1] impossiblefork）。また、Barnetteの予想の証明や、n log n以下の整数乗算アルゴリズム、n log n以下のフーリエ変換アルゴリズム、Navier-Stokes流におけるユニバーサル計算など、興味深い結果も挙げられています（[1.19] prideout, [1.20] kingstnap）。ProofAtlas.aiのトップ500の未解決問題のうち、90もの問題が解決されたとされています（[1.26] zone411）。</p>
+<p>しかし、これらの成果が人間によって完全に理解されるまでは、真の進歩とは言えないという見方もあります（[1.9.1] fspeech）。数学は知識を圧縮するツールであり、その定理は人間に思考の再編成という「副作用」をもたらすからだというのです。</p>
+<h2>数学研究者への影響</h2>
+<p>OpenAIの成果は、特にPh.D.学生にとって大きな懸念事項となっています。自身の研究テーマがOpenAIによってすでに解決されている場合、博士課程の学生はどうすべきかという問いに対し、すでに発表された成果を新たな研究基盤として利用し、AIツールを活用すべきだというアドバイスがあります（[1.12.2] binlog）。しかし、これは「博士課程前半の賭けに続き、後半も出版できるかどうかの賭けをする」ことを意味し、非常に厳しい状況だと指摘されています（[1.12.2.1] xpct）。</p>
+<p>一方で、他の研究者による「スクープ」はAI以前から常に発生しており（[1.12.4] aaraujo002）、CRISPRの登場で自身の博士課程の研究が陳腐化したという経験談も共有されています（[1.12.6] dekhn）。これは「フロンティアを受け入れ、アテンションがすべてであると認識する」ことを求めています（[1.12.3] caaqil）。</p>
+<h2>AIと数学の将来</h2>
+<p>一部のユーザーは、AIが数学の問題を解決する能力は「進歩に反対する」ものではなく、医師の仕事を維持するために病気を放置することとは異なると主張しています（[1.14] aaraujo002）。しかし、数学の多くの研究は人間の理解を深めることが目的であり、AIが問題を解いても数学者の仕事が奪われるだけで、OpenAIの広告以外の実質的な利益はないという反論もあります（[1.14.5] mattr03）。また、アドバイザリーグループの勧告（agmai.org）は、モデルがプロプライエタリであること、つまり科学コミュニティ全体がアクセスできないことを問題視しており、AIを止めること自体が目的ではないという指摘もあります（[1.14.7] tchalla）。</p>
+<p>OpenAIは、これらの結果を生成するために「ChatGPT Pro思考計算の3時間分」に相当する計算リソースを使用したと述べており、その具体的なコストや計算規模についての明確化が求められています（[1.15] pavitheran, [1.15.3] orlp）。</p>
+<p>これらの結果が適切にレビューされているか、誤りがないかという疑問も呈されています（[1.16] mathisfun123）。OpenAIのReadmeには、非形式化された結果に問題がある可能性を認め、迅速に修正する意向が示されていますが（[1.16.2] jojva）、これは「間違いが発覚した際に裏目に出る」という予測を裏付けるものだと受け止めるユーザーもいます（[1.16.2.1] mathisfun123）。</p>
+<h2>まとめ</h2>
+<p>OpenAIがGitHubで公開した数学研究成果は、数学コミュニティ内で大きな波紋を呼んでいます。過去の批判に対するOpenAIの対応として評価する声がある一方で、その動機や成果の発表形式には疑問も呈されています。特に、Unique Games Conjectureなどの画期的な証明が含まれているとされ、AIが50〜100年分の人間の数学的進歩に匹敵する成果を短期間で生み出した可能性が指摘されています。しかし、これらの成果が人間によって完全に理解されることの重要性や、AIがプロプライエタリなモデルで未解決問題を解くことが数学コミュニティに与える負の影響（特に博士課程の学生への「スクープ」）が活発に議論されています。AIの進歩は数学研究の未来を根本的に変える可能性を秘めていますが、それが人間の理解やコミュニティの発展とどのように共存していくのかが、今後の大きな課題として浮上しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
