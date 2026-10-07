@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Haiku 5.5 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Claude Haiku 5.5</h1>
+        <div class="meta">
+            投稿日: 2026年10月07日 | ランク: 1
+        </div>
+        <a href="https://www.anthropic.com/claude-haiku-5-5" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Anthropicは、高速でコスト効率の高い新しいAIモデル「Claude Haiku 5.5」を発表しました。このリリースは、特に競合モデル（OpenAIのGPT-6 LunaやJevなど）との価格競争力を高め、機能面での大幅な改善を提供することを目指しています。また、サブスクリプションユーザー向けのAPIクレジットの導入も注目を集めています。</p>
+<h2>パフォーマンスとコスト効率</h2>
+<p>新しいHaiku 5.5は、前モデルのHaiku 4.5から大幅に改善され、特にコンピュータ利用やエージェントベースのコーディングタスクにおいてGPT-6 Lunaを上回ると言われています。価格は、10万トークン以下のリクエストではLunaと同等ですが、それ以上では5倍高くなります。この価格設定は、Anthropicが短い、集中的なタスクでのHaikuの使用を奨励していることを示唆しています。</p>
+<p>ユーザーからは、Haiku 5.5が以前のモデルよりもはるかに賢く、特に高速性が必要なタスクや簡単な分類、要約、ログ解析などに適しているとの声が挙がっています。一部のベンチマークでは、Haiku 5.5が以前のHaiku 4.5と比較して9倍安価で、2段階の性能向上を示し、データ分析タスクにおいては最速のモデルとなっています。しかし、一部のユーザーは、期待される速度が得られない、あるいはプロンプトの変更が必要になるなど、5.5のパフォーマンスに一貫性がないと報告しています。</p>
+<h2>APIクレジットの導入とサブスクリプション戦略</h2>
+<p>Anthropicは、MaxおよびTeamプランのサブスクライバー向けに、毎月APIクレジットを導入しました（Max 5xユーザーは$100、Max 20xユーザーは$200、Teamユーザーは最大$500）。これにより、ユーザーはAPIを介してカスタムツール、アプリ、エージェントを構築する際にAnthropicのモデルを柔軟に利用できるようになります。</p>
+<p>この動きは、ユーザーベースをAPIエコシステムに引き込み、長期的な有料利用を促進するための戦略と見られています。一部のユーザーは、これが既存のサブスクリプションでAgent SDKを使用する能力を段階的に廃止するAnthropicの試みであると懸念しています。しかし、Anthropicの担当者は、Agent SDKがサブスクリプションから削除されることはなく、ヘルプセンターの記事は誤解を招く表現だったため修正されたと明確にしました。</p>
+<h2>競合との比較とオープンソースモデルの台頭</h2>
+<p>Haiku 5.5は、特にGPT-6 Lunaとの価格と性能の比較において、激しい競争にさらされています。多くのユーザーは、タスクあたりのコストパフォーマンスや、より高機能なモデル（Sol 6.1やMiMo、DeepSeekなどの中国製オープンソースモデル）との比較で、どのモデルが最適かを検討しています。</p>
+<p>MimoやDeepSeekといったオープンソースモデルは、コスト効率と性能の面で非常に競争力があることが指摘されており、AnthropicやOpenAIが価格を引き下げ、より効率的なモデルを提供することを余儀なくされている要因となっています。しかし、企業によっては中国製モデルの使用に抵抗がある場合もあり、AnthropicやOpenAIのモデルが「信頼できる」選択肢として引き続き利用される理由となっています。</p>
+<h2>その他の変更点と懸念</h2>
+<p>Haiku 5.5は、サイバーセキュリティのセーフガードが強化されており、防御タスクの範囲は広いものの、ペネトレーションテストなど、攻撃者が利用する可能性のある技術は引き続きブロックされます。この制限に対しては、モデルの機能を不必要に制限しているという批判も上がっています。</p>
+<p>また、一部のユーザーは、Anthropicのモデル命名規則やバージョン管理、そして「思考レベル」（thinking effort）の概念が混乱を招くと感じています。</p>
+<h2>まとめ</h2>
+<p>Claude Haiku 5.5は、大幅な性能向上と競争力のある価格設定（特に小規模タスク向け）を提供し、Anthropicの製品ポートフォリオを強化しています。サブスクリプションユーザー向けのAPIクレジットの導入は、APIエコシステムへのユーザーを誘致し、Anthropicの長期的な収益戦略を支えるものと見られます。しかし、価格体系の複雑さ、オープンソースモデルとの競争、およびセーフガードの制限については、ユーザーや開発者からの意見が分かれています。全体として、AI分野における進化の速さと、各プロバイダーが市場の需要と競争環境にどのように適応しているかを示す好例と言えるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
