@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Man discovers his parents&#x27; coffee machine used 1TB of data in 10 days - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Man discovers his parents&#x27; coffee machine used 1TB of data in 10 days</h1>
+        <div class="meta">
+            投稿日: 2026年10月09日 | ランク: 5
+        </div>
+        <a href="https://www.dexerto.com/entertainment/man-discovers-his-parents-coffee-machine-used-1tb-of-data-in-10-days-3416399/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、Midea製エアコンがローカルネットワークを大量のデータ（1ヶ月で1TB）で「クラッシュ」させていたという投稿者の経験から、IoTデバイスのプライバシー、セキュリティ、倫理問題が議論されています。この「クラッシュ」は、Keurig製のコーヒーメーカーも同様の動作をすることが明らかになったことで、意図的なネットワークスキャンによるデータ収集であり、マルウェアではなく監視目的である可能性が浮上しました。</p>
+<h2>IoTデバイスによる大量のネットワークトラフィックとその目的</h2>
+<p>Midea製エアコンが1ヶ月で1TBものデータをネットワークに流していたという投稿は、多くのユーザーを驚かせました。このトラフィックは外部へのアップロードではなく、ローカルネットワーク内でのスキャンによるもので、多くのIoTデバイスが同様の挙動を示すことが指摘されています。Keurigのコーヒーメーカーの場合、これは家庭内のデバイスに関するデータを収集し、広告主に販売するためであることが確認されており、エアコンも同様の意図があった可能性が示唆されています。</p>
+<p>この大量のトラフィックは、多くの場合、ネットワーク上の他のデバイスを特定し、ユーザーの消費パターンや収入レベルなどのプロファイルを構築するために利用されます。テレビ、電話、他のスマートデバイスの種類や年齢から、家庭環境や居住者の行動パターンが推測され、ターゲット広告に利用されます。</p>
+<h2>IoTデバイスのプライバシー侵害と法規制</h2>
+<p>多くのコメントは、IoTデバイスによるデータ収集がプライバシーを侵害し、倫理的に問題があると感じています。ユーザーは、コーヒーメーカーやエアコンのような家電製品が、明確な同意なしに家庭内の情報を収集することに強い懸念を表明しています。</p>
+<p>利用規約（ToS）がこのデータ収集を正当化するのか、あるいは不当な契約として無効になるのかという議論も交わされました。EUでは明確な同意なしにはこのようなデータ収集は違法とされており、米国でも集団訴訟の可能性が指摘されています。しかし、法規制の不備や執行の難しさ、消費者のITリテラシーの低さなどが、企業によるデータ収集を許容している現状が浮き彫りになっています。</p>
+<h2>対処法としてのネットワーク隔離とDIY</h2>
+<p>IoTデバイスによるプライバシー侵害への具体的な対策として、多くのユーザーがIoTデバイス専用のVLAN（仮想LAN）やゲストWi-Fiネットワークを設置し、他の家庭内ネットワークから隔離することを推奨しています。これにより、IoTデバイスが他のデバイスにアクセスしたり、不必要なインターネットアクセスを行ったりするのを防ぎ、監視を容易にします。</p>
+<p>一部のユーザーは、既成のスマートデバイスに頼らず、ESPHomeなどのオープンソースソリューションを使ってDIYでスマートホーム環境を構築することの利点を挙げています。これにより、ユーザー自身がデータの制御権を持つことができます。また、単純にインターネット接続が不要な家電製品を選び、スマート機能のない「ダム」なデバイスを好むという意見も多くありました。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、Midea製エアコンやKeurig製コーヒーメーカーのようなIoTデバイスが、ローカルネットワークを大量のデータスキャンで「クラッシュ」させ、ユーザーの家庭情報を収集して広告主に販売しているという、現代の家電製品における深刻なプライバシーとセキュリティ問題を浮き彫りにしました。多くのユーザーは、この行為を倫理的に問題視し、利用規約による同意が不当であると主張しています。解決策として、IoTデバイスを専用の隔離されたネットワークに接続するVLANの導入や、インターネット接続が不要なデバイスの選択、あるいはDIYによるスマートホームソリューションの利用が提案されています。この議論は、利益追求のためにユーザーのプライバシーを侵害する企業の姿勢と、それに対抗するための消費者の意識と技術的対策の必要性を示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
