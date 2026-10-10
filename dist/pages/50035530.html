@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DuckDB 2.0 is faster - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why DuckDB 2.0 is faster</h1>
+        <div class="meta">
+            投稿日: 2026年10月10日 | ランク: 4
+        </div>
+        <a href="https://motherduck.com/blog/why-duckdb-20-is-faster/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事は、DuckDB 2.0 のパフォーマンス向上に関する記事について議論しています。特に、その可視化の素晴らしさと、記事の文章スタイルがLLMによって生成されたものではないかという点に焦点が当てられています。</p>
+<h2>可視化と技術的進歩</h2>
+<p>記事の可視化については多くのコメントが賞賛しており、非常に優れていると評価されています。DuckDB 2.0の新しいC++拡張APIについても、開発・配布の観点から高速化されると期待されています。</p>
+<h2>LLMによる文章スタイルへの懸念</h2>
+<p>多くのコメントは、記事の文章スタイルがLLM（大規模言語モデル）によって生成されたものではないかという強い印象を受けていると指摘しています。「One setting drives this,...」「The cost is now about the rows you actually touch, not rounds times table size.」といった表現が、人間らしくなく読みにくいと感じられています。</p>
+<ul>
+<li><strong>読みにくさの指摘</strong>: 読者にとって解析しにくい、「脳が混乱する (brain scramblies)」ような文章だと感じられています。AIによる要約を読むようにはできているが、視覚化と併せて読むには適さないという意見もあります。</li>
+<li><strong>LLM利用への批判</strong>: LLMを使って記事を書くことは、読者の健康にとって危険であるとまで指摘されており、読者の理解を妨げる「低品質な文章」だと批判されています。</li>
+<li><strong>反論と擁護</strong>: この批判に対し、AI生成であるという決めつけは「集団ヒステリー」であり、内容ではなくLLMらしさを探すことで記事の価値を損なっている、という反論も出ています。重要な情報は今後もAIによって提供されるため、慣れるべきだという意見や、ガイドラインに反する「浅い却下」であるという指摘もあります。</li>
+<li><strong>LLMの質の議論</strong>: LLMが人間らしい文章を生成できない理由について、「人間が書いたテキストで学習されているのに、なぜ非現実的な散文になるのか？」という疑問が呈されています。これに対し、RLHF（強化学習による人間のフィードバック）や報酬による言語の変化、そして「良い散文」の検証の難しさ、LLMの不十分な「心の理論」などが原因として挙げられています。また、AIが書き直すことで元の主張が誤りであったと判明することがあるため、内容の検証が不十分であることの兆候と捉える意見もあります。</li>
+</ul>
+<h2>データベース設計とスケーラビリティ</h2>
+<p>DuckDBがUmbra / CedarDBのようなタスクベースの設計を採用していないこと、多くのデータベースエンジンが依然として「n-スレッド」方式の並列処理を使用していることへの不満が表明されています。1024コアといった大規模なシステムで1つのクエリを100%活用できるかという「レトリックな挑戦」が提示され、ほとんどのソフトウェアがそれに答えられないと指摘されています。これはデータベースに限らず、ファイル操作（圧縮・解凍、ハッシュ検証）やI/O操作においても同様の問題があると述べられています。将来のAMD EPYCプロセッサが512コア/1024スレッドを持つことを引き合いに出し、このスケーラビリティの問題が現実的であることを強調しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、DuckDB 2.0のパフォーマンス記事について、その<strong>優れた可視化</strong>を高く評価しつつ、<strong>記事の文章スタイルがLLMによって生成されたものではないかという点に大きな議論が集中</strong>しています。多くの読者がその文章を読みにくいと感じ、AI生成であることの兆候を指摘し批判しています。一方で、この批判が過剰であるという意見や、AI生成の問題ではなく、AIの文章品質を向上させる課題であるという建設的な議論も展開されています。また、DuckDBを含む多くのデータベースエンジンが、将来の多コア・高帯域幅システムにおいて、シングルクエリのスケーラビリティをどのように実現していくかという技術的な課題についても言及されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
