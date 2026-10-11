@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The gap in shared understanding of LLM capability is widening - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The gap in shared understanding of LLM capability is widening</h1>
+        <div class="meta">
+            投稿日: 2026年10月11日 | ランク: 3
+        </div>
+        <a href="https://twitter.com/karpathy/status/2109361546505966046" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのスレッドは、AIの現在の能力、特にその進歩の速度と実用性について、意見が二分している状況を浮き彫りにしています。一部の人々はAIが劇的な進歩を遂げ、ソフトウェア開発のような特定の領域で生産性を大幅に向上させていると主張する一方で、他の人々はその主張を誇張されたものと見なし、現実世界への影響が限定的であると指摘しています。</p>
+<h2>AIの進歩の評価：垂直曲線か、誇大広告か？</h2>
+<p>コメント欄では、AI、特に大規模言語モデル（LLM）の進歩が「垂直曲線」を描いているという主張に対し、多くの議論が交わされています。</p>
+<p>一部の専門家や開発者、特にソフトウェア検証の分野で働く人々は、LLMがコード生成や証明作成において驚くべき進歩を遂げたと報告しています。彼らは、数ヶ月かかっていたプロジェクトが数日で完了するようになったり、自身で証明を書く必要がなくなったと述べています。これは、LLMが特定の、検証可能なタスクにおいて人間を上回る能力を示している証拠とされています。また、一般的なソフトウェア製品企業で働く人々も、ソフトウェア開発プロセスがLLMによって劇的に変化したと実感しており、AI革命は「現実で否定できない」と主張しています。</p>
+<p>しかし、多くの人々がこの「垂直曲線」の主張に懐疑的です。一部のコメントでは、AIベンダーの関係者が金融的な利益のために誇大広告を流している可能性や、スーパーインテリジェンスの誕生を信じる「妄想」に囚われている人々がこの主張を広めていると指摘されています。彼らは、提供されるデモが実際の能力と乖離していることや、LLMが生成するコードや証明が扱いにくく、レビューに多大な時間を要するため、実質的な生産性向上に繋がっていないと反論しています。特にClaude Codeのようなツールは「信じられないほどバグだらけで散らかっている」と評され、その不正確さや非効率性が強調されています。</p>
+<h2>人間の検証能力と信頼性の問題</h2>
+<p>LLMの出力に対する人間の検証能力は、大きな懸念事項として浮上しています。多くのコメントで、LLMによって生成されたコードやコンテンツの量が増大するにつれて、人間がそれらを適切にレビューし、理解する能力が限界に達しているという意見が述べられています。</p>
+<p>一部のユーザーは、LLMが生成するコードが「粗悪」であり、レビューに何時間もかかるため、実際の作業負荷が増加していると指摘しています。また、数百万行にも及ぶLeanの証明のような複雑な出力は、人間には理解不能であるとされています。このため、「人間がLLMの出力を検証する能力」が、LLMの発展における真の「壁」となる可能性が指摘されています。企業が「速く動き、破壊する」という理念の下でLLMのコードを人間が十分にレビューしないままで使用する危険性や、それによる品質低下、バグ増加、法的責任のリスクが懸念されています。</p>
+<p>さらに、LLMの信頼性そのものも問題視されています。一部のユーザーは、AIチャットボットが「嘘をつく」ことが多く、重要なタスクに任せることはできないと述べています。特に、Google検索のAI要約機能や、ChatGPTのような無料モデルの出力が「不正確」であるという経験が共有されています。</p>
+<h2>現実世界への影響と期待のギャップ</h2>
+<p>LLMが社会全体や日常生活に与える影響についても、大きな意見の相違が見られます。</p>
+<p>一部の楽観的な見方では、AIの進歩はまだ初期段階にあり、自動車、エネルギー、医療などの分野にその恩恵が波及するには時間がかかるだろうと述べられています。例えば、自動運転車、AI設計のバッテリーシステム、より迅速な癌の発見などが将来的に実現される可能性が指摘されています。また、個人的なアシスタントとしてのAIの有用性（買い物、書類作成、旅行計画など）を挙げる人もいます。</p>
+<p>しかし、多くのコメントは、AIが平均的な人々の生活を改善したという実感がないと述べています。彼らは、AIの進歩が報じられる一方で、車や家電製品、公共交通機関は変わらず、燃料や食料、住宅費は上昇し、子供たちの学業成績は悪化し、政治は混乱し、環境問題は深刻化しているといった現実を突きつけています。彼らは、AIが「誰も使わないソフトウェアを大量に開発し、誰も解いて欲しがらなかった数学の問題を解いている」と皮肉っています。</p>
+<p>このギャップは、LLMの能力が特定分野（ソフトウェア開発、数学など）では高いものの、多くの人々が「現実的に必要とする」レベルには達していないか、またはその恩恵が社会の構造的な問題（インセンティブの欠如、規制など）によって阻害されているためであると分析されています。一部のユーザーは、AIが「デジタルなものは全てできるが、物理的な世界には対応できない」という限界を指摘し、期待と現実の間に大きな乖たりがあると感じています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、AI、特にLLMの現状と未来に対する複雑で多面的な見方を提示しています。一部のAI内部関係者や特定の技術分野の専門家は、AIが驚異的な速度で進化し、既に特定のタスクで人間の能力を超えていると確信していますが、その主張は多くの一般ユーザーや他の開発者からは誇張され、実用性に欠けるものと見なされています。</p>
+<p>AIの出力に対する人間の検証能力の限界、信頼性の問題、そしてAIが現実世界の広範な問題解決に貢献しているという実感の欠如が、中心的な懸念事項として浮上しています。多くの人々は、現在のAIの進歩が、社会全体の生活の質向上にはまだ繋がっておらず、むしろ一部の「AI産業」内の利益に偏っているのではないかと感じています。この意見の相違は、AI技術が社会に浸透し、その真の価値と限界が明らかになるにつれて、さらに深まる可能性があります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
