@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple HomeView - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Apple HomeView</h1>
+        <div class="meta">
+            投稿日: 2026年10月13日 | ランク: 6
+        </div>
+        <a href="https://www.apple.com/apple-homeview/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Appleが新たに発表したスマートディスプレイ「HomeView」に関する様々な意見や懸念を議論しています。EUでの販売不可、AI機能の必要性、製品の有用性、プライバシー、競合製品との比較などが主な焦点です。</p>
+<h2>EUでの販売不可とSiri AIの役割</h2>
+<p>AppleがEUでHomeViewを販売しない理由として、Siri AIがiOSで利用できないことを挙げている点について、多くのコメントが疑問を呈しています。Siri AIがなくても、Google Nest Hubのように十分に機能すると指摘する声や、AI機能が製品にとって最も興味がなく、最も役に立たない部分だと考える意見があります。EUのDigital Markets Act（DMA）が、AppleにサードパーティのAIアシスタントにSiriと同等のアクセスを強制するため、AppleがEUの規則に従うことを避けている、あるいはEUを悪役に見せかけようとしているという見方もあります。一部のユーザーは、Siri AIの搭載が製品のリリースを1〜2年遅らせたという噂に言及し、Siriが「まともに機能する」ようになるまで待っていたと推測しています。</p>
+<h2>製品の有用性と競合</h2>
+<p>多くのコメントが「なぜ別の画面が必要なのか？」という問いを投げかけています。iPhoneやiPadがある中で、HomeViewの必要性を感じないという意見が多数を占めます。レシピの閲覧、スマートホームのコントロール、家族間のコミュニケーションなどが挙げられますられる用途ですが、既存のデバイスで十分、あるいはより適していると感じるユーザーが多いようです。特に「古いiPadを壁に設置する」という解決策がHomeViewの最大の競合であり、マルチユーザーのFace ID機能が差別化要因となり得ると指摘されています。一方で、Appleの製品は「必要とされる」ために設計されているわけではないという意見や、スマートホームのマスターコントローラーとしての用途には価値があるという声もあります。一部のユーザーは、HomeViewがAmazonやGoogleが10年前に導入した製品カテゴリに今頃参入していることに驚きを示しています。</p>
+<h2>プライバシーとセキュリティ</h2>
+<p>HomeViewのプライバシーに関する声明（「誰もが享受すべきプライバシー」）に対して、多くのコメントが皮肉や疑念を抱いています。HomeViewのA18チップに搭載されている「Secure Exclaves」がカメラとマイクのフィードを安全な区画で処理し、OSやAppleがアクセスできないようにするというAppleの主張は注目されています。しかし、これを「監視」と捉える声や、Appleの言う「プライバシー」を鵜呑みにできないという意見も少なくありません。一部のユーザーは、他のスマートデバイスも同様のデータ収集を行っている中で、Appleが安全な実装を試みていることを評価しつつも、監視の常態化を懸念しています。</p>
+<h2>Siri AIの性能と製品への影響</h2>
+<p>SiriのAI機能に対する不満が多く表明されています。「Siri AIがなければ役に立たない」というAppleの主張は、Siriが依然として基本的な要求にもうまく応えられない、あるいは遅いというユーザー体験と矛盾すると感じられています。Geminiベースの新しいSiriも「半ば機能している」と評され、以前のSiriが抱えていた問題とは異なる新しい問題があると指摘されています。</p>
+<h2>アプリとエコシステム</h2>
+<p>HomeViewがApp Storeのサードパーティアプリをサポートしないこと、特に動画ストリーミングアプリ（YouTube、Plexamp、Spotifyなど）が利用できないことに多くのユーザーが失望しています。これは、既存のiPadをキッチンで使用する際に享受できる利便性がHomeViewでは得られないことを意味します。Apple MusicなどのAppleサービスにユーザーをロックインしようとする意図ではないかという憶測もあります。しかし、HomeViewが将来的にApple WatchやCarPlayのように、iPhoneアプリと連携する形でウィジェットやコンパニオンアプリをサポートする可能性も指摘されています。</p>
+<h2>デザインと価格</h2>
+<p>HomeViewのデザインについては、iMac G4を彷彿とさせるという意見がある一方で、「魂がない」「不格好」といった否定的な意見も寄せられています。特に、充電ケーブルを目立たなくするためにキッチンのカウンターに穴を開ける必要があることをプロモーションビデオで示している点や、壁掛けオプションの電源供給方法について疑問の声が上がっています。価格（299ドル）については、「Apple製品としては安い」と感じる人と、「高すぎる」「他の選択肢（iPadなど）の方が良い」と感じる人で意見が分かれています。</p>
+<h2>まとめ</h2>
+<p>AppleのHomeViewは、Hacker Newsコミュニティにおいて、その有用性、Siri AIへの依存、プライバシーへの懸念、そしてアプリエコシステムの閉鎖性に関して、賛否両論を巻き起こしています。多くのユーザーは、既存のiPadやHome Assistantなどの代替手段と比較して、HomeViewの独自性や優位性を見出すのに苦労しています。しかし、その手頃な価格設定とAppleエコシステムへの深い統合は、スマートホームの中央ハブとして、特にテクノロジーに詳しくない高齢者や忙しい親にとって一定の市場を獲得する可能性も指摘されています。Siriの性能向上やサードパーティ連携の拡大が、今後の製品の成功を左右する重要な要素となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

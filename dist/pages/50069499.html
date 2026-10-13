@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 year old unsoundness bugs found in Rust borrow checker - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">11 year old unsoundness bugs found in Rust borrow checker</h1>
+        <div class="meta">
+            投稿日: 2026年10月13日 | ランク: 8
+        </div>
+        <a href="https://github.com/rust-lang/rust/issues/164250" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、Rustコンパイラで発見された長期にわたるサウンドネスバグに関するものです。このバグは、参照がその参照対象よりも長く存続することをRustが静的に保証するという約束に違反するものです。特に、<code>Option&lt;T&gt;</code>のような型で<code>Drop</code>実装を使用し、<code>T: 'static + Send</code>のようなライフタイム境界を持つ場合に、コンパイラが「use-after-free」の状況を見逃す可能性があります。</p>
+<h2>バグの内容と発見の難しさ</h2>
+<p>このバグは、<code>Drop</code>トレイトの実装を持つ構造体で、ジェネリックパラメータTに<code>'static</code>ライフタイム境界がある場合に発生します。コンパイラは、この構造体内に格納された非<code>'static</code>参照を誤って<code>'static</code>として扱ってしまうため、参照対象が解放された後もその参照が有効であるかのように振る舞い、Use-After-Freeにつながる可能性があります。</p>
+<p>コメントでは、このバグが11年間発見されなかった理由について議論が交わされています。
+*   <strong>まれなユースケース:</strong> 一部のユーザーは、ジェネリックパラメータのライフタイムに依存して条件付きで<code>Drop</code>を実装するパターンが非常にまれであるため、このバグが発見されにくかったと指摘しています。しかし、他のユーザーは、バグの根本原因となっているコードパターンは「通常のコードで簡単に出くわすもの」であり、バグが長期間見過ごされてきたのは、たまたま深刻な問題を引き起こすような形で使用されなかったためではないかと反論しています。
+*   <strong>無害な利用:</strong> 型チェックが不十分なコードでも、実際のメモリ不正アクセスが発生しなければ、プログラムは意図した通りに動作するため、バグが表面化しにくいという意見もあります。
+*   <strong>実装上の問題:</strong> Rustコンパイラの統一処理が型のライフタイム境界をチェックしていなかったことが原因であるという指摘もあります。</p>
+<h2>Rustの安全性と保証への影響</h2>
+<p>このバグは、Rustの主要なセールスポイントである「メモリ安全性保証」に直接関わるため、コミュニティで大きな議論を巻き起こしています。
+*   <strong>保証の無効化:</strong> 一部のユーザーは、このようなバグが存在することは、Rustが宣伝する「保証」が実際には存在しないことを意味すると批判しています。
+*   <strong>コンパイラのバグ:</strong> 多くのユーザーは、これを型システム自体の根本的な欠陥ではなく、あくまでコンパイラの実装バグと見ています。コンパイラが本来拒否すべきコードを誤って受け入れていたため、修正はコードを拒否するように変更するだけであるという見解です。
+*   <strong>完璧ではない:</strong> どの言語やシステムも完璧ではなく、バグは常に存在するという現実的な意見も多数あります。Rustは他の言語に比べて安全性の基準を高く設定しており、この種のバグが発見され、修正されることは、むしろRustの強みであるという意見も出ています。</p>
+<h2>関連する議論</h2>
+<p>スレッドでは、バグそのもの以外にもいくつかの関連するトピックが議論されています。
+*   <strong>カスタムDrop実装の頻度:</strong> <code>Drop</code>トレイトのカスタム実装が実際のプロダクションコードでどれくらいの頻度で使用されるかについて、意見が分かれています。FFI（外部関数インターフェース）コードでは一般的であるという指摘もあります。
+*   <strong>RustとC++の比較:</strong> C++のメモリ安全性問題と比較し、Rustの安全性がどれほど優れているか、またはC++も現代的なプラクティスで改善できるかについての議論があります。
+*   <strong>OOM（Out of Memory）ハンドリング:</strong> Rustがメモリ不足の状況をより適切に処理すべきだという意見や、カスタムアロケータのサポートに関する議論も出ています。
+*   <strong>AIによるバグ発見:</strong> AIツールがRustのようなコンパイラのバグ発見に役立つ可能性についても言及されていますが、AIに関する議論が過熱していることに対する不満の声も上がっています。</p>
+<h2>まとめ</h2>
+<p>このRustコンパイラのサウンドネスバグは、Rustのメモリ安全性保証が直面する課題を浮き彫りにしました。このバグは、<code>Drop</code>実装とジェネリック型に<code>'static</code>ライフタイム境界が絡む特定の、比較的まれな（しかし不自然ではない）ユースケースで発生し、本来拒否されるべきUse-After-Freeを引き起こす可能性がありました。コミュニティでは、これをコンパイラの実装バグと捉え、Rustの安全性への長期的なコミットメントを再確認する機会と見ています。同時に、他の言語との比較や、完璧な安全性の達成の難しさ、さらにはAIが今後のバグ発見に果たす役割についての議論も活発に行われました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
