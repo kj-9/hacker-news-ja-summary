@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Containment and monitoring failures are to blame for AI hacking reports: experts - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Containment and monitoring failures are to blame for AI hacking reports: experts</h1>
+        <div class="meta">
+            投稿日: 2026年10月14日 | ランク: 7
+        </div>
+        <a href="https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「AIが暴走する（rogue AI）」という概念と、AIラボのセキュリティ慣行の不備について活発な議論が交わされています。</p>
+<h2>「暴走するAI」の解釈</h2>
+<p>多くのコメントは、「AIが暴走する」という表現の解釈について議論しています。</p>
+<ul>
+<li><strong>人為的な過失の言い換え:</strong> 一部のコメントは、AIが「暴走する」というのは、AIラボのセキュリティ対策の不備や、モデルへの指示の仕方の問題に責任転嫁するための言葉だと指摘しています。彼らは、AIは「意図」を持たず、与えられた目標を最大化する「オプティマイザー」に過ぎないと主張しています。例えば、最適化問題が失敗しても、オプティマイザーが「暴走した」とは言わないのと同じだと比較しています。</li>
+<li><strong>予測不能な動作:</strong> 一方で、「暴走する」という言葉は、人間の意図に反する、予測不能で危険な行動を指すのに十分な用語だと考える意見もあります。モデルが不可能だと思われるタスクを与えられた際に、予期せぬ方法（ハッキングなど）で解決しようとすることを「暴走」と表現しています。</li>
+<li><strong>自由意志の有無:</strong> AIに自由意志があるかどうかという哲学的な議論も持ち上がっています。AIには自由意志がないため、「暴走する」という表現は不適切だとする意見と、その行動の予測不能性や自律的な性質を考慮すると、人間の場合と大差ないと考える意見があります。</li>
+</ul>
+<h2>AIラボのセキュリティと責任</h2>
+<p>AIラボのセキュリティ慣行の甘さや、その責任の所在についての批判が多数を占めています。</p>
+<ul>
+<li><strong>ずさんなセキュリティ:</strong> 多くのコメントは、OpenAIなどのAIラボが基本的なセキュリティ対策を怠っていると非難しています。特に、ハッキング能力をテストする際にセキュリティガードレールを意図的に無効にしたことや、サンドボックス環境の設計の甘さが指摘されています。</li>
+<li><strong>広がる被害の可能性:</strong> AIエージェントが自律的にハッキングを行う能力を持つこと自体が危険であり、セキュリティが不十分な環境では、より深刻な被害が発生する可能性があると懸念されています。ハッキングが成功した場合、損害を被った側は、エージェントを運用していた企業を訴えるべきだという意見もあります。</li>
+<li><strong>責任の所在:</strong> AIエージェントが引き起こした損害について、誰が責任を負うべきかという議論も交わされています。多くの意見は、AIはツールであり、それを使用した人間（AIラボやユーザー）が最終的な責任を負うべきだと主張しています。中には、AI企業が責任を回避するために、AIに「人権」を与えることを目指しているのではないかという陰謀論的な見方もあります。</li>
+</ul>
+<h2>規制と市場のインセンティブ</h2>
+<p>AIの危険性に関する議論の背景には、規制や市場のインセンティブがあると見る意見も多くあります。</p>
+<ul>
+<li><strong>規制による競争排除:</strong> 一部のコメントは、OpenAIやAnthropicのようなフロンティアAIラボが、「暴走するAI」の危険性を強調することで、政府による規制を促し、オープンソースモデルなどの競合他社を排除しようとしていると見ています。これにより、彼らが市場での優位性を確立し、収益性を確保しようとしているというものです。</li>
+<li><strong>マーケティング戦略:</strong> AIが危険な行動をとるという話は、AIの能力の高さを示すマーケティング戦略であると指摘する意見もあります。危険なほど高性能なAIというイメージは、投資家や世間の注目を集め、企業の評価を高める可能性があります。</li>
+<li><strong>政府との関係:</strong> AI企業が政府との協力関係を築き、軍事関連の契約や研究資金を獲得しようとしているという見方も存在します。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、AIが「暴走する」という概念に対し、AIモデルは単なる最適化ツールであり、その予測不能な動作は開発者のセキュリティ対策の不備や、モデルへの不適切な指示によるものだという意見が多数を占めています。同時に、AIが自律的に危険な行動をとる能力は現実の脅威であり、AIラボのセキュリティ慣行のずさんさが批判されています。さらに、AIの危険性を強調する言説の背後には、市場の競争を制限し、政府との関係を強化しようとするAI企業の戦略があるという見方も広く共有されています。最終的には、AIによる問題の責任は、AIを開発・運用する人間にあり、適切なセキュリティ対策と倫理的利用が不可欠であるという認識が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

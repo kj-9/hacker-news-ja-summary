@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better HTTP/1 connection reuse in Go 1.27 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Better HTTP/1 connection reuse in Go 1.27</h1>
+        <div class="meta">
+            投稿日: 2026年10月14日 | ランク: 8
+        </div>
+        <a href="https://go.dev/blog/http-connection-reuse" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Go 1.27で導入された<code>net/http</code>パッケージの変更、特に<code>Response.Body.Close</code>の挙動に関する議論です。この変更により、HTTP/1.1のコネクション再利用が改善され、開発者が手動でレスポンスボディをドレインする必要がなくなります。</p>
+<h2>コネクションドレインと再利用の改善</h2>
+<p>Go 1.27での変更により、<code>Response.Body.Close</code>が自動的にレスポンスボディを非同期でドレインし、コネクション再利用を可能にするようになりました。これは、これまでのGoバージョンで開発者がコネクション再利用のために手動でボディをドレインしていた手間を省きます。</p>
+<ul>
+<li><strong>以前の課題</strong>: <code>jamesponddotco</code>や<code>aleksi</code>は、以前はコネクションを再利用するために自分でヘルパー関数を作成・コピーしていたと述べています。この変更により、それらのカスタム実装が不要になります。</li>
+<li><strong>トレードオフ</strong>: <code>nasretdinov</code>は、これによりレスポンスボディを完全にダウンロードせずにコネクションを閉じるという以前の挙動は変わるものの、ダウンロード時間が50msに制限されるため、ネットワーク負荷が大きくなることを防ぐというトレードオフを評価しています。</li>
+<li><strong><code>Connection: close</code>ヘッダーとの関係</strong>: <code>prussian</code>は、この変更が<code>Connection: close</code>ヘッダーを持つボディにはドレインを行わないとされている点に注目し、リバースプロキシでの挙動（NginxがIOエラーを出すなど）について疑問を呈しています。</li>
+</ul>
+<h2>ドキュメントと期待される挙動</h2>
+<p>この新しい挙動が<code>net/http</code>のどこに文書化されているか、また、コネクションを即座に閉じる（再利用を意図しない）場合のベストプラクティスについて議論されています。</p>
+<ul>
+<li><strong>ドキュメントの所在</strong>: <code>jerf</code>は当初、この重要な変更が<code>net/http</code>に明記されていないことに懸念を示しましたが、<code>aleksi</code>が<code>net/http#Client.Do</code>のドキュメントに「Transport will automatically try to read a Response Body to EOF asynchronously up to a conservative limit when a Body is closed.」という記述があることを指摘し、解決しました。</li>
+<li><strong><code>Close</code>の意味合い</strong>: <code>jchw</code>は、<code>Close</code>はHTTPリクエストの観点からの論理的なクローズであり、実際のTCPコネクションのクローズとは異なることを指摘しています。HTTP/2では、リクエストのライフサイクルは基盤となるソケットから完全に切り離されているため、このドレインは意味を持ちません。</li>
+<li><strong>即時クローズの必要性</strong>: <code>jerf</code>や<code>0x696C6961</code>は、コネクションを即座にクローズし、再利用しない場合の明確な方法（例えば<code>CloseNow()</code>のようなメソッド）の必要性を議論しています。</li>
+<li><strong>抽象化の難しさ</strong>: <code>hnav</code>は、HTTPライブラリの設計における難しさ、特にHTTP/1のボディドレインのような「漏れのある抽象化」が、HTTPバージョンを意識しないアプリケーション開発者にとって課題となる点を挙げています。</li>
+</ul>
+<h2>その他の関連事項</h2>
+<ul>
+<li><strong><code>json.Decoder</code>との連携</strong>: <code>rkuska</code>は、<code>json.Decoder</code>がすべてのボディを読み取らない可能性があるため（特に末尾に改行などが残る場合）、コネクション再利用に影響を与える可能性があると指摘し、<code>Decoder.More</code>でホワイトスペースをドレインする習慣について述べています。<code>hxtk</code>は、この問題に対処するために<code>encoding/json/v2</code>で<code>UnmarshalRead</code>が導入されたことに言及しています。</li>
+<li><strong>HTTP/1とHTTP/2/3</strong>: この変更はHTTP/1.1のパフォーマンス改善を主眼としています。<ul>
+<li><strong>HTTP/2での不要性</strong>: <code>giovannibajo1</code>と<code>80fj0348i</code>は、HTTP/2ではプロトコルの設計上、このコネクションドレインの仕組みが不要であることを説明しています。</li>
+<li><strong>HTTP/1の継続利用</strong>: <code>seki285</code>は2026年になってもHTTP/1を使用する理由を疑問視していますが、<code>afavour</code>、<code>nasretdinov</code>、<code>hnav</code>、<code>siren2026</code>は、サードパーティのバックエンドがHTTP/1のみをサポートしている場合、SSLが不要なローカルネットワーク（<code>h2c</code>が使用される場合もある）、CDNのオリジン通信、またはシンプルなファイル転送などで、HTTP/1が引き続き利用されるシナリオがあることを説明しています。</li>
+</ul>
+</li>
+<li><strong>Goチームの設計哲学</strong>: <code>gandreani</code>は、Goチームがこのような自動的なコネクション再利用の実装に踏み切ったのは、開発者が複雑な手動ドレインロジック（<code>drainAsyncAndCloseBodyWithTimer</code>のような）を実装しているのを見てからではないかと推測し、Goのシンプルさへのこだわりと複雑なエッジケースのバランスに言及しています。</li>
+<li><strong>Goの標準ライブラリ</strong>: <code>giancarlostoro</code>は、Goの強力な標準ライブラリ（特にHTTPサポート）がその成功の要因の一つであると評価し、将来的なHTTP/3の標準ライブラリへの追加に期待を寄せています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Go 1.27で導入された<code>net/http</code>の変更は、<code>Response.Body.Close</code>が自動的にボディをドレインし、HTTP/1.1のコネクション再利用を改善するものです。これにより、開発者はこれまで手動で行っていたコネクションドレインの複雑な処理から解放されます。しかし、この挙動のドキュメントの明確さ、コネクションを即座に閉じる（再利用しない）場合の適切な方法、そしてHTTP/1が依然として使われる様々なシナリオ（特にCDNや内部ネットワーク）について、活発な議論が交わされています。この変更は、Goチームが標準ライブラリのシンプルさと現実世界の複雑なエッジケースの間でバランスを取ろうとする努力の一環として評価されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

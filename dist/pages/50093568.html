@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Things to know when you get cancer – 2026 Edition - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Things to know when you get cancer – 2026 Edition</h1>
+        <div class="meta">
+            投稿日: 2026年10月14日 | ランク: 1
+        </div>
+        <a href="https://jjmaxwell4.com/writing/things-to-know-when-you-get-cancer/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、がん診断に直面した際の医療システムとの向き合い方について、実用的なアドバイスと個人的な経験を共有しています。全体として、患者が自身のケアに積極的に関与し、疑問を抱き、徹底的に情報を集めることの重要性が強調されています。</p>
+<h2>自身の医療における擁護者となる</h2>
+<p>多くのコメントが、患者自身、または信頼できる人が、自身の医療において最も強力な擁護者となる必要があると強調しています。医師は多くの患者を抱え、時間が限られているため、患者は自ら積極的に情報収集し、質問し、必要に応じて異議を唱える必要があります。</p>
+<ul>
+<li><strong>積極的な関与:</strong> 医師は多くの患者を診ており、一人ひとりに深い関心を寄せるのは難しい。患者は自身の健康問題について何日も、何週間もかけて調査し、治療計画を立てる「最も制約の少ないチームメンバー」であるべきです。</li>
+<li><strong>「迷惑がられるくらい居座る」ことの重要性:</strong> 家族や友人は、患者が困難な状況にあるときに、医師と話し、質問し、最善の治療を求めるために積極的に関わるべきです。物理的な存在感を示すことは、無視されにくくするために有効です。</li>
+<li><strong>記録の重要性:</strong> 診察内容、医師のコメント、症状の推移、投薬記録などを詳細に記録することは、正確な情報共有と診断に非常に役立ちます。医師も正確な情報に好意的に反応します。</li>
+<li><strong>セカンドオピニオン:</strong> 診断や治療計画が確定する前に、必ずセカンドオピニオンを求めるべきです。これは命に関わることであり、多くの保険でカバーされます。主治医が気分を害することはありません。セカンドオピニオンを求める医師には、最初の意見をすぐに伝えず、独立した意見を聞くことを推奨する人もいます。</li>
+</ul>
+<h2>医療システムのナビゲート</h2>
+<p>医療システムは複雑で、非人間的な側面があるため、効果的にナビゲートするための戦略が共有されています。</p>
+<ul>
+<li><strong>トップレベルの専門病院の活用:</strong> 可能であれば、地域の病院ではなく、US Newsなどで評価されているようなトップレベルのがんセンターを受診することを強く推奨されています。これらのセンターは異なる考え方をしており、診断や治療のスピードが格段に速い可能性があります。</li>
+<li><strong>専門家との連携:</strong> 特定の処置や診断を頻繁に行っている医師を選ぶべきです。経験豊富な医師は、症例を迅速かつ正確に処理できます。</li>
+<li><strong>保険会社との交渉:</strong> 保険給付調整に関する質問書（COB Questionnaire）など、保険会社から求められる書類に注意し、請求が不当に拒否された場合は粘り強く交渉する必要があります。</li>
+<li><strong>紹介の要求:</strong> 必要であれば、異なる種類の医師や同じ種類の別の医師への紹介を積極的に要求すべきです。医師は自分の専門分野内でしか考えない傾向があるため、患者が広範な視野を持つ必要があります。</li>
+</ul>
+<h2>AIと情報の利用</h2>
+<p>AI技術の進化に伴い、医療情報の収集と解釈におけるAIの役割についても議論されています。</p>
+<ul>
+<li><strong>AIの限界と有用性:</strong> AIは、初期段階で「がんではない」と過小評価する傾向があるという意見と、多くの文献を学習しているため、医師が気づかないような洞察や検査の提案をしてくれる可能性があるという意見があります。</li>
+<li><strong>AIを補完ツールとして活用:</strong> AIの言うことを鵜呑みにせず、医師の意見をAIで「加圧テスト」し、AIの言うことを医師で「加圧テスト」するという、両方を補完的に利用することが推奨されています。</li>
+<li><strong>AIの利用目的:</strong> LLMは、検査や紹介を求める際に役立つ情報を見つけるための効率的な手段となり得ると考えられています。ただし、最終的な診断は医師が行うべきです。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、がんと診断された、または医療問題に直面した個人に対し、自身の医療において<strong>究極の擁護者となる</strong>ことの重要性を強く訴えかけています。これには、<strong>積極的に情報収集し、徹底的に記録をとり、疑問を抱き、セカンドオピニオンを求め、必要に応じて医療機関を越えて最高の専門家を探す</strong>ことが含まれます。医療システムは複雑で、時間や資源の制約があるため、患者自身が「システム」を理解し、粘り強く交渉し、自身や愛する人のために積極的に行動することが、最善の結果を得る上で不可欠であると結論付けられます。また、AIは情報収集の強力なツールとなり得る一方で、その限界を理解し、常に医師の診断と組み合わせて利用すべきです。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
