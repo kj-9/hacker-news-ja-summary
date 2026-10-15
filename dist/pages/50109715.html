@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What I Self-Host - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">What I Self-Host</h1>
+        <div class="meta">
+            投稿日: 2026年10月15日 | ランク: 2
+        </div>
+        <a href="https://viceconsole.fyi/blog/2026/10/10/what-i-self-host/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、自己ホスティング（self-hosting）が将来の重要なトレンドであるという主張と、その実践に関する様々な意見を中心に展開しています。特に、コンテナ化（Docker/Podman）の使用、デプロイ方法、および特定のサービス（メディアサーバーやメール）のホスティングの容易さについて議論されています。</p>
+<h2>自己ホスティングの未来とAIバブル</h2>
+<p>多くのコメントでは、AIが将来を支配するという見方に疑問を呈し、自己ホスティングこそが真に革新的な未来であると主張しています。クラウドベンダーから提供されるサービスの多くは、比較的安価なハードウェアと、年々使いやすくなるソフトウェアで賄えるとのことです。AIについては、現在のAI経済が「バブル」であり、一時的に価値が急落する可能性があると指摘しつつも、AI技術自体がなくなるわけではないという意見もあります。しかし、自己ホスティングがAIと同じくらい大きな存在になることはないだろうという現実的な見方も示されています。</p>
+<h2>デプロイ方法：単一バイナリ vs. Docker Compose/コンテナ</h2>
+<p>サービスをデプロイする際のアプローチについて、大きく分けて2つの意見が対立しています。</p>
+<ul>
+<li><strong>単一バイナリを好む意見</strong>: 多くの依存関係を持つ複雑なサービスではなく、Go言語の単一バイナリのようにシンプルなサービスを好む人がいます。これは、エンドユーザーが簡単に実行できる点や、セットアップの簡潔さを重視するものです。</li>
+<li><strong>Docker Compose/コンテナを好む意見</strong>: MySQL、Redisなど複数の依存関係を持つサービスでも、Docker Composeの使用を好む声も多数あります。その理由としては、以下の点が挙げられます。<ul>
+<li><strong>分離</strong>: メインシステムや他のサービス、依存関係からの分離（セキュリティ向上、状態の永続化）。</li>
+<li><strong>移植性</strong>: 新しいシステムへの移行が容易。</li>
+<li><strong>アップグレード/ダウングレード</strong>: バージョン管理が容易。</li>
+<li><strong>統一されたインターフェース</strong>: アップデート、ログ、サービス管理、ネットワークルーティング、設定、ストレージマッピングなどが統一され、異なる実装に対応する手間が省ける。</li>
+<li><strong>構成の明確さ</strong>: 単一のYAMLファイルで必要な情報がすべて確認でき、依存関係の理解や設定の手間が省ける。</li>
+<li><strong>ドキュメントとしての機能</strong>: プロジェクトのアーキテクチャを素早く把握できるため、最高のドキュメントであると評価する声もあります。</li>
+</ul>
+</li>
+</ul>
+<p>また、Dockerの代替としてPodman + systemd、K3S、NixOSのsystemdコンテナ、Quadlet-Nixなどが挙げられています。Proxmoxのような仮想化環境でLXCコンテナを利用して分離とリソース効率を両立させる方法も推奨されています。</p>
+<h2>特定のサービスに関する議論</h2>
+<h3>メディアサーバー（*arrスタック）</h3>
+<p>Sonarr, Lidarr, Radarrなどの「*arr」スタックは、リソースを大量に消費し、頻繁に壊れるという印象があるが、実際にはメモリ消費も少なく安定しているという反論が多く寄せられています。これらは設定こそ複雑だが、一度設定すれば長期間にわたって安定稼働し、メディア管理を自動化する非常に優れたツールであると評価されています。</p>
+<h3>メールサーバー</h3>
+<p>メールの完全な自己ホスティングは「面倒で不必要」という意見が多いです。その理由としては、メールが相手に届くかどうかの保証が難しい（IPアドレスのブロックなど）点が挙げられます。代わりに、mbsyncで既存のメールボックス（Gmail, iCloud, Protonなど）をミラーリングし、Roundcubeのようなフロントエンドでアクセスする方法が提案されています。Proton MailのようなE2E暗号化メールサービスの場合、ブリッジアプリを利用することで自己ホスティング環境からアクセスできる可能性が指摘されています。</p>
+<h2>自己ホスティングの課題と解決策</h2>
+<ul>
+<li><strong>外部からのアクセス</strong>: 自己ホスティングの課題の一つは、外部からプライベートネットワークに簡単にアクセスする方法です。Tailscaleのようなベンダーソリューションが挙げられる一方、Pangolinのような組み込み認証付きのソリューションや、Wireguard VPNを携帯デバイスに自動接続させる方法も提案されています。Let's Encryptの証明書取得については、DNS-01チャレンジを利用することでパブリックインターネットに公開せずとも可能であると説明されています。</li>
+<li><strong>技術的なハードル</strong>: 自己ホスティングは平均的なユーザーにとってはまだハードルが高いと認識されています。Tarvis.ioのような、非技術者でもアクセスしやすくするための製品開発も進められています。</li>
+<li><strong>手間</strong>: 自己ホスティングは「パートタイムの仕事」に感じるほど手間がかかるという意見もあります。しかし、最近ではLLM（大規模言語モデル）を活用することで、手作業で行うような複雑な設定や修正の「退屈な作業」が大幅に軽減されるという指摘もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、自己ホスティングがクラウド依存からの脱却と個人のデジタル主権を取り戻す重要なトレンドであると広く認識されています。AIの台頭とは異なる、よりパーソナルな技術革新として注目されており、安価なハードウェアと進化するソフトウェアによってその実現可能性が高まっています。デプロイ方法については、単一バイナリの簡潔さを好む声と、Docker Compose/コンテナが提供する分離、移植性、統一された管理インターフェースを評価する声が分かれています。特に、コンテナ化は多くのユーザーにとって自己ホスティングを容易にする重要な技術と見なされています。メディアサーバーのような特定サービスは、初期設定の複雑さにもかかわらず、一度設定すれば安定稼働するという評価が多く、メールの完全な自己ホスティングは課題が多いものの、既存サービスのミラーリングは有効な選択肢とされています。外部からの安全なアクセスや技術的な障壁といった課題は残るものの、Tailscaleや新しいツール、さらにはAIを活用することで、その解決策が模索され、自己ホスティングは今後も進化し続けると示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
