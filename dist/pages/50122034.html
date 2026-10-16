@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBay Restricts Listings of Radio Equipment, but Exempts Ham-Band-Only Gear - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">eBay Restricts Listings of Radio Equipment, but Exempts Ham-Band-Only Gear</h1>
+        <div class="meta">
+            投稿日: 2026年10月16日 | ランク: 5
+        </div>
+        <a href="https://www.arrl.org/arrlletterissue?issue=2026-10-15#eBay-Restricts-Listings-of-Radio-Equipment_-But-Exempts-Ham-Band-Only-Gear" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、eBayがFCCの新しい規制に従って、一部の無線機器の販売を制限するというニュースに焦点を当てています。特に、アマチュア無線帯域のみで動作しない機器や、FCC IDがない機器が対象となります。議論は、この規制の意図、潜在的な抜け穴、アマチュア無線コミュニティへの影響、そしてより広範な規制と自由に関する哲学的な議論に及びました。</p>
+<h2>規制の対象と解釈</h2>
+<p>多くのコメンテーターは、この規制が特に「広帯域」無線機、特にBaofeng製のような安価な中国製無線機を対象としていると指摘しています。これらの無線機は、簡単な操作で認可されていない帯域（緊急サービスなど）でも送信できることが多く、これが問題視されてきました。</p>
+<ul>
+<li><strong>FCC IDの要件</strong>: 多くの消費財はFCC IDを持っているため、引き続き利用可能だと考えられています。しかし、DIYプロジェクトや一部のSDR（ソフトウェア無線）コンポーネント、特に広帯域の低ノイズアンプ（LNA）などは、FCC IDの表示がないため影響を受ける可能性があります。</li>
+<li><strong>「アマチュア無線帯域のみ」の解釈</strong>: 一部のユーザーは、既存のハードウェアのほとんどが禁止されると解釈し、混乱が見られました。しかし、記事の要約によれば、FCC IDがないものが禁止対象であり、アマチュア無線帯域専用の機器は影響を受けません。</li>
+<li><strong>中古品とソフトウェア規制</strong>: 中古品には規制が適用されないという声もあります。また、新しい無線機がソフトウェアで制限され、簡単に解除できるような形で販売される可能性も指摘されています。過去にはBaofeng無線機が、ボタンの組み合わせで制限を解除できる形で販売されていた例があります。</li>
+</ul>
+<h2>規制の意図と影響</h2>
+<p>規制の主な目的は、認可されていないユーザーがBaofengなどの改造無線機を使用して、認可されていない帯域（特にEMS、消防、警察などのサービス）で通信することを防ぐことです。</p>
+<ul>
+<li><strong>安全保障上の懸念</strong>: FCCは、この規則を「通信サプライチェーンに対する国家安全保障上の脅威から保護する」ためのものと説明しており、中国製品に対する広範な不信感との関連性も指摘されています。</li>
+<li><strong>ハッカーとハムコミュニティ</strong>: アマチュア無線コミュニティは、周波数スペクトルが有限で共有リソースであるため、「良き市民」として行動し、規制に従う傾向が強いと指摘されています。これは、自由に実験することを重視するコンピューターハッカーコミュニティとは対照的だと分析されています。</li>
+<li><strong>SDRとDIYプロジェクトへの影響</strong>: ESP32のようなマイクロコントローラーが限定的なSDRとして利用される可能性や、Meshtasticデバイスのような unlicensed band（無免許帯域）で動作するものが規制の対象となる可能性が議論されました。特に、FCC IDを持たないSDRコンポーネント（LNAなど）は、eBayから排除される可能性があるとの懸念が表明されています。</li>
+</ul>
+<h2>規制の限界と代替手段</h2>
+<p>この規制の有効性や、人々が「違法な」無線機を入手するのを完全に阻止できるかどうかに疑問を呈する声もあります。</p>
+<ul>
+<li><strong>「抜け道」</strong>: 規制後も、ユーザーはボタンの組み合わせや代替ファームウェアで制限を解除できる可能性があると指摘されています。</li>
+<li><strong>代替販売チャネル</strong>: もしeBayが完全に無線機販売を制限した場合、TikTokショップ、Facebookグループ、Craigslist、AliExpressなど、他のプラットフォームが代替の販売チャネルになる可能性が議論されました。</li>
+<li><strong>FCCの執行能力</strong>: FCCの執行部署はリソースが限られており、通常の消費者による軽微な違反に対して積極的に取り締まることは難しいという意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>eBayの新しい規制は、主に認可されていない帯域での違法な送信を防ぐことを目的としたFCCの動きに端を発しています。特に安価な中国製広帯域無線機がターゲットとされていますが、FCC IDを持たないSDRコンポーネントやDIYプロジェクトなど、他の無線関連機器にも影響が及ぶ可能性があります。この規制は、アマチュア無線コミュニティの自己規律と、限られた周波数スペクトルを保護しようとする政府の意図との間の緊張を浮き彫りにしています。しかし、その有効性や、ユーザーが代替手段を見つける可能性については懐疑的な意見も多く、将来的に無線機器の販売がどのように変化していくか注目されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

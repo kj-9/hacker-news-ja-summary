@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPEG XL vs. AVIF for web use-cases - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">JPEG XL vs. AVIF for web use-cases</h1>
+        <div class="meta">
+            投稿日: 2026年10月16日 | ランク: 10
+        </div>
+        <a href="https://jakearchibald.com/2026/jpeg-xl-vs-avif/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、主にウェブにおける次世代画像フォーマットであるAVIFとJPEG XLの比較に関する記事についての議論です。特に、ファイルサイズ、画質、エンコード速度、ブラウザサポート、および様々なユースケースにおける適用性について掘り下げています。</p>
+<h2>AVIFの優位性と特性</h2>
+<p>AVIFは、動画コーデックAV1のキーフレームをベースにしており、特にウェブでの利用において多くの利点が指摘されています。アニメーション画像では、GIFの代替として優れたパフォーマンスを発揮し、透過レイヤーを個別に扱えるため、アニメーションの柔軟性が高いと評価されています。プログレッシブレンダリングにも優れており、ウェブ上の画像表示速度向上に寄与します。一部のコメントでは、AVIFがJPEGやPNGと比較して大幅なファイルサイズ削減を実現しつつ、同等以上の画質を維持できるという経験が語られています。</p>
+<h2>JPEG XLの利点と課題</h2>
+<p>JPEG XLは、特に高画質画像やロスレス圧縮において強みを持つとされています。既存のJPEGファイルを視覚的劣化なしに（DCT係数を維持したまま）再エンコードしてファイルサイズを削減できるというユニークな機能は、大量のJPEGアーカイブを持つユーザーにとって大きな魅力です。また、高解像度や高ビット深度の画像をサポートする点も指摘されていますが、ウェブユースケースにおいてはオーバースペックになることが多いとの意見もあります。しかし、JPEG XLのエンコーダーはまだ成熟しておらず、特にエンコード速度が遅いという課題が挙げられています。</p>
+<h2>コンテナフォーマットの重要性（AVIF）</h2>
+<p>AVIFがコンテナベース（ISO-BMFF）であるという点について、将来のコーデック（AV2, AV3など）への移行が容易になるという意見と、コンテナ自体が複雑で役に立たないという意見が対立しています。前者は、一度サイトがAVIFをサポートすれば、新しいコーデックが内部に追加されても、ブラウザが対応するだけでサイト側の変更は不要になると主張します。後者は、新しいコーデックのファイルは結局表示されないため、コンテナは無意味だと反論しています。</p>
+<h2>ブラウザサポートとエコシステム</h2>
+<p>両フォーマットのブラウザサポート状況は常に議論の的です。Safariは早くからAVIFをサポートし、Chromeは両方をサポート、Firefoxは最近JPEG XLのサポートを追加しました。しかし、ChromeがJPEG XLのサポートを一時的にブロックした経緯は、Googleのコントロールに対する不満として言及されています。ウェブサイト側でのAVIFの採用はまだ不十分であり、WebPの方が普及しているという現状も指摘されています。</p>
+<h2>品質評価とエンコーダーの成熟度</h2>
+<p>画像コーデックの品質評価は複雑で、SSIMULACRA2のような知覚的指標と人間の主観的評価が必ずしも一致しないことが議論されています。エンコーダーのチューニングが結果に大きく影響し、同じフォーマットでも異なるエンコーダーや設定によって圧縮率や画質が大きく変わる可能性があることが示されています。JPEG XLのエンコーダーはまだ改善の余地が大きいとの意見があり、GPUアクセラレーションによる高速化の試みも紹介されています。</p>
+<h2>まとめ</h2>
+<p>ウェブにおけるAVIFとJPEG XLの議論は、両フォーマットがそれぞれ異なる強みと弱みを持つことを浮き彫りにしています。AVIFは、ウェブページの読み込み速度向上やアニメーションGIFの代替として優れたパフォーマンスを発揮し、特に低〜中品質の画像において有利です。一方、JPEG XLは、既存のJPEGアーカイブのロスレス変換や、高画質・高解像度画像の保存といったニッチな用途でその真価を発揮します。エンコーダーの成熟度やエコシステムの採用状況が、今後のウェブにおける「勝者」を左右する重要な要因となるでしょう。一部のコメントでは、MP3エンコーダー「LAME」が長年の改良を経て普及したように、画像コーデックも時間をかけて成熟していく必要があるという見方が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
