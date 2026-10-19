@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I built a drone with only one motor [video] - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">I built a drone with only one motor [video]</h1>
+        <div class="meta">
+            投稿日: 2026年10月19日 | ランク: 2
+        </div>
+        <a href="https://www.youtube.com/watch?v=Ndftcft6XhU" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのスレッドは、Joshua Bird氏が開発した単一モーターのドローン（スワッシュプレート不要）に関するもので、その革新的な機械設計と制御アルゴリズムについて議論しています。</p>
+<h2>革新性と設計</h2>
+<p>コメントの多くは、スワッシュプレートを不要にする特別なヒンジ設計、磁気エンコーダ、トルク変調を利用したコンセプトの巧妙さに感銘を受けています。一つのモーターでローターの揚力を制御し、機械的な複雑さを制御アルゴリズムに押し込める点が評価されています。ただし、単一モーターであるためペイロードが回転するという欠点も指摘されており、特定の用途（画像処理/スキャンなど）では利点になる可能性も示唆されています。同様のコンセプトはRCヘリコプターで以前から存在し、このドローンはそれを単一プロペラに適用したものであるという指摘もあります。</p>
+<h2>単一アクチュエーターロボットと制御の複雑さ</h2>
+<p>「アンダーアクチュエートされたロボット工学」という概念が議論の中心となっており、単一のモーターで複数の自由度を制御する設計が非常にクールだと評価されています。バトルボットのコミュニティでは、単一モーターでロボット全体を操作し、移動や攻撃を行う設計があることが例として挙げられています。第6世代戦闘機が垂直尾翼を欠き、コンピュータ制御に大きく依存している例や、油圧機械の単一モーター設計も言及されていますが、これらがアンダーアクチュエートに該当するかどうかについては議論があります。最終的には、制御システムの複雑さを増すことで機械的な問題を克服するという、より広範なトレンドの一部であると認識されています。</p>
+<h2>軍事利用とドローン技術の倫理</h2>
+<p>一部のコメントでは、この新しいドローン技術が、ロシア・ウクライナ戦争のような現代の紛争に与える影響について疑問を呈しています。より小型で安価、多数の攻撃用ドローンが可能になる可能性について議論されていますが、その有効性には懐疑的な意見もあります。軽量化は爆薬搭載量の増加につながるという見方もありますが、固定翼ドローンの利点を考慮すると、この特定の設計が戦況を大きく変えるとは考えにくいという意見もあります。また、ドローンが民間人を殺傷する事例に触れ、ドローン技術に対する倫理的な葛藤を表明するコメントも見られます。未来の戦争が人間ではなく技術と製造の対決になるという予測も提示されています。</p>
+<h2>学習とインスピレーション</h2>
+<p>多くの人々が、このような複雑なプロジェクトを実行するために必要なスキルをどのように学ぶかについて興味を示しています。LLM（大規模言語モデル）を利用して、マイクロコントローラー、物理学、PCB、3Dプリンティングなどについて段階的な指示を得ることが、学習の素晴らしい出発点になるという提案があります。このプロジェクトは、視聴者にロボット工学を始めるインスピレーションを与え、制作者のハッキング精神と問題解決能力が高く評価されています。</p>
+<h2>まとめ</h2>
+<p>Joshua Bird氏による単一モーターのドローンは、その革新的な機械設計と、機械的複雑さを制御アルゴリズムに移行させるというアプローチが注目を集めています。アンダーアクチュエートされたロボット工学の例として高く評価され、バトルボットや戦闘機など他の分野での単一アクチュエーターシステムとの比較も行われました。この技術が軍事用途に与える可能性と、それに関連する倫理的ジレンマについても議論が展開されました。全体として、このプロジェクトは技術的な巧妙さ、そして複雑な技術スキルを習得し、応用することへのインスピレーションを提供しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
