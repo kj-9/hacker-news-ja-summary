@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlopCodeBench 10/2026 – Opus 5.5, Astra wins overall, xhigh considered harmful - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">SlopCodeBench 10/2026 – Opus 5.5, Astra wins overall, xhigh considered harmful</h1>
+        <div class="meta">
+            投稿日: 2026年10月20日 | ランク: 6
+        </div>
+        <a href="https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、LLM（大規模言語モデル）のベンチマークである「Slop Code Bench (SCB)」に関するもので、特にモデルの「努力レベル（effort）」と生成されるコードの品質について議論されています。多くのコメントは、モデルの過度な努力が必ずしも良い結果に繋がらないこと、およびモデルが生成するコードの「雑さ（slop）」に焦点を当てています。</p>
+<h2>Slop Code Bench (SCB)の性質と評価方法</h2>
+<p>SCBは、実際のソフトウェア開発に近い形で、モデルに段階的に開示される機能リスト（チェックポイント）に対応させ、同じコードベースをライフサイクル全体で継承させる点でユニークであると説明されています。これにより、一度きりのタスクで構成される従来のベンチマークとは異なり、将来の進捗を妨げるような「雑なコード（slop code）」の問題を評価できます。一部のユーザーは、このベンチマークが本格的な評価であると評価しています。しかし、その結果の表示方法（36テストに対する5桁の精度など）や、「品質」の定義については疑問の声も上がっています。</p>
+<h2>モデルの努力レベルと出力品質</h2>
+<p>多くのユーザーは、LLMが「中程度の努力（medium effort）」で最も質の高い出力を生成すると感じています。過度な努力（xhighなど）をさせると、冗長なコードや、空間推論、ユーモラスなコンテンツ作成など、特定のタスクでは有用な場合もあるものの、多くの場合、求めていない余計なものや、過度に複雑なソリューションを生み出す傾向があるという意見があります。これにより、モデルはより遅くなり、コストも高くなるため、より賢い選択ではないとされています。</p>
+<h2>生成されるコードの「雑さ」と品質問題</h2>
+<p>LLMが生成するコードの「雑さ」は主要な懸念事項です。特に「Astra」モデルは、可読性を損なうようなコードゴルフや、行区切りの省略など、「雑な」コードを生成する傾向があると指摘されています。この問題はフォーマッター（Prettierなど）で解決できる場合もありますが、フォーマット適用後にモデルがコードの変更を認識せず混乱するという問題も発生しています。この「雑さ」は、LLMが過度に防衛的なプログラミングを行い、コードを削除・簡素化することを嫌う傾向があるため、不必要な複雑さやリファクタリングの欠如に繋がると考えられています。</p>
+<h2>LLMの活用戦略と「役割演技（Larping）」</h2>
+<p>ユーザーは、異なるモデルを特定のタスクに使い分ける戦略（モデルルーティング）や、モデルに具体的な役割（例：「技術スタッフ」「顧客擁護者」など）を与える「役割演技（Larping）」の有効性について議論しています。高機能なモデルを計画モードで使用し、実際のコーディングは安価なモデルに任せる、といったアプローチが共有されています。役割演技は、モデルの行動やトーンを目的のユースケースに合わせることで、アウトプットの質を向上させることがClaudeのドキュメントでも推奨されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、LLMのベンチマークであるSlop Code Bench (SCB)を巡る、モデルの品質、効率性、そして実用的な活用戦略についての多角的な議論を反映しています。多くのユーザーは、LLMが「中程度の努力」で最も効果的な結果を生み出し、過度な努力は冗長性や複雑さを招く可能性があると指摘しています。特に、モデルが生成するコードの「雑さ」や可読性の問題は、現実世界での開発における主要な懸念事項であり、これを克服するためには、モデルの活用戦略（モデルルーティングや役割演技）や、生成されたコードの人間によるレビューと簡素化のガイドが不可欠であると示唆されています。SCBは、実際の開発プロセスを模倣することで、モデルの長期的な保守性に対する影響を評価しようとしていますが、その評価方法や、モデルが「努力」をどのように理解しているかについては、さらなる検討が必要です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
