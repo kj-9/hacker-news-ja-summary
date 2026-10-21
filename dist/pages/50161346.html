@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No More Icons in Every Menu by Default - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">No More Icons in Every Menu by Default</h1>
+        <div class="meta">
+            投稿日: 2026年10月21日 | ランク: 3
+        </div>
+        <a href="https://blog.jim-nielsen.com/2026/icons-in-every-menu/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、AppleのUIデザインに関するブログ記事（元の記事は提供されていませんが、文脈からアイコンの使用に関するものであると推測されます）について議論しています。特に、Appleが以前は推奨していなかったアイコンをメニュー項目に使用し、その後その方針を撤回したこと、そして現代のUIデザイン全般の問題点に焦点が当てられています。</p>
+<h2>AppleのUIデザイン哲学とその変遷</h2>
+<p>コメントの多くは、AppleのUIデザインに対する批判、特に最近のリリースでのデザインの「迷走」と「修正」について述べられています。
+- <strong>デザインの矛盾</strong>: Appleが以前は推奨していなかったメニューアイコンを導入し、その後再び非推奨にしたことについて、ユーザーはAppleが「その場しのぎでデザインしている」と批判しています。これは、同社がかつては綿密に検討されたデザインで知られていたことと対照的であるとされています。
+- <strong>「ホットメス」な製品</strong>: 一部のユーザーは、そもそもAppleが「ホットメス」な製品を出荷しない判断を下していれば、もっと説得力のある製品になると主張しています。他の企業と比較してもAppleが劣っているわけではないという反論もありますが、多くのユーザーは「2010年代のApple」と比較して現在のAppleのデザイン品質が低下していると感じています。
+- <strong>考慮されたデザイン？</strong>: Appleがすべてを「注意深く検討している」という意見に対して、それは「泡の外の人々」でテストすれば簡単に分かることだった、と反論する意見もあります。Apple自身のデザインガイドラインに反するデザインを採用していたことも指摘されています。
+- <strong>アラン・ダイとiOS 7</strong>: 一部のユーザーは、アラン・ダイ氏が同社に加わって以来、UIデザインがグラフィックデザインに偏り、ヒューマンインターフェースデザインが後退したと非難しています。iOS 7のフラットデザインへの移行が、Appleのデザインの回復不能な転換点だったと考える人もいます。</p>
+<h2>現代のUIデザイン全般の問題</h2>
+<p>Appleに限定されず、現代のUIデザイン全般に対する不満が表明されています。
+- <strong>「若手デザイナー」の台頭と知識の欠如</strong>: 多くのコメントは、過去10年間でベテランUIデザイナーが退職し、若手デザイナーが引き継いだ際に、知識の伝達が不足していることを指摘しています。新しい世代は、過去の原則を「チェスタートンのフェンス」の教訓を無視して捨て去り、視覚的な美学を機能性やユーザビリティよりも重視していると批判されています。
+- <strong>クリック可能な要素の不明瞭さ</strong>: クリック可能な要素が視覚的に分かりにくくなったこと（下線がない、特別なフォントがないなど）、およびディレクトリツリーがコンパクトでなくなり、丸みを帯びたカードベースのデザインになったことへの不満があります。
+- <strong>アクセシビリティの軽視</strong>: フラットデザインや過度な余白の使用が、視覚障害を持つユーザーやスクリーンリーダーを使用するユーザーにとってアクセシビリティを損なっているという懸念が示されています。
+- <strong>「アジャイル」開発の弊害</strong>: アジャイル開発手法、特にスプリントモデルが、UX/UIデザイナーが本格的なユーザビリティ調査を行う時間を奪っているという指摘があります。
+- <strong>役割の専門性の低下</strong>: 「フルスタック開発者」が増えたことで、UIデザインの専門性が低下しているという意見もあります。
+- <strong>ファッションとエンジニアリングの混同</strong>: UIデザイナーが、人間工学的なエンジニアリングではなく、ファッション業界にいるかのようにデザインしているという意見も出ています。</p>
+<h2>アイコンの適切な使用</h2>
+<p>元の記事の主題であると思われるアイコンの使用について、具体的な意見も交わされています。
+- <strong>普遍的なアイコンの有用性</strong>: コピー＆ペーストなどの universally recognized (普遍的に認識される) アイコンは有用であるとされています。しかし、そうではないアイコンは「ノイズ」になるという意見です。
+- <strong>KDEへの言及</strong>: KDEのUIが、メニュー項目にアイコンを付けるか付けないかの「すべてかゼロか」のアプローチであることに対し、特定のアイコンのみを使用するという記事の主張に沿うべきだと指摘されています。
+- <strong>スキャンしやすいメニュー</strong>: アイコンの有無にかかわらず、メニューはキーワードが先頭に来るようにしてスキャンしやすくすべきだという意見もあります（例：「ゴミ箱へ移動」ではなく「削除」）。
+- <strong>「ハンバーガーメニュー」の例</strong>: 「ハンバーガーメニュー」などのアイコンが、誰もがその意味を理解しているわけではないという批判的な意見も出ています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、Appleの最近のUIデザインの決定（特にメニューアイコンの使用）が、同社がかつて持っていたデザインの卓越性から逸脱しているという広範な懸念を反映しています。多くのコメントは、現代のUIデザインが全体として、視覚的な美しさを機能性、ユーザビリティ、アクセシビリティよりも優先する傾向にあり、経験豊富なデザイナーから新しい世代への知識伝達の失敗が原因であると見ています。ユーザーは、普遍的に認識されるアイコンの限定的な使用には賛成しつつも、そうでないアイコンは混乱を招き、デザイン全体を低下させると考えています。要するに、現代のデジタル製品のUIは、以前よりも使いにくく、直感的ではなくなっているという強い不満が共有されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

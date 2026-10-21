@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eight Bits of Trust: eMudhra&#x27;s CA keys cracked in milliseconds - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Eight Bits of Trust: eMudhra&#x27;s CA keys cracked in milliseconds</h1>
+        <div class="meta">
+            投稿日: 2026年10月21日 | ランク: 7
+        </div>
+        <a href="https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>インドの認証局eMudhraの中間CA秘密鍵が「4」という極めて弱い値であったことが発覚し、この前代未聞の脆弱性がHacker Newsで大きな議論を巻き起こしています。コメントでは、その原因が単純な過失なのか、それとも意図的なバックドアなのかという問い、CAシステム全般の信頼性への疑問、そして更新できないIoTデバイスなどへの広範な影響について活発な意見が交わされました。</p>
+<h2>驚くべき脆弱性と原因</h2>
+<p>多くのコメントが、秘密鍵が単一の数字「4」であったことに驚きと非難を表明しています（1.5、1.6）。他にも7つの鍵が256未満の非常に小さい値であったことが報告されており、これは偶然では説明できないとされています（1.8.2、1.8.4）。Mozillaのバグレポート（1.8.5.1）によると、鍵生成センター（KGC）スクリプトの欠陥により、HSM（ハードウェアセキュリティモジュール）からの鍵エクスポートテスト中に、本来意図されたものとは異なる弱い鍵のペアが誤って作成され、それが使用されてしまったと説明されています。</p>
+<p>原因については、「悪意ではなく無知に帰せよ」というハロンの剃刀の原則が引用されつつも（1.3）、多くのユーザーが悪意、特に「意図的な詐欺の扉」や「公開されたバックドア」の可能性を疑っています（1.3.1.1、1.11.1、1.17）。鍵が非常に弱いことで、悪意を「怠慢」としてごまかす言い訳になるという指摘もあります（1.17.1.1.1.1.1.1）。HSMがこれほど弱い鍵の生成を許したこと、または鍵がHSMから「エクスポート」されたこと自体も問題視されています（1.11.2.1.1.2）。</p>
+<h2>CAシステムの信頼性と代替案</h2>
+<p>この事件は、既存のCA（認証局）システムに対する根本的な不信感を再燃させています（1.10、1.29）。「100もの信頼された認証局があるのは過剰」という意見があり、CAの多さが脆弱性の表面積を増やしているという議論があります（1.10.1、1.10.2.1）。信頼の鎖の最も弱い部分が全体を脆弱にするという比喩も用いられています（1.10.2.2）。</p>
+<p>代替案として、DNSSEC/DANE、コンテンツ署名、Web-of-Trustモデルなどが提案されていますが、これらには複雑性、集中化、導入の難しさ、人間の行動における課題が指摘されています（1.10.3.1）。Certificate Transparency（CT）ログは不正な証明書を検出するメカニズムとして機能しますが、クライアント側でのSCT検証の普及不足や、攻撃者がCTログに記録せずに証明書を発行する可能性などの限界も指摘されています（1.10.3.1.6）。</p>
+<h2>影響と対策</h2>
+<p>この脆弱性は、OS、ブラウザ、各種ライブラリ（Pythonのcertifi、Node.jsなど）がバンドルするCA証明書ストアに影響を与えるため、これらのコンポーネントの更新が必要となります（1.26、1.57）。最も懸念されるのは、ルーター、プリンター、スマートTV、IoT家電など、ファームウェアの更新が困難または不可能なデバイスです。これらのデバイスは、2039年の証明書有効期限まで脆弱なままとなる可能性があります（1.26）。</p>
+<p>攻撃者は、この弱い鍵を使って正当な証明書を偽造し、広範囲で中間者攻撃（MITM）を実行する可能性があります（1.31、1.38）。特に、更新されないIoTデバイスへの影響が懸念されています。一方で、この脆弱な鍵を利用して、Google HomeスピーカーのようなロックダウンされたIoTデバイスを「ジェイルブレイク」し、オープンソースファームウェアを導入したり、Home Assistantと統合したりする機会と捉える意見も出されています（1.38.1.1、1.49、1.51）。</p>
+<h2>検出と監査</h2>
+<p>この脆弱な鍵は、Googleのオープンソースツール<code>paranoid_crypto</code>を使用して発見されました（1.34）。CAの認証プロセスと監査プロセスの厳格さについて疑問が呈されており、「FIPS準拠の鍵生成器を使用していること」や「標準的なマルチパーソンプロセスに従っていること」といった形式的なチェックに留まり、実際に鍵の品質が徹底的に検証されることはないという指摘があります（1.10.1.1）。この鍵が1年以上も公開されていたにもかかわらず、Googleのツールが発見するまで誰も気づかなかったことに対し、セキュリティコミュニティ全体の盲点が指摘されています（1.54.1.1）。</p>
+<h2>まとめ</h2>
+<p>eMudhra CAの秘密鍵「4」問題は、デジタル社会の基盤となる「信頼」がいかに脆いかを示しました。コメント欄では、これが過失か悪意かという議論から、CAシステムの根本的な課題、そして更新できない多数のIoTデバイスが抱えるサイバーセキュリティリスクが浮き彫りになりました。この事件は、CAの監査プロセス、鍵生成のベストプラクティス、そしてインターネットの信頼モデル全体について、深刻な再考を促すものとなるでしょう。同時に、この脆弱性を逆手にとって、ロックダウンされたデバイスの制御を取り戻そうとする動きも見られます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

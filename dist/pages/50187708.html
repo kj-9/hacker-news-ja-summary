@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP web runtimes (CVE-2026-109618 and CVE-2026-109619) - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">PHP web runtimes (CVE-2026-109618 and CVE-2026-109619)</h1>
+        <div class="meta">
+            投稿日: 2026年10月21日 | ランク: 10
+        </div>
+        <a href="https://aws.amazon.com/security/security-bulletins/2026-143-aws/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、PHPの重大なRCE（Remote Code Execution）脆弱性（通称PHP2Shell）に対するAWS、特にAmazon Linuxの対応の遅さと情報提供の不足について議論しています。ユーザーはAWSがCVE公開後もタイムリーなパッチを提供せず、情報開示も不十分であったことに不満を表明しています。</p>
+<h2>AWSの対応遅延と情報不足</h2>
+<p>コメント投稿者たちは、PHPのRCE脆弱性の公開からAWSからの公式なセキュリティ速報が発表されるまでに時間がかかかったことについて不満を表明しています。AWSは最終的に「翌日」にアップデートを提供すると発表しましたが、その間の情報提供は乏しく、ユーザーは「非常に残念」と述べています。特に、CVEが公開されたUTC 14:00からAWSの速報が出たUTC 21:30までの間、具体的な情報がほとんどなかったことが指摘されています。</p>
+<h2>CVEの重要度分類とパッチ適用速度</h2>
+<p>AWSがPHPのRCE脆弱性を「Important」と分類し、「Critical」とはしなかったことに議論が集中しました。過去に「Important」と分類されたNginxのCVEパッチが適用されるまでに20日かかった例が挙げられ、AWSの「Critical」の基準（「サーバーが物理的に発火するようなものか？」という皮肉も）に疑問が呈されました。また、Bottlerocket OSにおいても、過去の重大なLinux CVEに対して他の主要なLinuxディストリビューションよりもアップデートが遅れていたことが指摘され、AWS全体の課題である可能性が示唆されています。</p>
+<h2>Embargoの早期解除とAWSの準備体制</h2>
+<p>一部のコメントでは、PHPのRCE脆弱性のembargo（情報公開制限）が予定より早く解除されたことが、AWSの対応が遅れた一因である可能性が示唆されました。本来UTC 14:00に予定されていたembargoがUTC 07:41にChainguardによって破られたとの情報があります。しかし、たとえ事前に情報がなかったとしても、AWSが修正の取り込みに24時間以上かかること自体への疑問が呈されました。これに対し、回帰テストの実行に時間がかかるためであるという推測や、緩和策の提案もされています。</p>
+<h2>Amazon Linuxの利用状況とユーザーの懸念</h2>
+<p>Amazon Linuxを本番環境で使用しているユーザーが実際にいるのかという疑問が提起されました。これに対し、EKSやECSに最適化されたイメージを使用しているケースや、AWS内部で利用されている可能性が挙げられました。一方で、「今朝までは使っていた」という皮肉めいたコメントや、AWSがAmazon Linuxユーザーを排除しようとしているのではないかという懸念も示されました。</p>
+<h2>まとめ</h2>
+<p>今回のPHPのRCE脆弱性に対するAWSの対応は、情報提供の遅さ、パッチ適用の遅延、そしてCVEの重要度分類基準の曖昧さに関して、Hacker Newsコミュニティから強い批判を受けました。embargoの早期解除という事情があったにせよ、ユーザーはAWSのセキュリティ対応への準備体制と透明性に疑問を呈しています。過去の事例も引き合いに出され、AWSのセキュリティアップデート配信ポリシー全体への不信感が浮き彫りになりました。Amazon Linuxの利用状況についても議論が及ぶなど、今回の件はAWSの顧客への対応姿勢に大きな影響を与えているようです。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
