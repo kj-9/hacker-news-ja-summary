@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Wikipedia: Wikipedia, but only for things a half hour walk from you - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Local Wikipedia: Wikipedia, but only for things a half hour walk from you</h1>
+        <div class="meta">
+            投稿日: 2026年10月23日 | ランク: 5
+        </div>
+        <a href="https://edjefferson.com/localwiki/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <h2>Hacker Newsのコメントの要約</h2>
+<p>Hacker Newsのコメントは、現在地または指定した場所の近くにあるWikipediaの記事を表示するウェブサイト「LocalWiki」についてのものです。多くのユーザーがこのアイデアを称賛し、旅行者や新しい場所を探求する人々にとって非常に役立つツールだと評価しています。しかし、Wikipediaの既存の「Special:Nearby」機能との類似性、言語サポート、距離単位、フィルター機能など、多くの改善点が提案されています。</p>
+<h2>キーテーマ1: 称賛と実用性</h2>
+<p>ユーザーは、LocalWikiのコンセプトを「非常にクール」「素晴らしいアイデア」と高く評価しています。多くの人が、身近な場所について知らなかった歴史的建造物、施設、出来事を発見できたと報告しています。旅行者や新しい街に移住した人にとって特に有用であるという意見が多く、Googleマップの代替となる情報源として期待されています。中には、個人的な関心と結びつくことで、普段は読まないような記事にも強い関心を持つという心理的な側面についても言及されています。</p>
+<h2>キーテーマ2: 既存のWikipedia機能との比較</h2>
+<p>多くのコメントで、LocalWikiがWikipediaに元々備わっている「Special:Nearby」機能（または公式モバイルアプリの類似機能）と非常に似ていることが指摘されています。一部のユーザーは、LocalWikiが単なるラッパーではないかという疑問を呈しています。しかし、LocalWikiは手動で場所を入力できる点や、地図の表示方法において「Special:Nearby」よりも優れているという意見もあります。また、「wiki-map.com」や「OsmAnd」など、同様の機能を持つ他のツールについても言及されています。</p>
+<h2>キーテーマ3: 改善提案と要望</h2>
+<p>LocalWikiに対する主な改善提案と要望は以下の通りです。</p>
+<ul>
+<li><strong>多言語サポート:</strong> 多くのユーザーが、英語のWikipediaでは地元の情報が不足しているため、現地の言語のWikipedia記事を表示する機能（または複数の言語を混合表示する機能）を強く求めています。</li>
+<li><strong>距離設定と単位:</strong> 検索範囲（距離）をカスタマイズする機能や、フィート/マイル以外のメートル法（キロメートル）を選択できる機能が要望されています。現在のヤード/マイル表示は、特に非英語圏のユーザーにとって混乱を招くという指摘が多数あります。</li>
+<li><strong>フィルター機能:</strong> 学校、教会、博物館、事件などの記事タイプやキーワードで結果を絞り込むフィルター機能が求められています。これにより、ユーザーは特定の関心事に基づいて情報を探索しやすくなります。</li>
+<li><strong>記事の関連性:</strong> 人里離れた場所では記事が少なすぎたり、都市部では学校や道路といったありふれた記事ばかり表示されたりするため、より興味深く多様なコンテンツを表示する「バリアンス機能」や、記事の重要度を考慮した表示（PageRankに基づくなど）が提案されています。</li>
+<li><strong>リンクと共有:</strong> 特定の場所へのリンクを共有できる機能や、画像リンクの修正が求められています。</li>
+<li><strong>UX/UI:</strong> ダークモードの追加や、地図のパフォーマンス改善、より直感的なUIへの要望も出ています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>LocalWikiは、現在地周辺のWikipedia記事を探求できる魅力的なウェブサイトであり、ユーザーから大きな称賛を受けています。特に、身近な地域の歴史や文化を再発見する点で高い価値が認められています。しかし、Wikipediaの既存機能との類似性から、明確な差別化や付加価値の提供が課題となっています。多言語サポート、距離設定、フィルター機能、および距離単位の改善は、ユーザー体験を大幅に向上させ、より幅広い層にアピールするための重要な鍵となるでしょう。多くのユーザーが、このプロジェクトが進化し、より洗練されたツールになることを期待しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

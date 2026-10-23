@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Now Google says it might use your Gmail and Google Photos data to target ads - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Now Google says it might use your Gmail and Google Photos data to target ads</h1>
+        <div class="meta">
+            投稿日: 2026年10月23日 | ランク: 9
+        </div>
+        <a href="https://www.theverge.com/tech/1017600/google-personal-intelligence-privacy-policy-ads-update" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、GoogleがGmailやGoogle Photosのデータを利用してAIモデルを訓練し、パーソナライズされた広告に利用するという最近の発表（または再開された方針）に対し、強い懸念と批判を表明しています。多くのユーザーがGoogleの「エヌシット化」とプライバシー侵害の歴史を指摘し、Googleサービスからの移行、または代替手段の利用について議論しています。</p>
+<h2>Googleのプライバシー慣行と「エヌシット化」への懸念</h2>
+<p>多くのユーザーは、GoogleがGmailやGoogle PhotosのデータをAIモデルの訓練や広告に利用することは、その「エヌシット化」（サービスの質が低下し、ユーザー体験が犠牲になる現象）の必然的な一部であると捉えています。以前にも同様のデータ利用が行われ、一時的に停止された時期があったものの、再びこのような方針に戻ることは、Googleが本質的にプライバシーを軽視している証拠だと指摘されています。「might（〜するかもしれない）」という表現は「already did（すでにやった）」という意味であり、ユーザーが同意を求められる頃にはすでにデータ利用が始まっているという皮肉な見解も共有されています。また、Google Photosの無制限ストレージも、実はAI訓練データを収集するためのものであったという意見もあります。</p>
+<h2>Google代替サービスへの移行と選択肢</h2>
+<p>Googleのプライバシー慣行に不満を抱く多くのユーザーは、GmailやGoogle Photosから他のサービスへの移行を積極的に検討し、具体的な代替案を共有しています。
+*   <strong>メールサービス:</strong> ProtonMail, FastMail, Tuta, Purelymail, Runboxなどが代替として挙げられています。多くの人が、プロバイダに依存しない「独自ドメイン」を所有することの重要性を強調しています。
+*   <strong>写真管理:</strong> ImmichやEnte PhotosがGoogle Photosの代替として推奨されており、特にImmichはセルフホスティングやエンドツーエンド暗号化（E2EE）のオプションがあるとして人気です。
+Googleから移行することで「人生が良くなった」と感じるユーザーも少なくありません。</p>
+<h2>Googleのポリシー文言とユーザーの選択肢の限界</h2>
+<p>Googleの新しいポリシーには「パーソナライズされた広告をサポートする他のGoogleサービスにデータを利用することを選択しない限り、広告には使用しない」といった文言が含まれていますが、これに対する懐疑的な見方が多数を占めています。ユーザーは、Googleがデフォルト設定や頻繁なポップアップ、ダークパターンを通じて、実質的にユーザーにデータ共有を「選択」させるように仕向けると考えています。例えば、GeminiのようなAIサービスは、多くの機能を利用するために個人データへのアクセスを許可する必要があり、ユーザーに真の選択肢はないと指摘されています。</p>
+<h2>広告とターゲティング広告の是非</h2>
+<p>コメントの中には、広告全般、特にデータ収集に基づくターゲティング広告に対する根本的な批判が見られます。広告は過剰消費を促進し、中毒性のある製品を子供にターゲットさせ、データ収集を助長する「諸悪の根源」であるという意見が表明されています。また、Googleが「人種、性的指向、宗教、健康」といった「センシティブなカテゴリ」を広告に利用しないとしている一方で、「政治的志向」がこのリストから漏れていることへの懸念も示されています。一部のユーザーは、広告ブロッカーや広告のないポッドキャストを利用するなど、積極的に広告を回避しています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコミュニティは、Googleのデータ利用方針の変更を、その「エヌシット化」とプライバシー軽視の現れとして強く批判しています。多くのユーザーはGoogleサービスからの移行を促し、メールや写真管理における具体的な代替サービスを推奨しています。また、「選択」という言葉の裏にあるGoogleのダークパターンや、ユーザーが実質的にデータ共有を強制される状況についても深い懸念が示されています。EUのDMAのような規制が、少なくとも欧州のユーザーにとっては、データ利用に関する選択肢を提供する可能性が示唆されており、規制の重要性が再認識されています。全体として、Googleへの不信感と、プライバシーを重視する代替サービスへの需要が高まっていることが浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
