@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Goose Programming Language - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The Goose Programming Language</h1>
+        <div class="meta">
+            投稿日: 2026年10月24日 | ランク: 3
+        </div>
+        <a href="https://aardappel.github.io/goose/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、新しいシステムプログラミング言語であるGooseについての議論をまとめたものです。コメントは、Gooseの目的、メモリ管理モデル、RustやC++といった既存の言語との比較、AIによる文章生成の利用など、多岐にわたります。Gooseの作成者であるAardappelも議論に参加し、質問に答えています。</p>
+<h2>Gooseの目的と既存言語との比較</h2>
+<p>Gooseの目的について、コメントでは既存の言語との比較が盛んに行われています。</p>
+<ul>
+<li><strong>Gooseの立ち位置</strong>: 多くのユーザーは、GooseがRustやC++といった既存のシステムプログラミング言語の中でどのようなニッチを埋めるのかを疑問視しています。特に「なぜC++ではなくGooseを使うのか？」という質問が多く見られます。</li>
+<li><strong>安全性とパフォーマンス</strong>: あるユーザーは、Rustの魅力が安全性、パフォーマンス、開発者体験の順であると述べ、Gooseがこれら3つの軸でどこに位置するのかを尋ねています。Gooseの作成者であるWvOは、Gooseが「Rust/C++よりも安全で高速、そしてメモリ消費が少ない」と述べていますが、明確な安全性保証（例：UBの回避）についてさらなる説明を求める声もあります。Gooseは配列の境界チェックをデフォルトで行い、コンパイラが多くのチェックを省略できる機能があるため、Rustと同様に安全性とパフォーマンスの両立を目指していることが示唆されています。</li>
+<li><strong>FlatBuffersとの関連</strong>: Gooseの設計は、作者が以前に開発したFlatBuffersのアイデアに似ており、ツリー構造やレコード、直接的なデータの直列化/非直列化に特に適していると指摘されています。</li>
+</ul>
+<h2>メモリ管理モデル</h2>
+<p>Gooseの最も特徴的な側面の一つは、そのメモリ管理モデルです。</p>
+<ul>
+<li><strong>スタックベースのアロケーション</strong>: Gooseは基本的にスタックベースのメモリ管理を採用しており、スコープが終了するとメモリが解放されます。これはアパッチモジュールでのリクエスト処理に似ており、非常に効率的であると評価されています。</li>
+<li><strong>動的サイズのデータ構造</strong>: JSONパーシングの例を挙げて、可変サイズのデータ構造をスタック上でどのように扱うかという質問が投げかけられました。Gooseは、コンパイル時に複数のスタックを分析し、各スタックが最大2GBまで仮想メモリを利用して成長できるという説明がありました。これにより、入力のパースと出力の生成に異なるスタックを使用し、完了時にスタックポインタをリセットすることでメモリを解放できます。</li>
+<li><strong>参照 vs インデックス</strong>: Gooseが参照を使用するのに対し、Rustがアリーナへのu32インデックスを使用するのと比較し、Gooseの方が参照の安全性が高いという意見があります。</li>
+<li><strong>制約</strong>: 可変サイズのハッシュテーブル（例：文字列を値とする辞書）のようなデータ構造を効率的に扱う方法については議論があり、Gooseの組み込み辞書はキーと値が固定サイズであるため、動的な文字列を扱うには別途参照を保持するなどの工夫が必要であることが指摘されました。これは、Gooseが特定のデータ構造の利用パターン（例えば、生存期間が似たデータが配列にまとまっている場合）で最大のメリットを発揮することを示唆しています。</li>
+<li><strong>組み込みシステムへの可能性</strong>: ヒープアロケーションを使わないというGooseのコンセプトは、組み込みシステム（特にMCU）での利用可能性に言及されています。ただし、Gooseが64ビットアドレス空間に依存している点が、組み込みでの採用における潜在的な課題として挙げられています。</li>
+</ul>
+<h2>AIの利用と文書の質</h2>
+<p>AIの利用については、賛否両論の意見がありました。</p>
+<ul>
+<li><strong>AI生成の文章</strong>: 記事やベンチマークがAIによって生成されたものであることに対し、「AIによる文章は読むのが苦痛だ」という批判的な意見と、「努力の度合いがわかる」という肯定的な意見が寄せられました。</li>
+<li><strong>透明性</strong>: 作成者は「History &amp; Use of AI」セクションでAIの使用について透明性を示していることが指摘されました。</li>
+<li><strong>ドキュメントの評価</strong>: AI生成の文書は質が低い傾向があるにもかかわらず、Gooseのドキュメントは作成者の努力により読みやすく、設計思想が理解しやすいと評価する声もありました。</li>
+</ul>
+<h2>その他のコメント</h2>
+<ul>
+<li><strong>コンパイル速度</strong>: 大規模なプログラムでのコンパイル速度について質問があり、Gooseは本番ビルドではCコンパイラをバックエンドとして使用するため速度が制限される可能性があるものの、開発/テスト段階では組み込みのJIT（libtccベース）が非常に高速であることが述べられました。</li>
+<li><strong>言語名の由来</strong>: 言語名が「Goose」であることについて、作成者は過去の言語デザインも動物の名前を使っているためだと説明しています。</li>
+<li><strong>他のプログラミング言語との比較</strong>: 作者は過去にもLobsterなどの言語を開発しており、その経験がGooseに活かされています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Gooseは、作者の豊富な言語開発経験を活かした新しいシステムプログラミング言語であり、特にその独自のスタックベースのメモリ管理モデルが大きな特徴です。このモデルは、RustやC++といった既存の言語とは異なるアプローチで安全性とパフォーマンスの両立を目指しており、特定のデータ構造やユースケース（例：ツリー構造の効率的な管理、埋め込みシステム）で大きな利点を発揮する可能性を秘めています。AIをドキュメンテーションやベンチマーク生成に活用している点も注目されましたが、その品質やアプローチについては様々な意見が見られました。Gooseのコンパイル速度や、動的なデータ構造を扱う際の実用性については、今後の開発とコミュニティからのフィードバックが重要となるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
