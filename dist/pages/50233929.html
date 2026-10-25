@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I refuse to accept a censored Internet. Join Me at FOSDEM 27 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">I refuse to accept a censored Internet. Join Me at FOSDEM 27</h1>
+        <div class="meta">
+            投稿日: 2026年10月25日 | ランク: 8
+        </div>
+        <a href="https://talkweb.eu/openweb/4558/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、「検閲されたインターネット」という概念と、AIの台頭が情報の過負荷と制御をどのように悪化させるか、そしてこの状況下で自由なコミュニケーションを維持するための代替インターネットの可能性について深く議論しています。</p>
+<h2>AIと情報の過負荷、そして「完璧な檻」</h2>
+<p>AIの急速な進化は、インターネットにおける情報環境を根本的に変えるという懸念が表明されています。AIが生成する大量の「ゴミ」情報（"slop brigades"）によって、真の情報を見つけることが極めて困難になり、これは実質的な検閲と同等、あるいはそれ以上に悪い状況をもたらすという意見があります。人々は、真実と「ゴミ」を区別する能力が機械にはないのではないか、あるいは、"Brandolini's law"（デマを否定するエネルギーは、デマを生み出すエネルギーよりも桁違いに大きい）の通り、真実を特定することの難しさを指摘しています。
+さらに、AIは「完璧な檻」を作り出す手段として利用される可能性があり、企業や政府が技術を自らの利益のために活用し、個人の権利を制限するだろうという悲観的な見方も示されています。</p>
+<h2>「検閲されたインターネット」の現状と定義</h2>
+<p>コメントでは、インターネットが既に検閲されているかどうか、そしてその定義について活発な議論が交わされています。「違法コンテンツの削除は検閲か」という問いに対しては、それが検閲であると認めつつも、その是非は状況によるとする見解や、中国の事例を挙げて政府による情報統制が明確な検閲であるとする意見があります。
+また、多くの西側諸国や大手テック企業による検閲への懸念も表明されており、「アメリカのテクノロジーCEOによる検閲」を特定の国々の検閲よりも懸念する声や、Facebookのようなプラットフォームが「デジタル自由」の名のもとに世界観を形成し、間接的に権威主義的な統制を行っているという指摘もあります。一部のユーザーは、政府ではなくプラットフォーム所有者による検閲であれば、別のプラットフォームに移行できるため問題ないと考えていますが、プラットフォームが実質的な独占状態にあることや、政府が民間企業に検閲を指示するケースがあることも指摘されています。</p>
+<h2>代替インターネットの可能性と課題</h2>
+<p>真に検閲されない、分散型インターネットを構築する可能性についても議論されています。LoRaチップとマイクロコントローラを使用した太陽光発電メッシュネットワークや、ReticulumのようなIPスタックに代わる暗号化メッシュルーティングシステム、あるいは光学レーザーメッシュといった技術が提案されています。しかし、これらの代替手段には、電波スペクトルの所有権、妨害の容易さ、スケーラビリティ、インフラ構築の莫大なコスト、そして政府による規制や非合法化といった数多くの課題が存在することが指摘されています。特に、グローバルな規模での代替ネットワークの構築は「愚かな試み」であり、既存の権力者がそれを妨害するだろうという懐疑的な意見が優勢です。また、量子もつれのようなSF的な通信方法についても言及されましたが、情報転送が光速を超えることはできないという物理的な制約が指摘されています。</p>
+<h2>検閲に対する人々の態度と心理</h2>
+<p>検閲に対する人々の態度は複雑であることが示されています。多くの人々は、自分の政治的傾向と一致する限りにおいて検閲を受け入れる傾向があるという指摘があり、Redditのコミュニティの変化をその例として挙げる人もいます。オンラインでの健全な議論には何らかのモデレーションが不可欠であり、その「検閲」は誰が行うかによって大きく意味合いが変わるとの意見もあります。一部のユーザーは、「真正に検閲されないインターネット」を望む人は実際にはおらず、自分たちが禁止したいものだけを禁止したいのだと主張しています。しかし、検閲が過度に進むと、代替サービスは「不快なコンテンツ」の温床となりやすいという「Reddit 2018」のような現象が起こる可能性も指摘されています。</p>
+<h2>FOSDEM (Free and Open Source Software Developers' European Meeting)</h2>
+<p>FOSDEMというカンファレンスが、この種の議論を行うのに最適な場であると高く評価されています。参加者たちは、このカンファレンスが「セールストークが少なく、技術的な内容がトップレベル」であり、「リラックスして、世界中の人々が何について語り、取り組んでいるのかを知ることができて本当に楽しい」と述べています。特に、検閲、デジタル権利、オープンソースの未来といったテーマに関心を持つ人々にとって、FOSDEMは貴重な情報交換とコミュニティ形成の機会を提供しているようです。</p>
+<h2>まとめ</h2>
+<p>コメント全体を通して、参加者たちはインターネットの未来、特に「検閲」と「情報の自由」という二つの相反する概念に強い関心を示しています。AIの進化は情報の洪水と制御の高度化をもたらし、既存の権力構造をさらに強固にする可能性が高いと見られています。代替の分散型インターネットの実現可能性は低いとされつつも、その理想は失われていません。多くのユーザーは、西側諸国を含む政府や大手テック企業による検閲が、特定の国々の検閲と同様に懸念されるべき問題であると認識しており、オンラインコミュニケーションにおける「モデレーション」と「検閲」の境界線、そしてその主体が誰であるかについて深く考察しています。最終的に、インターネットの未来は、技術的な進歩だけでなく、社会的な規範、政治的意志、そして個人の価値観によって形成されるという見方が示唆されています。FOSDEMのようなコミュニティイベントは、これらの課題に取り組むための重要な場として認識されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
