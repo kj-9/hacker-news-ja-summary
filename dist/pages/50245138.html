@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebastian Raschka&#x27;s from-scratch video course on building reasoning models - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Sebastian Raschka&#x27;s from-scratch video course on building reasoning models</h1>
+        <div class="meta">
+            投稿日: 2026年10月26日 | ランク: 4
+        </div>
+        <a href="https://magazine.sebastianraschka.com/p/building-reasoning-models" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <h3>Sebastian Raschka氏のLLM学習リソースに関するコミュニティの評価</h3>
+<p>Hacker Newsのコメントは、Sebastian Raschka氏のLLM学習リソース（特に書籍と動画コース）を非常に高く評価しており、AIの複雑な概念を直感的かつ実践的に学べる点が強調されています。彼の指導スタイルと、ゼロからLLMを構築するアプローチが、初心者から経験者まで幅広い層に支持されています。</p>
+<h2>学習スタイルと分かりやすさ</h2>
+<p>多くのコメントが、Raschka氏が複雑なAIトピックを非常に直感的で分かりやすい方法で説明している点を称賛しています。「Build Your Own LLM From Scratch」という書籍は特に高く評価されており、読者がPyTorchを使ったバックプロパゲーションの仕組みを理解するのに役立ったという声や、これまで難解だと感じていたニューラルネットワークの概念が「ほぼ完璧」に記述されているという意見が挙がっています。彼の教育法は、手取り足取り（hand-holding）でプロセス全体をガイドするため、これまで難しすぎたり、逆に単純化されすぎたりしていた学習資料に不満を感じていた人々にとって理想的であるとされています。</p>
+<h2>Karpathyとの比較</h2>
+<p>一部のユーザーは、Raschka氏をAndrej Karpathy氏と比較しており、「Karpathy 2.0」と呼ぶ声もあります。しかし、他のユーザーからはRaschka氏の方が10年以上前から同様の教育活動を行っていると指摘されており、両者は2015年頃から並行して優れた学習リソースを提供してきた同時代の研究者・教育者であるという見方が一般的です。両者とも、複雑な概念を分かりやすく説明する能力で高く評価されています。</p>
+<h2>「ゼロから構築する」アプローチの意義</h2>
+<p>「ゼロから構築する（from scratch）」というアプローチの意義については、議論があります。一部のコメントは、実際に実用的な大規模モデルをゼロから構築することは、個人のリソースでは不可能であり、学習リソースの目的について疑問を呈しています。これに対し、多くのユーザーは、このアプローチは「学習のため」であると強く反論しています。実用的なモデルを構築できなくても、その技術がどのように機能するかを深く理解することが重要であるという考えです。この学習方法は、例えば「Crafting Interpreters」のような書籍がHNで人気があるのと同様に、ユーザーがシステムの根本を理解するのに役立つと説明されています。特に、RLVR（Reinforcement Learning from Verifiable Rewards）のような高度なトレーニング手法を実際に体験できる点が、LLMの挙動を深く理解する上で非常に有用であると強調されています。</p>
+<h2>LLM学習における課題と解決策</h2>
+<p>LLM学習における課題として、一般的な教科書が理論先行であること、そして実践には大規模な計算リソースやデータが必要であると感じられる点が挙げられています。Raschka氏の書籍は、この問題に対する解決策の一つとして推奨されており、理論と実践のバランスが取れていると評価されています。また、小規模なモデルのファインチューニングや既存モデルのポストトレーニングは、個人でも取り組みやすい現実的な応用分野として提示されています。計算コストについては、書籍のコード例は通常のラップトップでも効率的に動作するように設計されており、高価なクラウドGPUは必須ではないことが明記されています。</p>
+<h2>まとめ</h2>
+<p>Sebastian Raschka氏のLLM学習リソースは、その分かりやすい説明と実践的なアプローチにより、Hacker Newsコミュニティから絶大な支持を得ています。特に、複雑なAI概念を直感的に理解させ、LLMが「ゼロから」どのように構築されるかを深く学ぶことができる点が評価されています。実用的な大規模モデルの構築は個人のリソースでは難しいとしても、その技術的基盤を理解することは、今日のAI駆動型世界を生きる上で不可欠であり、彼の教材はそのための優れたツールであると結論付けられています。また、個人レベルでLLMに貢献するための現実的な方法として、既存モデルのファインチューニングなどが提案されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
