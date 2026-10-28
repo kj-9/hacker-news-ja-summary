@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC Stone Carving - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">CNC Stone Carving</h1>
+        <div class="meta">
+            投稿日: 2026年10月28日 | ランク: 2
+        </div>
+        <a href="https://carmelitegothic.com/cnc-stone-carving/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsの投稿は、ワイオミング州の修道士たちがCNC（コンピューター数値制御）技術を使ってゴシック様式の建築物を製作しているという記事に関するものです。コメントは、この革新的なアプローチに対する称賛から、伝統的な手作業の価値、技術が現代社会に与える影響、そして現代建築の動向に至るまで、幅広い議論が交わされています。</p>
+<h2>技術革新と伝統の融合</h2>
+<p>多くのコメントが、修道士たちがゴシック様式の石造建築にCNC技術を導入していることに感銘を受けています。中世の建築家も常に最先端技術を追求していたという記事の冒頭の言葉に賛同する声や、サグラダ・ファミリアでも1990年代からCNCが使われているという情報が共有され、現代技術が伝統的な建築や芸術の作成を可能にする、あるいは加速させる可能性が指摘されています。特に、手作業では莫大な時間と費用がかかる装飾的な要素を、CNCによって手頃な価格と時間で実現できるという点が評価されています。</p>
+<h2>労働と生活における修道士の役割</h2>
+<p>AIによるプログラミング職の消滅という仮説から、若い男性が修道士になることの復活を予見する議論が展開されています。歴史的に教会が余剰の男性を吸収し、尊厳ある目的を与えてきたという指摘や、特に相続の機会がない男性にとって成功への代替経路を提供してきたという考察がなされています。また、現代社会ではかつて祖父母や父親が享受できた経済的自立と社会的に価値ある生活を送ることが困難になっているという現状認識も示されています。</p>
+<h2>建築における「本物」の価値と現代のモチベーション</h2>
+<p>CNC技術を使ったゴシック建築に対して、「本物」と「模倣」の違い、そして建築物に対する価値観について深い議論が交わされています。ゴシック大聖堂が単なる芸術作品ではなく、何世紀にもわたる何百人もの人々の献身と信仰の表れであるという意見があり、CNCによる効率化が、その「時間と労力」という本質的な要素を損なうのではないかという懸念が示されています。しかし、現代社会では中世のような大規模な手作業は非現実的であり、技術を使うことで美しさを保存できるという実用的な見方も提示されています。モチベーションと文化が重要であり、現代社会が物質主義的・消費主義的であるため、長期的な視点での建設プロジェクトへの意欲が不足しているという指摘も出ています。</p>
+<h2>現代建築の動向と装飾性への回帰</h2>
+<p>CNC技術によって複雑な装飾が容易になったにもかかわらず、現代建築が装飾性の高いファサードに回帰しないのはなぜかという疑問が提起されています。これには、コスト削減、モダニズム建築のイデオロギー（「装飾と罪悪」などの思想）、建築家のエリート主義的な美的感覚、そして一般大衆の好みが反映されていない現状などが要因として挙げられています。多くの一般人は古典的な外観の建物を好むという研究があるにもかかわらず、建築家や開発業者は、機能性、コスト、そして「無難さ」を優先し、耐久性や審美性を犠牲にしているという批判的な意見が見られます。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのコメントスレッドは、ワイオミング州の修道士たちがCNC技術を用いてゴシック様式の建築物を建設しているという興味深い取り組みから、技術と伝統、労働の未来、芸術と美の定義、そして現代社会の価値観といった多岐にわたるテーマについて活発な議論が展開されました。CNC技術は、高価で時間のかかる手作業を効率化し、過去の壮麗な建築様式を現代に再現する可能性を秘めていることが評価されています。しかし一方で、建築物の「本質的な価値」は単なる外観だけでなく、その制作プロセスに込められた時間、労力、そして献身にこそあるという深い洞察も示されました。また、AIによる社会変化の中で修道士の役割が再評価される可能性や、現代建築が装飾性から離れている背景にある経済的・イデオロギー的要因についても議論され、技術が私たちの文化や社会に与える影響について深く考えさせられる内容となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
