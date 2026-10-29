@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Auto Dismiss Mac OS &quot;Allow &lt;app&gt; to find devices on local networks?&quot; - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Auto Dismiss Mac OS &quot;Allow &lt;app&gt; to find devices on local networks?&quot;</h1>
+        <div class="meta">
+            投稿日: 2026年10月29日 | ランク: 9
+        </div>
+        <a href="https://github.com/johncassil/dontallow" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>macOSの「ローカルネットワーク上のデバイスを見つけて接続することを許可しますか？」という繰り返し表示されるポップアップの煩わしさを解決するために開発されたSwiftアプリに関するHacker Newsの議論。多くのユーザーがこのポップアップに不満を抱いており、AppleのUX設計への批判、AIを活用した問題解決の可能性、そしてサードパーティ製ツールのセキュリティと信頼性に関する懸念が主なテーマとなっています。</p>
+<h2>macOSの煩わしいポップアップとUXの課題</h2>
+<p>ユーザーは、macOS上で繰り返し表示されるローカルネットワークアクセス許可のポップアップに長年不満を抱いています。このポップアップは、OS設定でグローバルに無効化できず、作業を中断させるため、まるでmacOS版の「クッキーバナー」のようだと揶揄されています。Chromeのような自己更新を行うアプリケーションは、一時フォルダにコピーされることで毎回新しいアプリとして認識され、同じポップアップが何度も表示される問題が指摘されています。</p>
+<p>この問題は、VNC接続通知、クリップボードアクセス、天気アプリの位置情報アクセスなど、他のプライバシー関連のポップアップにも共通しており、その頻度と、アプリがなぜその権限を必要とするのかという技術的な詳細が不足していることから、ユーザーの判断を難しくし、疲弊させています。コメントの中には、AppleのUX設計への強い批判が見られ、「スティーブ・ジョブズならこのようなUXは許さなかっただろう」「macOSがWindows 11のようになってきている」といった声も上がっています。ユーザーは、本当に必要とされる場合にのみ、より詳細な情報と共に権限を尋ねられるべきだと主張しています。</p>
+<h2>サードパーティ製ツールとAIによる問題解決</h2>
+<p>本投稿の作者が開発した、煩わしいポップアップを自動で閉じるSwiftアプリは、多くのユーザーから歓迎されており、OSが提供すべき機能の欠如を補完するものと見なされています。</p>
+<p>この議論では、AI、特に大規模言語モデル（LLM）が、このような個人の小さな不満を解決するためのカスタムツール作成に大きく貢献する可能性が注目されています。実際に、AIを使って不要なウィンドウを自動で閉じるmacOSアプリを開発したユーザーの例も挙げられ、プログラミング経験のない一般ユーザーでも、自分のニーズに合わせてソフトウェアをカスタマイズできるようになる未来への期待が語られています。</p>
+<h2>セキュリティと信頼性の懸念</h2>
+<p>小規模なオープンソースのパッケージをインストールする際のマルウェアやセキュリティリスクについて懸念が表明されています。ソースコードのレビューは専門知識が必要であり、一般ユーザーには難しいという問題があります。</p>
+<p>AI（Claudeなど）を使ってリポジトリのセキュリティレビューを行うという提案がなされましたが、AIのプロンプトインジェクションに対する脆弱性や、悪意のあるコードが悪意を隠蔽するように仕向けられる可能性が指摘され、その信頼性には疑問符が付けられています。信頼性を高める方法として、オープンソースプロジェクトをフォークし、自分でAIレビューを行ってから実行することや、「Living off the land」（必要最低限のソフトウェアのみを使用する）というアプローチが提案されています。また、サンドボックス化されていないアプリや、アクセシビリティ権限のような広範な権限を要求するアプリをインストールすること自体が、解決しようとしている問題以上のリスクを生む可能性があるという皮肉なコメントもありました。</p>
+<h2>まとめ</h2>
+<p>macOSのローカルネットワークアクセス許可をはじめとする煩わしいポップアップは、多くのユーザーにとって長年の不満であり、OSのUX設計の欠陥として強く批判されています。この問題に対し、本投稿の作者が開発したSwiftアプリのようなサードパーティ製ツールは歓迎され、AIの活用が個々のユーザーの不満を解決する新たな可能性として期待されています。しかし、これらの小規模ツールのインストールは、マルウェアやセキュリティリスクという新たな懸念も生み出しており、AIによるコードレビューの信頼性や、最小限のソフトウェア使用といった対策が議論されています。ユーザーは、Appleに対し、ポップアップの表示頻度の見直し、詳細情報の提供、そしてユーザー体験を向上させる根本的な改善を求めています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We&#x27;re releasing the weights of Mistral Large 4 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">We&#x27;re releasing the weights of Mistral Large 4</h1>
+        <div class="meta">
+            投稿日: 2026年10月29日 | ランク: 2
+        </div>
+        <a href="https://mistral.ai/news/mistral-large-4-oss/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Mistral Large 4の発表は、その性能、価格設定、および「オープンウェイト」というライセンス形態を巡る活発な議論を呼び起こしました。多くのコメントは、EU圏の企業にとってのメリットと、モデルの自己ホスティングにおける課題に焦点を当てています。</p>
+<h2>Mistral Large 4の性能と価格競争力</h2>
+<p>Mistral Large 4は以前のプレビュー版と比較して大幅な価格改定（ほぼ半額）が行われ、一部のユーザーからは再評価の価値があるとされました。しかし、多くのコメントでは、DeepSeek v4.1 Flashのような競合モデルと比較して、価格、キャッシュレート、および全体的な性能（特にベンチマークスコア）において競争力がないとの見方が優勢です。一部のユーザーはMistralの過去のモデルの評価に懐疑的で、今回のモデルも「まだ高価で遅い」「Claude Opusに劣る」と感じています。その一方で、特にEU圏のユーザーからは「日常利用で他モデルより優れている」「十分使える」といった肯定的な評価も寄せられました。</p>
+<h2>「オープンウェイト」ライセンスと用語の議論</h2>
+<p>Mistral Large 4のライセンスは、モデルのweightsが公開されているものの、「Model as a Service」事業での商用利用には別途ライセンスが必要という制限を設けています。この制限を巡り、「オープンウェイト」という用語の適切性について激しい議論が展開されました。多くのユーザーは、この用語が「オープンソース」と同様に自由な商用利用を連想させるため「誤解を招く」と批判し、代替として「ウェイトアベイラブル」「ソースアベイラブル」「シェアウェア」といった用語が提案されました。OSI（Open Source Initiative）が提唱するAIの「オープンソース」定義は、トレーニングコードやデータ構成の公開を要求するため、現状のMistralモデルはこれに合致しないとの指摘もあります。しかし、制限があるとはいえ、完全にクローズドなモデルに比べればはるかにオープンであり、ベンダーのビジネスモデルとしては妥当だという擁護意見も存在しました。モデルのweightsが著作権の対象となるか、ライセンスの法的強制力についても疑問が呈されています。</p>
+<h2>EUでの利用メリットと地政学的側面</h2>
+<p>EU圏の企業は、データがEU域内に留まること、およびEU製のプロバイダーとの契約という点でMistralの利用に強いメリットを感じています。米国企業が中国製モデルの使用を規制している現状において、MistralのようなEU製モデルは自己ホスティングやエージェント利用の貴重な代替選択肢として重要視されています。Mistralが自社モデルだけでなく、DeepSeekやGLM Flashといったサードパーティの強力なモデルをEU域内で提供していることも、EU企業にとっての魅力となっています。しかし、EU域内推論には10%の追加料金がかかること、またMicrosoft Foundry経由での利用がCLOUD Actの影響を受ける可能性も指摘されました。</p>
+<h2>自己ホスティングの課題とハードウェア要件</h2>
+<p>Mistral Large 4の自己ホスティングには、最低でも256GBのVRAMが必要とされ、これはプロシューマー向けハードウェアではほとんど現実的ではありません。たとえ540GBのVRAMを持つH200カード4枚構成であっても、4bitまたは3bit量子化が必要になる可能性が示唆されました。MoE (Mixture of Experts) オフローディングが解決策として提案されたものの、読み込み速度への悪影響も懸念されています。Unslothチームによる要件削減の努力は評価されているものの、多くのユーザーにとっては依然として手の届かないハードルとなっています。</p>
+<h2>AIエコシステムの将来とオープンモデルの持続可能性</h2>
+<p>コメントでは、フロンティアモデルのトレーニングには莫大な資本、データ、人材が必要であり、真に「オープンソース」なコミュニティ主導のモデル開発は現状では非常に困難であるとの認識が示されました。モデルに実装されているガードレールや安全対策は「セキュリティシアター」であり、容易に回避可能であるため、モデルの真の性能や安全性に関する指標としては不十分だという批判があります。SOTAモデルのパラメータ規模が巨大化している傾向は、消費者向けハードウェアでの利用を妨げ、データセンターへの依存を加速させ、AI市場における独占を助長する可能性が懸念されています。将来的に、分散型トレーニングや、著作権で保護されていないデータセットのみで学習された、真にオープンで再現可能なモデルの必要性が訴えられています。</p>
+<h2>まとめ</h2>
+<p>Mistral Large 4のリリースは、AIモデルの性能、価格戦略、そして「オープンウェイト」という言葉の解釈について、Hacker Newsコミュニティ内で幅広い議論を巻き起こしました。性能と価格については依然として競合との比較で課題が残るものの、EU圏の企業にとってはデータ主権の観点から重要な選択肢となっています。しかし、その巨大なハードウェア要件は自己ホスティングの障壁となり、モデルのライセンスを巡る「オープン」の定義に関する議論は、AIエコシステム全体の将来における、真にオープンで持続可能なモデル開発の難しさを示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
