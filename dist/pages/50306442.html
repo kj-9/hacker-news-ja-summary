@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: A working Nintendo in ~1GB of Qwen weights - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: A working Nintendo in ~1GB of Qwen weights</h1>
+        <div class="meta">
+            投稿日: 2026年10月30日 | ランク: 8
+        </div>
+        <a href="https://github.com/dbreunig/nesformer" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このスレッドは、LLM（大規模言語モデル）を使ってNES（Nintendo Entertainment System）をエミュレートするプロジェクト「nesformer」に関するものです。このプロジェクトは、Qwenputerという先行研究に基づいており、CPU、ROM、RAMがモデルの内部で処理され、コントローラーの入力だけが外部から与えられるという、その技術的なアプローチに注目が集まっています。</p>
+<h2>LLMによるエミュレーションの意義と驚き</h2>
+<p>多くのコメント投稿者は、NESのCPU、ROM、RAMすべてをLLMの重みと構造の中に組み込んでエミュレートするというアイデア自体に驚きと感銘を受けています。特に、初期化後の入力がコントローラーのイベントのみである点や、メモリ（RAM）までモデル内部で処理されるGated DeltaNetアーキテクチャの利用が、技術的な妙技として評価されています。
+一部からは「なぜこのようなことをするのか理解できない」という疑問も呈されていますが、「純粋に楽しいから」「何ができるかを示すため」といった意見が優勢です。また、LLMが決定論的でないという批判に対する反論としても機能する可能性があります。</p>
+<h2>LLMの効率性と実用性に関する議論</h2>
+<p>nesformerが実機よりも150〜290倍遅いという事実から、LLMと通常のプログラムとの間の膨大な計算要件の違いが浮き彫りになっています。
+LLMによってOS全体をフレームごとに「幻覚」させるというアイデアが技術的には可能になったと指摘する人もいますが、その非効率性から実用性に疑問を呈する声が多数です。
+一部の投稿者は、LLMがコード生成ツールとしては非常に効率的である一方、直接的なエミュレーションのレイヤーとしては非効率的であると論じています。しかし、将来的に特化したモデルや最適化の余地がある可能性も示唆されています。
+また、LLMで非効率なソリューションを短期間で作り上げるのと、チームで最適化されたソリューションを長期間かけて開発するのと、どちらがビジネス上有効かという議論も展開されています。</p>
+<h2>プログラマーの仕事とAIの影響</h2>
+<p>LLMが驚くほどの速度で進化し、生産性を劇的に向上させるという個人的な経験を語る投稿者がいる一方で、それが最終的にプログラマーの雇用を減少させるのではないかという懸念が表明されています。
+過去のオフショアリング、クラウド、SaaSなどの進化がチーム規模に与えた影響を引き合いに出し、AIによる生産性向上が株主主導の経済下でチームの縮小につながるとの意見が多く見られます。
+しかし、必ずしもヘッドカウントの増加が成功の指標ではないと主張する人もおり、少人数のチームでより多くのことを成し遂げることを目指すリーダーシップの姿勢も存在します。
+プログラマーが経済やビジネスの仕組みを十分に理解していないため、AIをコスト削減の手段として捉える経営者の視点を見落としがちだという指摘もあります。</p>
+<h2>プロジェクトの成功要因とAIの能力</h2>
+<p>nesformerの作者は、プロジェクトが成功した理由として、Opus 5.5という強力なLLMを使ったこと、長年にわたるクラシックゲームエミュレーションコミュニティが作成した高品質な参照資料や適合性テスト（3000以上のゴールデンインストラクションを含む）が存在したこと、そしてQwenputerという先行研究とコンパイラが提供されていたことを挙げています。
+これは、適切な参照資料、優れた仕様、適合性テスト、明確な指示があれば、LLMが非常に複雑なタスクをこなせる能力があることを示しています。</p>
+<h2>まとめ</h2>
+<p>nesformerプロジェクトは、LLMがNESのような複雑なシステム全体をエミュレートできるという技術的な可能性を示し、多くのコメント投稿者に驚きと関心を与えました。その技術的な巧妙さは評価される一方で、実機と比較して大幅な低速性や高い計算要件から、LLMの効率性や実用性、そして「非決定論性」に関する議論が活発に行われました。また、AIによる生産性向上がプログラマーの雇用やチームサイズに与える影響についても、様々な意見が交わされました。このプロジェクトは、AIが特定の条件下で高度な技術的課題を解決できることを示すものであり、その成功要因として既存の高品質なリソースの重要性が強調されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backdoor in Claude Code for VS Code extension on the Cursor Marketplace - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Backdoor in Claude Code for VS Code extension on the Cursor Marketplace</h1>
+        <div class="meta">
+            投稿日: 2026年10月30日 | ランク: 3
+        </div>
+        <a href="https://phorion.io/blog/offical-claude-code-vsx-compromise/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Claude Code VS Code拡張機能の悪意のあるバージョンがCursor Marketplaceで配布されたセキュリティインシデントに関する議論がHacker Newsで活発に行われています。この事件は、公式マーケットプレイスへの影響、責任の所在、開発環境のセキュリティ対策、そしてAIツールに対する信頼性への懸念といった多岐にわたるテーマを引き起こしています。</p>
+<h2>セキュリティインシデントの概要と影響範囲</h2>
+<p>悪意のあるバージョン2.1.313は、SSHリバースバックドアを仕込んだものであり、Cursor Marketplaceを通じて配布されました。Anthropicの従業員からの公式コメントによると、この問題はAnthropicのシステムや従業員のラップトップの侵害ではなく、悪意のあるアクターがCursorのマーケットプレイスへのアクセスを利用して、Anthropicがビルドまたは公開していない改ざんされた拡張機能を公開したとのことです。そのため、公式のVS Code MarketplaceやOpenVSXは影響を受けていません。悪意のある拡張機能は約11時間ライブ状態でしたが、VS Codeの自動更新遅延機能（通常12時間）が適用されたことで、影響範囲が限定された可能性があります。ユーザーは、SSHの<code>authorized_keys</code>ファイルに<code>svc-telemetry</code>という公開鍵がないか確認することで、自身のマシンが影響を受けたかどうかをチェックできます。</p>
+<h2>責任の所在とマーケットプレイスのセキュリティ</h2>
+<p>誰がこのインシデントの責任を負うのか、という点については様々な意見が交わされています。Anthropicは自社の関与を否定していますが、一部のコメントでは、CursorがOpenVSXのミラーを運用しており、そこに不正な拡張機能が注入された可能性が指摘されています。OpenVSXのセキュリティ対策の甘さ（拡張機能署名や検証の欠如）が問題視されており、これにより類似のサプライチェーン攻撃が容易になっているとの指摘もあります。Cursorは、独自のマーケットプレイスプロキシを介して拡張機能のセキュリティ分析を行っていると主張していますが、不正な拡張機能が約11時間も検出されずに存在したことに対し、その有効性に疑問の声が上がっています。また、AnthropicとCursor/SpaceXの関係から、CursorがAnthropicを擁護しているという憶測も一部で述べられています。</p>
+<h2>開発環境のセキュリティ対策とAIツールへの信頼</h2>
+<p>このインシデントは、開発者の間で開発環境のセキュリティ対策の重要性を再認識させるきっかけとなりました。多くのユーザーが、サンドボックス、VM、またはコンテナ（Docker、QEMU、gVisorなど）を利用して開発ツールを隔離することの重要性を議論しています。AI駆動型開発ツール（Claude Codeなど）の利用が普及する中で、このようなツールがユーザーの環境で任意コード実行（RCE）を引き起こす可能性に対する懸念が表明されています。「なぜClaude自身がハックを検知できなかったのか」という皮肉なコメントや、Anthropicの従業員が以前主張した「AIモデルがプロンプトインジェクション攻撃の98%を阻止できる」という発言に対する懐疑的な意見も見られます。AIがセキュリティ問題を「解決」するという業界の主張と、現実のセキュリティ侵害とのギャップが露呈し、AIツールへの信頼性にも疑問が投げかけられています。拡張機能の自動更新を無効化し、手動で確認するといった予防策も提案されています。</p>
+<h2>まとめ</h2>
+<p>Claude Code VS Code拡張機能の悪意のあるバージョンがCursor Marketplaceで配布された事件は、AIを活用した開発ツールとサードパーティ製マーケットプレイスのセキュリティの脆弱性を浮き彫りにしました。Anthropicは自社のシステムへの侵害を否定し、問題はCursorのマーケットプレイスへの不正アクセスにあると説明していますが、OpenVSXのようなプラットフォームの基本的なセキュリティ対策の欠如が、広範なサプライチェーン攻撃のリスクを高めていることが示されました。</p>
+<p>このインシデントは、開発者がサプライチェーン攻撃から自身を守るために、サンドボックス化された環境の利用、拡張機能の出所と内容の慎重な吟味、そして自動更新の管理といった対策を講じることの重要性を強く再認識させるものとなりました。また、AIがセキュリティ問題を「解決」するという業界の主張と、実際にセキュリティ侵害が発生した現実との間に大きな隔たりがあることが露呈し、AIツールへの信頼性にも疑問が投げかけられています。Binanceのハッキングとの関連性については憶測が飛び交っていますが、公式な確認はなされていません。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
