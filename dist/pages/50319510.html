@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackerTube: YouTube built from videos recommended by HN - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">HackerTube: YouTube built from videos recommended by HN</h1>
+        <div class="meta">
+            投稿日: 2026年10月31日 | ランク: 1
+        </div>
+        <a href="https://karpathy.bearblog.dev/hacker-tube/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>HackerTubeは、Andrej Karpathy氏がHacker Newsのコメントから収集した6,454本の動画をYouTube風のインターフェースで提供するサイトです。多くのユーザーはYouTubeのレコメンデーションアルゴリズムに不満を抱いており、HackerTubeを高品質なコンテンツを発見するための歓迎すべき代替手段として評価しています。</p>
+<h2>YouTubeの現状とHackerTubeの魅力</h2>
+<p>多くのコメント投稿者は、YouTubeのレコメンデーションアルゴリズムが「slop（カス）」だらけであり、同じコンテンツを繰り返し推奨したり、クリックベイトやエンゲージメント最適化に偏っていることに強い不満を表明しています。YouTube Premiumユーザーでさえ、レコメンデーションの質が悪いと感じており、「マインドポイズン」とまで表現する人もいます。対照的に、HackerTubeは「純粋なオタクコンテンツ」として、インフルエンサーや広告がなく、ログイン不要で快適な視聴体験を提供している点が評価されています。</p>
+<h2>AIを活用したプロジェクト構築</h2>
+<p>HackerTubeは、AnthropicのAIモデルであるClaude Opus 5.5とClaude Sonnetを使用して構築されました。Karpathy氏によると、コメントのラベル付けにSonnetが5億400万入力トークン（90%キャッシュ済み）と760万出力トークンを使用し、アプリ開発とデプロイにはOpus 5.5が約100万トークン使用されたとのことです。合計コストは約$300と見積もられており、これは現代の基準から見ると非常に小さなプロジェクトであるとされています。一部のユーザーは、GLM 5.3 Flashなどのさらに安価で高性能なAIモデルの可能性についても言及しています。Hacker Newsの運営者であるdang氏も、LLMが新しいAPI開発における「退屈な作業」を効率化できると述べ、AIがプロジェクト開始の障壁を下げていることを強調しました。</p>
+<h2>コミュニティからのフィードバックと迅速な改善</h2>
+<p>HackerTubeへのコメントでは、多くの機能改善の提案が寄せられました。具体的には、アップロード日、推薦日、動画の長さ、種類（講演、講義など）によるフィルタリングとソート、HNのアップボートによるフィルタリング、「Hidden Gems」（HNで高評価だがYouTube再生回数が少ない動画）、「Evergreen only」（時事ネタではない動画）といった独自のフィルター、YouTubeプレイリストへのエクスポート機能、YouTube風ロゴの変更などが挙げられました。驚くべきことに、Karpathy氏はこれらの提案の多くを数分から数時間のうちに迅速に実装し、サイトに反映させました。この迅速な対応はコミュニティから高く評価され、「HackerTube Longs」（1時間以上の動画を集めたセクション）の追加なども行われました。</p>
+<h2>まとめ</h2>
+<p>HackerTubeは、YouTubeの飽和したレコメンデーション環境に不満を持つユーザーにとって、Hacker Newsコミュニティによって厳選された高品質な動画コンテンツを発見するための画期的なソリューションとして登場しました。AI（Claude Opus 5.5）の活用により、非常に低コストかつ短期間でこのプロジェクトが実現されたことは、現代におけるAIのプロトタイピング能力を示す好例です。ユーザーからの活発なフィードバックが迅速な機能改善につながるというコミュニティ主導の側面も持ち合わせており、YouTubeの「enshittified wall of slop」に対する質の高い代替手段として、今後の発展が期待されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
