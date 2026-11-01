@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: HackerBooks – HackerTube, but for books mentioned on HN - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: HackerBooks – HackerTube, but for books mentioned on HN</h1>
+        <div class="meta">
+            投稿日: 2026年11月01日 | ランク: 1
+        </div>
+        <a href="https://hackerbooks.org" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントで言及された書籍をまとめたウェブサイト「HackerBooks」のローンチに関する議論。Claude 5.5によって迅速に構築されたことに驚きの声が上がり、サイトの速度は高く評価されたものの、「おすすめ」と「言及」の区別やデータ品質、フィルタリング機能に関する多くの改善提案が寄せられました。</p>
+<h2>AI (Claude) による開発の驚きと評価</h2>
+<p>投稿者は、KarpathyのHackerTubeに触発され、Hacker Newsのコメントで言及された約16.5k冊の書籍をまとめた「HackerBooks」を開発しました。サイトのデータパイプライン、UI、サイト構築のほとんどをClaude Opus 5.5が担当したことに、多くのユーザーが驚きと称賛の声を上げました。特にUIの応答性の高さとデザインの良さが評価され、Claude 5.5がデザイン面でGPT-6.1 Solよりも優れているという意見も出ました。Claudeへの指示だけで迅速に高品質なサイトが構築できるという可能性が示され、「Claudeは最高だ」というコメントも見られました。</p>
+<h2>プロジェクトの目的と機能性</h2>
+<p>Hacker Newsのコメントから本のレコメンデーションを収集するというアイデアは非常に好評で、「純金」「素晴らしい」といった称賛の声が多数寄せられました。サイトは非常に高速で、静的JS、JSONファイル、Cloudflare、R2、ローカル検索インデックスを活用している点が評価されています。特定の書籍が言及されたコメントへのリンクや、データダウンロード機能も提供されています。投稿者は、ユーザーからの提案を受けてすぐに「トレンド」ページを実装するなど、迅速な改善姿勢を見せました。</p>
+<h2>言及カウントの問題点と改善提案</h2>
+<p>サイトは書籍の「言及数」をカウントしているため、肯定的な「おすすめ」と否定的な「言及」が区別されないという大きな課題が指摘されました。特に「Mein Kampf」が多数「おすすめ」されているように見える点や、Ayn Randの書籍が上位にあることについて議論が巻き起こり、投稿者は「recommended by」を「mentioned by」に修正しました。また、雑誌と書籍の混同（例: 「Vanity Fair」）、カテゴリ分類の不正確さ（例: 「Angry Birds」が本として表示）、著者情報の誤りなどのデータ品質に関する問題も指摘されました。</p>
+<p>ユーザーからは、著者、出版日、ライセンス、無料ダウンロードの有無、ページ数、言語、映画化の有無などの詳細なフィルタリングオプションや、特定のコメントへの直接リンク、コメント表示の改善、書籍カバー画像の品質向上などが提案されました。「トップ」リストだけでなく、「最も言及が少ない」書籍を表示する機能や、セマンティック検索の導入も望まれています。</p>
+<h2>類似プロジェクトへの展開と持続可能性</h2>
+<p>HackerTube (動画) に触発されたHackerBooksに対し、ユーザーからはポッドキャスト、映画、論文、音楽、開発ツール、ニュース記事など、他のメディア版「Hacker[X]」の作成を求める声が多数寄せられました。過去にも同様のHacker News書籍リストサイトが存在したが、多くが閉鎖していることが指摘され、本プロジェクトの長期的な持続可能性について懸念が示されました。アフィリエイトリンクによる収益化や、著作権切れの書籍への無料オンライン版リンクの追加が提案されたほか、オープンソース化することでコミュニティがプロジェクトを維持・発展させることへの期待も表明されました。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントで言及された書籍をまとめた「HackerBooks」は、その開発の大部分をAI（Claude 5.5）が担い、非常に高速で機能的なウェブサイトとして注目を集めました。コミュニティからは、プロジェクトのアイデア自体が「純金」と高く評価される一方、「おすすめ」と「言及」の区別があいまいであることによる誤解（特に政治的にデリケートな書籍について）、データ品質の課題、そしてより詳細なフィルタリング機能やUI改善に関する多くの建設的なフィードバックが寄せられました。過去の類似プロジェクトが短命に終わった経緯から、その持続可能性に対する懸念も表明されつつも、動画やポッドキャストなど他のメディアへの展開を望む声が多数上がり、AIによる迅速な開発が新たなコンテンツキュレーションのトレンドを生み出す可能性を示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
