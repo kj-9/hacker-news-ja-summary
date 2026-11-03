@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show HN: Subvocal – Talk to your computer without making noise - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Show HN: Subvocal – Talk to your computer without making noise</h1>
+        <div class="meta">
+            投稿日: 2026年11月03日 | ランク: 2
+        </div>
+        <a href="https://news.ycombinator.com/item?id=50340088" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Subvocalは、スマートグラスを使って無声で話すことで、コンピュータにテキスト入力できる製品を開発しています。口を動かさずに（または唇を閉じたまま）単語を発することで、RFセンサーが顔内部の微細な動きを検出し、それをテキストに変換します。</p>
+<h2>無声発話の技術と課題</h2>
+<p>Subvocalは、発話者が実際に声を出さずに、唇や舌の動き（「無声発話」または「内部発話」）を検出し、テキストに変換するスマートグラスを開発しています。当初はEMG（筋電図）センサーを試しましたが、汗による信号変化、電気的干渉、電極配置のばらつき、そして何よりも顔に電極を貼り付けることへの抵抗から断念。その後、Bluetoothと同様の無線電波（RF）を使用する現在のシステムに切り替えました。このRFは顔を透過し、舌、唇、軟口蓋の動きによって変調されるのを検出します。</p>
+<p>開発には多くの技術的課題があり、特に低ノイズのRFセンシングスタックの構築、アンテナの最適な配置が困難でした。ユーザー間の顔の解剖学的構造の違いによる信号パターンの多様性も大きな問題でしたが、大量の事前学習データセットを収集することで解決しました。Webサイトのデモビデオでは、短いキャリブレーションで高い精度を達成している様子が示されています。</p>
+<p>リップリーディング（唇の動きをカメラで読み取る）やIMU（慣性計測装置）などの他の手法も試されましたが、情報量に限界があり、実用的なエラー率に達しないことが判明しました。特にリップリーディングは、発音される音の多くが視覚的に区別できない（例: PとB）ため、情報理論的な限界があるとのことです。</p>
+<h2>製品の形態とユーザビリティ</h2>
+<p>製品はメガネ型ですが、一部のユーザーからは、メガネ型であることへの懸念が寄せられています。特に、度付きメガネを使用している人や、特定のデザインを好む人にとっては、既存のメガネの上に装着したり、既存のメガネに統合したりする方が望ましいという意見があります。しかし、開発者側は、すべての電子機器とアンテナを最適に配置し、様々な顔やメガネに一貫してフィットさせるためには、予測可能なデバイス形状としてメガネ型が最適であると説明しています。</p>
+<p>Webサイトのユーザーエクスペリエンス（UX）については、多くの批判が寄せられました。製品の核心的な機能や技術が冒頭で明確に説明されておらず、スクロールアニメーションが邪魔で、何が提供されているのか理解しにくいという意見が多数ありました。開発者はこのフィードバックを受け入れ、Webサイトの改善を約束しています。</p>
+<p>無声発話自体が、人によっては「変で気味が悪い」と感じる可能性があります。しかし、開発者は、唇を動かさなくても、口を閉じたままで「内部発話」によって動作させることが可能だと述べています。これは、頭の中で言葉を「考える」際の舌の自動的な動きとは異なり、唇を閉じたまま口を動かすような感覚で、慣れればうまくできるようになるとのことです。</p>
+<h2>ユースケースと将来性</h2>
+<p>この技術の主なユースケースは、公共の場所（図書館、オフィス、飛行機、公共交通機関など）や騒がしい環境（庭仕事、機械操作など）で、他人に迷惑をかけずにコンピュータにテキスト入力することです。音声認識は便利ですが、周囲に聞かれたくない内容や、騒がしくて聞き取りにくい環境では使用が難しいという課題を解決します。</p>
+<p>多くのコメントで、この技術がオーソン・スコット・カードのSF小説「エンダーのゲーム」シリーズに登場する、AIエージェント「ジェーン」とエンダーがコミュニケーションをとる「無声発話」を彷彿とさせると指摘されています。また、「her/世界でひとつの彼女」のようなAIとの対話体験にも近いとされています。</p>
+<p>将来的な可能性として、騒音の多い環境での音声ノイズキャンセリング（通常の音声とRF信号を組み合わせて音声を完全にノイズ除去する）、SDKの提供によるエコシステムの構築、そして最終的にはARディスプレイと組み合わせてインプットとアウトプットの両方を担うスマートグラスへの進化が考えられています。アクセシビリティの観点からは、発話に困難を抱える人々（RSI、麻痺、失語症、喉頭がんなど）にとって、新たなコミュニケーション手段となる可能性も指摘されています。</p>
+<h2>プライバシーと安全性</h2>
+<p>製品はクラウド上で推論処理を行うため、ユーザーのデータがサーバーに送られることに対してプライバシーの懸念が表明されています。開発者は、データセキュリティとプライバシーを非常に重視しており、ハードウェア隔離された暗号化されたデータ処理を行い、ユーザーの同意がない限り匿名化されたトレーニングにのみデータを使用すると説明しています。将来的にはローカル推論モデルの提供も検討しているとのことです。</p>
+<p>RF放射の健康リスクについても質問がありましたが、開発者は、RFは非常に低電力であり、長時間の顔への使用でも安全であることを確認済みで、開発中に数百時間ものデータ収集を自分たちで行い安全性を確認したと回答しています。また、RF送信は実際にディクテーションしている間のみ有効になることも強調されています。</p>
+<h2>まとめ</h2>
+<p>Subvocalは、公共の場や騒がしい環境でプライベートなテキスト入力を可能にする、革新的な無声発話スマートグラスを提案しています。初期の技術的な困難を乗り越え、RFセンサーと大規模なデータセットにより、口を閉じたままでも高精度なテキスト変換を実現しています。SF小説の世界を実現するような可能性を秘めており、プライバシーや安全性に関する懸念には対処しつつ、将来的には多様なユースケースと製品の進化が期待されます。しかし、製品の見た目、WebサイトのUX、クラウド依存の処理、発売時期については、まだ改善の余地やユーザーからの懸念が示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
