@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Paint Remote Code Execution Vulnerability - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">MS Paint Remote Code Execution Vulnerability</h1>
+        <div class="meta">
+            投稿日: 2026年11月06日 | ランク: 3
+        </div>
+        <a href="https://www.cve.org/CVERecord?id=CVE-2026-83844" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Windowsペイントにおけるリモートコード実行（RCE）の脆弱性（CVE-2026-83844）の発見に驚きと不信感を示しています。特に、ペイントのような基本的なアプリケーションにネットワーク機能が存在し、ユーザーの操作なしに攻撃が可能であるという点について議論が集中しています。</p>
+<h2>ネットワーク機能とRCEの仕組み</h2>
+<p>コメントの多くは、MS Paintにネットワーク機能があること自体に疑問を呈しています。特に、CVEの説明にある「認証されていない攻撃者がネットワーク経由で影響を受けるサービスに特別に細工されたパケットを送信することで、この脆弱性を悪用できる」という点が驚きをもって受け止められています。</p>
+<ul>
+<li><strong>Copilotの統合</strong>: 最近のWindows 11版PaintにはCopilotが統合されており、これがネットワーク機能の根源ではないかと推測されています。同様にNotepadにもCopilotが導入されていることが指摘され、シンプルなツールにAI機能が追加されることへの懸念が示されています。</li>
+<li><strong>サービスの可能性</strong>: Paintが直接ネットワークサービスを実行しているのではなく、Windowsのシステムサービス（例: <code>svchost.exe</code>）を介して間接的にネットワークに露出している可能性が示唆されています。</li>
+<li><strong>CVE記述の曖昧さ</strong>: 一部のユーザーは、CVEの記述が他の多くの脆弱性と同様のテンプレートを使用しているため、Paintに特有の状況を正確に反映していない可能性があると推測しています。悪意のあるファイルをユーザーが開くことによる攻撃（ユーザーインタラクションが必要）と、ネットワーク経由で直接サービスを攻撃する（ユーザーインタラクション不要）という記述の矛盾が指摘されています。しかし、公式な説明では「ユーザーインタラクション不要」と明記されており、そのメカニズムについて議論が続いています。</li>
+</ul>
+<h2>クラシックなWindowsアプリの現状</h2>
+<p>MS Paint、Notepad、Minesweeperなどの伝統的なWindowsアプリケーションが、肥大化し、ネットワーク機能やAI機能が追加されている現状に対し、多くのユーザーが懸念や皮肉を述べています。</p>
+<ul>
+<li><strong>MinesweeperのRCEジョーク</strong>: PaintのRCEを受けて、MinesweeperやCalc.exeといった他のシンプルなアプリケーションにもRCEが見つかる日が来るのではないかという皮肉なジョークが多数投稿されています。実際にMinesweeperが200MBを超えるサイズになっていることへの驚きも表明されています。</li>
+<li><strong>シンプルさの喪失</strong>: ユーザーは、これらのアプリケーションが本来持っていたシンプルさ、オフラインで機能する特性を失いつつあることに不満を表明しています。特に、Paintにレイヤー機能やAIジェネレーターなどが追加され、もはや「シンプル」とは言えない状態になっていることが指摘されています。</li>
+<li><strong>Windows 11版の影響</strong>: この脆弱性がWindows 11版のPaintにのみ影響し、古いWindows 10やそれ以前のバージョンでは関係ない可能性が指摘されています。Windows 11版Paintが完全に書き直されていることがその理由として挙げられています。</li>
+</ul>
+<h2>パッチと更新プロセス</h2>
+<p>脆弱性の修正には、Windows UpdateではなくMicrosoft StoreからPaintアプリを個別に更新する必要があるという点も議論の対象となっています。</p>
+<ul>
+<li><strong>Microsoft Store経由での更新</strong>: 複数のユーザーが、Windows Updateでは修正が表示されず、Microsoft StoreにアクセスしてPaintのページに移動することで初めて更新が適用されたと報告しています。この更新方法の不明瞭さが指摘されています。</li>
+<li><strong>ユーザー体験への影響</strong>: このような更新プロセスは、一般ユーザーにとって分かりにくく、セキュリティパッチの適用が遅れる原因になりうると懸念されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>MS Paintにおけるリモートコード実行の脆弱性は、長年親しまれてきたシンプルなWindowsアプリケーションが、現代のOSやAI統合の潮流の中でどのように変化し、予期せぬセキュリティリスクを抱えるようになったかを浮き彫りにしています。特に、ユーザーインタラクションなしでネットワーク経由の攻撃が可能であるという点に多くのユーザーが驚きと不信感を示し、その具体的なメカニズムについて議論が集中しました。CopilotなどのAI機能の統合がネットワーク機能の導入に影響を与えている可能性が指摘されており、シンプルなツールの肥大化とそれに伴う新たな脅威への懸念が広く共有されています。また、Windows Updateとは異なるアプリストア経由でのパッチ適用プロセスも課題として挙げられました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

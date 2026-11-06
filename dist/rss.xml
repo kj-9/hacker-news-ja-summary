@@ -1,5 +1,172 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><lastBuildDate>Thu, 05 Nov 2026 00:41:38 GMT</lastBuildDate><item><title>Residential proxies detected on White House network</title><link>https://layer3intel.com/blog/residential-proxies-white-house-network</link><description>&lt;p&gt;&lt;a href="https://layer3intel.com/blog/residential-proxies-white-house-network"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50371246.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+<rss version="2.0"><channel><title>Hacker Newsのコメント要約</title><link>https://github.com/kj-9/hacker-news-ja-summary</link><description>Hacker Newsのコメント要約</description><lastBuildDate>Fri, 06 Nov 2026 00:38:54 GMT</lastBuildDate><item><title>Claude Code sends your email address to websites</title><link>https://github.com/anthropics/claude-code/issues/107757</link><description>&lt;p&gt;&lt;a href="https://github.com/anthropics/claude-code/issues/107757"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50385272.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ユーザーは、AnthropicのClaude CodeがWeb検索を行う際に、ユーザーのメールアドレスをUser-Agentヘッダーに含めて送信し、それにより大量のスパムやフィッシングメールを受け取るようになったと報告しています。この動作はユーザーのプライバシーを侵害し、顧客に損害を与える一方で、スクレイパーや詐欺師には大きな利益をもたらすと批判されています。&lt;/p&gt;
+&lt;h2&gt;個人情報漏洩とプライバシー侵害&lt;/h2&gt;
+&lt;p&gt;多くのコメントが、Claude CodeがUser-Agentヘッダーにユーザーのメールアドレスを含めてWebリクエストを送信する問題について懸念を表明しています。ユーザーは、これにより大量のスパムやフィッシングメールを受け取るようになり、これはプライバシー侵害であり「とんでもない」行為だと述べています。一部のユーザーは、Claude Codeを使い始めてからスパムメールが増えたことを確認し、個人を特定できる情報（名前や名字）が含まれていることに驚きを示しています。これは、ユーザーが明示的に許可していないにもかかわらず、個人情報が第三者に漏洩していることを意味します。&lt;/p&gt;
+&lt;h2&gt;Anthropicの対応と批判&lt;/h2&gt;
+&lt;p&gt;AnthropicのClaude Code開発者であるmpoteat氏がコメント欄で、この問題は認識しており、User-Agentヘッダーにメールアドレスが含まれるのを「決定的にブロックする」&lt;code&gt;cc-plugin-privacy&lt;/code&gt;という組み込みモッドを導入したと説明しました。このモッドはバージョン2.1.317以降でデフォルトで有効になっているとのことです。&lt;/p&gt;
+&lt;p&gt;しかし、この対応に対して多くの批判が寄せられています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;デフォルトの動作への疑問&lt;/strong&gt;: なぜ最初からこのようなプライバシー侵害の動作がデフォルトだったのか、という疑問が多数あります。一部のユーザーは、User-Agentヘッダーに連絡先メールアドレスを含めることが一部のサイト（Wikipediaなど）のポリシーで推奨されていることが原因だと推測していますが、それでもユーザーの認証用メールアドレスを勝手に使うことは問題視されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;「alignment is important and highly non-trivial haha」という発言への反発&lt;/strong&gt;: 開発者のmpoteat氏が「これはアラインメントが重要で非常に自明ではない理由です haha」と発言したことに対し、ユーザーのプライバシー侵害を軽視している、不適切な発言であるとの強い批判が集中しました。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;根本的な解決ではないという指摘&lt;/strong&gt;: 問題の根本は、Claude Codeがシステムプロンプトにユーザーのメールアドレスを「隠された」情報ブロックとして挿入していることにあると指摘されています。プラグインで特定の動作をブロックするのではなく、システムプロンプトからメールアドレスを削除すべきだという意見が多く見られます。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;過去からの報告&lt;/strong&gt;: この問題は、少なくとも昨年7月にはGitHubのIssueで報告されており、数ヶ月前から認識されていたにもかかわらず、最近まで修正されなかったことへの不満が表明されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;LLMとプライバシー、信頼性&lt;/h2&gt;
+&lt;p&gt;このインシデントは、大規模言語モデル（LLM）の設計と、ユーザーのプライバシー保護の難しさについて議論を巻き起こしています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;非決定的な挙動&lt;/strong&gt;: LLMがコンテキスト内の情報（この場合はユーザーのメールアドレス）を利用して、User-Agentヘッダーに含めるという「自律的な」決定を下した可能性が指摘されています。これは、モデルが予測不能な方法で個人情報を漏洩させるリスクを示しており、ハーネス（モデルを制御するフレームワーク）による厳密なガードレールが必要であるという意見が出ています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;信頼の喪失&lt;/strong&gt;: 多くのユーザーがAnthropicに対する信頼を失ったと表明しています。Claude Codeの利用をやめる、あるいは代替としてローカルモデルやOpenAIのツールへの移行を検討する声が上がっています。一部のユーザーは、Anthropicが「vibes coding（雰囲気コーディング）」に基づいて製品を開発しており、基本的なエンジニアリングプラクティスを無視していると批判しています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AIによるスパム増加&lt;/strong&gt;: AIツールが普及することで、スパムメールの生成と送信がより高度になり、管理が困難になっているという意見もあり、皮肉な状況を呈しています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;AnthropicのClaude CodeがユーザーのメールアドレスをUser-Agentヘッダーに含めてWebリクエストを送信し、結果としてユーザーが大量のスパムを受け取るというプライバシー侵害の報告がありました。この問題は少なくとも昨年7月には報告されており、Anthropicは最近になってこの動作をブロックするプラグインを導入したと説明しています。しかし、その対応の遅れ、根本的な原因（システムプロンプトへのメールアドレス挿入）の未解決、および開発者からの不適切なコメントにより、ユーザーからの強い不満と信頼の喪失を招いています。このインシデントは、LLMが自律的に個人情報を漏洩させるリスクと、AIツールのプライバシー保護におけるハーネスとガードレールの重要性を浮き彫りにしました。多くのユーザーはClaude Codeからの移行を検討しており、Anthropicのエンジニアリング文化とプライバシーへの姿勢に疑問を投げかけています。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50385272</guid></item><item><title>Search for everyone</title><link>https://kagi.com/changelog#11820</link><description>&lt;p&gt;&lt;a href="https://kagi.com/changelog#11820"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50383740.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Kagiがアカウントなしで無料検索（50回/日、プライベートブラウジングで100回/日）を提供開始したことに対し、Hacker NewsのユーザーはKagiの価値提案、有料検索エンジンというビジネスモデルへの認識、特定の機能や倫理的側面、そしてAIエージェントによる検索の台頭といった幅広い側面から議論を交わしました。&lt;/p&gt;
+&lt;h2&gt;Kagiの検索体験と評価&lt;/h2&gt;
+&lt;p&gt;Kagiユーザーは、広告や不要なAI生成コンテンツ（AI slop）がないこと、そしてカスタマイズ可能な検索結果の品質を高く評価しています。多くの人が、Googleが「ひどい」状態になった今、Kagiの検索結果は一貫して優れており、「新鮮な空気」だと感じています。特に、個人のブログなど「Smallweb」を発見する機能や、必要に応じてAIアシスタントを利用できる点が好評です。また、特定のウェブサイト（例：Reddit、AI生成サイト）を検索結果から除外したり、ランクを下げたりできる機能も高く評価されています。しかし、一部のユーザーは、Kagiの検索結果がDuckDuckGoと同程度である、またはGoogleより劣ると感じているほか、KagiがGoogleを含む複数の情報源に依存していることを指摘し、懸念を示す声もあります。&lt;/p&gt;
+&lt;h2&gt;有料検索エンジンというモデルへの認識と課題&lt;/h2&gt;
+&lt;p&gt;有料の検索エンジンという概念は、多くのユーザーにとって馴染みがなく、支払いに抵抗があることが示されています。「無料」のウェブ体験に慣れているため、検索にお金を払うという発想自体を「鼻で笑う」人もいます。しかし、広告や「AI slop」がもたらす認知負荷や、ウェブの質低下を考えると、広告なしの体験にはそれ以上の価値があるという意見も多く聞かれました。また、ウェブサービスを維持するためのコスト（帯域幅、コンピューティングなど）に対する一般の理解不足も指摘されています。Kagiの特定機能に関しては、ローカルビジネスやマップ検索の弱さ、AIアシスタントのクレジット消費の速さ、Androidアプリのバグ、検索結果が200件に制限されていることなどが改善点として挙げられています。&lt;/p&gt;
+&lt;h2&gt;Yandex提携に関する倫理的懸念&lt;/h2&gt;
+&lt;p&gt;Kagiが検索結果の一部をロシア企業Yandexから取得していることに対し、複数のユーザーから倫理的な懸念が表明されました。これは、Kagiへの支払いが間接的に「無意味な戦争」に資金を提供していると見なされるためです。Kagiのリーダーシップが「政治が検索の要因になる瞬間、検索エンジンの開発をやめる」という姿勢を示したことについても、現状のウクライナでの戦争を「政治」と呼ぶことへの不満が聞かれました。Yandexへの支払いはKagiの総コストのわずか2%であるため、簡単に中止できるはずだという意見もあり、この問題を理由にKagiのサブスクリプションをキャンセルしたユーザーも存在します。一方で、他の検索エンジンも「より無意味な戦争」に資金を提供していると反論する声や、完璧なボイコットは難しいという意見も出ています。&lt;/p&gt;
+&lt;h2&gt;AIエージェントとウェブ検索の未来&lt;/h2&gt;
+&lt;p&gt;Google検索の品質低下に伴い、ChatGPTやClaudeなどのAIエージェントを主要な情報源として利用するユーザーが増加していることが指摘されました。これらのエージェントは、古い情報やスパムを避け、直接的な回答を提供できるため、従来のウェブ検索よりも効率的だと感じられています。KagiもAIアシスタントを提供していますが、「なぜAIが必要なのか」という疑問や、AIはGoogle/Geminiの方が優れているという意見もあります。また、AIエージェントによる検索は人間による検索とは異なる利用パターンとコスト構造を持つため、KagiがAPI利用に別途課金していることの是非についても議論されています。多くのAPIリクエストはKagiにとって大きなコストとなるため、有料モデルの持続可能性を保つためには不可欠であるという説明と、既存の有料プランにAPIアクセスも一部含むべきだという要望が対立しています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Kagiのアカウントなし無料検索の導入は、有料検索エンジンというニッチ市場に新たなユーザーを引き込む可能性を秘めています。ユーザーはKagiの広告なし、高品質な検索体験、カスタマイズ性を高く評価する一方で、有料モデルへの抵抗感、ローカル検索の弱さ、技術的な不具合、そしてロシアのYandexとの提携に関する倫理的懸念といった課題も指摘しています。ウェブ検索の風景がAIエージェントによって変化する中、KagiはGoogleの品質低下に不満を持つユーザーにとって魅力的な代替手段を提供していますが、そのビジネスモデルと倫理的姿勢は今後も議論の対象となるでしょう。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50383740</guid></item><item><title>MS Paint Remote Code Execution Vulnerability</title><link>https://www.cve.org/CVERecord?id=CVE-2026-83844</link><description>&lt;p&gt;&lt;a href="https://www.cve.org/CVERecord?id=CVE-2026-83844"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50384233.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントスレッドは、Windowsペイントにおけるリモートコード実行（RCE）の脆弱性（CVE-2026-83844）の発見に驚きと不信感を示しています。特に、ペイントのような基本的なアプリケーションにネットワーク機能が存在し、ユーザーの操作なしに攻撃が可能であるという点について議論が集中しています。&lt;/p&gt;
+&lt;h2&gt;ネットワーク機能とRCEの仕組み&lt;/h2&gt;
+&lt;p&gt;コメントの多くは、MS Paintにネットワーク機能があること自体に疑問を呈しています。特に、CVEの説明にある「認証されていない攻撃者がネットワーク経由で影響を受けるサービスに特別に細工されたパケットを送信することで、この脆弱性を悪用できる」という点が驚きをもって受け止められています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Copilotの統合&lt;/strong&gt;: 最近のWindows 11版PaintにはCopilotが統合されており、これがネットワーク機能の根源ではないかと推測されています。同様にNotepadにもCopilotが導入されていることが指摘され、シンプルなツールにAI機能が追加されることへの懸念が示されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サービスの可能性&lt;/strong&gt;: Paintが直接ネットワークサービスを実行しているのではなく、Windowsのシステムサービス（例: &lt;code&gt;svchost.exe&lt;/code&gt;）を介して間接的にネットワークに露出している可能性が示唆されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CVE記述の曖昧さ&lt;/strong&gt;: 一部のユーザーは、CVEの記述が他の多くの脆弱性と同様のテンプレートを使用しているため、Paintに特有の状況を正確に反映していない可能性があると推測しています。悪意のあるファイルをユーザーが開くことによる攻撃（ユーザーインタラクションが必要）と、ネットワーク経由で直接サービスを攻撃する（ユーザーインタラクション不要）という記述の矛盾が指摘されています。しかし、公式な説明では「ユーザーインタラクション不要」と明記されており、そのメカニズムについて議論が続いています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;クラシックなWindowsアプリの現状&lt;/h2&gt;
+&lt;p&gt;MS Paint、Notepad、Minesweeperなどの伝統的なWindowsアプリケーションが、肥大化し、ネットワーク機能やAI機能が追加されている現状に対し、多くのユーザーが懸念や皮肉を述べています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MinesweeperのRCEジョーク&lt;/strong&gt;: PaintのRCEを受けて、MinesweeperやCalc.exeといった他のシンプルなアプリケーションにもRCEが見つかる日が来るのではないかという皮肉なジョークが多数投稿されています。実際にMinesweeperが200MBを超えるサイズになっていることへの驚きも表明されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;シンプルさの喪失&lt;/strong&gt;: ユーザーは、これらのアプリケーションが本来持っていたシンプルさ、オフラインで機能する特性を失いつつあることに不満を表明しています。特に、Paintにレイヤー機能やAIジェネレーターなどが追加され、もはや「シンプル」とは言えない状態になっていることが指摘されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Windows 11版の影響&lt;/strong&gt;: この脆弱性がWindows 11版のPaintにのみ影響し、古いWindows 10やそれ以前のバージョンでは関係ない可能性が指摘されています。Windows 11版Paintが完全に書き直されていることがその理由として挙げられています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;パッチと更新プロセス&lt;/h2&gt;
+&lt;p&gt;脆弱性の修正には、Windows UpdateではなくMicrosoft StoreからPaintアプリを個別に更新する必要があるという点も議論の対象となっています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Microsoft Store経由での更新&lt;/strong&gt;: 複数のユーザーが、Windows Updateでは修正が表示されず、Microsoft StoreにアクセスしてPaintのページに移動することで初めて更新が適用されたと報告しています。この更新方法の不明瞭さが指摘されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ユーザー体験への影響&lt;/strong&gt;: このような更新プロセスは、一般ユーザーにとって分かりにくく、セキュリティパッチの適用が遅れる原因になりうると懸念されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;MS Paintにおけるリモートコード実行の脆弱性は、長年親しまれてきたシンプルなWindowsアプリケーションが、現代のOSやAI統合の潮流の中でどのように変化し、予期せぬセキュリティリスクを抱えるようになったかを浮き彫りにしています。特に、ユーザーインタラクションなしでネットワーク経由の攻撃が可能であるという点に多くのユーザーが驚きと不信感を示し、その具体的なメカニズムについて議論が集中しました。CopilotなどのAI機能の統合がネットワーク機能の導入に影響を与えている可能性が指摘されており、シンプルなツールの肥大化とそれに伴う新たな脅威への懸念が広く共有されています。また、Windows Updateとは異なるアプリストア経由でのパッチ適用プロセスも課題として挙げられました。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50384233</guid></item><item><title>sshole</title><link>https://sshhole.com</link><description>&lt;p&gt;&lt;a href="https://sshhole.com"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50378228.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;OpenSSHの認証バイパス脆弱性「sshhole」（CVE-2026-123158）に関する議論が行われています。この脆弱性は、musl libcを使用し、PAMなしでOpenSSH SSHdを動かしているシステム（特にAlpine Linux）に影響し、特定の条件下で256文字以上の長いパスワードによりログインが可能になるというものです。&lt;/p&gt;
+&lt;h2&gt;脆弱性の詳細と影響&lt;/h2&gt;
+&lt;p&gt;OpenSSHの認証バイパス脆弱性「sshhole」は、musl libcの&lt;code&gt;crypt()&lt;/code&gt;関数の挙動とOpenSSHのタイミング攻撃回避ロジックの意図せぬ相互作用によって発生します。具体的には、muslの&lt;code&gt;crypt()&lt;/code&gt;がエラー時にPOSIX標準の&lt;code&gt;NULL&lt;/code&gt;ではなく&lt;code&gt;*&lt;/code&gt;（アスタリスク）を返すという非標準的な挙動と、OpenSSHがユーザー列挙のタイミング攻撃を避けるため、パスワードが設定されていないアカウント（&lt;code&gt;/etc/shadow&lt;/code&gt;で&lt;code&gt;*&lt;/code&gt;や&lt;code&gt;!&lt;/code&gt;と表示される）の認証時に、システム内の別の有効なユーザーのハッシュ値を利用してハッシュ計算を偽装するロジックが組み合わさることで問題が生じます。パスワード入力が256文字以上になると、muslの&lt;code&gt;crypt()&lt;/code&gt;がエラーを返し&lt;code&gt;*&lt;/code&gt;を返すため、これがパスワードなしのアカウントのハッシュ値と一致し、認証がバイパスされることになります。&lt;/p&gt;
+&lt;p&gt;この脆弱性は、musl libcベースのシステム（Alpine Linuxなど）で、PAMなし、パスワード認証が有効なOpenSSH SSHdが動作しており、かつパスワードが設定されていないアカウントが存在する場合に影響します。多くのコメントで、DockerコンテナでのAlpine Linuxの利用や組み込みシステムへの影響が懸念されており、広範なシステムに影響を与える可能性があると議論されています。OpenSSHは既に修正をリリースしており、&lt;code&gt;PasswordAuthentication no&lt;/code&gt;を設定することでも緩和可能です。多くのユーザーが自身のシステムが影響を受けるか確認し、再現を試みています。&lt;/p&gt;
+&lt;h2&gt;musl libcの設計とC言語のエラーハンドリングの課題&lt;/h2&gt;
+&lt;p&gt;musl libcが&lt;code&gt;crypt()&lt;/code&gt;関数のエラー時に、POSIX標準で規定されている&lt;code&gt;NULL&lt;/code&gt;ではなく&lt;code&gt;*&lt;/code&gt;を返すという決定は、多くの批判を集めています。muslの開発者は、多くのプログラムが&lt;code&gt;NULL&lt;/code&gt;チェックを怠るためにクラッシュするのを避けるためにこの変更を行ったと説明していますが、結果としてこの脆弱性を生み出すことになりました。&lt;/p&gt;
+&lt;p&gt;コメントでは、C言語におけるエラーハンドリングの慣習（&lt;code&gt;NULL&lt;/code&gt;、&lt;code&gt;errno&lt;/code&gt;、マジック文字列など）が、このような予期せぬ脆弱性を生みやすい根本原因であると指摘されています。RustやGoのような、Result型や例外処理を言語レベルで強制する現代的なプログラミング言語であれば、このような問題は回避できた可能性が議論されています。また、「問題発生時にソフトウェアはクラッシュすべき（Fail Fast）」というセキュリティにおける哲学と、「可能な限り動作を継続すべき」という安定稼働を優先する考え方が対立しており、特にクリティカルなシステムでは後者が採用されがちであるという意見も出ています。&lt;/p&gt;
+&lt;h2&gt;脆弱性公開サイトとAI利用への反応&lt;/h2&gt;
+&lt;p&gt;この脆弱性を説明するために作成されたウェブサイト「sshhole.com」のデザインと内容も、Hacker Newsのコメントスレッドで大きな議論を呼びました。スクロールジャック、過度なアニメーション、そしてLLM（大規模言語モデル）によって生成されたと思われる文章スタイルに対して、賛否両論の意見が寄せられました。&lt;/p&gt;
+&lt;p&gt;一部のユーザーは、「情報密度が低く読みにくい」「AI生成コンテンツ特有の疲労感がある」と批判し、より簡潔で直接的な情報提供を求めました。一方で、「分かりやすく、クリエイティブ」「物語仕立てで面白い」と評価する声もあり、情報公開の手法としての一つの方向性を示唆しました。&lt;/p&gt;
+&lt;p&gt;また、AIが脆弱性発見に貢献したという作者の言及に対し、「開発におけるAIの利用を正規化すべき」という意見と、「AI生成コンテンツの品質」への懸念が同時に表明されました。中には、今回の脆弱性が「バックドア」に見えるという陰謀論的な意見も一部で見られ、AIが発見する複雑なバグが人間の理解を超えつつあるという認識が背景にあるようです。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;OpenSSHの認証バイパス脆弱性「sshhole」は、musl libcの非標準的なエラー処理とOpenSSHのタイミング攻撃回避ロジックの意図せぬ相互作用から生じました。この問題は、C言語のエラーハンドリングの難しさや、古いAPIの互換性を維持するための「ハック」が予期せぬ結果を招く典型例として、セキュリティコミュニティ内で活発な議論を呼びました。脆弱性発見におけるAIの役割や、情報公開サイトの表現方法に対する評価は分かれましたが、セキュリティ対策の重要性と、システム設計における根本的な課題が改めて浮き彫りになりました。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50378228</guid></item><item><title>Alpine Linux Security Advisory: OpenSSH-server password authentication bypass</title><link>https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/</link><description>&lt;p&gt;&lt;a href="https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50379704.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントでは、musl libcの&lt;code&gt;crypt()&lt;/code&gt;関数における最近発見された脆弱性について議論されています。この脆弱性は、長いパスワードに対してエラーインジケータとして返される文字列&lt;code&gt;*&lt;/code&gt;が、パスワードが設定されていないアカウントのシャドウファイルエントリと一致し、意図せず認証が成功してしまうというものです。議論は、このバグの技術的な詳細、C言語のエラー処理の限界とRustのような現代的な言語の潜在的な利点、そしてAlpine Linuxとmuslの広範な利用とその影響に焦点を当てています。&lt;/p&gt;
+&lt;h2&gt;musl crypt()の脆弱性とPOSIX仕様からの逸脱&lt;/h2&gt;
+&lt;p&gt;musl libcの&lt;code&gt;crypt()&lt;/code&gt;関数が、256バイト以上のキーに対してエラーインジケータとして文字列&lt;code&gt;*&lt;/code&gt;を返すことが、パスワードなしアカウントのシャドウエントリの&lt;code&gt;*&lt;/code&gt;と一致し、ログインを成功させてしまうという脆弱性が発見されました。これはPOSIX標準がエラー時にNULLポインタを返し、errnoを設定するよう規定していることに明確に違反しています。他のCライブラリでは挙動が異なり、OpenBSDの&lt;code&gt;crypt()&lt;/code&gt;はNULLを返しますが、Debianのmanページにはエラー時に&lt;code&gt;*&lt;/code&gt;で始まる無効なハッシュを返すことが記載されています。&lt;/p&gt;
+&lt;p&gt;この逸脱の理由については、「NULLをチェックしない呼び出し側のコードがクラッシュするのを防ぐため」や、「タイミング攻撃を防ぐために一定時間の比較を可能にするセンティネル値を使用するため」といった説が挙げられています。しかし、muslが通常POSIX仕様に厳密に準拠することで知られているにもかかわらず、危険な方法で逸脱したことが指摘され、これは設計上の明白なバグであると見なされています。&lt;/p&gt;
+&lt;h2&gt;C言語のエラー処理の課題とRustによる解決の可能性&lt;/h2&gt;
+&lt;p&gt;多くのコメントで、今回の脆弱性のようなロジックバグ、特にエラーを示すためのセンティネル値の使用やNULLポインタチェックの欠如は、C言語の持つエラー処理の課題を浮き彫りにしていると指摘されています。Rustのような現代的な言語の&lt;code&gt;Result&lt;/code&gt;や&lt;code&gt;Option&lt;/code&gt;型は、コンパイラがエラー処理を強制するため、このような問題を未然に防ぐことができると主張されています。&lt;/p&gt;
+&lt;p&gt;C言語ではNULLポインタを返すことが慣習的である一方、Rustでは&lt;code&gt;Result&amp;lt;T, E&amp;gt;&lt;/code&gt;型を使用することが一般的であり、これにより開発者はエラーパスを明示的に扱うことが強制されます。一部では、Rustでも怠惰な開発者が&lt;code&gt;unwrap()&lt;/code&gt;を使用する可能性があると指摘されていますが、それでもC言語のNULLポインタ操作による未定義の動作よりは安全であるとされています。Rustコミュニティの文化は、このような「安易なセンティネル値の返却」を許容しないだろうという意見が優勢です。これにより、C言語からより安全な言語への移行を求める声も上がっています。&lt;/p&gt;
+&lt;h2&gt;Alpine Linuxとmuslの採用とその影響&lt;/h2&gt;
+&lt;p&gt;この脆弱性は、Dockerエコシステムで広く利用されているAlpine Linuxとmuslに影響を与える可能性があると懸念されています。しかし、多くのユーザーはDockerコンテナ内でSSHサーバーを公開したり、パスワード認証を有効にしたりしていないため、直接的な影響を受けるケースは限定的であるという見方もあります。&lt;/p&gt;
+&lt;p&gt;Alpineとmuslは、静的リンクの容易さやイメージサイズの小ささから支持されていますが、その一方でパフォーマンスの低いアロケーター、限定的なロケールサポート、glibcとの互換性問題など、他の欠点も指摘されています。今回の脆弱性は、muslの「シンプルさ」が、残りのソフトウェアエコシステムと出会うことで予期せぬ複雑な問題を引き起こす可能性を示した例として挙げられています。脆弱性発覚後の迅速な対応は評価されていますが、一部からはAlpineやmuslの利用全般に対する懐疑的な意見も出ています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;musl libcの&lt;code&gt;crypt()&lt;/code&gt;関数における脆弱性は、C言語のエラー処理設計、POSIX標準への準拠、および現代のプログラミング言語（特にRust）が提供する安全性への関心を高めました。この問題は、エラー処理における設計上の選択がもたらす重大な結果を浮き彫りにし、開発者がコードの安全性と信頼性を確保するために、より堅牢な言語機能とベストプラクティスを採用することの重要性を強調しています。また、Alpine Linuxのような軽量な環境の利用におけるトレードオフと、セキュリティのベストプラクティス（例：SSH鍵認証の使用、SSHサーバーの不必要な公開を避ける）の必要性が再確認されました。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50379704</guid></item><item><title>The Hackintosh Reborn</title><link>https://www.naut.ca/blog/2026/11/05/the-hackintosh-reborn-with-ai/</link><description>&lt;p&gt;&lt;a href="https://www.naut.ca/blog/2026/11/05/the-hackintosh-reborn-with-ai/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50383057.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この記事のコメントは、MシリーズMac上でのmacOS仮想化やインストールに関する議論を通じて、Hackintoshの現代における価値、macOS自体の評価、そしてAppleハードウェア上でLinuxを実行することへの関心に焦点を当てています。&lt;/p&gt;
+&lt;h2&gt;Hackintoshの現代における価値の低下と過去の魅力&lt;/h2&gt;
+&lt;p&gt;多くのコメントで、Hackintoshは現代では魅力を失っているという見解が示されています。以前は、Appleが販売しない高性能なハードウェアでmacOSを使いたい、あるいは安価にMac環境を手に入れたいという需要があり、特にAppleのバタフライキーボード時代には、ThinkPadのような優れたキーボードを持つハードウェアでmacOSを使うという具体的な動機もありました。しかし、安定性の問題、アップデートでシステムが壊れるリスク、そして公式サポートの欠如から、そのメリットは疑問視されています。macOSが「特別に優れている」というわけではないため、バグが多く不安定な非公式バージョンを汎用ハードウェアで動かす価値はないと感じる人が増えています。&lt;/p&gt;
+&lt;h2&gt;macOS自体の評価とAppleハードウェアの魅力&lt;/h2&gt;
+&lt;p&gt;macOSに対する評価は厳しく、その品質の劣化を指摘する声が多数あります。「悲しいOS」「バグだらけで不器用なインターフェース」といった表現も見られます。多くのユーザーは、Appleの価値がもはやソフトウェアではなくハードウェア、特にAppleシリコン（Mシリーズ）のCPUにあると考えています。これらのチップは、ラップトップにおいて最高のパフォーマンスとバッテリー寿命を提供すると高く評価されています。しかし、最近ではIntelのPanther LakeやQualcommのARMチップなど、競合他社の進歩により、Appleのハードウェアが「圧倒的に最高」ではなく、性能差が縮まっているという意見も出ています。&lt;/p&gt;
+&lt;h2&gt;Appleハードウェア上でのLinuxへの強い関心（Asahi Linux）&lt;/h2&gt;
+&lt;p&gt;Appleの優れたハードウェア、特にMシリーズMacBookでmacOSではなくLinuxを使いたいという強い要望が示されています。Asahi Linuxプロジェクトには大きな期待が寄せられており、M1/M2/M3チップだけでなく、M4/M5チップへのサポートも積極的に進められています。Asahi Linuxは、MacBookのスピーカーやTouchIDといった周辺機器のサポートも着実に実現しており、その進捗は注目されています。また、AppleがLinuxプロジェクトを管理しているという誤解や、AsahiがAI生成コードを受け入れない方針に関する議論もコメントの中で見られます。&lt;/p&gt;
+&lt;h2&gt;特定のユースケースとAppleエコシステム&lt;/h2&gt;
+&lt;p&gt;Hackintoshには、ヘッドレスビルドマシンやiOS開発環境としてmacOSが必要な場合など、特定のニッチなユースケースが依然として存在します。かつては、経済的な理由でMacを購入できない人々がHackintoshを通じてMacエコシステムにアクセスし、それがキャリアを築くきっかけとなった例も挙げられています。また、iPhoneとのiMessage統合、クリップボード共有、Apple TVへのシームレスな画面投影など、Appleエコシステム特有の機能が、macOSを使い続ける主要な理由として挙げられています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントは、MシリーズMac上でのmacOSインストールや仮想化に関する議論を通じて、Hackintoshの価値が、特に一般ユーザーにとっては薄れていることを示唆しています。以前は安価に高性能なMac環境を手に入れる手段として魅力的でしたが、現代のmacOSの品質低下と不安定さから、そのメリットは疑問視されています。一方で、Appleハードウェア、特にAppleシリコンの性能は高く評価されており、多くのユーザーがこの優れたハードウェアでmacOSではなくLinux（Asahi Linux）を実行することに強い関心を示しています。iOS開発やCI/CDといった特定のユースケース、あるいはAppleエコシステムとの連携が、依然としてmacOSを使い続ける主な理由となっています。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50383057</guid></item><item><title>Tencent Launches Hy4, One of the Leading Open-Source AI Models</title><link>https://www.tencent.com/tencent-launches-hy4-joining-the-ranks-of-the-worlds-leading-open-source-ai-models/</link><description>&lt;p&gt;&lt;a href="https://www.tencent.com/tencent-launches-hy4-joining-the-ranks-of-the-worlds-leading-open-source-ai-models/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50383963.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;このHacker Newsのコメントは、ある記事が重複投稿であるという指摘と、それに対する記事の情報鮮度や完全性に関する反論についてのものです。&lt;/p&gt;
+&lt;h2&gt;重複投稿の指摘&lt;/h2&gt;
+&lt;p&gt;あるユーザーが、現在の投稿が以前の投稿の重複であると指摘し、元の記事へのリンクを提示しました。&lt;/p&gt;
+&lt;h2&gt;情報の鮮度と完全性への懸念&lt;/h2&gt;
+&lt;p&gt;別のユーザーは、重複投稿であるという指摘に対し、もし元の記事に特定の重要な情報（例: 「Qwen3.8 27B」）が含まれていない場合、元の記事は現在の状況を十分に要約していない可能性があると反論しました。これは、単なる重複であるかどうかだけでなく、情報が最新であるか、または重要な詳細が欠けていないかという視点の重要性を示唆しています。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsの投稿が重複であるという指摘がありましたが、元の記事が最新の重要な情報を含んでいない可能性が示唆され、記事の情報の鮮度と完全性に関する議論が持ち上がりました。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50383963</guid></item><item><title>Inkling 2 Small</title><link>https://thinkingmachines.ai/news/inkling-2-small/</link><description>&lt;p&gt;&lt;a href="https://thinkingmachines.ai/news/inkling-2-small/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50386338.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;オープンソースの大規模言語モデル（LLM）が示す驚異的な進展と、その性能向上に不可欠なモデル蒸留技術の役割についての議論。&lt;/p&gt;
+&lt;h2&gt;オープンソースLLMの急速な進展&lt;/h2&gt;
+&lt;p&gt;「現状最高水準（SOTA）にはまだ至っていない」ものの、「オープンウェイト（オープンソース）のラボが信じられないほどの速度で進歩している」と指摘されています。これは、特にオープンソースコミュニティにおけるLLM開発の活発さと勢いを強調しています。&lt;/p&gt;
+&lt;h2&gt;モデル蒸留がもたらす普遍的な恩恵&lt;/h2&gt;
+&lt;p&gt;「蒸留は全ての船を持ち上げる潮である（Distillation is the tide that lifts all boats）」という表現で、モデル蒸留（Distillation）技術が、様々なモデルの性能向上に貢献し、広範な恩恵をもたらしている点が述べられています。モデル蒸留は、大規模なモデルの知識をより小さなモデルに効率的に転移させることで、リソース効率の良いモデルの開発と普及を加速させる重要な手段です。&lt;/p&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;このコメントスレッドでは、オープンソースの大規模言語モデルの分野で目覚ましい進歩が見られるものの、まだ業界最高水準には達していないという現状認識が示されています。しかし、その発展速度は非常に速く、モデル蒸留のような技術が、幅広いモデルの性能向上と効率化を促進する上で極めて重要な役割を果たしていることが強調されています。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50386338</guid></item><item><title>Window Sweaters</title><link>https://github.com/saragordic/window-sweaters</link><description>&lt;p&gt;&lt;a href="https://github.com/saragordic/window-sweaters"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50381383.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hacker Newsのコメントスレッドは、macOS用の「ウィンドウセーター」（Window Sweaters）というユーティリティに関するもので、これはウィンドウの周りに装飾的なフレームを追加するものです。コメントでは、このプロジェクトが面白くてかわいいという意見と、AIによって生成されたコードや、セキュリティ、メンテナンスに関する懸念について議論されています。&lt;/p&gt;
+&lt;h2&gt;プロジェクトの評価と反応&lt;/h2&gt;
+&lt;p&gt;多くのコメントが「ウィンドウセーター」を「かわいい」「楽しい」「素晴らしいアイデア」と評価しています。特に冬の時期にぴったりのコンセプトだと感じている人もいます。作者のsaragordic氏自身もHacker Newsに掲載されたことに驚きと喜びを表明し、自身がプロダクトデザイナーであり、AI（Claude/Codex）の助けを借りて初めてオープンソースプロジェクトを作成した背景を説明しています。当初はスクリーンショットが不足していましたが、その後動画が追加され、視覚的な情報が改善されました。&lt;/p&gt;
+&lt;h2&gt;AIによるコード生成と価値観の議論&lt;/h2&gt;
+&lt;p&gt;このプロジェクトがAI（LLM）の助けを借りて作られたことに関して、Hacker Newsのコミュニティでは活発な議論が交わされています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;失われた「魔法」と「魂」&lt;/strong&gt;：一部のユーザーは、LLMによって作られたプロジェクトは、かつて手作業で作成された同様の「無意味だが魅力的な」プロジェクトが持っていた「魔法」や「魂」を失うと主張しています。彼らにとって、努力の量や、作者の情熱や人間性が作品に価値を与える要素であり、AIがその大部分を肩代わりしてしまうと、その価値が薄れると感じています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;アイデアの重要性&lt;/strong&gt;：一方で、アイデアそのものが重要であり、LLMがそのアイデアの実現を助けるのであれば素晴らしい、という意見もあります。LLMはAPIの処理や古いドキュメントの解読といった「つまらない作業」を肩代わりしてくれるため、クリエイティブなアイデアの実現が容易になると考えています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;作品の「信頼性」と「声」&lt;/strong&gt;：作者がAI生成のREADMEやコードの大部分を使用している場合、その作品における人間の選択やキュレーションがどこまで反映されているのかが不明瞭になり、作者自身の「声」が伝わりにくいという懸念も示されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;セキュリティとメンテナンスの懸念&lt;/h2&gt;
+&lt;p&gt;新しいGitHubリポジトリからバイナリを実行することに対するセキュリティ上の懸念が複数挙げられています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;サプライチェーン攻撃&lt;/strong&gt;：今年はサプライチェーン攻撃が多発しているため、信頼できる人物や組織以外からの新しいGitHubリポジトリの実行には慎重になるべきだという意見があります。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LLMエージェントによるインストール&lt;/strong&gt;：プロジェクトのREADMEでLLMエージェントを使ったインストール方法が推奨されていることに対し、LLMエージェントがコードの安全性をどこまで正確に評価できるのか、プロンプトインジェクション攻撃への耐性はあるのか、といった疑問が呈されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;メンテナンスの期待&lt;/strong&gt;：AIが生成した「おもちゃ」のようなプロジェクトは、長期的なバグ修正やメンテナンスが期待できないことが多いという指摘もあります。作者のsaragordic氏は、個人的な楽しみのために作ったものであり、継続的に修正しているが、あくまで「磨かれた製品ではない」と説明しています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;その他&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;インストール方法の奇妙さ&lt;/strong&gt;：&lt;code&gt;brew trust&lt;/code&gt;と&lt;code&gt;brew install&lt;/code&gt;の2つのコマンドで済むインストールを、わざわざLLMエージェントを使うことに疑問を感じるコメントがありました。これに対し、CLIに慣れていないユーザーにとってはLLMが役立つ可能性が指摘されています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Windows Sweatersとの混同&lt;/strong&gt;：Microsoftが毎年出している「Windows Sweaters」（物理的なセーター）とタイトルを混同したというコメントがいくつかありました。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stage Managerとの互換性&lt;/strong&gt;：類似のアプリがmacOSのStage Managerとの互換性で問題があったという経験談も共有されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントスレッドは、macOS用アプリ「Window Sweaters」を中心に、AIによるクリエイティブな開発の可能性と、それに伴う新たな課題（セキュリティ、メンテナンス、作品の「魂」の有無）について深く掘り下げた議論を展開しています。多くのユーザーがこのプロジェクトの可愛らしさや楽しさを評価する一方で、AIが作成プロセスに深く関与していることに対する複雑な感情や、オープンソースプロジェクトにおけるセキュリティと長期的なサポートへの懸念が表明されました。作者はプロダクトデザイナーであり、AIを活用して自身のアイデアを形にしたことを明らかにし、コミュニティからのフィードバックに感謝しています。この議論は、AI時代におけるクリエイティブな作品の価値、信頼性、そして開発者の役割について示唆に富んでいます。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50381383</guid></item><item><title>Launch HN: Rivet (YC W23) – Scale and Orchestrate Agents on S3</title><link>https://github.com/rivet-dev/rivet</link><description>&lt;p&gt;&lt;a href="https://github.com/rivet-dev/rivet"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50381687.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Rivetは、Cloudflare Durable Objectsに似たオープンソースで自己ホスト可能なアクターモデルを使用した、エージェントワークロード向けの高速でスケーラブルなオーケストレーターです。従来のサンドボックス型エージェントの非効率性を解消し、低コストで高性能な永続化ストレージを提供します。&lt;/p&gt;
+&lt;h2&gt;サンドボックスの課題とアクターモデルの利点&lt;/h2&gt;
+&lt;p&gt;Hacker Newsのコメントでは、特にエージェントワークロードにおける従来のサンドボックスの課題と、Rivetのアクターモデルがもたらす利点に注目が集まりました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;サンドボックスの非効率性&lt;/strong&gt;: 多くのコメントで、従来のサンドボックスがコストがかかり、アイドル状態が多く、起動が遅いという問題が指摘されました。特に、LLMの高速化に伴い、サンドボックスのコールドスタートがエージェントのインタラクティブ性のボトルネックになるという意見がありました。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;軽量アクターの優位性&lt;/strong&gt;: Rivetは、エージェントごとに軽量なアクターを割り当てることで、メモリ効率と起動速度を大幅に向上させています（アクターのベースラインメモリ72KB vs サンドボックスの512MB、アクターの起動速度4.9ms vs サンドボックスの1.7s）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サンドボックスの必要性&lt;/strong&gt;: エージェントがサンドボックスを必要とするかどうかについては議論があり、Rivetは3つのパターンを提示しています。単なるツールが必要なエージェント、V8/WebAssemblyベースの軽量サンドボックスが必要なエージェント、そしてサンドボックスをツールとして利用し、エージェントのロジックをサンドボックスの外で実行するパターンです。後者は「ヘッドとハンドの分離」と呼ばれ、信頼境界やリソース効率の面で優れているとされています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AgentOS&lt;/strong&gt;: Rivetは、Linux互換のV8/WebAssemblyサンドボックスであるAgentOSを提供しており、POSIXファイルシステム、ネットワークスタック、プロセスツリーをサポートし、データ分析やファイル処理などのワークロードに対応します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;S3をバックエンドとする永続化ストレージ&lt;/h2&gt;
+&lt;p&gt;Rivetのストレージアーキテクチャ、特にS3をバックエンドとして利用しながら高性能を実現している点も多くの関心を集めました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;S3利用の背景&lt;/strong&gt;: Rivetは当初FoundationDBを利用していましたが、ユーザーがPostgresをはるかに超えるデータを保存していることを発見し、S3をプライマリストレージとして採用しました。これにより、ストレージコストを大幅に削減（EBS gp3の10分の1）しつつ、SSDと同等の速度を維持しています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SSD階層型ストレージ&lt;/strong&gt;: S3への直接書き込みは遅く高価であるため、RivetはSSD階層型ストレージを利用しています。書き込みは2つのAZにあるSSDに永続化された時点で完了と見なされ、その後S3に非同期でバッチ処理されます。これにより、S3はライトパスから外れ、低レイテンシと低コストを実現しています。読み取りはSSDキャッシュから行われ、存在しない場合はS3からフォールバックされます。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;高性能な永続化&lt;/strong&gt;: このアーキテクチャにより、Rivetは1.07msの耐久性のある書き込み（3AZ、p99）、1.36msの読み取り（p99）、オブジェクトストレージからの読み取り138ms（p99）といった高いパフォーマンスを提供しています。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;celldとの比較&lt;/strong&gt;: S3バックエンドの永続化ストレージは、celldなど他の類似プロダクトと比較するコメントも見られました。Rivetは、オブジェクトごとのストレージではなく、SSD階層型ストレージエンジンを採用することで、コストとパフォーマンスの面で差別化を図っていると説明しています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;自己ホストと柔軟なデプロイオプション&lt;/h2&gt;
+&lt;p&gt;Rivetの自己ホスト性や、多様なデプロイオプションもHacker Newsコミュニティにとって魅力的な点でした。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;自己ホスト可能&lt;/strong&gt;: Rivetは単一のRustバイナリとS3を唯一の依存関係として自己ホストが可能です。これにより、ユーザーは独自のインフラストラクチャ上でRivetを実行できます。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cloudflare Durable Objectsからの移行&lt;/strong&gt;: 実際に、Cloudflare Durable ObjectsからRivetに移行したユーザーは、Rivetの自己ホストと柔軟なアーキテクチャを高く評価しています。特定のプラットフォームに縛られず、オンプレミスや既存のVPC内にデプロイできる点が利点とされました。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多様なデプロイオプション&lt;/strong&gt;: 自己ホストの他に、Rivet CloudによるAWS/GCPへの専用クラスタデプロイ、BYOC（Bring Your Own Cloud）によるユーザーのVPCへのデプロイもサポートしており、柔軟な利用が可能です。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ローカル開発との一貫性&lt;/strong&gt;: Rivetは軽量なバイナリであるため、ローカル開発環境と本番環境で同一に動作し、開発のしやすさも強調されています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Rivetは、エージェントワークロード向けに、従来のサンドボックスが抱える非効率性を解決する軽量なアクターモデルを提供します。特に、S3をバックエンドとしながらSSD階層型ストレージを組み合わせることで、低コストで高性能かつ耐久性のある永続化を実現している点が大きな特徴です。自己ホスト可能で、多様なデプロイオプションを提供することで、ユーザーは特定のクラウドプラットフォームに縛られることなく、柔軟にRivetを導入・運用できます。エージェントのロジックとサンドボックスを分離する「ヘッドとハンドの分離」というアーキテクチャは、信頼性とリソース効率の面で注目を集めました。一部からはプロダクトのUXや説明の分かりやすさについて改善を求める声もありましたが、Cloudflare Durable Objectsからの移行事例など、実際のユーザーからは高い評価を受けています。&lt;/p&gt;</description><pubDate>Fri, 06 Nov 2026 00:37:06 GMT</pubDate><guid isPermaLink="false">50381687</guid></item><item><title>Residential proxies detected on White House network</title><link>https://layer3intel.com/blog/residential-proxies-white-house-network</link><description>&lt;p&gt;&lt;a href="https://layer3intel.com/blog/residential-proxies-white-house-network"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50371246.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Hacker Newsのコメントスレッドは、ホワイトハウスネットワークからの「住居用プロキシ（residential proxy）」活動が検出されたというニュース記事に焦点を当てています。コメントでは、住居用プロキシの定義、検出方法、その悪用と潜在的な利点、そしてホワイトハウスのような高セキュリティ環境での発生の可能性について議論されています。&lt;/p&gt;
 &lt;h2&gt;住居用プロキシとは何か&lt;/h2&gt;
@@ -704,153 +871,4 @@
 &lt;h2&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;このHacker Newsスレッドは、提示された技術の科学的根拠（論文への参照）と、その技術が熱を扱う機能を持つ可能性に関する推測、そして特にウクライナでの軍事的な応用という、その実践的な影響について関心が集まっていることを示しています。&lt;/p&gt;</description><pubDate>Sun, 01 Nov 2026 23:14:09 GMT</pubDate><guid isPermaLink="false">50299427</guid></item><item><title>The She-Wolves of Jülich</title><link>https://www.historytoday.com/archive/history-matters/she-wolves-julich</link><description>&lt;p&gt;&lt;a href="https://www.historytoday.com/archive/history-matters/she-wolves-julich"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50318129.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Hacker Newsのコメントが提供されていません。要約を作成するためには、コメントの内容が必要です。&lt;/p&gt;</description><pubDate>Sun, 01 Nov 2026 23:14:09 GMT</pubDate><guid isPermaLink="false">50318129</guid></item><item><title>TCP Use-After-Free: CVE-2026-98432 / CVSS 9.8</title><link>https://atlasum.net/blog/cve-2026-98432-linux-ipv4-tcp-uaf</link><description>&lt;p&gt;&lt;a href="https://atlasum.net/blog/cve-2026-98432-linux-ipv4-tcp-uaf"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50319143.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このHacker Newsのコメントスレッドは、LinuxカーネルのTCP/IPスタックにおける深刻なuse-after-free脆弱性（CVE-2026-98432）を中心に展開しています。この脆弱性は、特にMultipath TCP (MPTCP) を介して悪用された場合、リモートからの任意コード実行（root権限）を可能にするものです。主要なLinuxディストリビューションでのパッチ提供の遅れ、一時的な緩和策の有効性、消費者向けデバイスへの影響、そしてAnthropicのAIがエクスプロイトを生成したという事実に焦点を当てた議論が交わされています。&lt;/p&gt;
-&lt;h2&gt;脆弱性の技術的詳細と影響範囲&lt;/h2&gt;
-&lt;p&gt;この脆弱性は、LinuxカーネルのTCP/IPスタックにおけるuse-after-freeバグであり、カーネルがリクエストソケットから保存されたオプションをコピーせずに新しい接続に渡し、接続終了時にそれらをすぐに解放してしまう一方で、別のCPUがハンドシェイク応答を構築するためにそれらを読み取る可能性があるという競合状態が原因です。この脆弱性の悪用にはマルチコアシステムが必要であり、シングルコアのシステムは影響を受けにくい可能性があります。&lt;/p&gt;
-&lt;p&gt;Anthropicの概念実証では、カーネルポインタのリークに48分、シェルコマンド実行に5分かかりましたが、競合状態が失敗してもシステム全体がクラッシュすることなくハンドシェイクが失敗するだけなので、攻撃者は成功するまで何度でも再試行できます。&lt;/p&gt;
-&lt;p&gt;特にMultipath TCP (MPTCP) を利用しているシステムが影響を受けやすいとされており、Go 1.24、Caddy、Tailscale、Apple iPhoneなどがMPTCPを利用していることが指摘されています。また、この脆弱性はIPv4にのみ影響し、IPv6は影響を受けません。影響を受けるカーネルバージョンは4.4以降の全てのカーネルで、修正版は5.10.272、5.15.223、6.1.190などがリリースされています。&lt;/p&gt;
-&lt;h2&gt;パッチの展開状況と緩和策&lt;/h2&gt;
-&lt;p&gt;主要なLinuxディストリビューションであるUbuntuとRHELでは、この脆弱性に対する公式パッチの提供が遅れており、ユーザーからは懸念と不満の声が上がっています。一部のユーザーは、回帰テストの必要性などが遅延の原因であると推測しています。一方で、Proxmox VEやSlackwareといったディストリビューションは既に修正版カーネルをリリースしていることが報告されています。OpenWRTも影響を受けますが、最新のスナップショットでは修正済みです。&lt;/p&gt;
-&lt;p&gt;一時的な緩和策として、&lt;code&gt;sysctl&lt;/code&gt;コマンドでMPTCPを無効化することや、ファイアウォールルールでIPオプションを持つパケットをドロップすることが提案されています。しかし、&lt;code&gt;sysctl&lt;/code&gt;の設定は再起動後に元に戻る可能性があり、また、MPTCPはTCPオプションを使用するため、IPオプションを持つパケットのドロップは完全な緩和策ではないという指摘もあります。より効果的な緩和策として、XDP（eXpress Data Path）を用いてIPオプションを持つパケットをドロップすることが提案されています。&lt;/p&gt;
-&lt;h2&gt;各種環境への影響と対策&lt;/h2&gt;
-&lt;p&gt;消費者向けのルーターやIoTデバイスは、一般的に古いカーネルを使用しているため、この脆弱性のパッチが提供される可能性は低いと懸念されています。ただし、これらのデバイスの多くがシングルコアであるため、脆弱性の悪用が難しい可能性も指摘されています。&lt;/p&gt;
-&lt;p&gt;AWSのようなハイパースケーラーのクラウドプロバイダーは、ロードバランサーなどのサービスを通じて、顧客のインスタンスが直接信頼できないソースからのTCP接続を受けないように保護しています。AWSは基盤インフラにアップデートを適用しており、これらのサービスを利用している顧客には直接的なアクションは不要とされていますが、自己管理インスタンスのアップデートは推奨されています。NixOSの自動更新やFreeBSDのロードバランサーのデフォルト設定が保護に役立つという意見も出ています。&lt;/p&gt;
-&lt;p&gt;デスクトップLinux、家庭用モデム・ルーター、IoTデバイスなど、一般的な環境における脆弱性の影響について多くのユーザーが懸念を表明し、特にIoTデバイスは既に侵害されているものとして専用VLANで隔離するなどの対策の重要性が再確認されています。&lt;/p&gt;
-&lt;h2&gt;AIの役割とセキュリティの未来&lt;/h2&gt;
-&lt;p&gt;この脆弱性に関する最も注目すべき点の一つは、AnthropicのAIであるClaudeが初期のプロンプトに基づいてエクスプロイトコードを作成したという事実です。これは、AIが既存の脆弱性（古いものも含む）を特定し、その悪用を加速させる能力を持っている可能性を示唆しています。&lt;/p&gt;
-&lt;p&gt;多くのコメント投稿者は、AIの進化により、今後数年間でサイバーセキュリティの脅威が劇的に増加し、毎日複数の重大なCVEが発見されるような状況になるだろうと予測しています。これに対応するためには、企業や個人はより迅速なセキュリティパッチの適用と、システムが侵害されることを前提とした防御策（攻撃範囲の制限など）を講じる必要があると強調されています。また、将来的にはLinuxネットワーキングスタックをRustのようなメモリ安全な言語で書き換えることへの期待も示されています。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;Linuxカーネルの深刻なuse-after-free脆弱性（CVE-2026-98432）は、広範囲にわたるシステムに影響を及ぼし、迅速なパッチ適用が不可欠です。主要なディストリビューションにおけるパッチ展開の遅れは批判の的となっており、今後のセキュリティアップデートの迅速化が課題となるでしょう。AnthropicのAIがエクスプロイトを生成したという事実は、AIがサイバーセキュリティの脅威と対策の両面において、そのあり方を根本的に変える可能性を示唆しています。ユーザーは自身のシステムがマルチコアであるか、MPTCPを使用しているかを確認し、利用可能な緩和策を適用するとともに、今後のセキュリティ環境の変化に対応するための準備を進めることが推奨されます。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50319143</guid></item><item><title>With 86% of the words, you might understand only 38% of an anime's lines</title><link>https://learnfromx.com/research/anime-word-coverage-vs-lines-understood</link><description>&lt;p&gt;&lt;a href="https://learnfromx.com/research/anime-word-coverage-vs-lines-understood"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50320028.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Hacker Newsのコメントスレッドは、アニメのセリフにおける「単語カバー率」という概念に関する記事を中心に展開しています。特に、特定のアニメ（例：エヴァンゲリオン、lain）のセリフで最も頻繁に使われる500語を知っていれば、どれだけのセリフを理解できるかという点に焦点が当てられています。&lt;/p&gt;
-&lt;h2&gt;文脈からの理解と人間の言語の冗長性&lt;/h2&gt;
-&lt;p&gt;多くのコメントは、個々の単語の意味を知らなくても、文脈からセリフの意味を推測できるという人間の言語学習能力の重要性を指摘しています。
-*   ユーザーは、視覚的な情報が伴う場合や、文脈から意味を推測できるため、すべての単語を理解する必要はないと述べています。
-*   人間の言語は本質的に冗長であり、この「ギャップを埋める」学習プロセスを可能にしているという意見もあります。未知の単語も、複数の文脈で繰り返し使われることで意味が理解されていくのが自然な学習方法だと説明されています。
-*   日本語の場合、複数の漢字から成る単語から、単語そのものを知らなくても文脈を得られるというコメントもあります。&lt;/p&gt;
-&lt;h2&gt;理解の「深さ」と「難解な」アニメ&lt;/h2&gt;
-&lt;p&gt;セリフの「理解」が何を意味するのか、その深さについても議論されています。特に、内容自体が難解なアニメについては、単語を理解しても全体を把握するのが難しいという意見が目立ちます。
-*   「エヴァンゲリオン」や「lain」のようなアニメでは、単語レベルでの理解はできても、内容そのものが意図的に難解であり、完全に理解することは難しいと述べられています。
-*   「lain」のセリフは、語彙は複雑ではないが、内容自体が理解しがたいものであり、シュールで夢のような体験を提供していると表現されています。&lt;/p&gt;
-&lt;h2&gt;LLMと「言葉の無駄」&lt;/h2&gt;
-&lt;p&gt;記事がLLM（大規模言語モデル）の分析のように聞こえるという意見もあり、LLMが「何も意味しない言葉を多く使用する」という特徴に言及されています。
-*   あるユーザーは、記事の書き方がLLMのように聞こえ、「意味のない多くの言葉が目立つ」と指摘しています。&lt;/p&gt;
-&lt;h2&gt;語彙の選択と情報量&lt;/h2&gt;
-&lt;p&gt;特定の単語がどの程度共通で、どの程度情報を持っているかについても議論されています。
-*   記事で「yakusoku（約束）」がぼかされ、「houshuu（報酬）」がぼかされていない点について、後者の方が珍しい単語であり、ぼかされるべきだったという意見があります。しかし、これは「特定の番組における最も一般的な500語」に基づいているため、一般的な語彙の頻度とは異なる可能性があるという反論もあります。
-*   珍しい単語は、通常、その文の最も多くの情報を持っているという意見も出されています。&lt;/p&gt;
-&lt;h2&gt;新しい言語学習方法の可能性&lt;/h2&gt;
-&lt;p&gt;特定の「インターネットミーム」が日本語の識字率向上に貢献しているという興味深い観察も共有されています。
-*   あるユーザーは、特定の「Inmu」と呼ばれるゲイポルノミームコンテンツが、東アジアや東南アジアで日本語の識字率を向上させていると述べています。これは、ごく少数の語彙を非常に繰り返し使用し、子供向けの絵本のように、しかしソーシャルメディアユーザーにとって魅力的で中毒性のある方法で提示されるため、言語習得の初期段階を効果的に促進する可能性があると考察されています。これは「絵本から始める」というアドバイスを再構築した形であると示唆されています。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;コメントスレッドは、アニメのセリフにおける「単語カバー率」の概念を起点に、単語の理解と文脈からの意味把握の重要性、人間言語の冗長性、そして難解なコンテンツにおける「理解」の深さといった多岐にわたる議論を展開しました。特に、LLMの言動との比較や、インターネットミームが意外な形で言語学習に貢献している可能性など、興味深い視点が提供されています。全体として、単語の表面的な理解だけでなく、文脈や文化的要素、さらにはコンテンツ自体の意図が、真の理解にいかに深く関わっているかを示唆する内容となりました。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50320028</guid></item><item><title>It's the Memory Latency, Stupid</title><link>https://pivotlake.io/blog/its-the-memory-latency-stupid/</link><description>&lt;p&gt;&lt;a href="https://pivotlake.io/blog/its-the-memory-latency-stupid/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50318720.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このHacker Newsのスレッドは、現代のソフトウェア開発における「メカニカルシンパシー（ハードウェアの仕組みを理解し、それに適したコードを書くこと）」の失われつつある技術と、パフォーマンス最適化に対する一般的な認識について議論しています。&lt;/p&gt;
-&lt;h2&gt;メカニカルシンパシーの必要性と欠如&lt;/h2&gt;
-&lt;p&gt;元のコメントでは、STM32MP1のようなキャッシュが少ないインオーダーCPU上で、メッセージパッシング、深い継承階層、大きなDOMなど、キャッシュに優しくない設計が使われているチームと、自作のSTLコンテナやSAXスタイルの処理、オブジェクトプールなど、ハードウェア特性を考慮した設計を採用している自分のチームの対比が語られています。多くの開発者がベンチマークで示さないとパフォーマンスの違いを理解してくれないという課題が指摘されています。特に、現代の多くのシステムで使われるCPUは、メインメモリと比べてはるかに高速なため、キャッシュミスやブランチ予測ミスのようなわずかな要因が性能に大きな影響を与えることが強調されています。&lt;/p&gt;
-&lt;h2&gt;ゲーム業界とエンジンの均質化&lt;/h2&gt;
-&lt;p&gt;ゲーム業界のシステムプログラマーが高度な最適化スキルを持っていることが認識されつつも、若い世代でそのスキルに関心を持つ人が少ないという懸念が示されています。Unreal Engine 5のような既存のゲームエンジンの普及により、スクラッチからエンジンを開発する価値が薄れているという意見がある一方で、もし誰もエンジンを作らなくなれば、Unreal Engineのような既存のエンジンを開発する人がいなくなるという反論もあります。また、ゲームエンジンの進化とグラフィックカードの性能向上が、ゲーム体験の向上よりも、販売者の利益を最大化する側面があるという意見や、大規模なゲーム開発のコスト増大が、安全なデザイン選択に繋がり、ゲームのアート性が失われているという指摘も見られます。&lt;/p&gt;
-&lt;h2&gt;「時期尚早な最適化」と開発文化&lt;/h2&gt;
-&lt;p&gt;キャッシュフレンドリーなデータ構造への再編成が、ベンチマークで性能向上が示されても「時期尚早な最適化」としてコードレビューで却下された経験が語られています。これは「Clean Code」のような特定の美的基準が、客観的かつ証明可能な正しさとして、他の何よりも重要視された結果ではないかと疑問を呈しています。開発者の多くは、パフォーマンス最適化に対する意識が低く、「Knuthの引用」が文脈を無視して誤用されていると批判されています。しかし、最適化を伴う可読性向上や、ボトルネックを切り出した関数でのキーホール最適化など、チームの反発を避けるための工夫も紹介されています。一方で、キャッシュが少ないシステムではリンクされたリストがキャッシュフレンドリーだったり、キャッシュを意識したアルゴリズムが必ずしも人間にとって分かりやすいとは限らないという見解も提示されています。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;本スレッドは、現代のソフトウェア開発においてハードウェア特性を理解し、それに適したコードを書く「メカニカルシンパシー」の重要性が過小評価され、そのスキルが失われつつある現状に警鐘を鳴らしています。特に、ゲーム業界におけるエンジンの均質化や、一般的な開発者コミュニティでの「時期尚早な最適化」という認識が、真のパフォーマンス向上を阻害している可能性があります。ハードウェアの進化と複雑化が進む中で、開発者が基本的なコンピューティング原理への深い理解を維持し、それを実際の開発に適用していくことの価値が強調されています。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50318720</guid></item><item><title>The Duty of a Scholar</title><link>https://www.daemonology.net/blog/2026-10-31-The-Duty-of-a-Scholar.html</link><description>&lt;p&gt;&lt;a href="https://www.daemonology.net/blog/2026-10-31-The-Duty-of-a-Scholar.html"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50319061.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このHacker Newsのコメントは、元の記事（おそらく個人の義務、学術的追求、社会貢献などについて書かれたもの）を受けて、医療制度、現代の学術界のあり方、エンジニアの倫理的責任、そしてセキュリティ脆弱性への企業の対応といった多岐にわたるテーマについて議論しています。&lt;/p&gt;
-&lt;h2&gt;現代学術界の目的と課題&lt;/h2&gt;
-&lt;p&gt;多くのコメントは、現代の学術界が記事で示唆されるような「学問」の本質からかけ離れていると指摘しています。主な意見として、学術界はテニュア（終身在職権）や研究助成金を得るために、漸進的な論文を量産することに主眼を置いているという批判があります。一方で、多くの学者は知識の発見と共有のために多大な時間と金銭を犠牲にしており、すべての学者を一括りにして批判すべきではないという反論もあります。また、一部の学問分野では知識生産よりもアクティビズムが目的になっているという批判や、AIの進化を例に、漸進的な学術研究の重要性を訴える意見も見られます。&lt;/p&gt;
-&lt;h2&gt;医療制度の比較と課題&lt;/h2&gt;
-&lt;p&gt;記事の著者がカナダに住んでいたことで、高額な医療費の心配なく職務を遂行できたという記述に対し、コメント欄ではカナダの医療制度への称賛とともに、アメリカの医療制度に関する議論が展開されています。アメリカでもリベラルな州であればメディケイドの資格があった可能性が指摘される一方で、「たくさんのただし書き」が付く話であり、ユニバーサルヘルスケアの必要性が強く訴えられています。また、保険に加入していない場合のインスリン費用や、州による違い、連邦要件の変更によるメディケイド受給者減少への懸念なども議論されています。&lt;/p&gt;
-&lt;h2&gt;エンジニアの倫理的義務とセキュリティ脆弱性&lt;/h2&gt;
-&lt;p&gt;IEEE（電気電子学会）のメンバーが「公衆の安全、健康、福祉を最優先する」という義務を負っているにもかかわらず、多くのメンバーがこの義務を真剣に受け止めていないという指摘があります。また、IntelのHyper-ThreadingやSpectreなどのセキュリティ脆弱性に対する企業の対応が議論されています。Intelが「実際的ではない」と主張したことに対し、悪意のあるウェブサイトを開くことが「制御された条件」に当たるのかという疑問が呈され、企業の対応が不十分であるという批判が見られます。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;コメント全体を通して、記事が提示した個人の「義務」や「学問」といった抽象的な概念が、具体的な社会システム（医療、学術、企業倫理）の中でどのように実践され、あるいは実践されないのかが浮き彫りにされています。特に、アメリカの医療制度の欠陥、現代学術界の官僚化・商業化、そしてセキュリティ脆弱性に対する企業の責任逃れが批判的に論じられています。これらの議論は、単なる技術的な問題に留まらず、社会的な責任や倫理といった広範なテーマに及んでいます。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50319061</guid></item><item><title>Surviving "The Graduate"</title><link>https://www.newyorker.com/culture/the-weekend-essay/dustin-hoffman-on-surviving-the-graduate</link><description>&lt;p&gt;&lt;a href="https://www.newyorker.com/culture/the-weekend-essay/dustin-hoffman-on-surviving-the-graduate"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50319563.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このHacker Newsのコメントでは、ダスティン・ホフマンが映画「卒業」で演じた役柄の裏話と、彼の演技へのアプローチ、特に彼自身の不安が役のリアルさに貢献したという分析が中心となっています。また、なぜ今この古い話が再浮上したのかという疑問と、その背景についても触れられています。&lt;/p&gt;
-&lt;h2&gt;ダスティン・ホフマンの演技とメソッド演技&lt;/h2&gt;
-&lt;p&gt;ダスティン・ホフマンが映画「卒業」で演じたベンジャミン・ブラドック役について、彼自身が「失敗している」と感じていたことが、キャラクターの「不器用さ」や「不安」をリアルに演じる上で役立ったという見解が提示されています。彼は実際に不器用で不安を感じていたため、キャラクターがそうであるべき姿を自然に演じることができたと分析されています。これはメソッド演技の核心であり、非常に強力な演技を生み出す一方で、演じる役の感情を実際に経験しなければならないという短所も指摘されています。あるユーザーは、ホフマンにとって必ずしも良い経験ではなかったようだと述べています。&lt;/p&gt;
-&lt;h2&gt;記事のタイミングと背景&lt;/h2&gt;
-&lt;p&gt;なぜ60年前の出来事が今になって話題になっているのかという疑問が呈されており、これに対して、最近出版された回顧録からの抜粋であることが理由だと説明されています。これにより、記事がダスティン・ホフマンの自伝的な内容に関連していることが示唆されます。&lt;/p&gt;
-&lt;h2&gt;映画「卒業」への言及と関連情報&lt;/h2&gt;
-&lt;p&gt;映画「卒業」について、その分析を深めるためのリソースが共有されています。具体的には、映画に馴染みのない人や復習したい人のために、スティーブン・ベネディクトによる9分間の音声エッセイへのリンクが提供されました。また、あるユーザーは自身が映画鑑賞クラスで「卒業」を視聴・議論した経験に触れ、ホフマン側の話を聞けることに興味を示しています。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;これらのコメントは、ダスティン・ホフマンが映画「卒業」で経験したことを巡る議論であり、特に彼の演技アプローチと、彼自身の不安や不器用さが役柄のリアリティを高めたという見解が焦点となっています。これはメソッド演技の成功例として分析されつつも、役者の精神的な負担も示唆されています。この話題が最近の回顧録から再浮上したこと、そして「卒業」という映画自体への関心や分析への言及も見られます。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50319563</guid></item><item><title>Show HN: NES Contra (1987) port (ASM –&gt; C and then C –&gt; WebAssembly)</title><link>https://epoyraz.github.io/nes-contra-us/</link><description>&lt;p&gt;&lt;a href="https://epoyraz.github.io/nes-contra-us/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50319169.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このコメントスレッドは、ユーザーがNES版Contraの6502アセンブリコードをC言語に、そしてWebAssemblyにポーティングし、ブラウザ上で動作するようにしたプロジェクトについて議論しています。さらに、オンラインマルチプレイヤー機能が追加され、2人のプレイヤーがインターネット経由で協力プレイできるようにしたことが紹介されています。&lt;/p&gt;
-&lt;h2&gt;プロジェクトの技術的詳細と実装&lt;/h2&gt;
-&lt;p&gt;プロジェクト作成者tevlonは、NES版ContraのアセンブリコードをC言語に移植し、オリジナルのゲームとフレームごとに比較しながら検証した上で、WebAssemblyに変換してブラウザで実行できるようにしたと説明しています。特にオンラインマルチプレイヤー機能の実装は注目を集め、その技術的な詳細について質問が寄せられました。Firefoxでのキー入力に関する問題が報告され、作成者はChromeでのみテストしたものの、対応を検討すると回答しています。また、操作キーのマッピング（A/Bキーの入れ替わり）に関する指摘もありました。&lt;/p&gt;
-&lt;h2&gt;NESゲームのアセット強化と近代化の可能性&lt;/h2&gt;
-&lt;p&gt;コメントの中では、NESゲームを近代化する可能性、具体的には高解像度グラフィックスやサンプルベースのサウンドにアップグレードできるかという議論が活発に行われました。一部のエミュレーター（Mesenなど）がテクスチャパックに対応していることが指摘された一方で、サウンドの変更はゲームごとのサウンドドライバーのリバースエンジニアリングが必要であり難しいとされています。しかし、NESのグラフィックデータは構造化されているため、エミュレーター側で高解像度タイルに置き換えるのは比較的容易かもしれないという意見も出ました。また、NESゲームを3Dボクセル環境に変換する「3dSen」のような既存の革新的なプロジェクトも紹介され、作成者もこれに感銘を受けています。&lt;/p&gt;
-&lt;h2&gt;ユーザーの感想と要望&lt;/h2&gt;
-&lt;p&gt;多くのユーザーがこのプロジェクトに対し、幼少期の記憶が蘇ったと感謝の意を表明し、特にオンライン協力プレイのアイデアを「素晴らしい」「ファンタスティック」と高く評価しています。一方で、ゲームサウンドが欠如していることを指摘し、伝説的なContraのBGMを聞きたいという要望が複数寄せられました。また、日本版Contraが米国版よりも優れていると冗談めかしてコメントするユーザーもいました。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;このプロジェクトは、NES版Contraをブラウザでプレイ可能にし、さらにオンラインマルチプレイヤーを追加したことで、技術的な興味とノスタルジーの両面でHacker Newsのコミュニティから大きな反響を呼びました。特にアセットの近代化や音楽の追加に関する議論が活発で、既存の技術的課題と未来の可能性が探られました。作成者はユーザーからのフィードバックに積極的に対応する姿勢を見せており、今後の進化にも期待が寄せられています。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50319169</guid></item><item><title>Molly (Signal fork) has not been updated since 3 months and is vulnerable</title><link>https://piefed.world/post/1503394</link><description>&lt;p&gt;&lt;a href="https://piefed.world/post/1503394"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50314666.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;本コメントスレッドでは、主にSignalアプリのさまざまな側面、特にSignal APKの更新、Mollyや他の代替メッセージングアプリとの比較、Signalのポリシー、そしてその分散化に対するアプローチについて議論されています。&lt;/p&gt;
-&lt;h2&gt;Signal APKの更新とMollyの利用&lt;/h2&gt;
-&lt;p&gt;Signalの公式ウェブサイトからダウンロードしたAPKが自動更新されるかについて、意見が分かれています。一部のユーザーは、通知を受け取って手動で更新する必要があると指摘し、自動更新されないことに不満を表明しています。特にGrapheneOSなどのカスタムOS環境では、パッケージの書き込み/インストール権限が必要になる場合があります。また、MollyなどのSignalフォークアプリを使用しているユーザーは、更新が停止したり、Signalの最新機能（複数デバイス対応など）がフォークに反映されないことで、Signal本体への移行を検討しています。&lt;/p&gt;
-&lt;h2&gt;Signalの複数デバイス対応とMollyからの移行&lt;/h2&gt;
-&lt;p&gt;これまでMollyを使用する主な理由とされていた、Signalの複数デバイス（特にセカンダリ電話やタブレット）へのアカウント共有機能が、Signal本体でサポートされるようになったことが話題になっています。これにより、多くのユーザーがMollyから公式Signalアプリへの移行を検討しています。ただし、一部のユーザーは、リンクされたデバイスが「プライマリデバイス」と見なされないため、元のデバイスをアクティブに保つ必要があるという制限を指摘しています。また、Androidタブレットでのセカンダリデバイスサポートについても意見の相違が見られます。&lt;/p&gt;
-&lt;h2&gt;Signalのポリシーと「ノーミー」ユーザーへの焦点&lt;/h2&gt;
-&lt;p&gt;Signalの設計思想、特に「ノーミー」（一般ユーザー）を対象としていることに対し、賛否両論があります。SignalがGoogle Playストアへの依存、電話番号登録の必須化、SMS機能の廃止、F-Droid版の非提供など、非技術系ユーザーにとっては使いやすい一方で、プライバシーや自由を重視するユーザーにとっては不満の種となっている点が挙げられています。開発者は、セキュリティの複雑さやメンテナンスの負担を理由に、これらの選択をしていると説明されています。また、Signalが集中型サービスであり、XMPPやMatrixのような分散型サービスとは異なるという批判もあります。&lt;/p&gt;
-&lt;h2&gt;Signalの批判点と代替案&lt;/h2&gt;
-&lt;p&gt;Signalに対する具体的な批判点として、以下の点が挙げられています。
-- &lt;strong&gt;更新プロセス&lt;/strong&gt;: APKからの手動更新の手間、または特定の環境での更新の不具合。
-- &lt;strong&gt;アカウントポリシー&lt;/strong&gt;: 一定期間使用しないとアカウントが削除される問題（ただし、4週間ではなく4ヶ月であるとの反論あり）。
-- &lt;strong&gt;SMSアクセス&lt;/strong&gt;: アプリ登録時にSMSアクセスを必須とすることへのプライバシー懸念。
-- &lt;strong&gt;Google Playサービスへの依存&lt;/strong&gt;: Googleサービスなしでのバッテリー消費問題や、F-Droid版の非提供。
-- &lt;strong&gt;通話品質&lt;/strong&gt;: 通話の着信不良やビデオ通話の品質低下。
-- &lt;strong&gt;メッセージング機能の廃止&lt;/strong&gt;: SMS機能の廃止により、Signalが「ワンストップ」のメッセージングアプリとして機能しなくなったこと。
-- &lt;strong&gt;ベンダーロックイン&lt;/strong&gt;: Signalの集中型サービスモデルがベンダーロックインを生み出しているという意見。
-代替案として、Molly、Session、SimpleX、Matrix、Delta Chat、XMPP+OMEMOなどが言及されています。ただし、Sessionはセキュリティ上の問題が指摘され、SimpleXは匿名性に関するマーケティングに疑問が呈されています。&lt;/p&gt;
-&lt;h2&gt;Signalのセキュリティとプライバシー&lt;/h2&gt;
-&lt;p&gt;Signalのセキュリティとプライバシーに対する姿勢についても議論があります。一部のユーザーは、Signalがエンドツーエンド暗号化（E2EE）を普及させた功績を高く評価し、そのセキュリティモデルを支持しています。一方で、サーバーがIPアドレスやタイミングメタデータにアクセスできること、ソーシャルグラフの構築の可能性（Signalは否定的）、そして「群衆の迷彩」という概念に対する懐疑的な見方もあります。また、iOSでのSQLiteデータベース破損問題のように、オープンソースでありながらユーザーが自身のデータにアクセスできないプラットフォームの制約も指摘されています。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;本スレッドでは、Signalの進化、特に複数デバイス対応の追加がMollyなどのフォークユーザーに与える影響が大きく議論されています。多くのユーザーがSignalのセキュリティとE2EE普及への貢献を評価する一方で、その集中型モデル、Google Playサービスへの依存、電話番号登録の必須化、特定のユーザー層（「ノーミー」ではないユーザー）への配慮の欠如といったポリシーに対する根強い批判も存在します。これらの批判は、Signalが「セキュリティ」と「使いやすさ」のトレードオフの中で、一部のユーザーの「自由」や「匿名性」のニーズを満たせていないことに起因しているようです。MatrixやSimpleXなど、代替の分散型・フェデレーション型メッセージングサービスへの関心も高まっています。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50314666</guid></item><item><title>Jepsen: ParticleDB 1.1.4</title><link>https://jepsen.io/analyses/particledb-1.1.4</link><description>&lt;p&gt;&lt;a href="https://jepsen.io/analyses/particledb-1.1.4"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50316100.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ParticleDBという新しいデータベースがJepsenテストによって多数の深刻なバグと整合性問題が露呈したこと、そしてその開発プロセスの信頼性に対する懸念が主な議論の対象となっています。特に「形式的に検証済み」という主張と、実際の品質との乖離が大きな論点となっています。&lt;/p&gt;
-&lt;h2&gt;ParticleDBの衝撃的な欠陥と信頼性の欠如&lt;/h2&gt;
-&lt;p&gt;JepsenレポートはParticleDB 1.1.4に96件もの重大な問題を指摘し、コメントではその深刻さに驚きの声が上がっています。ユーザーはデータ損失、デッドロック、部分的に見えない行、テーブルの歪曲、文字列が整数に変わるなど、信じがたいバグの具体例を挙げています。中でも、「&lt;code&gt;WHERE 4 = 5&lt;/code&gt;」というクエリが結果を返すというバグは特に象徴的で、多くのコメントで「これはひどい」と衝撃が表現されています。レポートでは、コミットされた書き込みの消失や内部整合性違反、あらゆる種類のトランザクション異常が、単一サーバーかつ障害なしの環境で発生したことが強調されており、ParticleDBがPostgreSQL互換という主張とは程遠い「混乱のライブラリ」であることが示されています。これらの結果から、「vibecoded（適当にコーディングされた）」データベースである可能性が指摘され、その信頼性に深刻な疑問が投げかけられています。&lt;/p&gt;
-&lt;h2&gt;ずさんな開発プロセスとテスト不足の露呈&lt;/h2&gt;
-&lt;p&gt;ParticleDBの開発チームは、ホームページで「TLA+による形式的検証済み」と謳っていたにもかかわらず、Jepsenとの共同作業ではその仕様が提示されなかったことが明らかになり、この虚偽の主張が厳しく批判されています。コメントでは、Jepsenテストを受ける前に、なぜこれほど基本的な多数の問題が社内テストで発見されなかったのかという疑問が集中しています。開発チームのメンバーは「問題は修正済みで、現在Jepsenワークロードを毎日実行している」と主張していますが、多くのユーザーは「再テストなしには信じられない」「LLM（大規模言語モデル）がテストを修正したと言っただけでは？」と懐疑的です。Jepsenレポート自体も「QAプロセスの構造的欠陥」を指摘しており、開発チームの判断力とエンジニアリング能力、特にAIエージェントを使ったテスト方法に根本的な問題があったと見られています。一部からは、会社の評判を考慮すると、プロジェクトをゼロからやり直すべきだという厳しい意見も出ています。&lt;/p&gt;
-&lt;h2&gt;データベース開発の困難さとJepsenの価値&lt;/h2&gt;
-&lt;p&gt;多くのコメントは、データベースの構築がいかに困難で、正しく行うのが難しいかを改めて認識しています。この議論を通じて、Aphyr氏とJepsenの厳格な分析がソフトウェアの信頼性を評価する上で極めて重要であると高く評価されています。Jepsenテストはバグの存在を証明する厳格な手法であり、etcdやTigerBeetleなどの他のデータベースプロジェクトがその指摘を真摯に受け止め、品質向上に繋げた例も参照されています。一部では、ベンダーが公開レポートでの開発手法に対する「論評」を嫌がる可能性も指摘されますが、開発者の「無礼」や虚偽の主張があった場合、そのような外部からの品質保証と厳しい評価は不可欠であるという意見が優勢です。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;Hacker Newsのコメントは、JepsenレポートによってParticleDBの広範かつ基本的な欠陥が明らかになったことに対し、強い衝撃と懸念を示しています。特に、「形式的検証済み」という虚偽の主張と、Jepsenテストを受けるまで内部で基本的な品質保証ができていなかったという事実は、開発チームの能力とプロセスに対する深刻な不信感を生んでいます。この議論は、データベース開発の極めて高い難易度と、Jepsenのような独立した厳格な検証がソフトウェアの信頼性を確保する上でいかに重要であるかを浮き彫りにしています。多くのユーザーは、この報告が「vibecoded」された製品（適当に作られた製品）の典型例であり、その信頼回復は極めて困難であると考えています。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50316100</guid></item><item><title>Show HN: A language model that lives in a boot sector</title><link>https://github.com/kerlenton/bootgpt</link><description>&lt;p&gt;&lt;a href="https://github.com/kerlenton/bootgpt"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50315782.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このコメントは、512バイトのブートセクタに収まるように設計された、非既存ハードウェアのブートログを生成する文字レベルのニューラルネットワークプロジェクトに関するものです。&lt;/p&gt;
-&lt;h2&gt;プロジェクトの着想と目標&lt;/h2&gt;
-&lt;p&gt;このプロジェクトは、512バイトでチェスやBASICゲーム、Cコンパイラなどが作られていたブートセクタのデモシーンから着想を得ました。プログラムの代わりにニューラルネットワークを使って何ができるかを探求し、MBRに収まる小さなNNで、存在しないハードウェアのLinuxブートメッセージを無限に生成することを目標としています。&lt;/p&gt;
-&lt;h2&gt;技術的実装と制約&lt;/h2&gt;
-&lt;p&gt;推論エンジン全体は510バイトのMBRに収まるよう設計されており、重み、語彙、文字列は後続のセクタに格納されます。このプロジェクトでは、機械が生成したdmesgデータで訓練された、1つの隠れ層を持つ文字レベルのニューラルネットワークが使用されます。これは、1セクタに収めるという厳しい制約のため、int8演算を用いるなど、よりシンプルな設計が採用されています。他の類似プロジェクトである&lt;code&gt;sectorllm&lt;/code&gt;が1.2KBで5層のLlama2を動かすのとは対照的で、制約に対するトレードオフが異なります。&lt;/p&gt;
-&lt;h2&gt;開発中のデバッグと解決策&lt;/h2&gt;
-&lt;p&gt;開発中にはいくつかの興味深いバグが発見されました。一つは、&lt;code&gt;train.py&lt;/code&gt;とQEMUの出力が一致しないというもので、活性化関数の&lt;code&gt;idiv&lt;/code&gt;が剰余を&lt;code&gt;edx&lt;/code&gt;に格納し、その結果、バイアステーブルへのポインタが上書きされることで、最初のニューロン以外が正しくバイアスされない問題でした。これは、バイアスのアドレスをループカウンターから決定することで解決されました。もう一つは、BIOSの印刷ルーチンが予測された文字番号を保持する&lt;code&gt;bx&lt;/code&gt;レジスタをゼロクリアしてしまう問題で、これは&lt;code&gt;push&lt;/code&gt;と&lt;code&gt;pop&lt;/code&gt;で&lt;code&gt;bx&lt;/code&gt;を保護することで対処されました。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;このコメントは、512バイトという極めて厳しい制約の中で、ブートセクタにニューラルネットワークを実装し、仮想的なブートログを生成するという創造的なプロジェクトについて語っています。限られたリソース内で効率的な設計を選択し、発生した複雑なバグ（特に&lt;code&gt;idiv&lt;/code&gt;によるレジスタの上書きやBIOSルーチンの副作用）を特定・解決した過程が詳細に説明されており、ミニマルな環境での低レベルプログラミングと機械学習の融合における技術的な挑戦と、その解決策が浮き彫りになっています。&lt;/p&gt;</description><pubDate>Sat, 31 Oct 2026 22:55:53 GMT</pubDate><guid isPermaLink="false">50315782</guid></item><item><title>My favourite PowerMac is a Nintendo Wii</title><link>https://virtuallyfun.com/2026/10/29/my-favourite-powermac-is-a-nintendo-wii/</link><description>&lt;p&gt;&lt;a href="https://virtuallyfun.com/2026/10/29/my-favourite-powermac-is-a-nintendo-wii/"&gt;元の投稿を読む&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://kj-9.github.io/hacker-news-ja-summary/pages/50307190.html"&gt;日本語要約ページを読む&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;このHacker Newsのスレッドは、Mac OSをNintendo Wiiに移植したプロジェクトについて議論しています。コメントは主に、PowerMacをWiiに変える可能性、Wiiコンソールの遺産、そして現代のmacOSにおけるレガシーコードの存在という3つのテーマに焦点を当てています。&lt;/p&gt;
-&lt;h2&gt;PowerMacからWiiへの変換&lt;/h2&gt;
-&lt;p&gt;コメントの冒頭では、PowerMacをNintendo Wiiに変えるという逆のプロジェクトが可能かどうかという疑問が投げかけられています。
-*   Wiiは異なるOSを実行する2つのプロセッサを持つため、エミュレーションやハードウェア修正が必要になるだろうという指摘があります。
-*   Wii/GamecubeのGPUは特殊であるため、互換性が問題になる可能性があります。DolphinエミュレータとKVM_PRを組み合わせて、ネイティブに近いCPUパフォーマンスを実現しつつ、3D翻訳とIOSのシミュレーションを行うアプローチが提案されています。
-*   元のXbox 360開発キットがPowerMac G5であったという関連情報も共有され、当時のクロスプラットフォームハードウェアの柔軟性が示唆されています。
-*   なぜそのようなことをするのかという疑問に対して、「楽しいことをするのがポイントだ」という意見があります。&lt;/p&gt;
-&lt;h2&gt;Nintendo Wiiの遺産と評価&lt;/h2&gt;
-&lt;p&gt;多くのユーザーがWiiを「ゲーム機の頂点」と評価し、その特徴を挙げています。
-*   ディスクベースのゲームはバグの多いアップデートが少なく、マイクロトランザクションがなかったため、より高い品質基準を持っていたという意見があります。
-*   オンラインプレイや基本的なユーザー生成コンテンツは可能でありながら、インターネット接続が必須ではなかった点が評価されています。
-*   Wiiが「ほぼ文字通り誰もが」プレイした経験を持ち、ビデオゲームを「おもちゃ」としか考えていなかった何百万人もの人々をゲームの世界に引き込んだという客観的な意見もあります。祖父母世代さえもバーチャルボウリングや剣術を楽しんでいたとされています。
-*   モバイルゲームも多くの人々をゲームに引き込んだが、Wiiのゲームはマイクロトランザクション漬けの粗悪品ではなく、「実際に良い」とされています。
-*   WiiのUI、特にライブアイコンタイルとWiiMoteの操作性は、史上最高のビッグスクリーンUIの一つと評価されています。
-*   Wii UはWiiゲームもプレイできるため、さらに良いと考えるユーザーもいます。
-*   一方で、Wiiリモコン市場の劣悪さ、ゲームディスクによるサイレントなファームウェアアップデートの存在、モーションコントロールが強制されることによる操作性の悪さを指摘する意見もあります。
-*   PS2やXboxも同時期の「ゲームの頂点」として挙げられ、Xbox 360は現代のオンラインゲーミング、ストア、インディーゲームチャネル、HDサポートなど、多くの現代的な機能を先駆的に取り入れた「最も重要な現代のコンソール」として評価されています。&lt;/p&gt;
-&lt;h2&gt;現代macOSにおけるレガシーコード&lt;/h2&gt;
-&lt;p&gt;プロジェクトの投稿者が「クラシックMac OSに触れてその『ジャンクさ』（1980年代にまで遡るハックの積み重ね）に魅了された」と述べたことから、現代のmacOSにおけるレガシーコードについて議論が展開されています。
-*   現代のmacOSにもクラシックMac OSからのコードが残っているという主張に対して、「Modern MacOSはNeXTSTEP OSをベースにしており、クラシックではない」という反論があります。
-*   しかし、かつてCocoa（NeXTSTEP由来のAPI）のメニューコードがCarbon（クラシックMac OS由来のAPI）コードを呼び出していたこと、Carbon API自体がmacOS 10.15までサポートされていたことなどが指摘されています。
-*   macOS 14ではCarbonメニューAPIが廃止されたものの、Securityフレームワークの大部分はOS 9時代から残っているという情報も共有されています。
-*   QuickTimeやiTunesも長らくCarbonコードを使用していたことが言及されています。&lt;/p&gt;
-&lt;h2&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;このスレッドでは、Mac OSをNintendo Wiiに移植するプロジェクトをきっかけに、技術的なチャレンジ、Nintendo Wiiの歴史的意義とカジュアルゲーマーへの普及力、そして現代のOSが過去の遺産をどのように引き継いでいるかといった多岐にわたる議論が繰り広げられました。PowerMacをWiiに変えることは技術的に複雑でありながらも、「楽しい」という動機付けが重要であると認識されています。また、Wiiは多くの人にとって特別なゲーム機であり、そのシンプルさ、高品質なゲーム、そして家族や友人を巻き込む能力が評価されています。同時に、macOSの深層には、開発者が楽しんでいる「ジャンクさ」と称されるような長年にわたるコードの層が今も存在することが示されています。&lt;/p&gt;</description><pubDate>Fri, 30 Oct 2026 23:22:34 GMT</pubDate><guid isPermaLink="false">50307190</guid></item></channel></rss>
+&lt;p&gt;Hacker Newsのコメントが提供されていません。要約を作成するためには、コメントの内容が必要です。&lt;/p&gt;</description><pubDate>Sun, 01 Nov 2026 23:14:09 GMT</pubDate><guid isPermaLink="false">50318129</guid></item></channel></rss>

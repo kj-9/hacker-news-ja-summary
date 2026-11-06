@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Rivet (YC W23) – Scale and Orchestrate Agents on S3 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Rivet (YC W23) – Scale and Orchestrate Agents on S3</h1>
+        <div class="meta">
+            投稿日: 2026年11月06日 | ランク: 10
+        </div>
+        <a href="https://github.com/rivet-dev/rivet" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Rivetは、Cloudflare Durable Objectsに似たオープンソースで自己ホスト可能なアクターモデルを使用した、エージェントワークロード向けの高速でスケーラブルなオーケストレーターです。従来のサンドボックス型エージェントの非効率性を解消し、低コストで高性能な永続化ストレージを提供します。</p>
+<h2>サンドボックスの課題とアクターモデルの利点</h2>
+<p>Hacker Newsのコメントでは、特にエージェントワークロードにおける従来のサンドボックスの課題と、Rivetのアクターモデルがもたらす利点に注目が集まりました。</p>
+<ul>
+<li><strong>サンドボックスの非効率性</strong>: 多くのコメントで、従来のサンドボックスがコストがかかり、アイドル状態が多く、起動が遅いという問題が指摘されました。特に、LLMの高速化に伴い、サンドボックスのコールドスタートがエージェントのインタラクティブ性のボトルネックになるという意見がありました。</li>
+<li><strong>軽量アクターの優位性</strong>: Rivetは、エージェントごとに軽量なアクターを割り当てることで、メモリ効率と起動速度を大幅に向上させています（アクターのベースラインメモリ72KB vs サンドボックスの512MB、アクターの起動速度4.9ms vs サンドボックスの1.7s）。</li>
+<li><strong>サンドボックスの必要性</strong>: エージェントがサンドボックスを必要とするかどうかについては議論があり、Rivetは3つのパターンを提示しています。単なるツールが必要なエージェント、V8/WebAssemblyベースの軽量サンドボックスが必要なエージェント、そしてサンドボックスをツールとして利用し、エージェントのロジックをサンドボックスの外で実行するパターンです。後者は「ヘッドとハンドの分離」と呼ばれ、信頼境界やリソース効率の面で優れているとされています。</li>
+<li><strong>AgentOS</strong>: Rivetは、Linux互換のV8/WebAssemblyサンドボックスであるAgentOSを提供しており、POSIXファイルシステム、ネットワークスタック、プロセスツリーをサポートし、データ分析やファイル処理などのワークロードに対応します。</li>
+</ul>
+<h2>S3をバックエンドとする永続化ストレージ</h2>
+<p>Rivetのストレージアーキテクチャ、特にS3をバックエンドとして利用しながら高性能を実現している点も多くの関心を集めました。</p>
+<ul>
+<li><strong>S3利用の背景</strong>: Rivetは当初FoundationDBを利用していましたが、ユーザーがPostgresをはるかに超えるデータを保存していることを発見し、S3をプライマリストレージとして採用しました。これにより、ストレージコストを大幅に削減（EBS gp3の10分の1）しつつ、SSDと同等の速度を維持しています。</li>
+<li><strong>SSD階層型ストレージ</strong>: S3への直接書き込みは遅く高価であるため、RivetはSSD階層型ストレージを利用しています。書き込みは2つのAZにあるSSDに永続化された時点で完了と見なされ、その後S3に非同期でバッチ処理されます。これにより、S3はライトパスから外れ、低レイテンシと低コストを実現しています。読み取りはSSDキャッシュから行われ、存在しない場合はS3からフォールバックされます。</li>
+<li><strong>高性能な永続化</strong>: このアーキテクチャにより、Rivetは1.07msの耐久性のある書き込み（3AZ、p99）、1.36msの読み取り（p99）、オブジェクトストレージからの読み取り138ms（p99）といった高いパフォーマンスを提供しています。</li>
+<li><strong>celldとの比較</strong>: S3バックエンドの永続化ストレージは、celldなど他の類似プロダクトと比較するコメントも見られました。Rivetは、オブジェクトごとのストレージではなく、SSD階層型ストレージエンジンを採用することで、コストとパフォーマンスの面で差別化を図っていると説明しています。</li>
+</ul>
+<h2>自己ホストと柔軟なデプロイオプション</h2>
+<p>Rivetの自己ホスト性や、多様なデプロイオプションもHacker Newsコミュニティにとって魅力的な点でした。</p>
+<ul>
+<li><strong>自己ホスト可能</strong>: Rivetは単一のRustバイナリとS3を唯一の依存関係として自己ホストが可能です。これにより、ユーザーは独自のインフラストラクチャ上でRivetを実行できます。</li>
+<li><strong>Cloudflare Durable Objectsからの移行</strong>: 実際に、Cloudflare Durable ObjectsからRivetに移行したユーザーは、Rivetの自己ホストと柔軟なアーキテクチャを高く評価しています。特定のプラットフォームに縛られず、オンプレミスや既存のVPC内にデプロイできる点が利点とされました。</li>
+<li><strong>多様なデプロイオプション</strong>: 自己ホストの他に、Rivet CloudによるAWS/GCPへの専用クラスタデプロイ、BYOC（Bring Your Own Cloud）によるユーザーのVPCへのデプロイもサポートしており、柔軟な利用が可能です。</li>
+<li><strong>ローカル開発との一貫性</strong>: Rivetは軽量なバイナリであるため、ローカル開発環境と本番環境で同一に動作し、開発のしやすさも強調されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Rivetは、エージェントワークロード向けに、従来のサンドボックスが抱える非効率性を解決する軽量なアクターモデルを提供します。特に、S3をバックエンドとしながらSSD階層型ストレージを組み合わせることで、低コストで高性能かつ耐久性のある永続化を実現している点が大きな特徴です。自己ホスト可能で、多様なデプロイオプションを提供することで、ユーザーは特定のクラウドプラットフォームに縛られることなく、柔軟にRivetを導入・運用できます。エージェントのロジックとサンドボックスを分離する「ヘッドとハンドの分離」というアーキテクチャは、信頼性とリソース効率の面で注目を集めました。一部からはプロダクトのUXや説明の分かりやすさについて改善を求める声もありましたが、Cloudflare Durable Objectsからの移行事例など、実際のユーザーからは高い評価を受けています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
