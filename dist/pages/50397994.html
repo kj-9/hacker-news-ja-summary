@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI is dramatically accelerating AI research - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">AI is dramatically accelerating AI research</h1>
+        <div class="meta">
+            投稿日: 2026年11月06日 | ランク: 3
+        </div>
+        <a href="https://www.planned-obsolescence.org/p/ai-is-dramatically-accelerating-ai" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、AI研究の加速化に関する記事について議論しており、特にAIがAI研究を加速させるという概念に焦点を当てています。コメントでは、この現象の持続可能性、AIの実際の価値と市場性、そして潜在的なリスクと社会への影響について、懐疑的な意見と肯定的な意見が入り混じっています。</p>
+<h2>資本とスケーリングの限界</h2>
+<p>一部のユーザーは、AIの進歩がモデル自体のインテリジェンスの向上によるものよりも、トレーニングに投じられる膨大な資本とエージェントスウォームの水平スケーリングによるものであると主張しています。ハードウェアとインフラの逼迫が迫っているため、この資本主導のスケーリングは持続不可能であると指摘し、過去のAIブームとAI冬の経験を比較する意見も見られます。しかし、これに反論するユーザーは、AIは効率性への注力を促し、AI研究は効率性が劇的に向上していると指摘しています。また、Anthropicのような企業の急速な収益成長と推論の収益性、そしてAI支援研究における賢明な検索スペースの剪定の重要性を強調し、資本が引き続きAI研究に有利であると主張しています。</p>
+<h2>AIの価値と市場性</h2>
+<p>AIの実際の価値と市場性についても議論があります。一部のユーザーは、AIの価値はまだ理論的なものであり、LLM（大規模言語モデル）は「想像上の小さな緑色の紙片」の移動にしか優れていないと懐疑的な見方を示しています。一方で、AIがソフトウェア開発者の生産性と能力を大幅に向上させているという意見もあります。特に、オープンソースモデルの台頭がフロンティアモデルの市場を縮小させる可能性や、AIが多くの企業でコストを正当化するのに十分な価値を生み出していないという懸念も挙げられています。これに対し、フロンティアラボがより費用対効果の高いモデルを開発して競争していることや、オープンソースモデルが実用的であると反論する意見もあります。</p>
+<h2>AIによるAI研究の加速</h2>
+<p>多くのユーザーは、AIがAI研究を実際に加速させていることを認めています。モデルがアイデアのブレインストーミング、実装、テストを劇的に迅速化し、数週間かかっていた作業を数分で完了させる例が挙げられています。これにより、開発者はより多くの「突飛なアイデア」を試すことができ、レガシーコードベースの理解、統合、リファクタリングにも役立っています。しかし、この加速がAGI（汎用人工知能）への具体的な進歩につながるかについては懐疑的な声もあり、NeurIPSやICLRなどの会議への論文提出数が増えている一方で、「スロップ」と呼ばれる質の低い研究が増加しているという懸念も示されています。</p>
+<h2>リスクと社会への影響</h2>
+<p>記事の「業界はこれを安全に扱う準備ができていない」というメッセージに対して、一部のユーザーはAI企業が利益を追求しながらリスクを軽視していると批判しています。AIが職を奪い、オンライン体験を汚染している一方で、開発が加速していることに憤りを感じている人もいます。また、AIが「ワイヤーヘディング（快楽への直接刺激）」のような有害な体験を生み出し、人間の生活を短縮する可能性があるという懸念や、AIが核兵器のような危険な技術をより安価に、アクセスしやすくする可能性があるという警鐘も鳴らされています。超知能が必ずしも人類にとって有益であるとは限らず、AI研究の制御が必要であるという意見もあります。</p>
+<h2>METR（Machine Intelligence Research Institute）の信頼性</h2>
+<p>METR（Machine Intelligence Research Institute）のレポートの信頼性についても議論があります。一部のユーザーは、METRが「BigAI」の広報活動を行っているだけで独立性がないと批判し、彼らの結論に疑問を呈しています。過去のAI予測との比較や、報告書に「Fake Data」とラベル付けされたグラフが含まれていることへの指摘もあります。しかし、METRがAI懐疑論者よりもAI能力の予測に優れているという反論もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドでは、AIがAI研究を加速させているという記事の主張に対し、多角的な視点から議論が展開されています。AIの進歩が資本注入によるものであり、持続可能性に疑問があるという意見がある一方で、効率性の向上やフロンティアモデルの収益性を強調する声もあります。AIが研究開発を迅速化していることは広く認識されていますが、その質やAGIへの具体的な貢献については懐疑的な見方もあります。また、AIの急速な発展に伴う社会的なリスクや倫理的な懸念、そして報告機関の信頼性についても活発な議論が交わされており、AIの未来に対する複雑な感情が浮き彫りになっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
