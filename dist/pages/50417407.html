@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask HN: What are you working on? (November 2026) - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ask HN: What are you working on? (November 2026)</h1>
+        <div class="meta">
+            投稿日: 2026年11月08日 | ランク: 3
+        </div>
+        <a href="https://news.ycombinator.com/item?id=50417407" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドでは、多種多様な個人プロジェクトが紹介されており、多くの開発者が自身の課題解決や特定のニーズに応えるために、様々なツールやアプリケーション、ゲームなどを開発しています。特に、AIやLLMの活用が目覚ましく、開発プロセスや製品の機能に深く組み込まれています。</p>
+<h2>AI/LLMを活用した開発とエージェント</h2>
+<p>多くの開発者が、AIやLLMをコード生成、デバッグ、テスト、リファクタリング、ドキュメント作成、APIの逆引き、さらにはアーキテクチャのガイドに活用しています。AIエージェントの記憶管理、オーケストレーション、対話機能を改善するツールも開発されており、開発者の日々の作業を自動化・効率化する試みが見られます。AIは、複雑なプロジェクトを飽きずに進めるためのモチベーション源となったり、退屈な定型作業を肩代わりすることで、より高度な問題に集中できる時間を与えています。採用プラットフォーム、履歴書作成、市場分析、コンテンツ作成、翻訳、データ分析など、特定の分野にAIを応用するプロジェクトも活発です。一方で、AIがアーキテクチャ設計やパフォーマンス最適化の面でまだ課題を抱えていることや、出力の正確性については人間による監視が必要であるという意見も散見されます。</p>
+<h2>パーソナルな課題解決と生産性向上ツール</h2>
+<p>自身の生活における不便さや課題を解決するために、様々な生産性向上のためのツールが開発されています。日々のタスクやスケジュールの管理を柔軟に行えるプランナー、保存した記事を読み終えることを促す読書管理アプリ、フィットネスや健康（体重減量、ワークアウト、呼吸法、運動のゲーム化）をサポートするアプリ、家事や育児の記録・サポートツール、支出トラッカーなどが挙げられます。これらのツールは、個人のワークフローやライフスタイルに合わせてカスタマイズされ、多くの場合、開発者自身が日常的に利用しています。</p>
+<h2>セルフホスティングとプライバシー重視のインフラ/サービス</h2>
+<p>PlexやJellyfinの代替となるセルフホスト型メディアサーバー、WordPressの機能を含むオールインワンCMS、データストレージの堅牢性と自動バックアップを追求するシステム、DockerやPostmanの代替を目指す軽量なツールなど、大手サービスからの独立やプライバシー保護を重視する動きが顕著です。多くのプロジェクトがオープンソースとして提供され、広告なし、サブスクリプションなし、オンデバイスでのAI処理などを特徴としています。これは、ユーザーが自身のデータとシステムをよりコントロールしたいという願望の表れと言えるでしょう。</p>
+<h2>ユニークなアプリ、ゲーム、特定のニーズに対応するプロジェクト</h2>
+<p>Hacker Newsのコミュニティらしく、非常にニッチで創造的なプロジェクトも数多く紹介されています。写真の効率的な管理・整理、レトロゲームのマルチプレイヤー化、デジタル水彩画の物理シミュレーション、独自の音楽ストリーミングサーバー、様々なパズルゲームや戦略ゲーム、物理ベースのサイクリングゲームなどが開発されています。また、特定の地理空間データの可視化、映画をテーマにしたデイリーゲーム、ドメイン名検索アプリ、公共交通機関のリアルタイム情報、音声認識を利用した執筆・学習支援、オープンソースをテーマにした児童書、哲学教師AIといった、多岐にわたる分野で独自のアイデアが形にされています。</p>
+<h2>まとめ</h2>
+<p>今年の「What are you working on?」スレッドは、AI/LLMが個人開発の風景を根本的に変えていることを如実に示しています。開発者はAIを強力な共同作業者として活用し、自身の生産性を向上させ、これまで以上に多様で複雑なプロジェクトに取り組んでいます。多くのプロジェクトは、自身の具体的な課題解決、ニッチなニーズへの対応、そしてプライバシーやデータ主権の重視といった、個人開発ならではのモチベーションに基づいています。AIの普及は、開発の障壁を下げ、より多くの人々が創造的なアイデアを具現化できる機会を提供していると言えるでしょう。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
