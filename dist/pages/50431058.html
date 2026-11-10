@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USPS now offers official ZIP Code boundary polygons - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">USPS now offers official ZIP Code boundary polygons</h1>
+        <div class="meta">
+            投稿日: 2026年11月10日 | ランク: 2
+        </div>
+        <a href="https://postalpro.usps.com/zcb" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>USPSがZIPコードの境界データ（ポリゴン）を有料で提供し始めたことに対し、その高額な価格設定や、ZIPコードの本来の性質（地理的境界ではないこと）、政府データの公開原則、USPSの財政問題など、多岐にわたる議論が交わされています。</p>
+<h2>ZIPコードデータ有料化とアクセシビリティ</h2>
+<p>USPSがZIPコードの境界データ（GeoJSON形式）を年間最低1万ドルからという高額な価格で提供し始めたことに対し、多くのコメントで驚きと批判の声が上がっています。多くの人々は、納税者によって生成された政府データは無料で公開されるべきだと主張しており、FOIA（情報公開法）の適用についても疑問が投げかけられています。</p>
+<p>一方、無料で利用できる代替手段として、米国国勢調査局が提供するZCTA（ZIP Code Tabulation Areas）データが「十分実用的」な選択肢として推奨されています。ただし、ZCTAは公式のZIPコード境界とは異なり、主に統計目的のために作られた地理的エリアです。過去には、住所検索APIが無料だった時代があったことや、データがCD-ROMで提供されていたことなどが指摘され、USPSのデータ有料化が方針転換であると見られています。高額な料金設定のため、誰かがデータを購入してGitHubなどで公開するべきだという意見も出ましたが、ライセンス契約が再配布を厳しく禁じていることが示され、その実現は困難であるとされています。</p>
+<h2>ZIPコードの本来の性質と地理的境界としての課題</h2>
+<p>地理空間情報に携わる多くの人々は、ZIPコードが元々地理的な「境界」として設計されたものではなく、郵便配達経路や特定の配達可能な住所の集合を指すものであると強調しています。そのため、ZIPコードをポリゴン（閉じた領域）として表現することには本質的な課題があると指摘されています。</p>
+<p>例えば、郵便局の私書箱（PO Box）やホワイトハウス、ペンタゴンといった単一の建物に割り当てられたZIPコード、軍関係者の所在地に紐づくZIPコード、さらには州境をまたぐZIPコードなど、特殊なケースが数多く存在します。これらのZIPコードは、通常の地理的ポリゴンでは適切に表現できません。また、ZIPコードのポリゴンは、重複したり、連続していなかったり、穴があったりする可能性があり、クリーンで相互排他的な地理的境界として利用することの難しさが議論されています。このため、ZIPコードを地理的な視覚化に用いるのはあくまで「近似」であり、行政区画のような地理的境界とは根本的に異なるという理解が広まっています。</p>
+<h2>USPSの財政と政治的背景</h2>
+<p>USPSがZIPコードデータを販売する背景には、その深刻な財政難があるという見方が多数を占めています。多くのコメントは、USPSが郵便物の配達により莫大な赤字を抱えていると指摘していますが、ジャンクメール（EDDM: Every Door Direct Mail）が実際にはUSPSの大きな収益源であり、財政問題の主因ではないという反論も多く寄せられています。</p>
+<p>USPSの財政問題の主な原因として、過去に議会が課した「将来の退職者の年金や医療費を数十年前から事前に積み立てる」というユニークな要件が挙げられています。この要件は他の政府機関にはなく、USPSの財政を著しく圧迫していましたが、2022年の法改正でようやく撤廃されたことが指摘されています。</p>
+<p>また、USPSは政府から運営資金を受け取らず、郵便物の販売やサービスで自立運営する「準政府機関」であるため、データ販売も収益確保の手段と見なされています。一部のコメントでは、USPSの財政難は意図的に作り出されたものであり、最終的な目標はUSPSの民営化にあるという陰謀論的な見方も示されています。民間配送業者（UPSやFedEx）がUSPSの最終配達サービスを利用して利益を得る一方で、USPSが全国一律料金で配達を行う普遍的サービス義務（Universal Service Obligation）を負っていることへの不公平感も表明されています。</p>
+<h2>データガバナンスと国際比較</h2>
+<p>USPSは、議会による特別免除を受けているため、「商業的性質の情報」の開示をFOIAから免除されている可能性があります。これが、データが有料化される一因ではないかと推測されています。</p>
+<p>他の国々における郵便番号データの扱いは様々です。
+*   <strong>カナダ</strong>：カナダポストも郵便番号データを独占しており、有料で提供している上、独自にデータセットを構築しようとした企業を訴追した事例も報告されています。
+*   <strong>イギリス</strong>：Ordnance Surveyも郵便番号のポリゴンデータを有料で提供しています。
+*   <strong>EU諸国</strong>：多くの欧州諸国では、このような地理空間データは政府ポータルを通じて無料で提供されており、米国との対比が際立っています。
+*   <strong>アイルランド</strong>：各住所に固有のコードを割り当てるEircodeシステムを導入し、郵便番号が地理的領域ではなく個々のアドレスを識別する例として挙げられています。
+*   <strong>オランダ</strong>：郵便番号が非常に詳細で、通りや通りの片側まで特定できると紹介されています。</p>
+<p>USPSのライセンス契約は、データの再配布や開示だけでなく、「データから派生した情報」の提供までも禁じていることが判明し、その実用性や過剰な制限に対する疑問が投げかけられています。</p>
+<h2>まとめ</h2>
+<p>USPSがZIPコード境界データを有料で提供する決定は、高額な価格設定、政府データの公開原則との矛盾、ZIPコードの地理的性質に関する根本的な誤解、そしてUSPSが抱える複雑な財政的・政治的課題など、多岐にわたる議論を巻き起こしています。多くの人々は、このような基礎的な政府データは無料で提供されるべきだと考えており、Census ZCTAのような代替データを利用する傾向にあります。USPSの財政問題は、過去の議会による年金積立金要件や民間企業との競合など、外部要因に起因する側面が強く、データ販売はその困難な状況を打破するための試みの一環と見られています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
