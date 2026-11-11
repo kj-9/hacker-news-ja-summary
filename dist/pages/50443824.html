@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synaptics patent claims stop work on DisplayLink drivers - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Synaptics patent claims stop work on DisplayLink drivers</h1>
+        <div class="meta">
+            投稿日: 2026年11月11日 | ランク: 6
+        </div>
+        <a href="https://lwn.net/SubscriberLink/1102549/acbc92e00cee3a3f/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、Synaptics社（DisplayLinkの親会社）が、DisplayLink技術のオープンソースドライバーを開発した開発者に対して停止命令書を送付したことについて議論しています。コメントの大部分は、Synapticsの行動に対する強い批判と、特許制度全般への不満、そしてこの状況に対する潜在的な解決策に焦点を当てています。</p>
+<h2>LWNのペイウォールとアクセシビリティ</h2>
+<p>当初、一部のユーザーは記事がLWNのサブスクライバー限定であると指摘しましたが、すぐにLWNが記事を公開したことが確認されました。これは「ソフトペイウォール」の一種であり、サブスクライバーが記事を共有できる仕組みや、記事が一定期間後に公開されることなど、LWNのビジネスモデルについて言及されています。Hacker NewsのFAQでも、回避策のあるペイウォール記事の投稿は許可されていることが示されています。</p>
+<h2>DisplayLinkの特許、所有権、およびOINメンバーシップ</h2>
+<p>DisplayLinkが2022年にSynapticsに買収されたことが確認され、これによりDisplayLinkがOpen Invention Network（OIN）のメンバーであるかどうかが議論の的となりました。OINはLinux関連の特許訴訟からメンバーを保護する団体ですが、記事によるとOINは「コーデック」特許を除外しており、DisplayLinkの特許がそれに該当すると見なされているようです。これは、SynapticsがOINメンバーシップを都合よく利用している可能性があるという懐疑的な見方を引き起こしています。</p>
+<h2>Synapticsの停止命令書と脅迫的な戦術</h2>
+<p>Synapticsからの停止命令書の内容、特に開発者に25,000ドルの「調査費用」を要求し、わずか5日間という短い期限を設定している点について、強い批判が寄せられています。これは「ギャングの戦術」や「ゆすり」と酷似していると見なされており、弁護士の名前が「Bateman」であること（アメリカン・サイコを連想させる）も皮肉を込めて言及されています。また、停止命令書が2026年という未来の日付で書かれているという誤りも指摘されています。</p>
+<h2>特許の妥当性と先行技術の存在</h2>
+<p>多くのユーザーが、DisplayLinkの特許の妥当性に疑問を呈し、それが無効である可能性が高いと予測しています。特に、「汎用データネットワークを介した表示データの伝送」と「Haar変換デコード」の組み合わせが2010年当時で自明であったことを示す先行技術が多数挙げられています。英国特許庁には250ポンドで再審査を請求できる比較的安価な行政手続きがあることも議論され、オープンソースコミュニティからの資金提供の提案もあります。AIによる先行技術調査の可能性も言及されており、ソフトウェア特許の有効性自体が疑問視されています。</p>
+<h2>DisplayLink製品の品質と代替技術</h2>
+<p>DisplayLink製品のLinux、macOS、Windowsでの使用経験が非常に悪いというコメントが多数寄せられており、頻繁なドライバー問題、互換性の問題、ハードウェア障害が報告されています。一部のユーザーはPlugableブランドのドックは比較的良好であると述べています。多くのユーザーはDisplayLink技術が時代遅れであり、USB-CのDisplayPort Alt ModeやThunderbolt/USB4などのより優れたネイティブなディスプレイサポートに置き換えられるべきだと考えています。</p>
+<h2>リバースエンジニアリング、特許、および著作権</h2>
+<p>リバースエンジニアリングが特許侵害に当たるか否か、および「クリーンルーム実装」が特許を回避できるかどうかが議論されています。一般的に、リバースエンジニアリングは企業秘密や著作権侵害の防御にはなり得ますが、特許侵害からの保護にはなりません。特許は発明の公開と引き換えに独占的な実装権を付与するためです。ただし、特許自体が先行技術によって無効である場合は別です。また、Synapticsが特許侵害だけでなく「企業秘密」の漏洩を主張している点についても、矛盾があると指摘されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsコミュニティは、DisplayLinkの親会社であるSynapticsがオープンソース開発者に送付した停止命令書に対し、強い反発と不満を表明しています。この行動は、脅迫的で不合理であり、特許制度の乱用であると広く見なされています。特に、DisplayLinkの特許の妥当性に対する疑問、多数の先行技術の指摘、そしてDisplayLink製品自体の品質問題が議論の中心となっています。コミュニティは、法的支援の提供や、無効な特許を覆すための集団的な取り組み、さらにはDisplayLink製品のボイコットを通じて、開発者を支援し、Synapticsの行動に抵抗する姿勢を示しています。多くのコメントは、AIが先行技術の発見を容易にすることで、ソフトウェア特許の未来が変化する可能性についても示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaProof Code - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">AlphaProof Code</h1>
+        <div class="meta">
+            投稿日: 2026年11月11日 | ランク: 8
+        </div>
+        <a href="https://deepmind.google/blog/introducing-alphaproof-code/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Google DeepMindがAIエージェント「AlphaProof Code」を用いてSignalの暗号プロトコルの一部を形式的に検証したことに対し、Hacker Newsのコミュニティではその画期的な成果を評価しつつも、形式的検証の限界、AIの役割、そして将来のソフトウェア開発への影響について活発な議論が交わされました。</p>
+<h2>AIによるSignalプロトコルの形式的検証の成果と評価</h2>
+<p>Google DeepMindがAIを活用してSignalの暗号プロトコルを形式的に検証したことは、コミュニティから高く評価されています。Signalのような大規模なコードベースが実用的かつ厳密な形式で安全であるという事実は驚きであり、開発者の技量の高さが伺えるとの意見が多く寄せられました。AIがソフトウェアのセキュリティ保証を大幅に向上させる可能性を示唆する画期的な成果と見なされています。特に、AIエージェントが人間の専門家と協力し、数百万行のLeanコードを生成してプロトコルのセキュリティ特性を数学的に証明したアプローチは、AIが形式的検証プロセスを加速するツールとしての可能性を示しました。一部のユーザーは、意図的にバグを再導入して検証プロセスが機能することを証明したGoogleの姿勢を評価し、将来的に信頼性の高いライブラリが生まれることへの期待を表明しています。</p>
+<p>しかし、検証の範囲については注意が必要です。この検証はSignalアプリ全体のコードではなく、その暗号プロトコル（libsignalライブラリ）の一部に限定されており、アプリのUI、基盤となるOS、さらには物理的なハードウェアのセキュリティは対象外であると指摘されています。実際、AIエージェントはコンパイルされたELFバイナリを直接ターゲットとし、ARMのセマンティクスを基盤としてプロパティを証明するという低レベルのアプローチを取ったことが、その厳密さを示しています。これは、コードが特定のセキュリティ目標に「フェイルセーフ」であることを証明するものであり、メモリリークやクラッシュといった一般的なバグが存在しないことを保証するものではないという認識も共有されています。</p>
+<h2>形式的検証の限界と現実世界への適用課題</h2>
+<p>コミュニティでは、形式的検証が抱える本質的な限界や、現実世界の複雑なソフトウェアへの適用における課題についても多くの議論がなされました。ホーティング問題との関連性について、形式的検証は「あらゆるプログラム」の特性を証明できるわけではないが、「特定のプログラム」の特定の特性を証明することは可能であり、実用上は大きな障害にならないとの見解が示されています。</p>
+<p>一方で、形式的検証のプロセスそのものの複雑さとコストが課題として挙げられています。Leanでの証明は手動で行うと元のコード作成の数十倍の労力がかかるとされ、AIがその労力を削減できる可能性が期待されています。</p>
+<p>最も重要な課題の一つとして「仕様の正確性」が指摘されました。「コードにバグがなくても、仕様にバグがあれば意味がない」という根本的な問題です。AIがコードの正しさを仕様に対して証明できても、その仕様が人間の意図や現実世界の要件を正確に捉えているとは限りません。AIが間違った目標を達成してしまう可能性や、AIが生成する証明やテスト自体の信頼性（AIが嘘をついたり、もっともらしいが誤った解決策を提示したりする可能性）に対する懸念も表明されています。</p>
+<p>さらに、現実のハードウェア（CPUのバグ、サイドチャネル攻撃など）やOS、並行処理、非決定論的な要素といった低レベルのシステムは、形式的検証のモデルに完全に取り込むことが極めて困難であるという点が強調されています。検証されたのは特定の条件下でのプロトコルであり、広範なシステム全体のセキュリティを保証するものではないという認識が示されています。</p>
+<h2>AIのソフトウェア開発への影響と信頼性</h2>
+<p>AIがソフトウェア開発にもたらす影響は多岐にわたり、意見は分かれています。肯定的な側面としては、AIエージェントの活用により開発速度とコード品質が向上する可能性が挙げられています。あるユーザーの企業では、エージェント型コーディングの導入後、インシデント率が大幅に減少し、余剰リソースをテストや検証に振り向けることで品質が向上したという具体的な経験が共有されました。AIが形式的検証のタスクを高速化し、人間の専門家を支援するツールとして機能することへの期待も高まっています。</p>
+<p>しかし、AIの信頼性に対する懸念も根強く存在します。特にGoogleのGeminiモデルについては、ベンチマーク偏重による不整合性や、間違った情報を生成する傾向があるという批判的な意見が寄せられています。AIが生成するテストや証明が、見た目には正しく見えても、実際には問題を見逃したり、意図しない振る舞いを隠蔽したりするリスクも指摘されています。また、AIが人間の専門知識なしに、より高速にコードを生成・検証できるようになることが、将来的に人間のソフトウェア開発者の役割を縮小させるのではないかという問いも投げかけられています。一方で、AIは「何を証明するか」という価値判断の部分では人間の介在が不可欠であり、人間の役割は変われど消えることはないという見方も示されています。</p>
+<h2>まとめ</h2>
+<p>Google DeepMindによるSignal暗号プロトコルのAI支援型形式的検証は、ソフトウェアのセキュリティと信頼性を高める上で重要な一歩となる成果です。AIが数百万行の証明コードを生成し、人間の専門家をサポートすることで、これまで不可能だった規模の検証が可能になる未来を示唆しています。</p>
+<p>しかし、この成果は形式的検証の広範な適用における課題も浮き彫りにしました。検証の範囲が限定的であること、仕様の正確性の問題、ホーティング問題などの理論的限界、そして現実世界の複雑なシステム（OS、ハードウェア、非決定論的要素）を完全にモデル化することの困難さが主な論点です。AIの信頼性自体への懸念も残されており、AIが生成する証明やテストの「正しさ」をどう保証するかが引き続き重要な課題です。</p>
+<p>将来に向けては、検証済みソフトウェアが標準となる未来が多くのユーザーによって予測されており、CPUのような低レベルのハードウェアからWebフレームワークやAPIサービスまで、形式的検証の適用範囲が拡大することが期待されています。そのためには、コードを書き上げてから検証するのではなく、最初から形式的な仕様に基づいてソフトウェアを設計・構築するアプローチや、再利用可能な検証ライブラリの確立が鍵となると考えられています。この技術の進展は、人間のソフトウェア開発者の役割を変革し、より安全で信頼性の高いデジタル世界を築く可能性を秘めています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
