@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A false smoke alarm almost drowned Jane Street&#x27;s only NYC datacenter - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A false smoke alarm almost drowned Jane Street&#x27;s only NYC datacenter</h1>
+        <div class="meta">
+            投稿日: 2026年11月12日 | ランク: 6
+        </div>
+        <a href="https://michael.bacarella.com/2026/11/10/false-smoke-alarm-jane-street-datacenter/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Jane Streetのデータセンターで煙感知器の誤作動により空調が停止し、スプリンクラー作動の危機に瀕した際、担当者が手動でサーバーの電源コードを抜いて危機を回避したという出来事が語られ、そこから職場での個人情報開示のリスク、劣悪な計画に対する「ヒーロー的行動」の是非、データセンターの火災対策、そしてハリケーン・サンディ時の教訓といったテーマについてHacker Newsユーザーが活発に議論しました。</p>
+<h2>個人情報の開示、職務の境界線、そして「ヒーロー文化」の功罪</h2>
+<p>コメンテーターの一人（hackermailman）は、職場近くに住んでいることを話したため、休日や夜間に緊急サーバー停止を求められるようになったと語っています。これは、個人的な情報を職場に明かすと、無給の労働として自分に跳ね返ってくるという教訓（tombert）につながり、「NO」と言うことの重要性や、それができない場合の搾取について議論が及びました。一部のユーザーは、オンコール担当になるのであれば「大幅な昇給がなければ絶対しない」と明言できる立場を持つことの強さ（pavel_lishin）を指摘しています。</p>
+<p>また、2012年のハリケーン・サンディの際、ディーゼル燃料を高層階の発電機まで手動で運んだ「超人的な人々」の逸話が引用され、こうした「ヒーロー的な行動」が称賛される一方で、多くは「ずさんな計画と劣悪なリーダーシップによる失敗を美化している」（gecko、apercu、jethro_tell）と批判しています。労働時間の効率化が進んでも労働時間が短くならないのは、競争市場において「より多くをこなす」企業が生き残るためだという見方（csallen）がある一方、これは労働者の搾取であり、労働保護法規によってのみ改善されると反論も出ています。</p>
+<h2>データセンターの火災対策と災害への備え</h2>
+<p>コメントの元の記事でスプリンクラーが言及されたことから、データセンターでの火災対策についての議論が活発に行われました。多くのユーザーは、水による消火は機器にとって火災と同等かそれ以上の損害を与えるため、ハロンガスや不活性ガス（CO2、Novec 1230など）システムが一般的であると指摘しています。ハロンガスは1990年代に環境規制で禁止され、現在は代替ガスが使用されています。これらのガスは人命への危険性も伴うため、建物の種類や立地によって水系システムが選択される場合があること、またスプリンクラーヘッドは通常、火災発生場所のみ作動するため、必ずしも施設全体が水浸しになるわけではないという説明もありました。</p>
+<p>緊急電源遮断（EPO）ボタンの設置が一般的であり、煙感知器と連動してCRACユニットを停止させる設計（元の記事の事象の原因）は珍しくないが、サーバーの電源を自動的に切るか、あるいはオペレーターが手動で介入できる仕組みが必要との意見も出ました。</p>
+<h2>ハリケーン・サンディが示したBCPの課題</h2>
+<p>2012年のハリケーン・サンディは、ニューヨークのデータセンターにとって大きな試練であったことが多数のコメントで語られています。特に、地下の燃料タンクが浸水し、高層階の発電機への燃料供給が困難になった事例が繰り返し挙げられました。55ガロン（約200リットル）のディーゼル燃料ドラム、あるいは5ガロン（約19リットル）のバケツを手動で17階まで運んだ「バケツ隊」の逸話が共有され、従業員の献身的な努力として称賛される一方、計画不足の象徴と見なされることも多いようです。</p>
+<p>あるユーザーは、当時勤めていたFog Creek（Trello、SquareSpaceなどを運営）がバックアップ戦略の欠如を理由に退職したが、すぐにハリケーンが襲来し、その予見が的中した経験を語り（gecko）、計画の不備をヒーロー行為でごまかしていると批判しました。燃料の品質管理の重要性も指摘されており、長期間貯蔵されたディーゼル燃料は、水分の蓄積やバクテリアの増殖により劣化し、フィルター詰まりを引き起こすことがあると説明されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのスレッドは、Jane Streetのデータセンターで発生した緊急事態をきっかけに、データセンターの設計、災害対策、そして企業文化における「ヒーロー的行動」の評価という広範なテーマに発展しました。特に、従業員が個人的な情報を開示することで職務外の負担を強いられたり、災害時に劣悪な計画を補うために「超人的な努力」を強いられたりする状況が、賞賛されるべきか、あるいは計画不足の失敗として批判されるべきかという点で議論が集中しました。ハリケーン・サンディ時のディーゼル燃料手動運搬の事例は、BCP（事業継続計画）における盲点やリスク管理の重要性を浮き彫りにし、データセンターの火災対策（水系 vs. ガス系）についても活発な意見交換が行われました。これらの議論は、ITインフラのレジリエンスと、それを支える人間的要素の両面における課題を多角的に示唆しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
