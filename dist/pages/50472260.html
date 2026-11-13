@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini 4 Hydrogen and Orchestrator - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Gemini 4 Hydrogen and Orchestrator</h1>
+        <div class="meta">
+            投稿日: 2026年11月13日 | ランク: 3
+        </div>
+        <a href="https://antigravity.google/blog/gemini-4-hydrogen-in-google-antigravity/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Googleが発表した新しいAIモデル「Orchestrator」と「Gemini 4 Hydrogen」について、ユーザーはOrchestratorの異なるモデルを組み合わせた効率化アプローチに期待を寄せる一方で、Geminiモデル自体の性能評価は賛否両論を呈しています。特に、モデルの命名規則の分かりにくさや、記事がホストされているウェブページの深刻なスクロール問題に対して多くの不満が表明されています。</p>
+<h2>OrchestratorのコンセプトとGeminiモデルの性能評価</h2>
+<p>Orchestratorは、CarbonとHydrogenという異なるGeminiモデルを動的に切り替えることで、タスクの成功率を維持しつつ、クォータ消費を24%削減し、処理速度を19%向上させるというアプローチが注目されています。このコンセプトは、Anthropicの「advisor mode」やGitHubの「HydraFusion」といった既存のマルチモデルパイプラインと比較され、効率化とコスト削減への期待が寄せられています。</p>
+<p>しかし、Geminiモデル全体の性能については意見が分かれています。物理工学分野で「ワークホース」として安定した性能を発揮すると評価する声がある一方で、一部のユーザーは「幻覚が多く、プロの仕事には使えない」「Argonはバグが多く、Opusによるレビューが必要」「遅い」と批判しています。特に、Carbon以前のGeminiモデルは「ゴミ」だったという厳しい意見も聞かれました。他社モデル（Claude Opus, GPT Sol, DeepSeek Flash）との比較では、Orchestratorの25%という節約効果が、OpusをオーケストレーターとするMjolnirの60%と比較して低いという指摘や、Flashモデルが単純作業やコスト重視のタスクで有用であるという見方もあります。</p>
+<h2>混乱を招くGoogle Geminiの命名規則</h2>
+<p>GoogleのGeminiモデルの命名（Argon, Carbon, Hydrogenなど）は、ユーザーの間で大きな混乱と不満を引き起こしています。これらの元素名がモデルの能力やサイズを直感的に示していないため、「どのモデルが優れているのか分からない」という声が多く聞かれ、Atomic Weight（原子量）やアルファベット順など様々な推測が飛び交っていますが、一貫した論理は見出されていません。</p>
+<p>一部のユーザーは、これを「内部ジョーク」や「元素周期表に沿った命名」ではないかと推測していますが、多くのユーザーは「ひどい命名」「直感的でない」と批判しています。OpenAIの最近の命名規則（Luna, Terra, Sol, Astra）と比較して、Geminiの方が理解しにくいという意見が優勢であり、Googleがユーザーフレンドリーな命名規則を導入すべきだという声が上がっています。</p>
+<h2>ウェブページの深刻なスクロール問題</h2>
+<p>Orchestratorの記事がホストされているGoogleのウェブページは、ネイティブのスクロール動作をオーバーライドしており、ユーザーから多数の苦情が寄せられています。具体的には、「ページが遅く、使いにくい」「Safariでズームすると横にスクロールする」「スワイプでのページ移動機能が効かない」といった問題が指摘されています。</p>
+<p>多くのユーザーは、このようなパフォーマンスの悪いウェブページをGoogleが公開したことに驚きと失望を表明しており、「スクロール操作は許可制にすべきだ」「Geminiがレビューしたのかも」といった皮肉も聞かれました。</p>
+<h2>OrchestratorとHydrogenの利用可能性</h2>
+<p>Orchestratorおよび新しいGemini 4 Hydrogenモデルの利用可能性については、ユーザー間で情報が錯綜しています。一部のユーザーは、Carbonと同様にOrchestratorはUltraプランのみで利用可能だと主張していますが、他のユーザーからはGoogle AI ProプランでHydrogenが選択できるようになった、あるいはFlash 3.8を置き換えたという報告もあります。Orchestrator自体はProプランでは見えないという報告もあり、現時点での正確な利用状況は明確ではありません。</p>
+<h2>まとめ</h2>
+<p>Googleの新しいOrchestratorアプローチは、異なるAIモデルを動的に組み合わせることで、効率性とコストパフォーマンスを向上させる可能性を秘めていると評価されています。しかし、Geminiモデル自体の性能評価は、安定性と革新性を評価する声がある一方で、信頼性、速度、およびバグの多さに対する批判も根強く、他社モデルと比較して一貫した優位性を確立しているとは言えません。モデルの命名規則が非常に分かりにくく、ユーザーの間で混乱を招いている点は、Googleが早急に対処すべき課題として指摘されています。また、今回発表された記事がホストされているウェブページの深刻なスクロール問題は、ユーザーエクスペリエンスを著しく損なっており、Googleに対する失望の声が多数上がっています。OrchestratorやHydrogenの実際の利用可能性については情報が錯綜しており、ユーザーは自身のプランでどのモデルが使えるのか不明瞭な状況にあります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
