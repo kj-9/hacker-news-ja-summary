@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why get an expensive Pi when I have an old phone? - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Why get an expensive Pi when I have an old phone?</h1>
+        <div class="meta">
+            投稿日: 2026年11月14日 | ランク: 9
+        </div>
+        <a href="https://so.long.thanks.fish/why-pi-when-i-have-an-old-phone/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、高価になったRaspberry Piの代替として古いスマートフォンを使用することの是非について議論しています。コスト、パフォーマンス、GPIO、ソフトウェアサポート、バッテリーの安全性、および中古小型PCなどの他の代替案が主な論点です。</p>
+<h2>Pi対中古スマートフォン</h2>
+<p>多くのユーザーは、古いスマートフォンがRaspberry Piよりもはるかに強力なCPUとRAM、そして画面、カメラ、GPS、Bluetoothといった多くの組み込みセンサーと機能を持っている点を強調しています。特にAIやエッジコンピューティングの用途において、その高い演算能力が評価されています。例えば、あるユーザーは古いAndroidフォンをKubernetesクラスターのノードとして活用し、24コアと30GBのRAMを備えた環境を構築した事例を共有しています。また、WordPressサイトやGolangのpubsubサービスを古いスマートフォン上で実行し、Pi 3よりもはるかに強力で作業しやすかったという経験談もあります。</p>
+<p>一方で、PiはGPIO（汎用入出力）ピンを備え、整備されたLinuxカーネルとユーザー空間、豊富なドキュメント、そして活発なコミュニティサポートが強みとされています。Piは「弄られるために作られている」ため、初心者にとっての開発体験はスマートフォンよりも優れているという意見もあります。</p>
+<h2>バッテリーと信頼性の課題</h2>
+<p>中古スマートフォンを24時間稼働させる際の最大の懸念は、リチウムイオンバッテリーの安全性と寿命です。バッテリーの膨張、発火のリスク、および経年劣化が繰り返し指摘されています。多くのスマートフォンはバッテリーなしでは起動しないため、継続的な電力供給のためにバッテリーを取り外して電源を直結する改造が必要になる場合があります。これにはハンダ付けや、バッテリー管理システム（BMS）の回避といった専門的な知識と作業が伴い、誤ると危険が伴う可能性も指摘されています。</p>
+<p>対策としては、充電制限ソフトウェアの使用や、一部のスマートフォン（例：OnePlusの一部モデル）に搭載されている「バイパス充電」機能の活用が挙げられています。しかし、数百台といった規模でデバイスを展開する場合、中古スマートフォンは「バスタブ曲線」の最終段階にあるため、故障率が高く、予測不能な挙動を示す可能性が高いと見られています。これに対し、Piのようなコモディティハードウェアは、新品であれば保証の対象となり、より一貫した信頼性が期待できるという意見があります。</p>
+<h2>GPIOとソフトウェアサポート</h2>
+<p>Raspberry Piの主要な利点の一つはGPIOピンですが、USB-to-GPIOアダプター（Adafruit FT232Hなど）を使用すれば、スマートフォンでもGPIO機能を利用できることが議論されています。ただし、リアルタイム制御が必要な場合は、ArduinoやESP32のようなマイクロコントローラを介して接続することが推奨されます。</p>
+<p>ソフトウェアの面では、Piが安定したLinuxカーネルと定期的なOSアップデートを提供しているのに対し、古いスマートフォンはカーネルのメンテナンス不足、ベンダー独自の閉鎖的なバイナリブロブ、そしてブートローダーのロックが大きな課題となります。これにより、汎用的なLinuxディストリビューションを導入することが難しく、セキュリティ上の脆弱性が残る可能性があります。しかし、PostmarketOSやNerves (Elixir VM) のようなプロジェクトは、古いスマートフォンにメインラインのLinuxカーネルを導入する取り組みを進めており、最近ではLLM（大規模言語モデル）がカーネルの移植やドライバのリバースエンジニアリングに役立つ可能性も示唆されています。</p>
+<h2>Raspberry Piの代替としての小型PC</h2>
+<p>Raspberry Piの価格上昇と入手困難さを受け、GPIOが不要な用途であれば、中古の小型PC（NUC、Lenovo Tiny/Dell MicroなどのSFF PC）、シンクライアント、あるいは画面が壊れた古いノートPCのメインボードが、Piの強力な代替案として広く推奨されています。これらのx86-64ベースのデバイスは、Piよりもはるかに強力なプロセッサ、豊富なRAM（16GB以上も珍しくない）、そしてSSDを搭載し、価格もPiと同等かそれ以下である場合が多いと指摘されています。</p>
+<p>中古の小型PCは、ホームサーバー、メディアサーバー、Kubernetesノード、Pi-holeなど、多くの用途で優れたパフォーマンスを発揮します。アイドル時の消費電力はPiより高いものの、それでも数ワット程度に抑えられるモデルも多く、バッテリーの問題がないことも利点です。また、古いノートPCのメインボードを再利用する場合、バッテリーを取り外してUSB-Cなどで電源を供給する方法が提案されており、BIOS設定でバッテリーなしでの動作や自動起動を可能にする工夫も共有されています。</p>
+<h2>まとめ</h2>
+<p>Raspberry Piは、GPIOアクセス、教育用途、小型フォームファクタ、広範なコミュニティサポートといった特定のユースケースにおいて、依然としてその価値を保持しています。しかし、近年Piの価格が上昇し、入手が困難になっている現状において、古いスマートフォンや中古の小型PCが、多くの汎用コンピューティング用途で魅力的な代替案として浮上しています。</p>
+<p>古いスマートフォンは、高い計算能力と豊富な内蔵センサーを低コストで提供する可能性を秘めていますが、バッテリーの安全性、ソフトウェアのカスタマイズの複雑さ、およびスケーラビリティの課題が伴います。一方、GPIOが不要なホームサーバーやデスクトップ代替などの用途では、中古のx86-64ミニPCやノートPCのメインボードが、Piを上回るパフォーマンスと安定したソフトウェアサポートを、費用対効果の高い形で提供する強力な選択肢となっています。</p>
+<p>最終的には、プロジェクトの具体的な要件、技術的な習熟度、そしてコストと信頼性のバランスを考慮し、最適なデバイスを選択することが重要であるという結論が導き出されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
