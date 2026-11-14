@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse engineering my Coway air purifier to ditch the cloud - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Reverse engineering my Coway air purifier to ditch the cloud</h1>
+        <div class="meta">
+            投稿日: 2026年11月14日 | ランク: 6
+        </div>
+        <a href="https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、ユーザーがAI（LLM）を活用してクラウド接続必須のIoTデバイスをリバースエンジニアリングし、ローカルで制御するトレンドについて議論されています。これはデバイスの所有権を取り戻し、プライバシーを保護する動きとして肯定的に捉えられる一方で、スマートデバイスの真の必要性や、DIYによる安価で効果的な空気清浄機の代替案についても活発な意見交換がされています。</p>
+<h2>AIを活用したIoTデバイスのハッキングと所有権の奪還</h2>
+<p>多くのユーザーは、AI（特に大規模言語モデル、LLM）の助けを借りて、クラウド接続が必須とされるIoTデバイスをリバースエンジニアリング（RE）し、Home Assistantのようなローカルシステムで制御する動きを歓迎しています。これにより、メーカーのロックイン戦略から解放され、デバイスの真の所有権を取り戻し、プライバシーを保護できるとされています。Vornado製扇風機やHaier製エアコン、Rheem製炉などのハッキング事例が挙げられ、AIがこのプロセスを容易にしているとの指摘があります。</p>
+<p>一方で、AI企業がREを妨害しようとする動き（例: Opus 5.5の制限）や、メーカーがAIを利用してDRM（デジタル著作権管理）を強化し、将来的にデバイスのロックダウンがより困難になる可能性が懸念されています。また、メーカーがソフトウェア開発やセキュリティを軽視している現状が、REを通じて露呈しているという指摘もあります。一部では、メーカーが広告やサブスクリプションでデバイス価格を補助している可能性があり、ロックインを破ることで反消費者的な企業に損害を与えられるという意見も出ています。</p>
+<h2>スマートホームデバイスの価値と「ダム」な代替案</h2>
+<p>空気清浄機のようなデバイスにおける「スマート」機能の必要性については意見が分かれています。遠隔操作、空気品質データの監視、複雑な自動化（例: 寝室の自動化と連動して空気清浄機のファン速度を調整）といった利便性を評価する声がある一方で、多くのユーザーは最初から「ダム」（非スマート）なデバイスを好んでおり、余計な設定の手間やプライバシーリスクを避けたいと考えています。</p>
+<p>Zigbee、Z-Waveのような完全にローカルなプロトコルや、Home Assistantのようなオープンソースのスマートホームシステムに対する支持が高いです。新しい「Matter」規格については、ローカル制御を意図しているものの、メーカーがインターネット接続やテレメトリー送信を促す可能性、および認証プロセスにかかる費用やロックインの可能性に懸念が示されています。また、スマート機能を持つ家電製品でも、Wi-Fi接続をせずに「ダム」なデバイスとして使用するという選択肢を実践しているユーザーもいます。</p>
+<h2>効果的な空気清浄機の選択とDIYソリューション</h2>
+<p>空気清浄機の選び方と、DIYによる代替ソリューションについても活発な議論が交わされています。市販の高級空気清浄機（Cowayなど）の性能や静音性を評価する声がある一方で、HEPAフィルターが家庭用としては過剰で、空気抵抗が大きく騒音の原因になりやすいという批判も出ています。PM2.5やアレルギー対策にはMERV13/14フィルターで十分だという意見が優勢です。</p>
+<p>特に注目されているのが「Corsi-Rosenthal Box」というDIY空気清浄機です。これは箱型扇風機と市販の炉フィルター（MERV13/14など）を組み合わせて作るもので、安価で高いCADR（清浄空気供給率）を実現できると評価されています。見た目の美しさに欠けるという意見もあるものの、その性能とコストパフォーマンスから多くの支持を得ています。また、セントラルHVACシステムに高品質なMERVフィルターを導入し、ファンを定期的に稼働させることで家全体の空気品質を向上させる方法も提案されていますが、ブロワーモーターへの負荷や湿度制御への影響に注意が必要とされています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、AIの進化がIoTデバイスのハッキングとユーザーによる所有権奪還を促進している現状を浮き彫りにしています。多くのユーザーがプロプライエタリなクラウドサービスからの脱却とプライバシーの保護を求めており、LLMはそのための強力なツールとなりつつあります。しかし、この動きが永続的なものとなるか、それともメーカーによるロックダウン強化によって終焉を迎えるかについては、意見が分かれています。同時に、空気清浄機のようなスマートデバイスの本来の価値が問われ、「ダム」なデバイスやCorsi-Rosenthal Boxのような安価で効果的なDIYソリューションが再評価されています。これは、技術の進歩がユーザーに新たな可能性をもたらすと同時に、デジタル主権と消費者の選択の自由という根本的な問いを提起していることを示しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

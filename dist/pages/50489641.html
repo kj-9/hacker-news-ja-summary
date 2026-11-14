@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAA issues national ground stop - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">FAA issues national ground stop</h1>
+        <div class="meta">
+            投稿日: 2026年11月14日 | ランク: 1
+        </div>
+        <a href="https://www.nbcnews.com/news/us-news/faa-orders-nationwide-ground-stop-departing-flights-reasons-safety-rcna609247" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>2026年11月13日、米国の連邦航空局（FAA）が通信障害により全国的な離陸停止（グランドストップ）を発令し、全米の航空交通が麻痺しました。当初、原因は不明で様々な憶測が飛び交いましたが、最終的に通信ネットワークの更新作業中の障害が原因と報じられました。</p>
+<h2>全国的なグランドストップと影響</h2>
+<p>FAAは、「並外れた状況と安全上の理由により」全米の空港で離陸停止を命じました。管制通信システムの問題が原因とされ、国内線のほとんどが停止しました。国際線はケースバイケースで対応され、太平洋方面へのフライトなど一部の国際線は運航が許可され始めました。フライトトラッカーでは、米国上空を飛行する航空機の数が劇的に減少する様子が確認されました。
+空港では、ゲートの不足や乗客の降機制限、パイロットへの情報不足による混乱が報告されました。着陸した航空機の乗客が長時間機内に留め置かれる事態も発生し、代替の降機手段（タラップとバス）や航空機の牽引などが議論されました。</p>
+<h2>障害原因に関する憶測と判明した原因</h2>
+<p>障害の具体的な原因について、コメントでは当初多くの憶測がなされました。
+*   <strong>古いシステムとインフラの脆弱性:</strong> ATCシステムがIBM System/360やIBM 9020に由来する非常に古い技術に基づいているという指摘が多く、長年の資金不足によるインフラのアップグレードの遅れが問題の根底にあるという見方が強かったです。
+*   <strong>AIシステム「SMART」の導入:</strong> FAAが最近全国展開を開始したAIベースの経路最適化ツール「SMART」が原因ではないかという憶測が多数を占めました。AIがレガシーシステムに過剰な要求を送ったり、未熟なAIが予期せぬ形でシステムをダウンさせたりした可能性が指摘されました。しかし、FAAや開発元のAirspace Intelligence社は「SMART」との関連を否定しました。
+*   <strong>通信ネットワーク障害:</strong> ATCの無線システム自体ではなく、管制センターと遠隔無線送信機を繋ぐ広域通信ネットワークに問題があるという推測が次第に有力視されました。最終的に、L3Harris社が運用するこの通信ネットワークの更新作業中にシステムが再起動し、クラッシュして通信障害を引き起こしたことがCBSニュースなどによって報じられました。
+*   <strong>その他の可能性:</strong> Microsoft 365の障害、Friday the 13th、国家気象局のレーダー障害など、同時期の他の出来事との関連性も一時的に議論されました。サイバー攻撃、ランサムウェア、外国の敵対的行為などの可能性も浮上しましたが、国土安全保障省はサイバー攻撃の可能性を否定しました。</p>
+<h2>航空管制システムの冗長性と課題</h2>
+<p>航空管制システムは本来、高い冗長性を持つべきですが、今回の全国規模の障害は想定外の事態でした。音声通信の代替としてCPDLC（テキストベース通信）や、航空機間の直接無線通信、レーダーに依存しない管制方法も存在しますが、全国的なシステムダウンを補うには限界があることが示されました。パイロットは無線喪失時の緊急手続きの訓練を受けていますが、すべての航空機が同時に通信を失うような状況は極めて困難です。この事態は、航空交通量の増加に対応するためのシステム全体の近代化と、予期せぬ広範囲な障害に対する真のレジリエンスの必要性を改めて浮き彫りにしました。</p>
+<h2>インフラ更新とAI導入への懸念</h2>
+<p>米国では、航空管制システムの近代化は2003年頃から「NextGen」プロジェクトとして進められてきましたが、長年にわたり予算や進捗の遅れが指摘されてきました。今回の障害は、約450億ドル規模と見積もられる大規模なインフラ更新が喫緊の課題であることを改めて示唆しました。また、「金曜日にデプロイするな」というソフトウェア開発の鉄則が、航空管制システムのようなクリティカルなインフラの更新にも適用されるべきかという議論が巻き起こりました。AI技術の導入に関しては、その効果に期待が寄せられる一方で、重要な安全システムへのAIの統合が性急すぎないか、潜在的なリスクが十分に評価されているか、といった懸念が示されました。</p>
+<h2>まとめ</h2>
+<p>2026年11月13日に発生した米国の全国的な航空管制停止は、FAAの通信ネットワークの更新作業中のシステム障害が原因でした。この事態は、長年遅れてきた航空管制インフラの近代化の喫緊性、および新しいAI技術を導入する際の慎重さの必要性を浮き彫りにしました。世界中で航空機が運航を停止し、空港で大混乱が生じたことは、社会の基幹インフラが抱える脆弱性と、その維持・更新に対する投資と配慮の重要性を改めて認識させる出来事となりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
