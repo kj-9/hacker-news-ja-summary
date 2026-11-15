@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&#x27;Birdbrain&#x27; Is a Misnomer. Crows Make Decisions Faster Than We Can - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">&#x27;Birdbrain&#x27; Is a Misnomer. Crows Make Decisions Faster Than We Can</h1>
+        <div class="meta">
+            投稿日: 2026年11月15日 | ランク: 5
+        </div>
+        <a href="https://www.nytimes.com/2026/11/15/science/birdbrain-crows-birds-research-decision.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントでは、鳥の知能、特にその意思決定の速さと「birdbrain」という言葉の矛盾について活発な議論が交わされた。多くの人々は、鳥の脳が小さいにもかかわらず高度な知能を持ち、効率的な情報処理を行う能力を強調している。</p>
+<h2>「Birdbrain」という言葉の誤解と鳥の知能</h2>
+<p>多くのコメント投稿者は、「birdbrain（鳥の脳みそ）」という言葉が「愚か」を意味することに対し、鳥、特にカラス、ワタリガラス、オウムが高い知能を持つという科学的知見との間に矛盾を感じている。ネイティブスピーカーの多くは、「birdbrain」が「速い意思決定」ではなく「愚かさ」を意味すると明確に指摘している。「頭のないニワトリが走り回る」といった俗説や、ドードー鳥がその語源である可能性を論じる意見もあった。しかし、鳥が飛行中に狭い枝に着地する様子など、その素早い動きや反応能力から、鳥の脳が非常に効率的な情報処理を行っていることは明らかであると強調された。</p>
+<h2>鳥の脳の構造と効率的な情報処理能力</h2>
+<p>鳥の知能が高い理由として、その脳の特殊な構造が挙げられている。哺乳類と比較して脳のサイズは小さいものの、ニューロン密度が非常に高く、ニューロン自体のサイズも小さいため、限られた体積により多くのニューロンを詰め込むことができる。これにより、神経伝達距離が短くなり、信号の伝達速度が向上し、ゼロに近い遅延と高い代謝効率を実現していると考えられている。脳のサイズだけが知能の決定要因ではなく、その情報処理容量（IPC）が重要であり、特定の課題においては大型類人猿に匹敵すると指摘されている。</p>
+<h2>知能の多様な進化と定義</h2>
+<p>コメントでは、知能が地球上で少なくとも3回（哺乳類、鳥類、タコ）独立して進化した可能性が示唆されている。それぞれのグループが異なる脳のアーキテクチャやニューロン設計を持つことから、知能を実現する方法は複数存在するという見解が示された。さらに、ミツバチ、植物、粘菌、さらには白血球のような細胞レベルでも「知能」と見なせる適応的な挙動が見られるという意見もあり、知能の定義の広がりについても議論された。カラスやオウムは非常に賢い一方で、ニワトリや家畜の七面鳥は「愚か」と見なされがちだが、ニワトリには高度な社会的知能があること、野生の七面鳥は賢いことなど、種による知能の多様性も指摘されている。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsの議論は、鳥の知能、特にその素早い意思決定能力に関する一般的な認識と、「birdbrain」という言葉が持つ「愚かさ」という語義とのギャップに焦点を当てた。コメント投稿者たちは、鳥の脳が小さいながらも高いニューロン密度と効率的な情報処理能力を持つことで、驚くべき認知能力を発揮していることを強調した。また、知能は単一の指標で測れるものではなく、哺乳類、鳥類、タコ、さらには植物や微生物に至るまで、生命の様々なレベルで異なる形で進化してきた多面的な現象であるという深い洞察が示された。この議論は、人間中心的な知能の定義を見直し、生物多様性の中での認知能力の多様性を理解する重要性を浮き彫りにしている。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

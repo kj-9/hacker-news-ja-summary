@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protomaps: Self-hosting map tiles has gotten cheap and easy - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Protomaps: Self-hosting map tiles has gotten cheap and easy</h1>
+        <div class="meta">
+            投稿日: 2026年11月15日 | ランク: 3
+        </div>
+        <a href="https://bruceroettgers.eu/blog/protomaps/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、PMTilesフォーマットとその利用について活発に議論しています。特に、コスト削減、パフォーマンス最適化の課題と解決策、大規模な地理空間データへの対応、そしてオープンソースエコシステムのツールに焦点が当てられています。</p>
+<h2>PMTilesの利点と導入</h2>
+<p>多くのユーザーは、PMTiles（Protomaps Tile Archive）が地図データ配信の優れたソリューションであると評価しています。その主な利点は以下の通りです。</p>
+<ul>
+<li><strong>コスト削減</strong>: Google Mapsのような商用サービスからPMTilesに移行することで、運用コストを大幅に削減できるという経験談が多く寄せられています。月額150ユーロかかっていた費用がほぼゼロになった例や、Cloudflare R2, D1, Workersを組み合わせて月額約2ドルで個人用地図を運用している例が挙げられています。</li>
+<li><strong>プライバシーと制御</strong>: 自社で地図インフラを運用することで、プライバシー保護やアクセス制御を強化できる点が強調されています。</li>
+<li><strong>幅広いクライアントサポート</strong>: MapLibre GLやLeafletなどの既存の地図ライブラリと連携するnpmライブラリがあり、GDALドライバも利用可能です。</li>
+<li><strong>使いやすさ</strong>: セットアップが簡単で、テーマ変更も容易であると評価されています。</li>
+</ul>
+<h2>パフォーマンスとキャッシングの最適化</h2>
+<p>PMTilesをS3などのクラウドストレージから直接提供する場合、パフォーマンスに関する課題が指摘されています。</p>
+<ul>
+<li><strong>レイテンシとキャッシュの課題</strong>: S3のようなクラウドストレージからの直接アクセスは、HTTP Range Requestの粒度的なキャッシュが不十分なため、各タイルが個別の高レイテンシなラウンドトリップになる可能性があり、予測不可能なレイテンシが発生することが挙げられています。</li>
+<li><strong>解決策</strong>:<ul>
+<li><strong>中間サーバー</strong>: Martinのようなタイルスサーバーを前段に置くことでパフォーマンスを改善できます。</li>
+<li><strong>CDNとWorker</strong>: Bunny StorageやCloudflareのCDNがRange Cachingをサポートしていること、Cloudflare Workerを使ってキャッシュをフロントに配置することで優れたパフォーマンスが得られることが報告されています。</li>
+<li><strong>スマートなキャッシュ</strong>: WASMとスマートなキャッシュを組み合わせることで、さらに改善できる可能性が示唆されています。</li>
+<li><strong>標準GETリクエスト</strong>: 静的ファイルとしてZXY形式で配置し、標準GETリクエストを使用する方が、キャッシュしやすく実用的なパフォーマンスが良い場合もありますが、そのためにはサーバー運用や静的生成が必要になります。</li>
+</ul>
+</li>
+</ul>
+<h2>大規模地図データの課題と複雑なタイル生成</h2>
+<p>PMTilesは効率的ですが、高解像度衛星画像のような超大規模なデータセット（数百テラバイト規模）では、依然として課題があります。</p>
+<ul>
+<li><strong>ストレージと処理コスト</strong>: ズームレベルを上げるとデータ量が爆発的に増え、数百テラバイト規模になると一般的なクラウドサービスや家庭用インターネットでの処理・アップロードが困難になります。</li>
+<li><strong>複雑なタイル生成</strong>: 高品質な地図（特に衛星画像モザイク）を生成するには、デモザイク、雲や煙/霞のフィルタリング、季節の一貫性の確保、露出補正など、高度な技術と時間（数週間かかる場合もある）が必要です。</li>
+<li><strong>関連エコシステム</strong>: ユーザーは検索にPelias、ルーティングにValhallaなど、他のオープンソースマッピングツールも自前でホストし、その充実したエコシステムに感銘を受けています。</li>
+</ul>
+<h2>関連するプロジェクトとエコシステム</h2>
+<p>コメントでは、PMTilesに関連する様々なプロジェクトやツールが紹介されています。</p>
+<ul>
+<li><strong>ビューアとツール</strong>: PMTilesはCLIツール「gloss」や公式Webインターフェース (pmtiles.io) で閲覧できます。</li>
+<li><strong>Cloudflareの活用</strong>: Cloudflare R2, D1, Workersを組み合わせることで、安価かつ強力な地図インフラを構築できると高く評価されています。特にR2はストレージ費用が非常に安価です。</li>
+<li><strong>nimbleterminal</strong>: ntmaps (Golangライブラリ) は異なるタイルプロバイダーを扱え、ntplaygroundsはOpenStreetMapデータを使った都市シミュレーションを提供します。</li>
+<li><strong>OpenFreeMap</strong>: nginxとBtrfsのハードリンクを利用して3億ファイルを公開し、無料で地図サービスを提供する類似のプロジェクトも存在します。</li>
+<li><strong>Tilemaker</strong>: 最新の改善により、惑星全体のタイル生成が5分未満で可能になる可能性が言及されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>PMTilesは、Google Mapsのような既存の商用サービスからの移行先として、コスト削減、プライバシー、そして柔軟なカスタマイズ性という点で非常に魅力的な選択肢です。Cloudflare R2やWorkersなどのクラウドネイティブな技術と組み合わせることで、個人から大規模なプロジェクトまで、非常に安価かつ効率的に地図サービスを運用することが可能になっています。</p>
+<p>一方で、S3からの直接アクセスにおけるパフォーマンスの課題や、高解像度衛星画像のような超大規模なデータセットを扱う際のストレージ、処理、そして品質管理の複雑さは依然として存在します。しかし、オープンソースコミュニティの活発な開発と、MartinタイルスサーバーやTilemakerの進化、そしてCloudflareのような新しいクラウド技術の登場が、これらの課題に対する新しい解決策を提供し、地図データ配信の世界を大きく変えつつあります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

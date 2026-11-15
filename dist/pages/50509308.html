@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A short explainer on how El Niño works [video] - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A short explainer on how El Niño works [video]</h1>
+        <div class="meta">
+            投稿日: 2026年11月15日 | ランク: 4
+        </div>
+        <a href="https://www.youtube.com/watch?v=7_JF3etiAv8" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>エルニーニョ現象に関するHacker Newsのコメントは、エルニーニョと地球温暖化の関連性、気候変動がもたらすリスクの性質、そして気候変動対策における各国の責任と国民の反応、さらには経済的影響と解決策の方向性について活発な議論が交わされています。</p>
+<h2>エルニーニョと地球温暖化、そして増大するリスク</h2>
+<p>コメントでは、現在のエルニーニョ現象が過去12万5千年で最も温暖な地球環境下で発生している点が強調され、気象・気候関連のリスクが常に増大しているという見解が示されました。この「リスク」の定義については議論があり、主観的なものか、客観的な「確率×コスト」で測られるものかといった意見が交わされています。具体的なリスクとして、大気中の水分増加による洪水被害の増大、海面上昇による沿岸部の浸水悪化、太平洋岸北西部での雪解け水不足、漁業への悪影響などが挙げられ、既存のインフラや農業が過去の気候体制に基づいて設計されているため、新たな気候変動に適応できていない現状が指摘されています。一方で、気候システムには非線形性があり、過去のデータから単純な直線的予測を立てることの危険性も示唆されました。</p>
+<h2>気候変動への責任、国民の反応と政治的課題</h2>
+<p>米国（および西側諸国）が地球温暖化に「過大な責任」を負っているにもかかわらず、その国民の反応が「子供じみている」という批判的な意見が出されました。気候変動の真実を伝えることの重要性が主張される一方で、それが経済的なコストや心理的な抵抗から人々によって「すぐに聞く耳を持たれない」結果となる可能性も指摘されています。米国は過去20年間でCO2排出量を大幅に削減したというデータが提示されましたが、これは製造業の他国への移転（消費ベースではなく生産ベースでの削減）によるものであり、「排出量の外部化」に過ぎないという反論もなされています。また、カナダなど西側諸国で気候変動対策が政治的にタブー視され、経済成長が優先されている現状や、中国の石炭消費量の増大といった他国の状況も議論に上がりました。</p>
+<h2>気候変動対策と経済的影響、そして解決策</h2>
+<p>気候変動対策が経済的な「物質的貧困」につながるという懸念が表明されました。より多くの住宅、交通、食料、エネルギー、そして子供が必要な現代において、炭素削減がこれらの「削減/否定」を意味すると捉えられ、人々が「DINK（夫婦で共働き、子供なし）ポッド人間」のような選択肢の少ない生活を望んでいないという意見です。これに対し、「無限の資本主義」と「絶え間ない成長」という考え方が現実的ではないという反論や、現実の制約を無視することは壊滅的な結果を招くと警告されました。コメントでは、短期的なインフレを引き起こさない、技術的な解決策が求められているという意見や、経済的豊かさを維持しつつ炭素を削減するアプローチの必要性が示唆されました。</p>
+<h2>エルニーニョに関する情報源</h2>
+<p>議論の中では、エルニーニョ現象の現状を示す具体的な情報源として、Climatereanalyzer.orgのグラフや、個人が作成したelnino.observerのようなサイトが共有されました。また、元の動画が米国に焦点を当てていたため、ブラジルやフランスといった他の地域に特化したエルニーニョの解説動画も紹介され、地域ごとの影響や情報への関心が示されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、エルニーニョ現象を起点に、地球温暖化がもたらす複合的なリスクの増大、リスク概念の多義性、そして気候変動対策における各国の責任と国民の意識や政治的課題について深く掘り下げた議論を展開しました。特に、気候変動対策が経済に与える影響に対する懸念と、物質的な豊かさを維持しつつ環境問題に取り組むための実現可能な解決策の模索が重要なテーマとして浮かび上がっています。これらの議論は、気候変動が単なる科学的現象ではなく、社会、経済、政治に深く根差した複雑な問題であることを浮き彫りにしています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
