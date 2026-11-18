@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nvidia stopped disclosing Singapore sales as revenues hit $104B - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Nvidia stopped disclosing Singapore sales as revenues hit $104B</h1>
+        <div class="meta">
+            投稿日: 2026年11月18日 | ランク: 8
+        </div>
+        <a href="https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>NVIDIAのジェンスン・フアンCEO（当時）の辞任を巡るHacker Newsのコメントでは、シンガポールを経由した半導体販売が輸出規制回避に関わるものだったのか、それともシンガポールが多国籍企業の地域ハブであることによる通常の会計処理だったのかについて議論が交わされました。NVIDIAの会計報告方法の変更、輸出規制の「抜け穴」としてのリモートコンピューティング、そしてフアン氏の辞任の背景にあるとされるメディアの報道姿勢についても活発な意見が述べられています。</p>
+<h2>シンガポール経由の収益とその性質</h2>
+<p>コメントでは、NVIDIAのシンガポール子会社が2025年に1040億ドルの収益を計上し、NVIDIA全体の収益の約半分を占めたという報道に対し、その意味合いが多角的に議論されています。一部のユーザーは、シンガポールが中国へのチップ密輸ルートとして利用されたと示唆するFTの報道（1.2）に言及していますが、多くのコメントは、シンガポールが税制優遇、強力な法の支配、効率的なインフラを備えたアジア地域の主要なビジネスハブであり、多くの多国籍企業が地域統括本部を置き、収益を計上しているため、NVIDIAのケースも同様であると指摘しています（1.4.2.1.5, 1.4.9, 1.22）。</p>
+<p>特に、1040億ドルという数字は、シンガポール国内の最終顧客への売上ではなく、アジアに拠点を置く多くのOEM（Wistron, Foxconn, Asusなど）を経由して、米国を含む世界中の最終顧客に販売されたチップの収益を含む可能性があるとの説明が有力視されています（1.3.4, 1.16）。また、シンガポール自体は広大なデータセンターを設置できる物理的スペースや電力容量に限りがあるため、実際にチップがどこで使われたのかという疑問も提起されており、マレーシアのデータセンターに送られた可能性が指摘されています（1.4.5.1.1）。しかし、調査官が実際に稼働しているチップをほとんど確認できなかったという反論もあり、議論は錯綜しています（1.4.5.1.1.1, 1.4.5.2）。</p>
+<h2>NVIDIAの会計報告変更への疑問</h2>
+<p>NVIDIAが2025年7月以降、四半期報告書で地域別収益の報告方法を「顧客請求場所に基づく」から「顧客本社所在地に基づく」に変更し、それまで言及されていたシンガポール関連の収益項目が公表から姿を消したことが、多くのユーザーから疑問視されています（1.7）。この変更は、輸出規制が強化される中でシンガポールでの事業の役割を軽視するための意図的な隠蔽であり、疑念を抱かせる行動だと見る向きがあります（1.16.2）。一方で、この変更はより実態に即した報告方法であり、地政学的な緊張が高まる中で関税や輸出規制の影響をより正確に反映するためのものという擁護意見もあります（1.7.2）。また、現在の暫定CEOであるCFOもこの変更に関与しているため、一連の問題に対する責任はフアン氏だけでなく、CFOにも及ぶ可能性があるとの指摘もなされています（1.7.1）。</p>
+<h2>輸出規制の抜け穴と中国の思惑</h2>
+<p>コメントでは、米国の輸出規制を回避するための「抜け穴」として、中国企業がシンガポールやマレーシアなどのデータセンターに設置されたNVIDIAのチップを物理的に購入するのではなく、リモートでコンピューティングサービスを借りて利用していた可能性が活発に議論されています（1.2.2, 1.2.3, 1.4.5, 1.4.10.1, 1.21）。この「リモートコンピューティング」は当時、法的に制限されていなかったものの、米国政府は最近この抜け穴を塞ぐ動きを見せています（1.4.10.1.1, 1.21.5）。</p>
+<p>なぜ中国が物理的なチップを必要とするのかという問いに対し、ユーザーは複数の理由を挙げています。将来的にアクセスを拒否されるリスクを回避するため（1.21.1）、自国でチップを所有することでコストを削減するため（1.21.2）、国家安全保障上重要な用途で利用するため（1.21.3）、そして大規模なデータセンターを建設・運用する専門知識を自国で蓄積するため（1.21.5）などが挙げられています。</p>
+<h2>ジェンスン・フアンの辞任とメディア報道</h2>
+<p>ジェンスン・フアン氏のCEO辞任は、単なる不倫スキャンダルだけでなく、シンガポールを経由した中国へのチップ販売による制裁回避疑惑への関与が主要な原因であるという見方が強く示されています（1.4, 1.4.6）。特に、輸出規制回避を助けたとされる女性との不倫が問題視されています。不倫自体が企業のHR上の重大な問題であり、制裁回避疑惑がなくても辞任は避けられなかったという意見もあります（1.4.3）。</p>
+<p>しかし、これらのNVIDIAに対する一連のネガティブ報道が、誰かによる「組織的なキャンペーン」ではないかという推測も多く見られます（1.14）。フアン氏を失脚させるための意図的な情報操作であると疑う声がある一方で、これは大きなスキャンダルが起きた際に、新しい情報が次々と報じられるという通常のメディアの動きに過ぎないという反論も展開されています（1.14.1, 1.14.3, 1.14.6）。</p>
+<h2>まとめ</h2>
+<p>NVIDIAを巡るシンガポールでのビジネスに関する議論は、単なる会計処理の問題に留まらず、米国の輸出規制、地政学、企業の透明性、そしてガバナンスといった複雑な要素が絡み合っていることを浮き彫りにしています。ジェンスン・フアン氏の辞任の真の理由は依然として憶測の域を出ませんが、一連の報道はNVIDIAのビジネス慣行と企業ガバナンスに大きな疑問を投げかけています。米国政府によるAIチップの輸出規制強化と、それに対する企業の対応が、今後のAI技術の発展と地政学的なパワーバランスにどのような影響を与えるかが引き続き注目されます。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

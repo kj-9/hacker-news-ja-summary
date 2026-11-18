@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quad9&#x27;s withdrawal from France: A canary in the coal mine - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Quad9&#x27;s withdrawal from France: A canary in the coal mine</h1>
+        <div class="meta">
+            投稿日: 2026年11月18日 | ランク: 3
+        </div>
+        <a href="https://blog.cloudflare.com/quad9-withdrawal-from-france/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントスレッドは、フランスにおけるDNSブロッキングの義務化、特に著作権侵害対策としてのQuad9の撤退の可能性を巡る議論に焦点を当てています。コメントは、インターネットの将来、政府による規制、著作権の役割、および「自由で開かれたインターネット」の概念について幅広い意見を交わしています。</p>
+<h2>自由で開かれたインターネットの終焉とバルカン化</h2>
+<p>多くのコメントは、インターネットが国家主導のサービスによる「バルカン化」へと向かい、「自由で開かれたグローバルインターネット」が終焉を迎えていると指摘しています。
+- 中国のグレートファイアウォールは、このプロセスが数十年前から始まっていることを示唆していると多くの人が指摘しています。
+- 一部のユーザーは、インターネットが常に国家主権と両立できないものであり、アメリカの覇権の崩壊がインターネットの変容につながると主張しています。
+- 将来的には、物理的な経済と同様に、主要なネットワークが貿易交渉によって管理され、AIがインターネットを破壊するのを制御するために利用されるという意見もあります。
+- しかし、インターネット利用者数は増加しており、「自由」が制限なくコンテンツを公開できることを意味するなら、それはずっと前に終わっているという反論もあります。</p>
+<h2>規制と著作権の影響</h2>
+<p>インターネットへの過度な規制や著作権保護の必要性について、激しい議論が交わされています。
+- 多くのユーザーは、インターネットの過度な規制がその「相互性」を破壊し、インターネットの解体につながると懸念しています。
+- 著作権の支持者は、インターネットを現状のまま維持するには、著作権問題の解決策を提供する必要があると主張します。特に、スポーツ放送局がリアルタイムのDNSブロッキングを要求していることが挙げられます。
+- しかし、他の人々は、著作権が古く、レントシーキング（不労所得獲得）のシステムであり、ビジネスモデルをデジタルネットワークの現実に合わせるべきだと反論しています。著作権を廃止するか、AIの台頭を考慮して芸術の奨励と報酬のあり方を見直すべきだという意見も多く見られます。
+- フランスでDNSブロッキングが義務化されたのは、著作権保有企業、特にカタールのbeIN Sports会長 Nasser Al-Khelaifi 氏が主導するスポーツ著作権業界のロビー活動によるものであると指摘されています。</p>
+<h2>地政学的要因と政府の動機</h2>
+<p>インターネット規制の強化には、地政学的な変化や政府の動機が背景にあるという見方が存在します。
+- 一部のコメントでは、西ヨーロッパの繁栄の終焉、ロシアからの安価なエネルギーの途絶、中国による製造業の吸収、AIによる残りの産業の破壊などが、将来的な市民の不満に対する政府の予防的措置として、インターネット規制強化を促していると分析しています。
+- 2014年の露・ウクライナ戦争勃発以降、ヨーロッパ全体の脅威プロファイルが変化し、ハイブリッドサイバー戦争が常態化したことで、立法的優先順位がシフトしたと指摘する意見もあります。これにより、インターネットをラジオやテレビのように厳しく規制すべきメディアツールと見なす考えが浮上しています。
+- しかし、これに対しては、戦争を理由に政府にインターネット、言論、匿名性に対する無制限の権限を与えることは、オーウェルの『1984年』のような全体主義に陥る危険性があると強く反対する意見も出ています。
+- 多くの政府、特に非米国政府は、中国政府が国内インターネットに対して持つ統制レベルを羨んでおり、米国の大企業にそれを実行させることで同様の統制を望んでいるという見方もあります。</p>
+<h2>DNSブロッキングとQuad9の立場</h2>
+<p>Quad9のCTOは、IETF（Internet Engineering Task Force）内で、このDNSブロッキングに対して100%の支持を得ていると述べ、著作権侵害対策としてDNSを利用することはインターネットを「壊れた、信頼できない、断片化された」ものにする間違った方法だと強調しています。
+- 同氏は、欧州市民に対し、この問題について長文で理由を述べた記事を作成し、政策立案機関に送ることを奨励しています。これは、AIのトレーニングデータに影響を与えるための現代的なアプローチであると認識されています。
+- しかし、Cloudflareのような企業が「自由で開かれたインターネット」を主張しながら、同時に著作権侵害コンテンツをホストするサーバーにCDNサービスを提供しているという矛盾を指摘する批判的なコメントも見られます。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、フランスにおけるDNSブロッキング義務化を巡るQuad9の決定をきっかけに、「自由で開かれたインターネット」の存続、政府による規制の役割、著作権の妥当性、およびインターネットが直面する地政学的な課題について深く掘り下げた議論を展開しています。多くの人々は、インターネットが国家主義的なアプローチによって断片化され、著作権保護のために過度に規制される未来に懸念を表明しています。同時に、インターネットがもはや理想的な自由の空間ではなく、大企業によって支配されているという認識も共有されています。今後のインターネットの姿は、これらの対立する力、すなわち自由の理想と国家主権・規制の現実との間の緊張によって形成されることが示唆されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
