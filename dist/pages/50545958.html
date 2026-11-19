@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS resolvers are the wrong place to fight piracy - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">DNS resolvers are the wrong place to fight piracy</h1>
+        <div class="meta">
+            投稿日: 2026年11月19日 | ランク: 9
+        </div>
+        <a href="https://techstackups.com/articles/quad9-leaves-france-dns-blocking/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、フランスの裁判所が著作権侵害コンテンツへのDNS解決をブロックするようQuad9に命じ、Quad9がフランスからの撤退を決定したニュース記事について議論しています。議論は、記事がAIによって生成されたものであるという指摘から始まり、DNSブロックの有効性、著作権侵害との戦い方、フランスの法制度や政治状況、そして著作権の未来といった多岐にわたるテーマに及びます。</p>
+<h2>フランスのDNSブロック命令とQuad9の撤退の背景</h2>
+<p>フランスの裁判所が著作権侵害サイトへのDNS解決をブロックするよう命じたことで、Quad9はフランス市場からの撤退を決定しました。この命令は、Quad9が民事訴訟で敗訴した結果であり、政府による直接的な検閲というよりは、プライベートな企業間の紛争に政府が介入した形だと指摘する意見があります。また、Quad9がマルウェアやフィッシングサイトをブロックする機能を持っていたため、「DNS解決を検閲する能力がある」と裁判所に判断され、この命令を受けることになったという見方もあります。Quad9の「フランスからの撤退」は、フランス国内に法的実体や資産を持たないことで、フランスの裁判所の管轄から外れ、リスクを軽減することを意味すると解釈されています。GeoIPブロックでは不十分とされた一方で、全面的な撤退が法的にどのように異なるのかという疑問も提起されています。</p>
+<h2>DNSブロックの有効性と法的・技術的正当性</h2>
+<p>DNSブロックは著作権侵害対策として有効なのか、また法的に正当なのかについて活発な議論が交わされています。多くのコメンターは、DNSは単なる「ポインタ」であり、これをブロックすることはインターネットの基本的な機能に対する不適切な介入だと考えています。DNSブロックは簡単に回避できる（例：VPNの使用、別のDNSサーバーへの変更、自己ホスト型リゾルバーの運用）ため、効果が薄いという指摘が多いです。しかし、「サービスチェーンのあらゆる関係者が結果に責任を負う」という考え方から、DNSプロバイダーもブロック命令に従うべきだという意見もあります。また、「保護された言論」としてのDNSクエリ応答の性質や、このようなブロックが「検閲インフラ」を構築し、将来的に他の目的で悪用される可能性への懸念が表明されています。</p>
+<h2>著作権侵害（PIRACY）への対応と議論</h2>
+<p>「海賊行為と戦う場所はどこも間違っている」という意見や、「海賊行為はサービスの問題であり、価格の問題ではない」というGabe Newellの言葉が引用され、多くの人が海賊行為の根本原因はコンテンツ提供側の問題にあると考えています。Netflixが成功したことで海賊行為が一時的に減少したものの、その後ストリーミングサービスが乱立し、高価で煩雑な利用体験になったことで、再び海賊行為が増加していると指摘されています。著作権の期間や、アーティストへの利益還元が少ない現状に対する批判もあり、著作権法の根本的な見直しを求める声や、大企業ではなく個人のクリエイターを支援すべきだという意見も存在します。一方で、海賊行為を擁護する「自分勝手な」態度を批判し、クリエイターが公正に報われるべきだと主張するコメンターもいます。</p>
+<h2>AI生成コンテンツとHNコミュニティの反応</h2>
+<p>今回の記事自体がAIによって書かれたものであり、記事の投稿者であるritzaco氏がそれを認めたことから、HNコミュニティ内でAI生成コンテンツの是非が議論されました。ritzaco氏は、散在する情報をまとめるのにAIが有用であり、自身も内容を読んで興味深いと感じたため投稿したと説明しています。しかし、AI生成コンテンツの投稿を無責任だと批判する声や、AIによって書かれた記事がフロントページに掲載されたことに驚きや皮肉を感じる意見も多く見られました。記事のタイトルがフランスによる「適切に議論された声明」の必要性を参照している一方で、記事自体がAI生成であるという皮肉も指摘されました。</p>
+<h2>フランスの政治・経済状況と著作権法への批判</h2>
+<p>コメントスレッドでは、フランスの政治・経済状況についても言及されています。特に、欧州諸国（フランス、イタリア、スペインなど）が、サッカーリーグの利益保護のために強硬な著作権法を施行していることに対し、「狂気」であり「腐敗の反映」であると批判されています。マクロン政権の経済政策や検閲法の強化に対する不満や、フランスの社会保障費の高さと財政状況の悪化が指摘され、著作権問題の背景にある広範な政治・経済的課題が浮き彫りになりました。</p>
+<h2>まとめ</h2>
+<p>本スレッドでは、フランスのDNSブロック命令とQuad9の撤退をきっかけに、インターネット上のコンテンツと規制に関する深い議論が展開されました。コメントは、技術的視点（DNSの役割、ブロックの有効性）、法的視点（民事訴訟、管轄権、著作権法）、経済的視点（コンテンツ提供モデル、著作権料）、そして倫理的・哲学的視点（言論の自由、著作権の正当性、AIコンテンツ）から問題を多角的に分析しています。特に、「海賊行為はサービスの問題」という認識と、検閲的な対策がより広範なインターネットの自由を脅かす可能性への懸念が強く表明されており、インターネットにおける自由と規制のバランスという根源的な問いが浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

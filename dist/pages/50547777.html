@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI agents ask better questions than KPMG accountants in audit trial - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">AI agents ask better questions than KPMG accountants in audit trial</h1>
+        <div class="meta">
+            投稿日: 2026年11月19日 | ランク: 7
+        </div>
+        <a href="https://europeanbusinessmagazine.com/ai-agents-better-questions-kpmg/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>本投稿では、AIが会計士よりも優れた質問をすることが可能であるというKPMGの報告書について議論されています。コメントでは、AIが会計業務において持つ可能性と、ビッグ4監査法人の既存の問題点について深く掘り下げられています。</p>
+<h2>会計士の能力と監査の質</h2>
+<p>多くのコメント投稿者は、KPMGの報告がAIの能力を証明するというよりも、KPMGを含むビッグ4監査法人の会計士の質やモチベーションに疑問を投げかけています。「KPMGの会計士は一般的に経験が浅く、過重労働で、インセンティブが不十分である」という意見や、KPMGのドイツでのニックネームが「子供が私の会社を監査する (Kinder Prüfen Meine Gesellschaft)」であるという皮肉なコメントも見られます。エンロン事件のような過去の会計スキャンダルに触れ、監査が「手抜きのごまかし作業」であることが多すぎると指摘する声もあります。監査法人が、疑わしい会計を見逃す代わりに、様々な有利なコンサルティング契約を得ているという構造的な問題が挙げられています。</p>
+<h2>AIの潜在能力と限界</h2>
+<p>AIが会計業務、特に監査において大きな利点を持つという意見が多く見られます。AIは「怠ける傾向がなく、疲れを知らない」「詳細を鋼の罠のように記憶する」ため、人間の会計士が嫌う反復的で退屈な作業や、膨大な量の情報処理において優位性があると指摘されています。特に、AIが平均的で一般的な質問から始める傾向があるため、それが会計士を上回る結果につながる可能性があるという見方もあれば、「AIは膨大な量の情報を生成し、人を圧倒する一方で、最も愚かな間違いを犯す可能性がある」という懸念も示されています。また、AIが「ルールとパターンに則って行動する」ことに長けているため、税務関連の試験で人間を上回る成績を収めた例も挙げられています。</p>
+<h2>AI導入による業界の変化</h2>
+<p>AIの導入が会計業界に与える影響についても活発に議論されています。AIが「無料に近い規模のブルートフォースを可能にし、人間には決してできなかった包括的な評価へと監査を移行させる」という期待がある一方で、これはビジネスに完璧を求めすぎ、些細なミスを許容する現在のサンプルベースの監査体制を破壊する可能性があるという懸念もあります。AIが監査業務の80%を担うことができるようになれば、監査法人はより少ない、より上級のスタッフでより多くの利益を上げることが可能になると予測する声もあります。しかし、AIが監査報告書に署名する人間の責任を代替することはできないため、人間による確認の必要性は残るだろうという意見もあります。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントでは、AIが会計業務、特に監査において大きな変革をもたらす可能性について議論されています。多くの投稿者は、KPMGの報告がAIの能力を強調する一方で、既存のビッグ4監査法人の会計士の質やインセンティブの問題を浮き彫りにしていると見ています。AIは「怠けず、疲れを知らず」、膨大なデータの処理や詳細な質問を生成する能力に優れており、会計業務の効率と徹底性を大幅に向上させる可能性があります。しかし、AIが完璧ではないこと、人間の判断力や常識が依然として重要であること、そしてAIの導入が業界の構造や責任の所在にどのような影響を与えるかについては、まだ多くの疑問が残されています。AIが提供する「掘り下げた質問」が真に価値ある結果につながるのか、それとも単に「紙面上でより徹底的になるだけ」なのか、今後の進展が注目されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
