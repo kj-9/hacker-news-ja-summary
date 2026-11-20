@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Someone reported java4shell bug in September 2026 - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Someone reported java4shell bug in September 2026</h1>
+        <div class="meta">
+            投稿日: 2026年11月20日 | ランク: 10
+        </div>
+        <a href="https://github.com/openjdk/jdk/pull/32781" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントスレッドは、最近公開されたOpenJDKのバッファオーバーフローの脆弱性が、以前にコミュニティによって報告されていたものの、公式プロジェクトによって見過ごされていた（または公には対応されていなかった）という事実に焦点を当てています。議論は、この脆弱性の処理方法、LLM（大規模言語モデル）の関与、およびOracleに対する感情に及びます。</p>
+<h2>未公開の脆弱性報告とOracleの対応</h2>
+<p>多くのコメントが、今回のバッファオーバーフローが以前にもコミュニティによって報告されていた（PRが提出されていた）ものの、公開の場でプロジェクト側から十分な対応がなされなかった点に注目しています。しかし、OpenJDKの関係者とされるユーザー (pron) からは、VMクラッシュを引き起こすバグ、特にコンパイラバックエンドのバグは、セキュリティレビューチームによって常にセキュリティフラグが立てられ、調査が完了し、バックポートおよびリリース戦略が決定されるまで、公開の場でのコミュニケーションは行われず、パッチもマージされないという説明がありました。これは、JDKがLinuxと同様に世界のソフトウェアインフラの多くを支える極めて重要なプロジェクトであるため、セキュリティ関連の取り扱いには細心の注意を払う必要があるというポリシーに基づいています。元のPRが提出された際、Oracleから作者にPRを進めないように連絡があり、その後Oracleが対応を引き継いだという情報もこれを裏付けています。</p>
+<h2>LLMと脆弱性発見の関連性</h2>
+<p>今回の脆弱性を発見したCalifの研究者がLLM（Codex）を使用したと述べていることから、LLMが過去の公開された（あるいはクローズされた）バグ報告やPRを読み取って、この脆弱性を「再発見」した可能性が議論されています。
+しかし、これに対しては、多くのソフトウェアには無視されるバグが多数存在し、LLMなしでも同様の脆弱性を発見することは可能だという意見や、LLMが何かを「した」という表現は適切ではなく、実際に脆弱性を見つけたのは人間であるという批判的な意見も出ています。LLMの役割を巡っては、「単なるツールか、それとも共同作業者か」という見方が分かれています。</p>
+<h2>バッファオーバーフロー検出における「AAA...A」の使用</h2>
+<p>この脆弱性のPRで「AAA...A」という文字列が使われている点も議論の対象となっています。これは、メモリ操作のデバッグでA（ASCIIで0x41）がよく使われる一般的な慣習であり、Base64エンコードではゼロになるため、特に珍しいことではないという意見が複数見られます。過去の脆弱性でも同様のパターンが使われていた例が挙げられています。</p>
+<h2>Oracleとオープンソースプロジェクトの課題</h2>
+<p>Oracleのセキュリティ問題への対応や、オープンソースプロジェクトにおける自動クローズボットの役割についても議論されています。一部のユーザーは、Oracleがセキュリティ研究者に対して敵対的であると批判し、全てのバグをゼロデイ攻撃として公開すべきだと主張する過激な意見も見られました。一方で、自動クローズボットは、対応されないPRを整理する上で必要であるという意見もあれば、プロジェクト管理のずさんさを示すものだという意見もありました。しかし、今回のケースでは、自動クローズボットが関係する前にOracleが内部で対応を進めていた可能性が指摘されています。</p>
+<h2>まとめ</h2>
+<p>このHacker Newsのスレッドは、OpenJDKにおけるバッファオーバーフローの脆弱性とその発見を巡る複雑な議論を浮き彫りにしています。表面上は「コミュニティが見つけたバグが無視された」ように見えたかもしれませんが、実際にはOpenJDKがセキュリティ上の理由から非公開で対応を進めていた可能性が高いことが、プロジェクト関係者のコメントによって示唆されました。また、LLMが脆弱性発見にどのように貢献したかという新しい論点も加わり、LLMの能力と、それに伴う開発者の責任について多様な意見が交わされました。Oracleの企業文化に対する批判や、オープンソースプロジェクトにおけるセキュリティ対応の難しさも議論の重要な要素となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

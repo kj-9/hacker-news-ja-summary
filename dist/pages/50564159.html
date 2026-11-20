@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 98% Slot Machine: How Paid Advertising Became an Extraction Tax - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The 98% Slot Machine: How Paid Advertising Became an Extraction Tax</h1>
+        <div class="meta">
+            投稿日: 2026年11月20日 | ランク: 9
+        </div>
+        <a href="https://globalcommercegraph.com/writing/the-ninety-eight-percent-slot-machine" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>オンライン広告がカジノのように詐欺的で、広告主が儲からない仕組みになっているという記事に対して、Hacker Newsのユーザーたちは、そのアナロジーの適切性、広告効果の実態、そして大手プラットフォームの市場支配力について多様な意見を交わしました。</p>
+<h2>オンライン広告の効果と詐欺性への疑念</h2>
+<p>多くのユーザーは、オンライン広告が効果が薄く、費用対効果が低いと感じています。具体的な例として、ウェブ広告は記憶に残らないが、物理的なIKEAの看板は記憶に残るという声や、ボットへの広告費浪費の懸念が挙げられました。広告エコシステムが「搾取的」であり、プラットフォームが広告費用を吊り上げ、パブリッシャーのコンテンツを自社の都合の良いように利用しているという批判もあります。過去の著名な研究（eBayとGoogleの広告効果実験など）やFreakonomicsのポッドキャストも引用され、オンライン広告が本当に機能するのかという根源的な疑問が呈されました。一部には、企業がプロダクトマーケットフィットの欠如を広告費で隠蔽しているケースもあるとの指摘もありました。一方で、大口の広告主は広告効果を厳しく検証しており、実際に利益を上げている企業も多数存在する、という反論もありました。</p>
+<h2>「カジノ」アナロジーの妥当性に関する賛否</h2>
+<p>記事の「カジノ」というアナロジーについては、意見が二分されました。反対派は、カジノがゼロサムゲームであり、客に負けさせるよう設計されているのに対し、広告はプラスサムゲームであり、広告プラットフォームは広告主の成功を望む市場であると主張しました。しかし、賛成派は、広告主間の激しい競争が広告費用を限界利益がゼロになるまで押し上げ、結果的に「胴元」（広告プラットフォーム）だけが常に利益を得る構造はカジノに似ていると指摘。また、短期間の結果がゼロマージン付近をさまよう際の人間行動がギャンブルに似ているとの見解も示されました。AmazonやGoogleが広告オークションで不正を行ったとされる事例も、プラットフォームの信頼性への疑念を深めました。</p>
+<h2>広告プラットフォームの市場構造と価格決定メカニズム</h2>
+<p>オンライン広告はオークション形式で販売されますが、この競争メカニズムが、高額な広告費用を支払える大企業（高単価・高リピート商品）に有利に働き、中小企業を市場から締め出しているという指摘がありました。これらの大企業が「フロア価格」を設定しているとも言及されました。広告プラットフォームに広告主自身の収益データを提供することに対し、「マージンを押し下げられる」という懸念から、多くの企業がためらいを感じていることも示されました。広告費用を「ビジネスに対する税金」と捉える意見もあり、多くの企業が効果的な広告運用方法を知らずに損失を出している現状が語られました。</p>
+<h2>まとめ</h2>
+<p>オンライン広告を「カジノ」になぞらえる記事に対し、Hacker Newsのコミュニティは、その比喩の適切性、広告の実際の有効性、そして広告プラットフォームの市場支配力について深く議論しました。多くのユーザーはオンライン広告の費用対効果に懐疑的であり、プラットフォームが広告主から過剰な利益を吸い上げているという懸念を共有しました。一方で、広告には明確な経済的価値があり、適切に運用すれば利益をもたらすという見解も示されました。記事自体がAI生成であるという指摘も複数ありましたが、それが議論の活発さを妨げることはありませんでした。議論を通じて、広告業界の透明性の欠如、競争による利益の希薄化、そして広告主の戦略的思考の重要性が浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
