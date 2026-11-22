@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inkling-2-Mini in 5.4 GB Memory - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Inkling-2-Mini in 5.4 GB Memory</h1>
+        <div class="meta">
+            投稿日: 2026年11月21日 | ランク: 3
+        </div>
+        <a href="https://github.com/ShinMegamiBoson/lookatmyquant" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Inkling 2 Miniという新しい量子化モデルに関するHacker Newsの議論は、その性能、品質、そしてローカルAIモデルとフロンティアモデルの間の「ギャップ」について活発な意見交換がされています。特に、量子化の有効性、ベンチマークの信頼性、そしてさまざまな推論エンジンでのモデルの速度に関する議論が中心です。</p>
+<h2>Inkling 2 Miniの性能と品質に関する議論</h2>
+<p>Inkling 2 Miniは、NVFP4で訓練され、MXFP8に量子化されている点について、その有効性に疑問が呈されています。一部のユーザーは、このモデルをOpus 4.6に匹敵すると評価し、数年前のフロンティアモデルレベルの性能を持つと主張しています。しかし、他のユーザーは、Muse GlimmerやQwen 3.8 27Bと比較して、一般的なコーディングアシスタントとしては劣ると感じており、特にマルチターンのチャットや複雑な制約のある指示には強くないと公式でも認められている点が指摘されています。</p>
+<p>モデルの推論速度については意見が分かれています。一部のユーザーはQwen 27Bより遅いと報告していますが、開発元はQwen 27Bの5倍速いと主張しており、これは最適化不足や特定のハードウェア/推論エンジンの問題に起因する可能性が示唆されています。また、READMEの内容やベンチマーク結果（特にKLダイバージェンス）の信頼性についても批判的な意見があり、ベンチマークはモデルの能力全体ではなく、特定のデータセットに対する出力の一致度を測るものに過ぎないという指摘も見られます。</p>
+<h2>ローカルAIモデルの進化と「ギャップ」</h2>
+<p>コメントの中核をなすのは、フロンティアモデルとオープンソースのローカルモデル間の「ギャップ」に関する議論です。一部のコメントでは、このギャップは一時的なものであり、ローカルモデルはSOTAから約1年遅れているだけで、やがて追いつくという楽観的な見方が示されています。多くのユーザーは、約1年後にはOpus 5.5レベルのローカルモデルが登場することを期待しており、プライバシーの確保、コスト削減、そしてクラウドモデルの性能低下やサービス停止への依存回避といったローカルモデルの利点を強調しています。</p>
+<p>ローカル推論モデルとウェブ検索や専門知識パックを組み合わせることで、知識の幅を補い、より効果的に使えるという提案もされています。また、一部のユーザーは、ローカルセットアップを最適化するためにClaudeのようなフロンティアモデルを使用していると報告しており、現在のローカルAI環境ではllama.cpp、litellm、openwebui、whisper、strataなどが利用されていることが言及されています。</p>
+<h2>量子化モデルと推論エンジンの課題</h2>
+<p>一般的な量子化モデルの主張に対して、安易なベンチマーク数値（KLダイバージェンスなど）に過度に期待しないよう警告が発されています。検証データセットの選択が重要であり、ベンチマークだけでは実際の能力を測れないという見解が示されています。また、特定のGitHubリポジトリで見られる未検証の量子化モデルは信頼性に欠けることが多く、主流のGGML、Unsloth、あるいはコミュニティの著名なクオンタイザー（bartowski、AesSedai）が推奨されています。</p>
+<p>Inkling 2 Miniの推論速度が遅いと報告された原因として、llama.cppの最適化不足や、モデルの新しいアーキテクチャ（ループレッドトランスフォーマー）への対応不足が指摘されています。llama.cpp以外のより高速な代替推論エンジンとして、vLLM、MLX (Apple Silicon向け)、ninfer、Radiance (AMD向け)、Strata、capy-flash、basaltなどが挙げられており、これらのエンジンは新しいモデルが登場して間もないため、まだ最適化が追いついていない可能性があることが示唆されています。</p>
+<h2>まとめ</h2>
+<p>Inkling 2 Miniのリリースは、Hacker Newsコミュニティで技術的な議論とローカルAIの将来についての広範な対話を巻き起こしました。モデルの量子化、ベンチマークの信頼性、およびさまざまな推論エンジンでの性能に関する疑問が提起され、ローカルAIモデルとフロンティアモデルの間の「ギャップ」を埋める可能性について活発な意見が交わされました。多くのユーザーはローカルAIの進歩に期待を寄せつつも、未検証の主張や安易なベンチマーク結果に対しては懐疑的な姿勢を見せており、実用性と安定性のある推論環境の確立が今後の重要な課題であることが浮き彫りになりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lean verification of the Riemann Hypothesis - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Lean verification of the Riemann Hypothesis</h1>
+        <div class="meta">
+            投稿日: 2026年11月21日 | ランク: 2
+        </div>
+        <a href="https://leanprover-community.github.io/blog/posts/riemann-hypothesis/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドでは、Generalized Riemann Hypothesis (GRH)の証明がLean定理証明支援系を使ってAIによって形式的に検証されたという発表を受けて、その意味合い、有用性、そして将来への影響について議論されています。多くの人々が、今回の証明が数学のコミュニティにもたらす変化、特にAIが生成した巨大な証明の検証と理解、そして数学研究のあり方そのものについて懸念や期待を表明しています。</p>
+<h2>AIによる証明の信頼性</h2>
+<p>AIが生成したGRHのLean形式証明の信頼性について、多くのコメントが寄せられています。Leanのカーネルや証明チェッカー自体のバグの可能性、そして「信頼の連鎖」に関する懸念が議論の中心です。</p>
+<ul>
+<li><strong>多重検証とLeanの信頼性:</strong> 多くのコメントが、今回の証明が複数の独立したLeanチェッカー（<code>con-leche</code>や<code>con-ron</code>など）によって検証された点を強調しています。特に<code>con-leche</code>はそれ自体が集合論に基づいて形式的に証明された整合性を持つとされ、Lean自体の論理の欠陥を悪用する懸念に対処しています。</li>
+<li><strong>Gödelの不完全性定理:</strong> Leanのような形式システムが自己の整合性を証明できないというGödelの定理が引用され、証明の「絶対的な」信頼性には限界があることが指摘されています。しかし、これは現代数学の基盤である集合論自体にも当てはまる問題であり、Leanの証明だけが抱える特有の問題ではないとされています。</li>
+<li><strong>人間によるチェックの限界:</strong> 過去10年間に行われた査読済み数学の大部分よりも高い基準で検証されていると評価する声がある一方で、1,700万行にも及ぶ証明を人間が完全に理解することは不可能であるという意見も多く見られます。</li>
+</ul>
+<h2>証明の有用性と「理解」の必要性</h2>
+<p>AIによって生成された証明が「有用」であるか、そして人間がその内容を「理解」する必要があるのかという点が大きなテーマとなっています。</p>
+<ul>
+<li><strong>有用性:</strong> GRHはこれまでも多くの数学者が真であると仮定して研究を進めてきたため、今回の証明が直接的な実用性を持つわけではないという意見があります。しかし、GRHを前提としていた多くの仮説が定理に昇格するという点で有用性が認められています。また、カウンター例を探す労力がなくなることもメリットとして挙げられます。</li>
+<li><strong>人間による理解の重要性:</strong> 多くの数学者は、証明が真実であると同時に、その「なぜ」を理解することに価値を見出しています。四色定理のコンピューター支援証明の例が挙げられ、計算による網羅的な証明は得られても、人間にとって洞察に満ちた理解は得られにくいことが指摘されています。今回のGRH証明も同様に、その巨大さから人間が「理解」するには多大な努力が必要とされています。</li>
+<li><strong>AIによる「理解」の再構築:</strong> 将来的には、AIが生成した巨大な証明を人間が理解しやすい形に再構築したり、新たな技術や概念を抽出したりするプロセスが重要になると考えられています。一部では、AIが提供するロードマップや人間が読める形式へのリファクタリングが進むことを期待する声もあります。</li>
+</ul>
+<h2>数学コミュニティへの影響と将来の展望</h2>
+<p>AIによる数学の証明は、数学コミュニティのあり方や研究の進め方に大きな影響を与えると予測されています。</p>
+<ul>
+<li><strong>研究スタイルの変化:</strong> AIが未解決問題を解決するにつれて、数学者の役割が「証明の発見」から「AIが生成した証明の解釈・簡素化」へと変化する可能性が示唆されています。また、LLMとの共同作業は、一部の数学者にとっては「楽しくない」と感じられる可能性も指摘されています。</li>
+<li><strong>「知識」の概念:</strong> AIが人間には理解できないほどの複雑な証明を生成できるようになったことで、「知識」や「理解」の定義自体が問い直されるという意見も出ています。AIが「知っている」が人間は「知らない」という状況が、科学の最前線で常態化する可能性が議論されています。</li>
+<li><strong>千年賞問題への挑戦:</strong> Navier-Stokes方程式やGRHがAIによって解決されたことで、次にP vs NPやGoldbach予想などの残りの千年賞問題がターゲットになるのではないかという憶測が飛び交っています。</li>
+</ul>
+<h2>AIと社会へのより広範な影響</h2>
+<p>コメントスレッドでは、AIによる数学の進展が、数学という分野を超えて、社会全体にどのような影響を及ぼすかについての議論も展開されています。</p>
+<ul>
+<li><strong>「カルチャー」ユニバースへの接近:</strong> Iain BanksのSF小説『カルチャー』シリーズに描かれるような、人間が技術や科学を完全に理解できなくなる世界への接近が示唆されています。これはAIの恩恵を享受しつつも、人間の役割や存在意義が問われるという、希望と懸念が混じり合った視点です。</li>
+<li><strong>AIの安全性とアライメント:</strong> AIが人間にとって理解不能なレベルに達した場合、その行動が人間のニーズと合致するかどうか、また悪意のある利用やバグの悪用といったリスクについても懸念が表明されています。AIによる「危険」を煽る過度な不安を指摘する声もありますが、人間社会の根本的な問題（紛争、不平等など）が解決されないまま技術だけが進歩することへの警鐘も鳴らされています。</li>
+<li><strong>倫理的・経済的懸念:</strong> AnthropicなどのAI企業が未解決問題を解決するアプローチが、数学コミュニティ（特に若手研究者）の資金調達やモチベーションに悪影響を与えるという批判も一部で見られます。AI開発が少数の企業に富と権力を集中させることへの懸念も示されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>AIによるGeneralized Riemann Hypothesisの形式的な証明は、その巨大さと、人間には直接理解が困難であるという特性から、数学界に大きな衝撃を与えています。 Lean証明支援系を用いた多重検証によりその信頼性は高いと評価されているものの、証明の「有用性」や「理解」の定義が問い直されています。 今後、AIが生成した証明の簡素化や、そこから新たな数学的洞察を引き出すための研究が不可欠となるでしょう。 この進展は、数学の未来のあり方、人間とAIの協調関係、そしてAIが社会にもたらす倫理的・経済的影響について、広範な議論を巻き起こしています。 AIが人類の認知の限界を超えた知識を生み出す時代が到来しつつあり、その成果をどのように統合し、活用していくかが重要な課題となります。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

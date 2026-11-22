@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My monitor was cutting my download speed by 75% - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">My monitor was cutting my download speed by 75%</h1>
+        <div class="meta">
+            投稿日: 2026年11月21日 | ランク: 9
+        </div>
+        <a href="https://blog.tymscar.com/posts/studiodisplayethernet/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>この記事のコメントでは、Apple Studio Displayを介したUSB-Cイーサネットアダプターの速度低下問題について、その技術的根源、責任の所在、そして関連する広範なテーマについて活発な議論が展開されています。特に、USBの複雑性やマルチギガビットインターネットの実際のメリットに関心が寄せられています。</p>
+<h2>根本原因：レイテンシとバッファの相互作用</h2>
+<p>多くのコメントは、著者が特定した技術的な原因、すなわち、モニターのUSBハブを介することで生じるわずかなレイテンシ（約7.6 µs）と、イーサネットアダプター（Realtek RTL8156Bチップ搭載）の限られたバッファサイズ（4x 1KBパケットのバースト制限）が組み合わさって問題を引き起こしているという点に同意しています。これにより、アダプターが次のデータ送信許可（ACK）を待つ間にバッファが満杯になり、パケットがドロップされ、TCPの輻輳制御が働き速度が低下するというメカニズムが説明されています。これは「帯域幅遅延積（Bandwidth-Delay Product）」の考え方として理解されています。著者が最終的に導入したより高性能なアダプター（8x 1KBパケットを送信可能）は、このレイテンシに対する耐性を高めることで問題を解決しました。</p>
+<h2>責任の所在：アダプター、モニター、またはユーザー？</h2>
+<p>問題の責任がどこにあるかについては、コメント間で意見が分かれています。</p>
+<ul>
+<li><strong>アダプターの設計不良説:</strong> 多くの人は、USBハブを介した接続は一般的なシナリオであり、アダプターが宣伝された2.5Gbpsの速度を出せないのは、バッファサイズが不十分であるか、設計が不適切であるためだと主張しています。特に、安価なUGREEN製アダプターに対する批判が見られます。</li>
+<li><strong>Apple Studio Displayへの期待と現実:</strong> 一部のユーザーは、高価なApple Studio Displayがハブとしてこのような問題を引き起こすのは不適切であり、Apple製品への高い期待値と実際のパフォーマンスのギャップを指摘しています。</li>
+<li><strong>ユーザー側のトラブルシューティング不足:</strong> 多くのコメントは、著者が最初にイーサネットアダプターをMacBookに直接接続してテストすべきだったと指摘しています。USBハブやドックを介した接続で問題が発生することはUSBの「よくある落とし穴」であり、過度なデバッグの前に基本的なトラブルシューティングを怠ったと批判する声もあります。また、ベンチマークを走らせるまで速度低下に気づかなかった点も指摘されています。</li>
+</ul>
+<h2>USBの複雑性と「ワンケーブル」の落とし穴</h2>
+<p>USBの規格は複雑であり、多くの「落とし穴」があることが広く認識されています。コメントでは、ハブやドックを介した接続の不安定さが強調され、特に電源供給、ビデオ出力、データ転送をすべて1本のケーブルで行う「ワンケーブルソリューション」の信頼性の低さが繰り返し指摘されています。USB 3.0が引き起こす電磁干渉（EMI）がWi-Fi信号に影響を与える可能性や、USBドライブでRAIDを組むことの無謀さといった類似の体験も共有されています。</p>
+<h2>マルチギガビットインターネットの現実</h2>
+<p>著者の2.5Gbps対称インターネット回線について、その実際のユースケースや必要性について広範な議論が交わされています。</p>
+<ul>
+<li><strong>メリット:</strong> 大容量のゲームやOSアップデート、Linux ISO、LLMモデル、Dockerイメージなどのダウンロード、自宅サーバーのホスティング、複数の家族が同時に高帯域幅を使用する際のパフォーマンス維持、およびバックアップの大幅な高速化などが、マルチギガビット接続の主な利点として挙げられています。特にアップロード速度の向上が、ファイルの共有やクラウドへのデータ転送といった日常的な行動を変えるという意見が多数あります。</li>
+<li><strong>限界と費用対効果:</strong> 一方で、ほとんどのオンラインサービスはそこまで高速な接続を飽和させないことや、家庭内のWi-Fiルーターやネットワーク機器自体がボトルネックになることが多いという指摘もあります。一部のユーザーは500Mbps〜1Gbpsで十分であり、それ以上の速度は費用対効果が低いと感じています。また、多くの人がベンチマークを走らせるまで高速回線の恩恵を完全に享受できていないことに気づかない、という意見もあります。</li>
+</ul>
+<h2>まとめ</h2>
+<p>この記事とコメントは、一見単純に見えるネットワーク速度の問題が、USBプロトコルの詳細、デバイス間のレイテンシ、バッファ管理といった複雑な技術的要因に起因することを明らかにしました。問題は、特定のデバイス（アダプター）が一般的な使用シナリオ（USBハブを介した接続）において宣伝された性能を発揮できないことにあり、その責任の所在については議論の余地があることが示唆されました。また、高速インターネット接続の導入が進む中で、その真の価値を享受するためには、末端のハードウェアや内部ネットワークの構成にも注意を払う必要があるという教訓も提示されています。さらに、今回の問題だけでなく、<code>io_uring</code>のI/O負荷検出、ディスプレイケーブルの干渉、モニターのリフレッシュレートがゲームに影響するなど、他のシステムにおける同様の隠れたパフォーマンス問題についても洞察が共有されました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
