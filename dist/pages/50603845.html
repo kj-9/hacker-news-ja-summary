@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Beginner&#x27;s Guide to Local AI with Inkling, Qwen, and Unsloth - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">A Beginner&#x27;s Guide to Local AI with Inkling, Qwen, and Unsloth</h1>
+        <div class="meta">
+            投稿日: 2026年11月23日 | ランク: 3
+        </div>
+        <a href="https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このコメントスレッドは、ローカル環境でAIモデル（特にQwen）を実行するために必要なハードウェア、パフォーマンス、コスト、そしてローカルAIの将来性について議論しています。</p>
+<h2>必要なハードウェアとパフォーマンス</h2>
+<p>ユーザーはQwenモデルをローカルで実行する際のVRAM要件について質問しており、これに対し、必要なVRAMはモデルの種類や量子化レベルによって異なるとの回答があります。</p>
+<ul>
+<li><strong>VRAMとメモリ帯域幅</strong>: 多くのコメントで、VRAMの量だけでなくメモリ帯域幅も重要であることが指摘されています。プロセッサのFLOPSはモデル並列化で多少役立つ程度で、ほとんどの場合、PCIe帯域幅がボトルネックになるとされています。</li>
+<li><strong>推奨されるVRAM</strong>: 理想的には128GBのVRAMがあればQwen-coder next (Q8)を50トークン/秒で実行できるという意見もありますが、「それによるところが大きい」とされています。</li>
+<li><strong>実際の使用例</strong>:<ul>
+<li>NVIDIA RTX 5070ti (16GB VRAM) と 96GB RAM で Basalt with Qwen 3.8 flash next (NVFP4) を実行し、プレフィル約2000tok/s、生成約100tok/sで「遅いとは感じない」との報告。ただし、これはノートPCではない。</li>
+<li>ThinkPad x13 (Ryzen AI 350, 32GB RAM) で Qwen3.5-9B (npu2) を実行し、12トークン/秒で「気持ち良い」と感じるが、最新モデルには品質で劣る。</li>
+<li>MacBook Air 32GB で Qwen3.8-27b を約15tok/sで実行し、ローカルタスクには十分との報告。Qwen3.8-27bは約18GBのVRAMを使用し、その品質に驚いているとのこと。</li>
+</ul>
+</li>
+<li><strong>MoEモデル</strong>: Qwen3.6-35B@q4のようなMixture of Experts (MoE) モデルは、3060でも問題なく動作すると指摘されており、従来のモデルよりも効率的な実行が可能であることを示唆しています。</li>
+<li><strong>コスト</strong>: 「10,000ユーロのグラフィックカードが必要」というジョークのようなコメントから、RTX 5090が10,000ドルもすると指摘されており、現在の高性能GPUが高価であることが強調されています。</li>
+</ul>
+<h2>ローカルAIの体験とツール</h2>
+<p>ローカルAIの体験をClaudeに近づける方法について議論されています。</p>
+<ul>
+<li><strong>ツール</strong>: OpenWebUI, OpenTerminal, OpenClawなどのツールがローカルモデルの使用に役立つと紹介されています。</li>
+<li><strong>Claude Codeの活用</strong>: DeepSeek 4.1F 1017のようなモデルをClaude Codeと組み合わせて使用し、Claude Opus/Fableとの間で容易に切り替えられるという事例が共有されています。</li>
+<li><strong>品質</strong>: ローカルモデルで「Claudeのような体験」は難しいが、努力すれば90%のタスクでClaudeのような結果を得られるとされています。</li>
+<li><strong>個人プロジェクト</strong>: ローカルでオーディオブックをナレーションするウェブアプリのプロジェクトが紹介されており、Qwen3.6-35B-A3B MTPが文法チェックに優れていると評価されています。</li>
+</ul>
+<h2>ローカルAIの将来性</h2>
+<p>ローカルAIが今後どのように発展していくかについて、様々な意見が交わされています。</p>
+<ul>
+<li><strong>「プラズマTV期」</strong>: 現在のローカルAIは黎明期であり、大型で高価であるという「プラズマTV期」になぞらえられています。5年後にはほとんどの実用的なAIが個人マシンで動作するようになり、一部の「スーパーブレイン」のみがクラウドに残ると予測されています。</li>
+<li><strong>SOTAモデルとのギャップ</strong>: ローカルAIモデルがクラウドの最先端モデルに追いつくことはないと考える意見がある一方で、Gemini Neon / Opus 5.5レベルに達すれば「終わり」だと主張する意見もあります。しかし、ユーザーは最先端モデルに慣れるため、ローカルモデルの品質が向上してもクラウドモデルの優位性は保たれるという反論もあります。</li>
+<li><strong>「Bitter Lesson」の適用</strong>: 「Bitter Lesson」（計算能力の拡大が成功の鍵）について、一部ではまだ有効であるという意見があるものの、その提唱者自身が「力技だけでは不十分で、巧妙な新しい方法が必要」と見解を修正したことや、純粋なスケーリングには限界があるとの指摘もなされています。</li>
+<li><strong>効率性と小型化</strong>: モデルの効率化が進み、特に小規模なモデルが今後さらに有用になるとの予測が多く見られます。12B未満のモデルがSOTAに1～2年遅れているが、すでに多くの実用的なタスクに対応できるとされています。</li>
+<li><strong>データセンターの役割</strong>: クラウドプロバイダーにとって、超大型モデルの推論は依然として実行可能なパスであり続けると見られていますが、小型モデルの性能向上により、大多数の人々にとってはローカルモデルが十分になると考えられています。</li>
+<li><strong>Wirthの法則とLLM</strong>: Wirthの法則（ソフトウェアが膨張するため、ハードウェアの性能向上は帳消しになる）がLLMには適用されない可能性が指摘されており、将来のコンピューターとソフトウェアがより高性能になることが期待されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、ローカル環境でAIモデルを実行する現在の課題と将来の展望について活発な議論が展開されています。現在のローカルAIは高性能GPUと豊富なVRAM（16GB以上、理想的には128GB）を必要とし、高価な投資が必要ですが、Mixture of Experts (MoE)のような技術や効率的な量子化によって、一部のモデルはより少ないリソースでも実用的な性能を発揮し始めています。OpenWebUIなどのツールや既存のハーネスとの統合を通じて、ローカルAIの利用体験は向上しつつあります。</p>
+<p>将来については、ローカルAIが現在の「プラズマTV期」を脱し、5年後には多くの実用的なAIが一般家庭のPCで動作するようになると予測されています。クラウドの最先端モデルとの性能差は残るものの、ローカルモデルの品質と効率が向上し、大多数の日常的なタスクには十分になると見られています。計算能力のスケーリングだけでなく、より巧妙なアルゴリズムやモデル圧縮技術が、ローカルAIの普及を加速させる鍵となると考えられています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
