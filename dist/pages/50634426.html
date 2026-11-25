@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch HN: Versine (YC F26) – MCP to send and receive money - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Launch HN: Versine (YC F26) – MCP to send and receive money</h1>
+        <div class="meta">
+            投稿日: 2026年11月25日 | ランク: 5
+        </div>
+        <a href="https://news.ycombinator.com/item?id=50634426" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Versineは、AIアシスタント（MCP）を介して金銭の送受信を可能にするサービスです。これは、AIが支払いを処理するという点で、Venmoに似ていますが、より高度な機能を提供します。ユーザーはチャットやテキストを通じてAIに指示し、承認を経て支払いを行います。現在はP2P（個人間取引）に焦点を当てており、将来的には完全な「エージェント・ファーストの銀行」を目指しています。</p>
+<h2>AIによる支払いと自動化</h2>
+<p>Versineは、AIアシスタントを通じて金銭の送受信を可能にし、支払いプロセスを自動化しようとしています。ユーザーはAIに指示を出すだけで、例えば割り勘の計算やグループ旅行の費用の精算、ポーカーの賭け金の清算などが可能です。AIがレシートを解析して支払いを分割する作業はできるものの、最終的な送金は人間が行う必要があるという現状の課題を解決しようとしています。特に、複数人への一括送金や、Versineアカウントを持たない人への送金（相手は2分で銀行口座に引き出し可能）といった機能が注目されています。</p>
+<h2>自己管理型ウォレットとUSDCの利用</h2>
+<p>Versineのバックエンドでは、各ユーザーがBase上のUSDCを保管する自己管理型ステーブルコインウォレットを持っています。これにより、ユーザー自身が鍵を所有し、彼らの承認なしに資金が送金されることはありません。同社は、従来の銀行との提携によるフィアット（法定通貨）での解決策では規制やコンプライアンスの遅延が大きすぎたため、4週間という短期間で製品を開発するためにステーブルコインウォレットの利用を余儀なくされたと説明しています。これにより、Versineはユーザーの資金を管理しないため、マネーサービスビジネス（MSB）に該当しないとしています。</p>
+<h2>課題と将来の計画：巻き戻し不能な取引と銀行パートナーシップ</h2>
+<p>コメントでは、自己管理型ウォレットの「巻き戻し不能な取引」が大きな懸念として挙げられています。ユーザーの資金が一度送金されると、Versineには取引を元に戻す能力がないため、AIのエラーや詐欺のリスクが指摘されています。これに対し、Versineはデフォルトで全ての支払いにパスキー承認を要求し、「信頼できる連絡先」への送金には上限を設定することで対策しています。しかし、ユーザーからはこの解決策では不十分であり、従来の銀行システムが持つ紛争解決や返金機能が不可欠であるとの厳しい意見も出ています。Versineは、現在P2P送金に注力しているが、将来的にはパートナー銀行との提携を通じて法定通貨に対応し、紛争処理能力の獲得や、預金、振替、購入など、より包括的な銀行ソリューションへと拡大する計画を明かしています。</p>
+<h2>収益モデルと競争</h2>
+<p>P2P決済自体は収益性が低いと認識されており、Versineはこれを「エージェント・ファーストの銀行」というより大きな目標への足がかりと位置付けています。将来的に完全な銀行になれば、預金からの利息やクレジットカードなど、他の銀行と同様の方法で収益を上げることを目指しています。コメントでは、CashAppやVenmoのような既存の決済プロバイダーが同様の機能を迅速に模倣する可能性が指摘されていますが、Versineは、既存のネオバンクが単にAI機能を既存のソリューションに追加するのではなく、エージェント向けにゼロから構築する必要があると考えています。</p>
+<h2>まとめ</h2>
+<p>Versineは、AIアシスタントを介した金銭の送受信を可能にするサービスで、AIを活用した支払い自動化の道を切り開いています。ユーザーはAIに指示を出し、パスキー承認を通じて簡単かつ一括で送金が可能です。現在は自己管理型ステーブルコインウォレットを利用していますが、これにより「巻き戻し不能な取引」という重大な課題が生じています。同社はこの問題を認識しており、将来的にはパートナー銀行と提携し法定通貨ベースのサービスに移行することで、紛争解決能力を向上させ、より包括的な「エージェント・ファーストの銀行」となることを目指しています。P2P決済自体は収益性が低いものの、これを足がかりとして、預金やクレジットカードなど、多角的な収益モデルを構築する計画です。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

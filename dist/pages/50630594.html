@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active intrusion campaign against Check Point security management servers - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Active intrusion campaign against Check Point security management servers</h1>
+        <div class="meta">
+            投稿日: 2026年11月25日 | ランク: 6
+        </div>
+        <a href="https://www.greynoise.io/blog/check-point-security-management-servers-intrusion-campaign" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>AI（LLM）の進化がサイバー攻撃の脅威を増大させているという懸念が高まっており、Hacker Newsのコメントでは、その影響、企業のセキュリティの現状、および防御側の課題について活発な議論が交わされています。具体的な攻撃事例や古い脆弱性の再浮上が指摘される一方で、AIによる脅威を過大評価する声や、従来のセキュリティ問題の延長線上にすぎないという見方も存在します。</p>
+<h2>AI/LLMがもたらすサイバー攻撃の脅威と潜在的な影響</h2>
+<p>多くのコメント投稿者は、AI、特に大規模言語モデル（LLM）がサイバー攻撃の様相を大きく変えるという懸念を表明しています。LLMがサイバー犯罪者や国家主体によって、自動化された大規模な攻撃に利用される可能性があると指摘されており、例えば「できるだけ多く金を稼げ」と指示するようなモデルやスウォームが、重要なインフラを含むあらゆるオンラインサービスを攻撃する未来が予測されています。これにより、既存の脆弱性の発見と悪用が加速され、防御側が追いつくのが困難になると考えられています。
+しかし、一方で、AIによる脅威を過大評価しているとの意見もあります。犯罪者はLLMがなくても犯罪を犯しており、既存のサイバー犯罪はすでに大規模であるため、LLMが新しい局面をもたらすかはまだ不明確だという見方もあります。</p>
+<h2>企業のセキュリティの現状と具体的事例</h2>
+<p>現在の企業のサイバーセキュリティ対策のずさんさが、新たな脅威に直面する上で大きな問題であると指摘されています。具体的な事例として、Hondaがサイバー攻撃によりソフトウェアアップデートファイルを破損させ、ステアリングユニットが故障したことや、スーパーマーケットの冷蔵庫が攻撃を受けて食品が廃棄された事例が挙げられています。これらのインシデントは、多くの組織が長年のソフトウェア開発プラクティスの怠慢とセキュリティへの軽視の代償を払っていることを示唆しています。
+また、JavaScriptの<code>Math.random()</code>のような安全でない乱数生成関数の不適切な使用が、いまだにセッションクッキーの偽造など深刻な脆弱性として悪用されている事例も報告されています。これは、セキュリティの基本中の基本でありながら見過ごされがちなミスであり、LLMによって容易に発見され悪用される可能性があります。さらに、ネットワーク機器の管理プレーンがインターネットに公開されているという、驚くほど一般的な設定ミスも指摘されており、企業の脆弱性を露呈しています。</p>
+<h2>攻撃者側の行動と防御の課題、懐疑的な視点</h2>
+<p>防御側は、攻撃の複雑化と大規模化に追いつくことの困難さに直面しています。攻撃者がシステムに侵入後、他の攻撃者から自らの足場を守るために、パッチを適用したり設定を変更したりする事例（「侵入後にドアを閉める」）も報告されています。
+LLMを用いた防御策への期待も一部で語られていますが、防御が攻撃よりも本質的に困難であるという認識が優勢です。また、既存のセキュリティ製品の効果に疑問を呈する声や、企業のセキュリティ部門がパニックに陥り、無秩序な対策を講じている現状も描かれています。ルーターやファイアウォールといったネットワーク機器への攻撃が増加しており、管理プレーンの隔離やより堅牢な設定管理（例：NixOSベースのルーター）の必要性が議論されています。
+一方で、Hacker Newsのコミュニティには「最近のトレンド」や「カルマ稼ぎ」のバイアスがあり、サイバー攻撃に関する議論が過熱していると指摘するコメントもあります。実際の攻撃率は以前と大きく変わっておらず、AIによる脅威は過大評価されているか、従来のセキュリティ問題の延長線上にすぎないという懐疑的な見方も存在します。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、AI（LLM）の進化がサイバー攻撃に与える影響と、現代のサイバーセキュリティが直面する課題について多角的な視点を提供しています。LLMによる攻撃の自動化と大規模化への懸念が根強く、Hondaやスーパーマーケットの冷蔵庫への攻撃、<code>Math.random()</code>の誤用といった具体的な事例が、多くの組織におけるセキュリティ対策の怠慢を浮き彫りにしています。
+防御側もLLMの活用を模索するものの、攻撃側が有利であるという見方が多く、管理プレーンの適切な隔離や堅牢なシステム設計の重要性が再認識されています。一方で、AIの脅威を過大評価する声や、過去から続くセキュリティ問題の延長にすぎないとする懐疑的な意見も存在し、今後のサイバーセキュリティの動向に対する様々な予測が示されています。全体として、技術の進化が新たなリスクと防御の必要性を生み出しており、企業や社会全体がその変化にどのように対応していくかが問われています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gödel Enigma - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Gödel Enigma</h1>
+        <div class="meta">
+            投稿日: 2026年11月25日 | ランク: 9
+        </div>
+        <a href="https://www.helsinki.fi/en/researchgroups/godel-enigma/research/project-description" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>ゲーデルの未公開ノート、特に速記で書かれた「Max Phil」の解読とその潜在的な重要性、彼の主要な数学的業績（特に不完全性定理）の解釈、関連書籍の推薦、そして彼の業績が現代の情報社会に与えた影響について、Hacker Newsのユーザーが多角的に議論しています。</p>
+<h2>ゲーデルの未発表ノートとAIによる解読</h2>
+<p>ゲーデルが速記で書いた多数の未解読ノート（特に「Max Phil」）が議論の中心です。これらのノートには数百の定理が含まれている可能性があり、AIやLLMがそれらを解読することへの大きな期待が寄せられています。2016年の書籍『Kurt Gödel: Philosopher-Scientist』が、一部のノートを初めて研究資料として用いたことが指摘されています。また、AIによる解読の進捗に関する過去のHacker News記事も参照され、記事の情報の古さ（2019年時点）についても言及があります。</p>
+<h2>ゲーデルの主要な業績と不完全性定理の解釈</h2>
+<p>ゲーデルの最も有名な業績は、数学の基礎を揺るがした「不完全性定理」であると広く認識されています。その内容は、数学はすべての真の命題を証明できないこと、そして自身の無矛盾性を証明できないことであるとされています。しかし、「数学はすべての真の命題を証明できない」という表現は誤解を招きやすいと指摘され、ある種の公理系の下ではすべての真の算術命題を証明できるが、その公理系が無限であるため実用的でない、といったより正確な解釈が提示されています。また、一貫性を証明できるシステムは、算術を表現するのに十分な強度を持つ場合、矛盾しているか、あるいは一貫性を証明できないかのどちらかであるという定理の深い意味も解説されています。不完全性定理以外にも、述語論理の完全性定理や連続体仮説とZF集合論公理の無矛盾性の証明、アインシュタインの場の方程式の解の発見も、彼の重要な業績として挙げられています。</p>
+<h2>ゲーデルに関する書籍の推薦と周辺知識</h2>
+<p>ユーザーはゲーデルについて学ぶためのお気に入りの書籍を多数推薦しており、特にダグラス・ホフスタッターの『ゲーデル、エッシャー、バッハ』がそのアクセシビリティで最も人気があります。その他、伝記『Journey to the Edge of Reason』、不完全性定理の分かりやすい解説書『Gödel's Proof』や『Incompleteness』などが挙げられています。ロジャー・ペンローズの『皇帝の新しい心』も言及されていますが、不完全性定理の解釈が誤っているという批判も付記されています。さらに、ウィトゲンシュタインの『論理哲学論考』との関連性や、フィクション作品『The Maniac』での登場にも言及があります。</p>
+<h2>ゲーデルの業績と情報社会への影響</h2>
+<p>記事中の「ゲーデルがいなければ情報社会はなかっただろう」という主張に対して、多くのユーザーが疑問や反論を呈しています。未出版の速記ノートが情報時代に不可欠だったはずがないという意見や、不完全性定理が現代の情報社会や計算に直接的な影響を与えることは少ないという見方があります。もしゲーデルが存在しなかったとしても、チューリングやチャーチのような他の研究者が計算理論を発展させ、情報社会への道を開いただろうという意見が多い一方で、不完全性定理のような「狂気じみた概念的飛躍」を要する発見は、他の誰かがなし得たか定かではない、という異なる見解も示されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントスレッドは、ゲーデルの未解読ノートの可能性、彼の画期的な数学的貢献の正確な理解、そしてその現代社会への深い影響についての活発な議論の場となっています。特に、AIによる古文書解読への期待、不完全性定理の微妙な解釈、そして「ゲーデルがいなければ情報社会はなかった」という大胆な主張に対する多角的な考察が展開されており、彼の思想と業績が依然として多くの人々にとって興味の尽きないテーマであることが示されています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

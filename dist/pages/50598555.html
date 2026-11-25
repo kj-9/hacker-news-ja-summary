@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spray Bottle - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">The Spray Bottle</h1>
+        <div class="meta">
+            投稿日: 2026年11月25日 | ランク: 7
+        </div>
+        <a href="https://mechanical-pencil.com/products/spray-bottle" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>このHacker Newsのコメントは、スプレーボトルの詳細な分解図とアニメーションを提示するウェブサイトに関するもので、その美しさと教育的価値が広く称賛されました。一方で、技術的な疑問点、現代のスプレーボトルの信頼性への不満、そしてコンテンツのAI生成の有無を巡る倫理的議論も展開されました。</p>
+<h2>スプレーボトルの動作原理とイラストレーションへの反応</h2>
+<p>多くのユーザーが、ウェブサイトの美しいイラストレーションとアニメーションの品質、そして日常的な機械の仕組みを視覚的に解説する手法に感銘を受けました。製作者の情熱と努力への感謝の声が多く寄せられ、同様の教育的な分解図コンテンツ（例：Bartosz Ciechanowskiの作品や、ドイツのテレビ番組「Die Sendung mit der Maus」）が共有されました。しかし、イラストレーションの一部、特に「ピストンチャンバーが空になる」という記述や、ボールバルブの正確な動作原理（重力、流体圧、バネなどによる上下動や逆流防止）について、より詳細な説明や修正を求める意見も上がりました。また、鳥の肺、現代の飲料ボトル、電子レンジ、トイレの仕組みなど、他の身近な物の分解図も見てみたいという要望が複数寄せられました。</p>
+<h2>スプレーボトルの信頼性と耐久性</h2>
+<p>多くのコメントは、最近のスプレーボトルの信頼性の低さや故障のしやすさに対する不満に集中しました。スプレーヘッドの破損、ストローとチャンバーの接続不良、チャイルドロックなどの安全機能による複雑化が、品質低下の主な原因として挙げられています。ヨガスタジオでの頻繁な使用や、安価な詰め替えボトルではすぐに壊れてしまうという具体的な経験談が共有され、耐久性の高い製品（産業用や園芸用のボトルなど）への投資が推奨されました。同時に、数セントでこれほど複雑な機構が製造されていることへの驚きも表明されました。</p>
+<h2>AI利用と誠実さに関する議論</h2>
+<p>ウェブサイトのイラストがAIによって生成されたものではないかという疑問が提起されたことから、広範な議論が展開されました。著者がFAQでAI不使用を明言し、手作業での分解、CADモデリング、イラスト化、アニメーション作成のプロセスを説明していることが指摘されました。この件をきっかけに、AI生成コンテンツの開示のインセンティブの欠如、競争環境におけるAI利用の合理性、そして誠実さや倫理的行動の価値についての深い哲学的な対話が生まれました。「皆が嘘をつくならAIを使うのが合理的」という意見に対し、「誠実さは長期的には良い結果をもたらす」「人間的な誇りや喜びは金銭的インセンティブだけではない」といった反論が活発に交わされました。</p>
+<h2>新しいスプレー技術とその他の観察</h2>
+<p>ワンプッシュで長く噴霧が続く新しいタイプのスプレーボトル（例：Dawn Dish Spray）に多くのユーザーが関心を示し、その仕組み（加圧チャンバー、一定放出メカニズムなど）について推測しました。また、スプレーボトルのノズルを一度外して元に戻すと、うまく噴霧できなくなるという個人的な経験が共有され、その理由が解明されなかったことへの残念さも表明されました。その他、アニメーションのバグ（アニメーション中にボタンを押すと壊れる）が指摘されました。</p>
+<h2>まとめ</h2>
+<p>スプレーボトルの分解図を掲載したウェブサイトは、その優れた視覚表現と教育的価値でHacker Newsコミュニティの注目を集めました。ユーザーは日常品の複雑なエンジニアリングに感銘を受け、技術的な詳細について活発に議論を交わしました。同時に、現代のスプレーボトルの信頼性に対する一般的な不満が表明され、より高品質な製品への需要が浮き彫りになりました。さらに、コンテンツのAI生成の有無を巡る議論は、AI時代における誠実さ、競争、そして個人の価値観という、より広範な倫理的・哲学的なテーマへと発展しました。このウェブサイトは、単に機械の仕組みを解説するだけでなく、多岐にわたる議論と考察を促すきっかけとなりました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

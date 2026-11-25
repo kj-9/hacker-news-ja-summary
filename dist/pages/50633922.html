@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ternary Bonsai 2.5 27B - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Ternary Bonsai 2.5 27B</h1>
+        <div class="meta">
+            投稿日: 2026年11月25日 | ランク: 2
+        </div>
+        <a href="https://prismml.com/news/bonsai-2-5-27b" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Ternary Bonsai 2.5 27Bモデルは、その高いベンチマークスコアと小さなフットプリントが注目を集めていますが、Hacker Newsのコメントでは、その実用性、既存のモデル（特にQwen 3.8 27B）との比較、低ビット量子化の真の価値、そしてハードウェア要件と性能について活発な議論が交わされています。</p>
+<h2>ベンチマークの信頼性と実用性への疑問</h2>
+<p>多くのコメント投稿者は、Ternary Bonsai 2.5のベンチマークスコアが「Opus 4.6に匹敵する」という主張に対し、懐疑的な見方を示しています。これは、過去にベンチマークスコアが高いにもかかわらず、実際の使用感が期待外れだった経験に基づいています。「隣の猫でも今週Opus 4.6と同等スコアを出した」といった皮肉なコメントも見られ、ベンチマークがモデルの真の能力をどの程度反映しているのか、あるいは単なるマーケティングツールと化しているのかという根本的な疑問が提起されています。Goodhartの法則が引用され、指標が目標になると良い指標ではなくなるという指摘もあります。</p>
+<h2>低ビット量子化の価値とQwen 3.8 27Bとの比較</h2>
+<p>Ternary Bonsai 2.5の主要なアピールポイントは、Qwen 3.8 27Bのフル精度モデル（50GB超）やQ4量子化モデル（約16GB）と比較して、非常に小さなフットプリント（Q2量子化で約5.9GB）でありながら、同等のベンチマーク性能を目指している点です。これにより、VRAMが少ないハードウェアでも大規模モデルに近い能力を利用できる可能性があります。しかし、Qwen 3.8 27B（特にQ4以上の量子化）を既に動かせるユーザーは、品質面でQwenの方が優れていると感じており、Ternary Bonsai 2.5への移行の必要性をあまり感じていません。Ternary Bonsai 2.5は、限られたリソースで特定のコーディングタスクをこなす際に「サイズに対しては良い」という評価が寄せられています。</p>
+<h2>モデルの挙動と過去バージョンからの課題</h2>
+<p>以前のBonsaiモデル（特にBonsai 1と2）は、「デッドループ」に陥りやすい、多ターン会話で混乱する、特定のスタイルガイドに従わない（例：「Clauditis」と呼ばれる、過度に丁寧な表現）といった問題が指摘されていました。Ternary Bonsai 2.5ではこれらの問題が改善されているという期待や報告もありますが、一部では「低推論モードでも考えすぎる」という傾向が残っている可能性も示唆されています。また、単一の強力なモデルではなく、複数のエージェントを並列で実行し、いわば「ブルートフォース」的に知能を補うというアプローチも議論されています。</p>
+<h2>ハードウェア要件と実測性能</h2>
+<p>Mac Mini M5 Pro (24GB RAM)のような統合メモリシステムでのTernary Bonsai 2.5 (Q2 GGUF)の実行結果が報告されており、22-25 tokens/s程度の生成速度で、128kの長文コンテキストを容易に扱えることが示されています。これは、特にエージェントによるバッチ処理やターミナルでの作業において有用であると評価されています。一方で、より多くのRAM（例：48GB）を持つMacでは、Qwenモデルなども高速で実行できることが述べられています。低ビット量子化モデル向けのハードウェアアクセラレーションとしてFPGAやASICの可能性も議論されていますが、現状ではGPUの方が性能対価格比で優れているという見方が一般的です。</p>
+<h2>LLMエコシステムの進化と「スキル」の重要性</h2>
+<p>LLMエコシステムはベンチマークスコアだけでは測れないほど複雑化しており、「ハーネス」（モデルと連携するツールやコード）の影響、量子化認識トレーニング（QAT）、ストリーミングエキスパート、後処理による推論オーバーヘッド削減などの要素が重要になっています。コメント投稿者たちは、ベンチマークの数値に惑わされず、実際に様々なローカルモデルを動かし、ツール連携の仕組みを理解することで、将来的に「依存関係」ではなく「スキル」を築くことの重要性を強調しています。また、中国におけるGPU不足の可能性や、オープンウェイトモデルにおける検閲版・非検閲版の存在も言及されており、ユーザーは自身のニーズに合わせて慎重にモデルを選択する必要があることが示唆されています。</p>
+<h2>まとめ</h2>
+<p>Ternary Bonsai 2.5 27Bモデルは、非常に小さなフットプリントで高いベンチマークスコアを達成している点で注目されていますが、実際の使用感ではフロンティアモデルや既存の強力なオープンウェイトモデル（特にQwen 3.8 27B）に及ばないという意見が多数を占めています。その最大の価値は、限られたVRAM環境（例：Macの統合メモリ）でも大規模モデルに近い能力を発揮できる点にあり、特にエージェントによるバッチ処理や特定のコーディングタスクで潜在的な有用性が示唆されています。しかし、以前のモデルで指摘されたデッドループや不自然な応答の傾向が改善されているかについては、さらなる実地評価が求められています。ベンチマークの限界と、モデルの「ハーネス」や運用スキルが重要になるLLMエコシステムの複雑化も議論の焦点となっています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
