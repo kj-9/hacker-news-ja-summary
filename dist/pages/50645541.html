@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiagent coding is the future - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Multiagent coding is the future</h1>
+        <div class="meta">
+            投稿日: 2026年11月26日 | ランク: 9
+        </div>
+        <a href="https://www.kalzumeus.com/2026/11/25/multiagent-coding-is-the-future/" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>Hacker Newsのコメントは、Patrick Collisonの記事「Situational Awareness」について議論しています。この記事は、AIによるコード生成ツールの進化、特にマルチエージェントシステムへの言及に焦点を当てています。</p>
+<h2>「vibecoding」という言葉とツールの成熟度</h2>
+<p>「vibecoding」という言葉は、AIによるコード生成ツールが「厳密性のないおもちゃ」であるという印象を与え、エンジニアや部外者の両方にその天井が低いと誤解させたという意見があります。しかし、この言葉は現状を適切に表しているとも考えられています。プロフェッショナルな文脈ではこの言葉を避け、趣味やノーコード開発に限定すべきだという提案もあります。</p>
+<h2>ストライプの「ミニオン」と人間のレビュー</h2>
+<p>ストライプが「ミニオン」と呼ばれる自律型システムによって毎週数千件のプルリクエストをマージしているという記事の記述について、それがストライプ自身のブログ記事の「人間によるレビューはあるが、人間が書いたコードは含まれていない」という表現と矛盾しているという指摘があります。SOC2コンプライアンスでは、展開前にすべてのコードラインが人間によってレビューされることが求められるため、企業ブログは人間によるコードレビューの「法的な」真実を強調するインセンティブがある一方で、個人的なブログは「事実上の」最小限の人間の監視を指摘する可能性があるという見解が示されています。また、「人間によるレビュー」が単なる目視確認やゴム印のような承認になっており、人々がすべてのPRを詳細に読むことはもはや現実的ではないという意見もあります。</p>
+<h2>推論コストとAIの未来</h2>
+<p>記事で言及されているような月額170万ドルという高額な推論コストは、AIコーディングの未来に参加するための大きな障壁となり、多くの人々がその未来から締め出される可能性があるという懸念が表明されています。一方で、業界全体としては、チームの費用を制限し、NVDAの株価下落、再雇用、GPT-6.2への反応の薄さなどから、推論に多額の費用を費やすことへの興奮はあまり見られないという反論もあります。むしろ、比較的小さなオープンウェイトモデルに興奮が見られるとのことです。</p>
+<h2>記事のタイミングと信用性</h2>
+<p>記事が「サンフランシスコで未来を最初に体験できる」と主張していることや、特定のテクノロジー（Nvidia株）に関する言及が、記事の公開時期を考えると時代遅れであるという批判があります。特に、筆者が「Situational Awareness」というヘッジファンドについて言及しているが、このファンドが最近大きな損失を出していることが明らかになり、記事の信用性や「状況認識」というテーマとの矛盾が指摘されています。一部のコメントでは、記事が数ヶ月前に書かれたものが公開されたのではないかという疑念も呈されています。</p>
+<h2>マルチエージェントシステムとLLMの利用</h2>
+<p>LLMが賢明な意思決定をするのであれば、単一のLLMを使い続けることで最大のメリットを得られるはずであり、人間の組織に見られるコミュニケーションのボトルネックの問題を抱える「ミニオン」のように擬人化する必要はないという意見があります。マルチエージェントのユースケースは存在するものの、コンピューティングタスクの並列化と同様に、すべてに適用できるわけではなく、設計に時間をかけなければならず、リターンは急速に減少すると考えられています。また、複数のコーディングエージェントを動かす上での本当のボトルネックはコード生成速度ではなく、ファイル所有権の分離と出力検証のための決定的なテストにあるという経験則も共有されています。特定のタスクに対しては、Claudeのような既存のLLMに組み込みのサブエージェント機能があり、高額な費用をかけずに利用できるという具体的なアドバイスも提供されています。</p>
+<h2>まとめ</h2>
+<p>Hacker Newsのコメントは、Patrick Collison氏のAIによるコード生成ツールの進化に関する記事に対して、多角的な視点から議論を交わしています。AIツールの呼称や成熟度、ストライプの「ミニオン」と人間のレビュープロセスの実態、高額な推論コストがAIの未来への参入障壁となる可能性、そして記事自体の執筆時期と筆者の信用性について疑問が呈されました。特に、マルチエージェントシステムの有効性やLLMの最適な活用方法については、単一エージェントとの比較や実際の運用における課題が議論されています。全体として、AIがコーディングにもたらす変化に対しては期待と懐疑が入り混じっており、現実的な課題や誤解を指摘する声が多く聞かれました。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>

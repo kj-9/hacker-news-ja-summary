@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-6.2 Astra is the first model to beat Googlers&#x27; code golf records - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">GPT-6.2 Astra is the first model to beat Googlers&#x27; code golf records</h1>
+        <div class="meta">
+            投稿日: 2026年11月26日 | ランク: 5
+        </div>
+        <a href="https://bjin.github.io/go-codegolf-benchmark/#leaderboard" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>OpenAIのGPT-6.2 Astraが、コードゴルフのベンチマークにおいて人間の記録を打ち破り、独創的な解決策を見出したことに関する議論。コメントでは、Astraのプログラミング能力への賞賛と、その一方で一般的な言語タスクや指示理解における課題、そしてコードゴルフというベンチマークの有用性について多様な意見が交わされています。</p>
+<h2>GPT-6.2 Astraのコードゴルフでの優れた性能と独創的な解法</h2>
+<p>投稿者は、2015年のGoogle社員によるコードゴルフの記録を超えるため、一連の難しいプログラミング問題で構成されるベンチマークを作成しました。GPT-6.2 Astraは、「Surviving Queens」や「The Rolling Dice」で複素数を使用したり、「(-5)-Smooth Numbers」問題で4の累乗から数を生成するといった、人間が見つけられなかった独創的で短い解決策を発見し、複数の問題で人間の記録を破りました。このモデルは「Game of Life」でも人間の記録よりも短いソリューションを生成しています。一部のユーザーは、Astraがプログラミングタスクにおいて人間を凌駕し始めたと感じており、その能力を高く評価しています。</p>
+<h2>GPT-6.2 Astraの他の性能側面と他のLLMの比較</h2>
+<p>コードゴルフでのAstraの強力なパフォーマンスとは対照的に、多くのユーザーはAstraが一般的なライティング、明確な説明、指示追従、法律文書作成といったタスクでは性能が低下していると感じています。Astraが以前のバージョンや他のモデルに比べて「退行している」と指摘する声もあります。これは、OpenAIがコスト削減のためにAstra 6.2のチューニングを行った結果ではないかという推測もされています。実際に、あるデータによるとAstra 6.2は前バージョンに比べてタスクあたりの時間とコストが減少しているものの、Eloレーティングでは同程度を維持しており、コーディングタスクでは高い勝率を示す一方で、ライティングや議論のカテゴリでは低い勝率を示しています。</p>
+<p>この議論の中で、他のLLMについても言及されています。AnthropicのFable（特に5.2 High）は法律文書作成に優れていると評価されていますが、高価で冗長な場合があるとのこと。GoogleのGeminiモデル（Flash, Hydrogen, Neon）は、他のLLMの出力を明確な英語に変換したり、ソーシャル推論や文学的散文において高い能力を持つと評価されていますが、こちらもコストや冗長性に関する懸念が示されています。Lunaは要約やアウトライン作成において、コストと品質のバランスが良いとされています。</p>
+<h2>コードゴルフというベンチマークの価値と意義</h2>
+<p>コードゴルフの有用性については意見が分かれています。コードの長さのみに焦点を当てるため、実用的な文脈では「無用」であり、可読性や保守性を犠牲にすると考えるユーザーもいます。一方で、コードゴルフは「楽しみ」や「競争」のためだけでなく、思考の多様性を促進し、問題を異なる角度から見る能力を育む「有用な練習」であるという肯定的な意見も多く聞かれました。これは、言語、ライブラリ、アルゴリズムを深く学び、新しいアプローチを発見する動機付けとなり、知能の一形態としての「圧縮」能力を測る良いベンチマークであると見なされています。投稿者も、コードゴルフが「思考実験」や「実験実行」の能力を測る良い指標となり、既存の学習データからは得られない独創性を評価できると強調しています。</p>
+<h2>まとめ</h2>
+<p>GPT-6.2 Astraがコードゴルフのベンチマークで人間の記録を破り、革新的な解決策を生成したことは、LLMのプログラミングにおける高度な能力を示しています。しかし、その一方で、Astraの一般的な言語能力や指示追従における課題は、LLMが特定の分野で非常に優れている一方で、他の分野ではまだ改善の余地があることを浮き彫りにしています。この議論は、LLMの評価方法、特定の分野における強みと弱み、開発におけるコストと性能のバランス、さらには訓練データに関する倫理的な問題といった、幅広いテーマに及びました。コードゴルフという一見ニッチな活動が、LLMの知能の深さ、学習能力、そして人間との比較における複雑な側面を測る興味深い手段として機能しています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
