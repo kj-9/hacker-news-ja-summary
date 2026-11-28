@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citroën Hydraulic System - Hacker News日本語要約</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #fff7ed;
+            --surface: #ffffff;
+            --text: #1f2933;
+            --muted: #667085;
+            --border: #f0dfcf;
+            --accent: #ff6600;
+            --accent-strong: #e45a00;
+            --accent-soft: #fff0e4;
+            --shadow-sm: 0 1px 2px rgba(31, 41, 51, 0.06), 0 1px 3px rgba(31, 41, 51, 0.08);
+            --shadow-md: 0 16px 40px rgba(31, 41, 51, 0.10);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', Roboto, sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+            line-height: 1.75;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255, 102, 0, 0.14), transparent 34rem),
+                linear-gradient(180deg, #fffaf4 0%, var(--bg) 44%, #fff 100%);
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,246,237,0.94));
+            border: 1px solid rgba(255, 102, 0, 0.14);
+            border-radius: 8px;
+            padding: 28px 72px 28px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        .title {
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            line-height: 1.25;
+            margin: 14px 0 12px;
+            color: var(--text);
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+        .original-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 102, 0, 0.22);
+        }
+        .original-link:hover {
+            background: var(--accent-strong);
+        }
+        .content {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .content p {
+            margin: 0 0 1.05em;
+        }
+        .content ul,
+        .content ol {
+            padding-left: 1.4rem;
+        }
+        .content li {
+            margin: 0.45em 0;
+        }
+        .content a {
+            color: var(--accent-strong);
+            text-underline-offset: 3px;
+        }
+        .content code {
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.1em 0.35em;
+        }
+        .content h2 {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 14px;
+            margin-top: 32px;
+            line-height: 1.35;
+        }
+        .footer {
+            margin-top: 28px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 12px 28px;
+            }
+            .header {
+                padding: 68px 18px 24px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            color-scheme: dark;
+            --bg: #0f1218;
+            --surface: #171b23;
+            --text: #f2f4f7;
+            --muted: #aab3c2;
+            --border: #2a3240;
+            --accent: #ff9a4d;
+            --accent-strong: #ffb274;
+            --accent-soft: rgba(255, 154, 77, 0.14);
+            background:
+                radial-gradient(circle at top left, rgba(255, 154, 77, 0.14), transparent 34rem),
+                linear-gradient(180deg, #141923 0%, var(--bg) 58%, #0c0f14 100%);
+            color: var(--text);
+        }
+        body.dark-mode .header {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.36);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(32, 38, 49, 0.82);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .title {
+            color: var(--text);
+        }
+        body.dark-mode .meta,
+        body.dark-mode .footer {
+            color: var(--muted);
+        }
+        body.dark-mode .original-link {
+            background: var(--accent);
+            color: #121212;
+        }
+        body.dark-mode .original-link:hover {
+            background: var(--accent-strong);
+        }
+        body.dark-mode .content,
+        body.dark-mode .footer {
+            background: rgba(23, 27, 35, 0.88);
+            border-color: var(--border);
+        }
+        body.dark-mode .content h2 {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        body.dark-mode .back-link,
+        body.dark-mode .footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌓</button>
+        <a href="../index.html" class="back-link">← 記事一覧に戻る</a>
+        <h1 class="title">Citroën Hydraulic System</h1>
+        <div class="meta">
+            投稿日: 2026年11月28日 | ランク: 9
+        </div>
+        <a href="https://www.citroenet.org.uk/miscellaneous/hydraulics/hydraulics-1.html" target="_blank" class="original-link">元記事を読む</a>
+    </div>
+    
+    <div class="content">
+        <p>ハイドロニューマチックサスペンションを搭載したシトロエン車に関するコメントは、その革新性、卓越した乗り心地、独特の機能、そして信頼性とメンテナンスに関する課題に焦点を当てています。多くの人が個人的な思い出を共有し、現代のアクティブサスペンション技術との比較も行われています。</p>
+<h2>シトロエンのハイドロニューマチックサスペンションの革新性と課題</h2>
+<ul>
+<li><strong>先進的な乗り心地と機能:</strong> シトロエンのハイドロニューマチックサスペンションは、比類ない滑らかな乗り心地（「waft」）と優れたハンドリングを提供したと評されています。エンジン始動時の自動的な車高調整機能、悪路走行やタイヤ交換のための手動調整機能などがユーザーを魅了しました。特に、ジャッキを使わずにタイヤ交換ができる機能や、過積載時でも車高を維持する能力は画期的でした。また、Xantia以前のモデルでは、ブレーキやパワーステアリングもこの油圧システムに統合されており、独特のブレーキフィールを生み出していました。しかし、油圧の漏れが発生すると、サスペンションだけでなくステアリングやブレーキにも影響が出る可能性があったとの指摘もあります。</li>
+<li><strong>信頼性とメンテナンス:</strong> このシステムは複雑で、油圧ラインの液漏れや「緑のボール」（スフェア）の故障など、経年劣化による問題が指摘されています。一部のコメントでは、重機の油圧システムや初期のエアサスと同様に、故障すると修理が困難で費用がかさむとされています。整備士が敬遠する傾向があったこと、部品の入手が難しいことも課題として挙げられています。しかし、適切に設計・整備されていれば非常に信頼性が高いという反論もあり、実際に何十万キロも大きな問題なく走行した経験も共有されています。高圧システムのため、作業には危険が伴うとの意見もあります。</li>
+</ul>
+<h2>現代のアクティブサスペンションとシトロエンの遺産</h2>
+<ul>
+<li><strong>Boseの電動サスペンション:</strong> 多くの人が、Boseが開発した電動アクティブサスペンションが市販車に採用されなかったことを残念に思っています。その革新的なデモンストレーションは、将来のサスペンション技術への期待を高めました。</li>
+<li><strong>現代の高性能サスペンション:</strong> 現在では、ポルシェ・パナメーラ、アウディ、GMのマグネティックライド、レクサスのAPSSSなど、様々なメーカーが磁気式や油圧式の半アクティブ/アクティブサスペンションシステムを高級車に導入しており、シトロエンの時代から大きく進化していると認識されています。しかし、シトロエンのハイドロニューマチックサスペンションは、現代の技術の基礎を築いた先駆的な存在として称賛されています。特にXantia Activaは、現代の車と比較しても遜色ないほどの優れたハンドリング（ムーステストでの高い評価など）を発揮したと評価されています。</li>
+</ul>
+<h2>シトロエン車への個人的な思い入れと文化的影響</h2>
+<ul>
+<li><strong>懐かしい思い出:</strong> 多くのコメント投稿者が、幼い頃にシトロエン車に乗っていた経験を共有しています。エンジン始動時に車がゆっくりと上昇する様子への憧れや、独特の滑らかな乗り心地に対する懐かしさが語られています。</li>
+<li><strong>逸話と愛着:</strong> 大量の荷物を積んでも車高を維持した逸話や、ブレーキの仕組み、古いディーゼル車での暖機との関連性など、具体的な体験談が豊富に共有されています。DS、BX、CX、XM、Xantia Activaといったモデル名が頻繁に登場し、それぞれへの愛着が感じられます。チャールズ・ド・ゴール大統領の暗殺未遂事件でDSが果たした役割など、歴史的なエピソードも言及されています。</li>
+<li><strong>メディアでの登場:</strong> シトロエンDSは、「Buffy the Vampire Slayer」や「Highlander」、「Gattaca」といった映画やテレビドラマにも登場しており、そのユニークなデザインと先進性が多くの人々の記憶に残っています。また、YouTubeチャンネル「UPnDOWN」や「Car SOS」など、現代のメディアでもその魅力が再評価されています。</li>
+</ul>
+<h2>まとめ</h2>
+<p>シトロエンのハイドロニューマチックサスペンションは、半世紀以上前に登場しながらも、その卓越した乗り心地、自動水平機能、革新的な車高調整能力で人々を魅了しました。液漏れやメンテナンスの複雑さといった課題も抱えていましたが、その先進性は現代のアクティブサスペンション技術の基礎を築いたと認識されています。多くのユーザーが、独特のドライビング体験や家族との思い出を共有し、シトロエン車が単なる乗り物ではなく、文化的なアイコンであったことを示しています。その遺産は、現代の高性能車に見られる技術にも受け継がれており、今なお多くの愛好家に語り継がれています。</p>
+    </div>
+    
+    <div class="footer">
+        <p><a href="../rss.xml">RSS フィード</a> | <a href="https://github.com/kj-9/hacker-news-ja-summary">GitHub</a></p>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌓';
+            }
+        };
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
